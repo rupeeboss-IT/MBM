@@ -1,0 +1,29 @@
+##################################
+# Angular Frontend
+##################################
+Frontend/node_modules/
+Frontend/dist/
+Frontend/.angular/
+Frontend/.vscode/
+
+##################################
+# .NET Backend
+##################################
+Backend/**/bin/
+Backend/**/obj/
+Backend/**/.vs/
+
+##################################
+# Environment & Secrets
+##################################
+*.env
+appsettings.Development.json
+appsettings.*.json
+
+##################################
+# OS / IDE
+##################################
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
