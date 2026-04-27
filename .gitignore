@@ -1,17 +1,17 @@
 ##################################
 # Angular Frontend
 ##################################
-Frontend/node_modules/
-Frontend/dist/
-Frontend/.angular/
-Frontend/.vscode/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.vscode/
 
 ##################################
 # .NET Backend
 ##################################
-Backend/**/bin/
-Backend/**/obj/
-Backend/**/.vs/
+backend/**/bin/
+backend/**/obj/
+backend/**/.vs/
 
 ##################################
 # Environment & Secrets
