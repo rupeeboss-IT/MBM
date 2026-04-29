@@ -1,1 +1,77 @@
-<p>loans works!</p>
+<!-- ===== LOANS PAGE ===== -->
+<div class="page active" id="page-loans">
+<div class="page-header red-header"><div class="container"><h1>Apply for MSME Business Loan</h1><p>Access 100+ Banks & NBFCs — Free Doorstep Service — ₹1 Lakh to ₹1000 Crore</p></div></div>
+<section class="section"><div class="container">
+  <div class="loan-layout">
+    <div class="loan-form-box">
+      <h2>Loan Application Form</h2>
+      <p class="form-sub">Free consultation • No hidden fees • Response within 24 hours</p>
+      <div id="loanSuccess" class="success-msg" style="display:none">✅ Application submitted successfully! Our team will contact you within 24 hours.</div>
+      <form id="loanForm" onsubmit="submitLoan(event)">
+        <div class="form-row">
+          <div class="form-group"><label>Full Name *</label><input type="text" id="loanName" placeholder="Your full name" required></div>
+          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="loanPhone" placeholder="10-digit mobile" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email Address</label><input type="email" id="loanEmail" placeholder="your@email.com"></div>
+          <div class="form-group"><label>Company Name *</label><input type="text" id="loanCompany" placeholder="Your company name" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Loan Type *</label>
+            <select id="loanType" required>
+              <option value="">Select Loan Type</option>
+              <option>Business Loan</option><option>Working Capital Loan</option><option>Machinery / Equipment Loan</option><option>MSME Loan</option><option>Unsecured Business Loan</option><option>Overdraft Facility</option><option>Letter of Credit</option><option>NPA Revival</option><option>Project Finance</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Loan Amount Required *</label>
+            <select id="loanAmount" required>
+              <option value="">Select Amount</option>
+              <option>Up to ₹10 Lakh</option><option>₹10 – 50 Lakh</option><option>₹50 Lakh – 1 Crore</option><option>₹1 – 5 Crore</option><option>₹5 – 25 Crore</option><option>Above ₹25 Crore</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Annual Turnover (₹)</label><input type="number" id="loanTurnover" placeholder="e.g. 5000000"></div>
+          <div class="form-group"><label>CIBIL Score (approx)</label><select id="loanCibil"><option value="">Select</option><option>750+</option><option>700–750</option><option>650–700</option><option>Below 650</option><option>Don't Know</option></select></div>
+        </div>
+        <div class="form-group full"><label>Purpose of Loan</label><textarea id="loanPurpose" rows="3" placeholder="Briefly describe how you plan to use the loan..."></textarea></div>
+        <button type="submit" class="btn-submit" id="loanSubmitBtn">Submit Application — Free</button>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.8rem;text-align:center">By submitting, you agree to be contacted by our loan advisors</p>
+      </form>
+    </div>
+    <div class="loan-sidebar">
+      <div class="sidebar-card">
+        <h3>Why Choose Us</h3>
+        <ul>
+          <li>Free Doorstep Service — We come to you</li><li>100+ Banks & NBFCs options</li><li>Loans ₹1 Lakh to ₹1000 Crore</li><li>No hidden charges or upfront fees</li><li>Dedicated Relationship Manager</li><li>Quick approval in 48-72 hours</li><li>NPA Revival & Credit Rectification</li><li>Unsecured loans available</li>
+        </ul>
+      </div>
+      <div class="sidebar-card">
+        <h3>Loan Products</h3>
+        <div class="loan-product"><span class="lp-icon">🏢</span><div><strong>Business Loan</strong><span>₹1L – ₹500 Cr</span></div></div>
+        <div class="loan-product"><span class="lp-icon">⚙️</span><div><strong>Machinery Loan</strong><span>₹5L – ₹50 Cr</span></div></div>
+        <div class="loan-product"><span class="lp-icon">💵</span><div><strong>Working Capital</strong><span>₹1L – ₹100 Cr</span></div></div>
+        <div class="loan-product"><span class="lp-icon">📈</span><div><strong>Project Finance</strong><span>₹50L – ₹1000 Cr</span></div></div>
+        <div class="loan-product"><span class="lp-icon">🔄</span><div><strong>NPA Revival</strong><span>Case by Case</span></div></div>
+      </div>
+      <div class="sidebar-card contact-card">
+        <h3>Speak to an Expert</h3>
+        <p>Call us directly for immediate assistance</p>
+        <div class="contact-nums">
+          <a href="tel:+917982218029">📞 +91 79822 18029</a>
+          <a href="mailto:loans@msmebharatmanch.com">✉️ loans@msmebharatmanch.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+<section class="section bg-light"><div class="container">
+  <div class="section-header"><h2>Who Is Eligible?</h2><p>We serve all types of MSME enterprises across India</p></div>
+  <div class="eligibility-grid">
+    <div class="elig-card"><span>🏭</span><strong>Manufacturers</strong><p>All manufacturing MSMEs including Micro, Small & Medium units with valid Udyam registration</p></div>
+    <div class="elig-card"><span>🛒</span><strong>Traders</strong><p>Wholesale and retail traders with valid business registration and minimum 1 year in operation</p></div>
+    <div class="elig-card"><span>💼</span><strong>Service Providers</strong><p>IT, consulting, healthcare, education and all service sector MSMEs with proper documentation</p></div>
+    <div class="elig-card"><span>👩‍💼</span><strong>Women Entrepreneurs</strong><p>Special schemes and enhanced subsidy for women-led MSMEs with lower interest rates available</p></div>
+  </div>
+</div></section>
+</div><!-- /loans -->

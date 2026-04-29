@@ -1,1 +1,44 @@
-<p>contact works!</p>
+<!-- ===== CONTACT PAGE ===== -->
+<div class="page active" id="page-contact">
+<div class="page-header"><div class="container"><h1>Contact Us</h1><p>We're here to help. Reach us via any channel — we respond within 24 hours.</p></div></div>
+<section class="section"><div class="container">
+  <div class="contact-layout">
+    <div class="contact-form-box">
+      <h2>Send Us a Message</h2>
+      <div id="contactSuccess" class="success-msg" style="display:none">✅ Thank you! We'll get back to you within 24 hours.</div>
+      <form id="contactForm" onsubmit="submitContact(event)">
+        <div class="form-row">
+          <div class="form-group"><label>Your Name *</label><input type="text" id="cName" placeholder="Full name" required></div>
+          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="cPhone" placeholder="10-digit number" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Email Address</label><input type="email" id="cEmail" placeholder="your@email.com"></div>
+          <div class="form-group"><label>Subject</label>
+            <select id="cSubject">
+              <option>Loan Enquiry</option><option>Government Scheme</option><option>Company Formation</option><option>Technology Services</option><option>Digital Marketing</option><option>Membership</option><option>Partnership</option><option>General Enquiry</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Message *</label><textarea id="cMessage" rows="5" placeholder="Tell us how we can help you..." required></textarea></div>
+        <button type="submit" class="btn-submit" id="contactSubmitBtn">Send Message</button>
+      </form>
+    </div>
+    <div>
+      <div class="contact-info-item"><div class="ci-icon">📍</div><div class="ci-text"><strong>Head Office</strong><span>620, The Summit Business Bay,<br>Near WEH Metro, Andheri East,<br>Mumbai – 400093</span></div></div>
+      <div class="contact-info-item"><div class="ci-icon">📞</div><div class="ci-text"><strong>Phone</strong><a href="tel:+917982218029">+91 79822 18029</a><br><a href="tel:+919022119750">+91 90221 19750</a></div></div>
+      <div class="contact-info-item"><div class="ci-icon">✉️</div><div class="ci-text"><strong>Email</strong><a href="mailto:info@msmebharatmanch.com">info@msmebharatmanch.com</a><br><a href="mailto:support@msmebharatmanch.com">support@msmebharatmanch.com</a></div></div>
+      <div class="contact-info-item"><div class="ci-icon">🕐</div><div class="ci-text"><strong>Business Hours</strong><span>Mon–Sat: 9:00 AM – 7:00 PM<br>Sunday: 10:00 AM – 4:00 PM</span></div></div>
+      <div style="margin-top:2rem"><strong style="display:block;color:var(--navy);font-weight:700;margin-bottom:1rem">Zonal Offices</strong>
+        <div class="offices-grid">
+          <div class="office-card"><h4>🏙️ Mumbai</h4><p>The Summit Business Bay, Andheri East</p></div>
+          <div class="office-card"><h4>🏛️ Delhi</h4><p>Connaught Place, New Delhi – 110001</p></div>
+          <div class="office-card"><h4>💻 Bengaluru</h4><p>Koramangala, Bengaluru – 560034</p></div>
+          <div class="office-card"><h4>🏭 Pune</h4><p>Kothrud, Pune – 411038</p></div>
+          <div class="office-card"><h4>🌆 Ahmedabad</h4><p>SG Highway, Ahmedabad – 380054</p></div>
+          <div class="office-card"><h4>🌊 Chennai</h4><p>Anna Salai, Chennai – 600002</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+</div><!-- /contact -->

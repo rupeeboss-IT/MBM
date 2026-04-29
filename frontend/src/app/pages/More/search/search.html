@@ -1,1 +1,13 @@
-<p>search works!</p>
+<!-- ===== SEARCH PAGE ===== -->
+<div class="page active" id="page-search">
+<div class="page-header"><div class="container"><h1>Search</h1><p>Find services, schemes, events and articles</p></div></div>
+<section class="section"><div class="container">
+  <form onsubmit="doSearch(event)" style="display:flex;gap:.8rem;margin-bottom:2rem;max-width:600px">
+    <input type="search" id="searchPageInput" placeholder="Search MSME services, schemes, events..." style="flex:1;padding:.85rem 1.2rem;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;outline:none">
+    <button type="submit" class="btn-primary" style="padding:.85rem 1.5rem">Search</button>
+  </form>
+  <div id="searchResultsArea">
+    <p style="color:var(--muted)">Enter a search term to find services, schemes, events and articles.</p>
+  </div>
+</div></section>
+</div><!-- /search -->

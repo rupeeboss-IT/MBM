@@ -1,1 +1,28 @@
-<p>our-services works!</p>
+<!-- ===== SERVICES PAGE ===== -->
+<div class="page active" id="page-services">
+<div class="page-header"><div class="container"><h1>Our 360° Services</h1><p>12 comprehensive service categories covering every aspect of your MSME journey</p></div></div>
+<section class="section"><div class="container">
+  <div class="services-filter" id="servicesFilter">
+    <button class="filter-btn" [class.active]="active()==='all'" (click)="setFilter('all')">All Services</button>
+    <button class="filter-btn" [class.active]="active()==='finance'" (click)="setFilter('finance')">Finance</button>
+    <button class="filter-btn" [class.active]="active()==='legal'" (click)="setFilter('legal')">Legal</button>
+    <button class="filter-btn" [class.active]="active()==='technology'" (click)="setFilter('technology')">Technology</button>
+    <button class="filter-btn" [class.active]="active()==='marketing'" (click)="setFilter('marketing')">Marketing</button>
+    <button class="filter-btn" [class.active]="active()==='growth'" (click)="setFilter('growth')">Growth</button>
+  </div>
+  <div class="services-grid-3" id="servicesGrid">
+    <a class="service-card" data-cat="finance" [style.display]="show('finance') ? 'block' : 'none'" [routerLink]="['/service','msme-loans-finance']"><div class="service-icon">💰</div><h3>MSME Loans & Finance</h3><p>Business loans, working capital, machinery finance from 100+ banks and NBFCs. Collateral-free loans available. Free doorstep service.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="legal" [style.display]="show('legal') ? 'block' : 'none'" [routerLink]="['/service','company-formation']"><div class="service-icon">🏢</div><h3>Company Formation</h3><p>Pvt Ltd, LLP, OPC, Partnership, Sole Proprietorship — complete legal structure setup and regulatory compliance.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="finance" [style.display]="show('finance') ? 'block' : 'none'" [routerLink]="['/service','government-subsidies']"><div class="service-icon">🏛️</div><h3>Government Subsidies</h3><p>PMEGP, CGTMSE, MUDRA, Capital subsidy, sector-specific schemes — we identify and apply for the right schemes for your business.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="technology" [style.display]="show('technology') ? 'block' : 'none'" [routerLink]="['/service','technology-solutions']"><div class="service-icon">💻</div><h3>Technology Solutions</h3><p>ERP, CRM, websites, mobile apps, cloud computing and complete digital transformation for manufacturing and service MSMEs.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="marketing" [style.display]="show('marketing') ? 'block' : 'none'" [routerLink]="['/service','sales-digital-marketing']"><div class="service-icon">📣</div><h3>Sales & Digital Marketing</h3><p>SEO, Google Ads, social media marketing, content creation, brand building and comprehensive lead generation for MSMEs.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="growth" [style.display]="show('growth') ? 'block' : 'none'" [routerLink]="['/service','ipo-investment-banking']"><div class="service-icon">📈</div><h3>IPO & Investment Banking</h3><p>SME IPO listing on NSE Emerge & BSE SME, fund raising, M&A advisory, private equity and investment banking.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="growth" [style.display]="show('growth') ? 'block' : 'none'" [routerLink]="['/service','coaching-consulting']"><div class="service-icon">🎓</div><h3>Coaching & Consulting</h3><p>Business strategy, management consulting, leadership coaching, mentorship programs and executive training.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="legal" [style.display]="show('legal') ? 'block' : 'none'" [routerLink]="['/service','legal-compliance']"><div class="service-icon">⚖️</div><h3>Legal & Compliance</h3><p>GST registration, income tax, trademark, ISO, FSSAI, MSME Udyam and all regulatory compliance services.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="technology" [style.display]="show('technology') ? 'block' : 'none'" [routerLink]="['/service','research-development']"><div class="service-icon">🔬</div><h3>R&D & Innovation</h3><p>Product development support, innovation funding, patent filing, R&D tax benefits and technology transfer assistance.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="growth" [style.display]="show('growth') ? 'block' : 'none'" [routerLink]="['/service','export-import']"><div class="service-icon">🌐</div><h3>Export & Import</h3><p>IEC registration, export documentation, trade finance, international market linkages and export promotion support.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="growth" [style.display]="show('growth') ? 'block' : 'none'" [routerLink]="['/service','hr-recruitment']"><div class="service-icon">👥</div><h3>HR & Recruitment</h3><p>Talent acquisition, HR policies, payroll management, PF/ESI compliance and employee benefits for MSMEs.</p><span class="service-link">Learn More →</span></a>
+    <a class="service-card" data-cat="finance" [style.display]="show('finance') ? 'block' : 'none'" [routerLink]="['/service','accounting-cfo']"><div class="service-icon">📊</div><h3>Accounting & Virtual CFO</h3><p>Bookkeeping, financial statements, MIS reporting, budgeting, virtual CFO services and financial planning for MSMEs.</p><span class="service-link">Learn More →</span></a>
+  </div>
+</div></section>
+</div><!-- /services -->

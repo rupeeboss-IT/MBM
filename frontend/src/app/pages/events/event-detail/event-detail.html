@@ -1,0 +1,36 @@
+<!-- ===== EVENT DETAIL PAGE ===== -->
+<div class="page active" id="page-event-detail" *ngIf="event() as ev">
+<div class="page-header" style="background:linear-gradient(135deg,var(--red),var(--red-dark))"><div class="container"><div class="breadcrumb"><a routerLink="/home">Home</a><span class="sep">›</span><a routerLink="/events">Events</a><span class="sep">›</span><span id="eventDetailCrumb">{{ ev.crumb }}</span></div><h1 id="eventDetailTitle">{{ ev.title }}</h1><p id="eventDetailSubtitle">{{ ev.subtitle }}</p></div></div>
+<section class="section"><div class="container">
+  <div class="detail-layout">
+    <div class="detail-main" id="eventDetailMain">
+      <div style="background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;border-radius:14px;padding:3rem;text-align:center;margin-bottom:2.5rem">
+        <span style="font-size:4rem;display:block;margin-bottom:1rem">{{ ev.emoji }}</span>
+        <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:.5rem">{{ ev.title }}</h2>
+        <p style="opacity:.9">📅 {{ ev.date }}</p><p style="opacity:.9">📍 {{ ev.venue }}</p>
+      </div>
+      <div style="display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap">
+        <div style="background:var(--gray);border-radius:10px;padding:.8rem 1.2rem;font-size:.85rem"><strong>Type:</strong> {{ ev.type }}</div>
+        <div style="background:var(--gray);border-radius:10px;padding:.8rem 1.2rem;font-size:.85rem"><strong>Fee:</strong> {{ ev.price }}</div>
+      </div>
+      <div [innerHTML]="safeBody()"></div>
+    </div>
+    <div class="detail-sidebar">
+      <div class="sidebar-card" style="background:linear-gradient(135deg,#fff5f5,#ffe0e3);border-color:#fcd0d4">
+        <h3>Register Now</h3>
+        <p style="color:var(--text);font-size:.88rem;margin-bottom:1rem" id="eventRegisterNote">{{ ev.regNote || 'Secure your spot today' }}</p>
+        <button class="btn-primary" style="width:100%" onclick="openModal('registerEvent')">Register for Event</button>
+      </div>
+      <div class="sidebar-card">
+        <h3>Share This Event</h3>
+        <div class="share-btns">
+          <button class="share-btn" onclick="shareContent('whatsapp')">WhatsApp</button>
+          <button class="share-btn" onclick="shareContent('linkedin')">LinkedIn</button>
+          <button class="share-btn" onclick="copyLink()">Copy Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+</div><!-- /event detail -->
+

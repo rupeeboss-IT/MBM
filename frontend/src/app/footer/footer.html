@@ -1,1 +1,68 @@
-<p>footer works!</p>
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-icon">🏛️</div>
+        <h3>MSME <span>Bharat Manch</span></h3>
+        <p>India's #1 platform for 360° MSME business solutions — from company formation to IPO listing. Powered by RupeeBoss.com.</p>
+        <ul class="footer-contact">
+          <li>📍 620, The Summit Business Bay, Andheri East, Mumbai – 400093</li>
+          <li>📞 <a href="tel:+917982218029" style="color:inherit">+91 79822 18029</a></li>
+          <li>✉️ <a href="mailto:info@msmebharatmanch.com" style="color:inherit">info@msmebharatmanch.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a [routerLink]="['/service','msme-loans-finance']">MSME Loans</a></li>
+          <li><a [routerLink]="['/service','company-formation']">Company Formation</a></li>
+          <li><a [routerLink]="['/service','government-subsidies']">Govt. Schemes</a></li>
+          <li><a [routerLink]="['/service','technology-solutions']">Technology</a></li>
+          <li><a [routerLink]="['/service','sales-digital-marketing']">Digital Marketing</a></li>
+          <li><a [routerLink]="['/service','ipo-investment-banking']">IPO & Investment</a></li>
+          <li><a [routerLink]="['/service','coaching-consulting']">Coaching</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a onclick="nav('about')">About Us</a></li>
+          <li><a onclick="nav('partners')">Growth Partners</a></li>
+          <li><a onclick="nav('events')">Events</a></li>
+          <li><a onclick="nav('news')">News & Blog</a></li>
+          <li><a onclick="nav('careers')">Careers</a></li>
+          <li><a onclick="nav('media')">Media Kit</a></li>
+          <li><a onclick="nav('contact')">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal & Support</h4>
+        <ul>
+          <li><a onclick="nav('membership')">Membership Plans</a></li>
+          <li><a onclick="nav('search')">Search</a></li>
+          <li><a onclick="nav('privacy-policy')">Privacy Policy</a></li>
+          <li><a onclick="nav('terms')">Terms of Use</a></li>
+          <li><a onclick="nav('disclaimer')">Disclaimer</a></li>
+        </ul>
+        <div style="margin-top:1.5rem">
+          <h4>Follow Us</h4>
+          <div style="display:flex;gap:.8rem;margin-top:.6rem">
+            <a href="#" style="color:#9ca3af;font-size:1.1rem">in</a>
+            <a href="#" style="color:#9ca3af;font-size:1.1rem">tw</a>
+            <a href="#" style="color:#9ca3af;font-size:1.1rem">fb</a>
+            <a href="#" style="color:#9ca3af;font-size:1.1rem">yt</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="border-top:1px solid #374151;padding:1.5rem 0;max-width:1280px;margin:0 auto;padding-left:1.5rem;padding-right:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+    <p style="font-size:.8rem;color:#9ca3af">© 2024 MSME Bharat Manch. A National Initiative by RupeeBoss.com. All rights reserved.</p>
+    <div style="display:flex;gap:1.5rem">
+      <a onclick="nav('privacy-policy')" style="font-size:.8rem;color:#9ca3af;cursor:pointer">Privacy</a>
+      <a onclick="nav('terms')" style="font-size:.8rem;color:#9ca3af;cursor:pointer">Terms</a>
+      <a onclick="nav('disclaimer')" style="font-size:.8rem;color:#9ca3af;cursor:pointer">Disclaimer</a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,24 @@
+<!-- ===== SCHEME DETAIL PAGE ===== -->
+<div class="page active" id="page-scheme-detail" *ngIf="scheme() as sc">
+<div class="page-header" style="background:linear-gradient(135deg,#2d6a4f,#1b4332)"><div class="container"><div class="breadcrumb"><a routerLink="/home">Home</a><span class="sep">›</span><a routerLink="/schemes">Schemes</a><span class="sep">›</span><span id="schemeDetailCrumb">{{ sc.crumb }}</span></div><h1 id="schemeDetailTitle">{{ sc.title }}</h1><p id="schemeDetailSubtitle">{{ sc.subtitle }}</p></div></div>
+<section class="section"><div class="container">
+  <div class="detail-layout">
+    <div class="detail-main" id="schemeDetailMain">
+      <div [innerHTML]="safeHtml()"></div>
+      <p style="margin-top:2rem;padding:1rem;background:#e8f5e9;border-radius:8px;font-size:.9rem;color:var(--green)">📞 Our experts have helped 1,000+ MSMEs successfully apply for this scheme. Contact us for free guidance.</p>
+    </div>
+    <div class="detail-sidebar">
+      <div class="sidebar-card">
+        <h3>Apply Now</h3>
+        <p style="color:var(--text);font-size:.88rem;margin-bottom:1rem">Our experts will help you apply</p>
+        <button class="btn-primary" style="width:100%;background:var(--green)" onclick="nav('contact')">Get Expert Help</button>
+      </div>
+      <div class="sidebar-card" style="background:#e8f5e9;border-color:#c8e6c9">
+        <h3 style="color:var(--green)">Key Benefits</h3>
+        <ul id="schemeDetailBenefits"><li *ngFor="let b of sc.benefits">{{ b }}</li></ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+</div><!-- /scheme detail -->
+

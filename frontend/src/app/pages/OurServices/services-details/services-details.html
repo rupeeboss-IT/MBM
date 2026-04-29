@@ -1,0 +1,49 @@
+<!-- ===== SERVICE DETAIL PAGE ===== -->
+<div class="page active" id="page-service-detail" *ngIf="svc() as service">
+<div class="page-header" id="svcDetailHeader"><div class="container"><div class="breadcrumb"><a routerLink="/home">Home</a><span class="sep">›</span><a routerLink="/our-services">Services</a><span class="sep">›</span><span id="svcDetailCrumb">{{ service.title }}</span></div><h1 id="svcDetailTitle">{{ service.emoji }} {{ service.title }}</h1><p id="svcDetailSubtitle">{{ service.subtitle }}</p></div></div>
+<section class="section"><div class="container">
+  <div class="detail-layout">
+    <div class="detail-main" id="svcDetailMain">
+      <h2>Overview</h2>
+      <p>{{ service.title }} is one of MSME Bharat Manch's core service offerings. {{ service.subtitle }}. Our team of experts provides end-to-end support through every step of the process.</p>
+
+      <h2>Key Benefits</h2>
+      <ul class="benefit-list">
+        <li *ngFor="let b of service.benefits"><span class="check">✓</span>{{ b }}</li>
+      </ul>
+
+      <h2>Our Process</h2>
+      <p>{{ service.process }}</p>
+
+      <h2>Who Is This For?</h2>
+      <div class="target-grid">
+        <div class="target-card" *ngFor="let t of service.targets">
+          <span>{{ splitTarget(t).icon }}</span><strong>{{ splitTarget(t).text }}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="detail-sidebar">
+      <div class="sidebar-card">
+        <h3>Quick Apply</h3>
+        <p style="color:var(--text);font-size:.88rem;margin-bottom:1rem">Get expert help with this service today</p>
+        <button class="btn-primary" style="width:100%" onclick="nav('contact')">Request Callback</button>
+        <div style="margin-top:1rem;text-align:center"><a href="tel:+917982218029" style="color:var(--red);font-weight:700;font-size:.95rem">📞 +91 79822 18029</a></div>
+      </div>
+      <div class="sidebar-card">
+        <h3>Why Choose Us</h3>
+        <ul>
+          <li>Free initial consultation</li><li>500+ expert partners</li><li>Pan India service</li><li>Doorstep assistance</li><li>No hidden charges</li><li>24-48 hour response</li>
+        </ul>
+      </div>
+      <div class="sidebar-card">
+        <h3>Related Services</h3>
+        <ul id="svcRelated">
+          <li *ngFor="let r of related()">
+            <a [routerLink]="['/service', r.slug]" style="cursor:pointer">{{ r.data.title }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+</div><!-- /service detail -->

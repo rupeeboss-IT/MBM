@@ -1,1 +1,72 @@
-<p>header works!</p>
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a class="brand" routerLink="/home">
+      <span class="brand-icon">🏛️</span>
+      <span>MSME <span class="accent">Bharat Manch</span></span>
+    </a>
+    <button class="menu-toggle" onclick="toggleMobile()" id="menuBtn">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a routerLink="/home">Home</a>
+      <a routerLink="/about">About</a>
+      <div class="dropdown" id="dd-services">
+        <span class="dropdown-trigger" onclick="toggleDD('dd-services')">Services ▾</span>
+        <div class="dropdown-menu">
+          <a routerLink="/our-services">All 360° Services</a>
+          <div class="dd-sep"></div>
+          <a routerLink="/service/msme-loans-finance">💰 MSME Loans</a>
+          <a routerLink="/service/company-formation">🏢 Company Formation</a>
+          <a routerLink="/service/government-subsidies">🏛️ Govt. Subsidies</a>
+          <a routerLink="/service/technology-solutions">💻 Technology</a>
+          <a routerLink="/service/sales-digital-marketing">📣 Digital Marketing</a>
+          <a routerLink="/service/ipo-investment-banking">📈 IPO & Investment</a>
+          <a routerLink="/service/coaching-consulting">🎓 Coaching</a>
+        </div>
+      </div>
+      <a class="nav-loans" routerLink="/loans">Loans</a>
+      <a routerLink="/schemes">Schemes</a>
+      <a routerLink="/events">Events</a>
+      <a routerLink="/partners">Partners</a>
+      <div class="dropdown" id="dd-more">
+        <span class="dropdown-trigger" onclick="toggleDD('dd-more')">More ▾</span>
+        <div class="dropdown-menu">
+          <a routerLink="/news">📰 News & Blog</a>
+          <a routerLink="/contact">📞 Contact</a>
+          <a routerLink="/search">🔍 Search</a>
+          <a routerLink="/membership">💎 Membership</a>
+          <a routerLink="/careers">👔 Careers</a>
+          <a routerLink="/media">📸 Media Kit</a>
+        </div>
+      </div>
+      <button class="btn-icon" onclick="toggleSearch()">🔍</button>
+      <div id="nav-auth-guest">
+        <a class="btn-outline" routerLink="/login">Login</a>
+        <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Free</a>
+      </div>
+      <div id="nav-auth-user" style="display:none">
+        <div class="dropdown" id="dd-user">
+          <span class="dropdown-trigger" onclick="toggleDD('dd-user')" id="user-pill" style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+            <span style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem" id="user-avatar">A</span>
+            <span id="user-name-nav">User</span> ▾
+          </span>
+          <div class="dropdown-menu dm-right">
+            <a onclick="nav('dashboard');close()">📊 Dashboard</a>
+            <a onclick="nav('profile');close()">👤 My Profile</a>
+            <a onclick="nav('admin');close()" id="admin-link" style="display:none">⚙️ Admin Panel</a>
+            <div class="dd-sep"></div>
+            <button class="dd-logout" onclick="doLogout()">⏏ Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="search-drawer" id="searchDrawer">
+    <form class="search-form" onsubmit="doSearch(event)">
+      <input type="search" id="searchInput" placeholder="Search services, schemes, events, news...">
+      <button type="submit" class="btn-search">Search</button>
+      <button type="button" style="background:none;border:1px solid #ddd;border-radius:6px;padding:.6rem .8rem;cursor:pointer;color:#888" onclick="toggleSearch()">✕</button>
+    </form>
+  </div>
+</nav>
