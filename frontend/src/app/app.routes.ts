@@ -21,6 +21,11 @@ import { Disclaimer } from './pages/disclaimer/disclaimer';
 import { Login as UserLogin } from './user/login/login';
 import { Register } from './user/register/register';
 import { ArticleDetail } from './pages/More/news-blog/article-detail/article-detail';
+import { ForgotPassword as UserForgotPassword } from './user/forgot-password/forgot-password';
+import { Login as AdminLogin } from './admin/login/login';
+import { ForgotPassword as AdminForgotPassword } from './admin/forgot-password/forgot-password';
+import { OfferingDetails } from './pages/offering-details/offering-details';
+import { ErrorPage } from './error-page/error-page';
 
 export const routes: Routes = [
     {
@@ -112,6 +117,10 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'offering/:slug',
+        component: OfferingDetails
+    },
+    {
         path: 'news',
         component: NewsBlog,
         pathMatch: 'full'
@@ -151,8 +160,27 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'forgot-password',
+        component: UserForgotPassword,
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-login',
+        component: AdminLogin,
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-forgot-password',
+        component: AdminForgotPassword,
+        pathMatch: 'full'
+    },
+    {
         path: 'register',
         component: Register,
         pathMatch: 'full'
+    },
+    {
+        path: '**',
+        component: ErrorPage
     }
 ];

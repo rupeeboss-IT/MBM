@@ -1,110 +1,403 @@
-
 <!-- ===== MEMBERSHIP PAGE ===== -->
 <div class="page active" id="page-membership">
-<div class="page-header"><div class="container"><div class="section-tag-white">Join MSME Bharat Manch</div><h1>Membership Plans</h1><p>Choose the plan that fits your MSME growth stage</p></div></div>
-<section class="section"><div class="container">
-  <div style="display:flex;align-items:center;gap:.6rem;background:#fffbe6;border:1px solid #fce779;border-radius:10px;padding:.8rem 1.2rem;margin-bottom:2rem;font-size:.88rem;color:#7c6b02;max-width:600px;margin-left:auto;margin-right:auto">
-    <span style="font-size:1.1rem">💡</span>
-    <span><strong>Tip:</strong> Click on any underlined feature in the plan cards to learn exactly what that offering includes.</span>
+  <div class="page-header">
+    <div class="container">
+      <div class="section-tag-white">Join MSME Bharat Manch</div>
+      <h1>Membership Plans</h1>
+      <p>Choose the plan that fits your MSME growth stage</p>
+    </div>
   </div>
-  <div class="plans-grid">
-    <div class="plan-card"><div class="plan-icon">🌱</div><h2>MSME Basic</h2><p class="plan-desc">For any MSME with Udyam Aadhaar — start your growth journey.</p><div class="plan-price"><span class="price">₹999</span><span class="period">/ year + 18% GST</span></div><ul class="plan-features"><li><span class="tick">✓</span>Join with Udyam Aadhaar</li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('trust-score')"><span class="pfl-text">Build your credibility profile</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span>National MSME network</li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span>Growth ecosystem access</li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp Platform</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Basic Website</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('practo-insurance')"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('credit-report')"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ</span></span></li></ul><button class="btn-primary" style="width:100%" onclick="navPlan('MSME Basic','999')">Get MSME Basic</button></div>
-    <div class="plan-card"><div class="plan-icon">🌐</div><h2>MSME Standard</h2><p class="plan-desc">Manage your website, automate WhatsApp replies, capture leads.</p><div class="plan-price"><span class="price">₹4,999</span><span class="period">/ year + 18% GST</span></div><ul class="plan-features"><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Website Development (Business / Service / Portfolio / E-commerce)</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Hosting + Server + Database included</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Free subdomain on qobo.dev</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span>Domain mapping FREE</li><li><span class="tick">✓</span>Mobile-friendly, fast loading, WhatsApp + Call button</li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">FAQ automation</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span>Basic routing/notifications</li><li><span class="tick">✓</span>Setup + yearly hosting/maintenance</li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span>Growth ecosystem access</li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('practo-insurance')"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('credit-report')"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ</span></span></li></ul><button class="btn-outline" style="width:100%" onclick="navPlan('MSME Standard','4999')">Get MSME Standard</button></div>
-    <div class="plan-card featured"><div class="plan-popular">Most Popular</div><div class="plan-icon">🏆</div><h2>MSME Premium</h2><p class="plan-desc">Perfect for MSMEs ready to build financial credibility.</p><div class="plan-price"><span class="price">₹9,999</span><span class="period">/ year + 18% GST</span></div><ul class="plan-features"><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('trust-score')"><span class="pfl-text">Infomerics Verified business verification report</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('scheme-discovery')"><span class="pfl-text">Company Scheme Discovery report</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('bank-statement-analyzer')"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('relationship-manager')"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('loan-audit')"><span class="pfl-text">Free Loan Audit</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('insurance-audit')"><span class="pfl-text">Free Insurance Audit</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">2 MSME Events Access</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('practo-insurance')"><span class="pfl-text">₹15 Lakh Insurance Cover</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('credit-report')"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ</span></span></li></ul><button class="btn-primary" style="width:100%" onclick="navPlan('MSME Premium','9999')">Get MSME Premium</button></div>
-    <div class="plan-card"><div class="plan-icon">💎</div><h2>MSME Pro</h2><p class="plan-desc">For MSMEs seeking deeper insights and GeM access.</p><div class="plan-price"><span class="price">₹19,999</span><span class="period">/ year + 18% GST</span></div><ul class="plan-features"><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('trust-score')"><span class="pfl-text">Infomerics business assessment report</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('gem-registration')"><span class="pfl-text">GeM Portal Registration &amp; Support</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('scheme-discovery')"><span class="pfl-text">Company Scheme Discovery report</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('bank-statement-analyzer')"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('relationship-manager')"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('loan-audit')"><span class="pfl-text">Free Loan Audit</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('insurance-audit')"><span class="pfl-text">Free Insurance Audit</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">4 MSME Events Access</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('practo-insurance')"><span class="pfl-text">₹15 Lakh Insurance Cover</span><span class="pfl-info">ℹ</span></span></li><li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('credit-report')"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ</span></span></li></ul><button class="btn-navy" style="width:100%" onclick="navPlan('MSME Pro','19999')">Get MSME Pro</button></div>
-  </div>
-  <div class="section-header" style="margin-bottom:1.5rem"><h2>Frequently Asked Questions</h2></div>
-  <div style="max-width:760px;margin:0 auto">
-    <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Can I upgrade my plan later? <span class="faq-icon">+</span></div><div class="faq-a">Yes, you can upgrade your membership plan at any time. You'll only pay the difference for the remaining period of your subscription. Contact our support team for seamless plan upgrades.</div></div>
-    <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Is the Basic plan really free forever? <span class="faq-icon">+</span></div><div class="faq-a">Yes! The Basic plan is completely free with no time limit. You get full platform access, can apply for loans, discover government schemes, and attend events. Paid plans unlock priority support and dedicated relationship managers.</div></div>
-    <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">What is a Relationship Manager (RM)? <span class="faq-icon">+</span></div><div class="faq-a">A Relationship Manager is a dedicated MSME expert assigned to your account. They help you identify the right loan products, guide you through scheme applications, connect you with the right service providers, and provide personalized business advice.</div></div>
-    <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">How do I apply for government schemes through my membership? <span class="faq-icon">+</span></div><div class="faq-a">Once you're a member, you can browse all available government schemes, check your eligibility, and request application assistance. For Silver and above plans, our experts handle the complete application process on your behalf.</div></div>
-    <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">Is there a refund policy? <span class="faq-icon">+</span></div><div class="faq-a">We offer a 30-day satisfaction guarantee for all paid plans. If you're not satisfied with the service within the first 30 days, contact us and we'll process a full refund without any questions.</div></div>
-  </div>
-</div></section>
+  <section class="section">
+    <div class="container">
+      <div
+        style="display:flex;align-items:center;gap:.6rem;background:#fffbe6;border:1px solid #fce779;border-radius:10px;padding:.8rem 1.2rem;margin-bottom:2rem;font-size:.88rem;color:#7c6b02;max-width:600px;margin-left:auto;margin-right:auto">
+        <span style="font-size:1.1rem">💡</span>
+        <span><strong>Tip:</strong> Click on any underlined feature in the plan cards to learn exactly what that
+          offering includes.</span>
+      </div>
+      <div class="plans-grid">
+        <div class="plan-card">
+          <div class="plan-icon">🌱</div>
+          <h2>MSME Basic</h2>
+          <p class="plan-desc">For any MSME with Udyam Aadhaar — start your growth journey.</p>
+          <div class="plan-price"><span class="price">₹999</span><span class="period">/ year + 18% GST</span></div>
+          <ul class="plan-features">
+            <li><span class="tick">✓</span>Join with Udyam Aadhaar</li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
+                  class="pfl-text">Build your credibility profile</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span>National MSME network</li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span>Growth ecosystem access</li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Platform</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
+                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+          </ul><button class="btn-primary" style="width:100%" onclick="navPlan('MSME Basic','999')">Get MSME
+            Basic</button>
+        </div>
+        <div class="plan-card">
+          <div class="plan-icon">🌐</div>
+          <h2>MSME Standard</h2>
+          <p class="plan-desc">Manage your website, automate WhatsApp replies, capture leads.</p>
+          <div class="plan-price"><span class="price">₹4,999</span><span class="period">/ year + 18% GST</span></div>
+          <ul class="plan-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development (Business /
+                  Service / Portfolio / E-commerce)</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Hosting + Server + Database
+                  included</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Free subdomain on
+                  qobo.dev</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span>Domain mapping FREE</li>
+            <li><span class="tick">✓</span>Mobile-friendly, fast loading, WhatsApp + Call button</li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">FAQ automation</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span>Basic routing/notifications</li>
+            <li><span class="tick">✓</span>Setup + yearly hosting/maintenance</li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span>Growth ecosystem access</li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
+                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+          </ul><button class="btn-outline" style="width:100%" onclick="navPlan('MSME Standard','4999')">Get MSME
+            Standard</button>
+        </div>
+        <div class="plan-card featured">
+          <div class="plan-popular">Most Popular</div>
+          <div class="plan-icon">🏆</div>
+          <h2>MSME Premium</h2>
+          <p class="plan-desc">Perfect for MSMEs ready to build financial credibility.</p>
+          <div class="plan-price"><span class="price">₹9,999</span><span class="period">/ year + 18% GST</span></div>
+          <ul class="plan-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
+                  class="pfl-text">Infomerics Verified business verification report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery
+                  report</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
+                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
+                  Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
+                  Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
+                  class="pfl-text">Free Loan Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','insurance-audit']"><span class="pfl-text">Free Insurance Audit</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">2 MSME Events Access</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">₹15 Lakh Insurance
+                  Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+          </ul><button class="btn-primary" style="width:100%" onclick="navPlan('MSME Premium','9999')">Get MSME
+            Premium</button>
+        </div>
+        <div class="plan-card">
+          <div class="plan-icon">💎</div>
+          <h2>MSME Pro</h2>
+          <p class="plan-desc">For MSMEs seeking deeper insights and GeM access.</p>
+          <div class="plan-price"><span class="price">₹19,999</span><span class="period">/ year + 18% GST</span></div>
+          <ul class="plan-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
+                  class="pfl-text">Infomerics business assessment report</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal Registration &amp;
+                  Support</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery
+                  report</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
+                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
+                  Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
+                  Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
+                  class="pfl-text">Free Loan Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','insurance-audit']"><span class="pfl-text">Free Insurance Audit</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">4 MSME Events Access</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">₹15 Lakh Insurance
+                  Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+          </ul><button class="btn-navy" style="width:100%" onclick="navPlan('MSME Pro','19999')">Get MSME Pro</button>
+        </div>
+      </div>
+      <div class="section-header" style="margin-bottom:1.5rem">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <div style="max-width:760px;margin:0 auto">
+        <div class="faq-item" [class.open]="openFaqIndex === 0">
+          <div class="faq-q" (click)="toggleFaq(0)">
+            Can I upgrade my plan later? <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Yes, you can upgrade your membership plan at any time. You'll only pay the difference for
+            the remaining period of your subscription. Contact our support team for seamless plan upgrades.</div>
+        </div>
+        <div class="faq-item" [class.open]="openFaqIndex === 1">
+          <div class="faq-q" (click)="toggleFaq(1)">
+            Is the Basic plan really free forever? <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Yes! The Basic plan is completely free with no time limit. You get full platform access,
+            can apply for loans, discover government schemes, and attend events. Paid plans unlock priority support and
+            dedicated relationship managers.</div>
+        </div>
+        <div class="faq-item" [class.open]="openFaqIndex === 2">
+          <div class="faq-q" (click)="toggleFaq(2)">
+            What is a Relationship Manager (RM)? <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">A Relationship Manager is a dedicated MSME expert assigned to your account. They help you
+            identify the right loan products, guide you through scheme applications, connect you with the right service
+            providers, and provide personalized business advice.</div>
+        </div>
+        <div class="faq-item" [class.open]="openFaqIndex === 3">
+          <div class="faq-q" (click)="toggleFaq(3)">
+            How do I apply for government schemes through my membership? <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">Once you're a member, you can browse all available government schemes, check your
+            eligibility, and request application assistance. For Silver and above plans, our experts handle the complete
+            application process on your behalf.</div>
+        </div>
+        <div class="faq-item" [class.open]="openFaqIndex === 4">
+          <div class="faq-q" (click)="toggleFaq(4)">
+            Is there a refund policy? <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-a">We offer a 30-day satisfaction guarantee for all paid plans. If you're not satisfied with
+            the service within the first 30 days, contact us and we'll process a full refund without any questions.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section class="section bg-light">
-<div class="container">
-  <div class="section-header">
-    <div class="section-tag">What's Included</div>
-    <h2>Explore All Plan Offerings</h2>
-    <p>Click any offering card to read the full details — what it is, how it works, and what you get</p>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem" id="offerings-explorer-grid">
-    <div class="offering-explorer-card" onclick="navOffering('whatsapp-platform')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:1.5rem">💬</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">WhatsApp Platform</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Run WhatsApp campaigns, automate replies, capture leads</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All Plans</span></div>
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">What's Included</div>
+        <h2>Explore All Plan Offerings</h2>
+        <p>Click any offering card to read the full details — what it is, how it works, and what you get</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem" id="offerings-explorer-grid">
+        <div class="offering-explorer-card" [routerLink]="['/offering','whatsapp-platform']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            💬</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">WhatsApp Platform</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Run WhatsApp campaigns, automate replies,
+            capture leads</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All
+              Plans</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','basic-website']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0f3460,#1a56db);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🌐</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Website Development</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Business/Portfolio/E-commerce site + hosting +
+            qobo.dev subdomain</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All
+              Plans</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','credit-report']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e63946,#c1121f);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            📊</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Free Credit Report</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">CIBIL score + full credit history + monthly
+            updates</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All
+              Plans</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','practo-insurance']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🛡️</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Practo Health Plan</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Family health cover + accident protection +
+            hospital cash</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#e3f2fd;color:#1565c0;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Basic
+              & Standard</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','trust-score']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7b1fa2,#4a148c);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            ⭐</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Infomerics Trust Score</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">SEBI-registered business verification report —
+            build credibility</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','scheme-discovery']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2d6a4f,#1b4332);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🏛️</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Scheme Discovery Report</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Personalized govt schemes list based on your
+            Udyam profile</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','bank-statement-analyzer']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1a56db,#0f3460);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🏦</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Bank Statement Analyzer</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Automated cash flow analysis + loan eligibility
+            report</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','relationship-manager']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#4c1d95);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            👔</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Free Relationship Manager</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Dedicated financial expert — single point of
+            contact, free</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','loan-audit']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e65100,#bf360c);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🔍</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Free Loan Audit</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Reduce EMIs, save on interest, restructure
+            existing loans</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','insurance-audit']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0277bd,#01579b);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🛡️</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">Free Insurance Audit</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Optimize premiums, fix coverage gaps, eliminate
+            duplicates</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','msme-events']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e63946,#c1121f);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🎟️</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">MSME Events Access</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Summits, trade fairs, workshops — meet buyers
+            and investors</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
+              & Pro</span></div>
+        </div>
+        <div class="offering-explorer-card" [routerLink]="['/offering','gem-registration']"
+          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
+          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          <div
+            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1565c0,#0d47a1);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
+            🏛️</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">GeM Portal Registration</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Sell to government buyers — 25% MSME quota, no
+            EMD</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
+              style="background:#ede7f6;color:#4a148c;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Pro
+              Only</span></div>
+        </div>
+      </div>
+      <style>
+        @media(max-width:900px) {
+          #offerings-explorer-grid {
+            grid-template-columns: repeat(3, 1fr) !important
+          }
+        }
+
+        @media(max-width:600px) {
+          #offerings-explorer-grid {
+            grid-template-columns: repeat(2, 1fr) !important
+          }
+        }
+      </style>
     </div>
-    <div class="offering-explorer-card" onclick="navOffering('basic-website')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0f3460,#1a56db);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🌐</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Website Development</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Business/Portfolio/E-commerce site + hosting + qobo.dev subdomain</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All Plans</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('credit-report')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e63946,#c1121f);display:flex;align-items:center;justify-content:center;font-size:1.5rem">📊</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Free Credit Report</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">CIBIL score + full credit history + monthly updates</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All Plans</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('practo-insurance')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🛡️</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Practo Health Plan</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Family health cover + accident protection + hospital cash</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#e3f2fd;color:#1565c0;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Basic & Standard</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('trust-score')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7b1fa2,#4a148c);display:flex;align-items:center;justify-content:center;font-size:1.5rem">⭐</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Infomerics Trust Score</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">SEBI-registered business verification report — build credibility</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('scheme-discovery')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2d6a4f,#1b4332);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏛️</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Scheme Discovery Report</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Personalized govt schemes list based on your Udyam profile</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('bank-statement-analyzer')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1a56db,#0f3460);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏦</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Bank Statement Analyzer</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Automated cash flow analysis + loan eligibility report</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('relationship-manager')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#4c1d95);display:flex;align-items:center;justify-content:center;font-size:1.5rem">👔</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Free Relationship Manager</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Dedicated financial expert — single point of contact, free</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('loan-audit')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e65100,#bf360c);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🔍</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Free Loan Audit</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Reduce EMIs, save on interest, restructure existing loans</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('insurance-audit')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0277bd,#01579b);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🛡️</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">Free Insurance Audit</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Optimize premiums, fix coverage gaps, eliminate duplicates</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('msme-events')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e63946,#c1121f);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🎟️</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">MSME Events Access</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Summits, trade fairs, workshops — meet buyers and investors</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium & Pro</span></div>
-    </div>
-    <div class="offering-explorer-card" onclick="navOffering('gem-registration')" style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='';this.style.transform=''">
-      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1565c0,#0d47a1);display:flex;align-items:center;justify-content:center;font-size:1.5rem">🏛️</div>
-      <strong style="color:#1a1a2e;font-size:.92rem">GeM Portal Registration</strong>
-      <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Sell to government buyers — 25% MSME quota, no EMD</p>
-      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span style="background:#ede7f6;color:#4a148c;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Pro Only</span></div>
-    </div>
-  </div>
-  <style>@media(max-width:900px){#offerings-explorer-grid{grid-template-columns:repeat(3,1fr)!important}}@media(max-width:600px){#offerings-explorer-grid{grid-template-columns:repeat(2,1fr)!important}}</style>
-</div>
-</section>
+  </section>
 </div><!-- /membership -->

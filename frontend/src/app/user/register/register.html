@@ -1,1 +1,96 @@
-<p>register works!</p>
+<!-- ===== REGISTER PAGE ===== -->
+<div class="page active" id="page-register">
+<div class="auth-wrap" style="align-items:flex-start;padding-top:2rem">
+  <div style="width:100%;max-width:540px;margin:0 auto">
+    <!-- Steps indicator -->
+    <div class="payment-steps" style="margin-bottom:2rem">
+      <div class="pay-step active" id="reg-step-ind-1"><div class="pay-step-num">1</div><span>Account</span></div>
+      <div class="pay-step-line" id="reg-line-1"></div>
+      <div class="pay-step" id="reg-step-ind-2"><div class="pay-step-num">2</div><span>Choose Plan</span></div>
+      <div class="pay-step-line" id="reg-line-2"></div>
+      <div class="pay-step" id="reg-step-ind-3"><div class="pay-step-num">3</div><span>Payment</span></div>
+      <div class="pay-step-line" id="reg-line-3"></div>
+      <div class="pay-step" id="reg-step-ind-4"><div class="pay-step-num">4</div><span>Done</span></div>
+    </div>
+
+    <!-- Step 1: Account Details -->
+    <div class="auth-box" id="reg-step-1">
+      <div class="auth-logo"><span style="font-size:2.5rem">🏛️</span><h2>Create Your Account</h2><p>Step 1 of 4 — Basic details</p></div>
+      <form id="registerForm" onsubmit="regNextStep(event,1)">
+        <div class="form-group"><label>I am a</label>
+          <select id="regRole">
+            <option value="member">MSME Member / Business Owner</option>
+            <option value="partner">Growth Partner / Consultant</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Full Name *</label><input type="text" id="regName" placeholder="Your full name" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Email Address *</label><input type="email" id="regEmail" placeholder="your@email.com" required></div>
+          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="regPhone" placeholder="10-digit number" required></div>
+        </div>
+        <div class="form-group"><label>Password *</label><input type="password" id="regPass" placeholder="Min. 8 characters" required minlength="8"></div>
+        <div class="form-group"><label>Company / Business Name</label><input type="text" id="regCompany" placeholder="Your company name (optional)"></div>
+        <div style="background:#f8f9fa;border:1.5px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
+          <label style="display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;font-size:.85rem;color:#444;line-height:1.6;font-weight:400">
+            <input type="checkbox" id="regConsent" required style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--red);cursor:pointer">
+            <span>By registering, you provide your consent to <strong>Rupeeboss</strong> to contact you via call, SMS, WhatsApp, and email regarding MBM product and Rupeeboss Financial products, including service updates, support, and relevant offers. You also agree to the collection and use of your personal information in accordance with our <a [routerLink]="['/privacy-policy']" style="color:var(--red);font-weight:600;cursor:pointer">Privacy Policy</a>.</span>
+          </label>
+          <div id="consent-error" style="display:none;color:var(--red);font-size:.8rem;margin-top:.5rem;font-weight:600">⚠️ Please accept the consent to continue.</div>
+        </div>
+        <button type="submit" class="btn-submit">Continue to Plan Selection →</button>
+      </form>
+      <div class="auth-footer">Already have an account? <a [routerLink]="['/login']">Login here</a></div>
+    </div>
+
+    <!-- Step 2: Choose Plan -->
+    <div class="auth-box" id="reg-step-2" style="display:none;max-width:760px;width:100%">
+      <div class="auth-logo"><span style="font-size:2rem">💎</span><h2>Choose Your Plan</h2><p>Step 2 of 4 — Start free, upgrade anytime</p></div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem" id="reg-plan-grid">
+        <div class="home-plan-card" id="rplan-MSME Basic" onclick="selectRegPlan('MSME Basic','999','🌱')" style="cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌱</div><h3 style="font-size:1rem">MSME Basic</h3></div><div class="hp-badge free">₹999/yr</div></div>
+          <p class="hp-desc">Udyam Aadhaar + credibility profile + WhatsApp + Basic Website</p>
+          <ul class="hp-features"><li><span class="tick">✓</span>Join with Udyam Aadhaar</li><li><span class="tick">✓</span>WhatsApp Platform</li><li><span class="tick">✓</span>Basic Website</li><li><span class="tick">✓</span>Practo Insurance + Credit Report</li></ul>
+          <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--green);font-size:.9rem">Select Basic — ₹999/yr</div>
+        </div>
+        <div class="home-plan-card" id="rplan-MSME Standard" onclick="selectRegPlan('MSME Standard','4999','🌐')" style="cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌐</div><h3 style="font-size:1rem">MSME Standard</h3></div><div class="hp-badge silver">₹4,999/yr</div></div>
+          <p class="hp-desc">Website + WhatsApp automation + hosting + lead capture</p>
+          <ul class="hp-features"><li><span class="tick">✓</span>Website Development + Hosting</li><li><span class="tick">✓</span>Free subdomain on qobo.dev</li><li><span class="tick">✓</span>WhatsApp FAQ automation</li><li><span class="tick">✓</span>Mobile-friendly + fast loading</li></ul>
+          <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#555;font-size:.9rem">Select Standard — ₹4,999/yr</div>
+        </div>
+        <div class="home-plan-card featured-plan" id="rplan-MSME Premium" onclick="selectRegPlan('MSME Premium','9999','🏆')" style="cursor:pointer">
+          <div class="plan-popular" style="top:-10px">Most Popular</div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🏆</div><h3 style="font-size:1rem">MSME Premium</h3></div><div class="hp-badge gold">₹9,999/yr</div></div>
+          <p class="hp-desc">Infomerics verified report + RM + Loan Audit + 15L Insurance</p>
+          <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Verified Report</li><li><span class="tick">✓</span>Free Relationship Manager</li><li><span class="tick">✓</span>Free Loan &amp; Insurance Audit</li><li><span class="tick">✓</span>2 Events + ₹15L Insurance</li></ul>
+          <div style="background:var(--red-light);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--red);font-size:.9rem">Select Premium — ₹9,999/yr</div>
+        </div>
+        <div class="home-plan-card" id="rplan-MSME Pro" onclick="selectRegPlan('MSME Pro','19999','💎')" style="cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">💎</div><h3 style="font-size:1rem">MSME Pro</h3></div><div class="hp-badge platinum">₹19,999/yr</div></div>
+          <p class="hp-desc">GeM Portal + Business Assessment + 4 Events + 15L Insurance</p>
+          <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Business Assessment</li><li><span class="tick">✓</span>GeM Portal Registration</li><li><span class="tick">✓</span>4 MSME Events Access</li><li><span class="tick">✓</span>₹15L Insurance + Free RM</li></ul>
+          <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#3949ab;font-size:.9rem">Select Pro — ₹19,999/yr</div>
+        </div>
+      </div>
+      <button class="btn-outline" style="width:100%" onclick="regGoBack(1)">← Back</button>
+    </div>
+
+    <!-- Step 3: Already handled by payment page -->
+    <!-- Step 4: Done - shown after payment -->
+    <div class="auth-box" id="reg-step-4" style="display:none">
+      <div class="success-animation">
+        <div class="success-tick">✅</div>
+        <h2>Welcome to MSME Bharat Manch!</h2>
+        <p id="reg-success-name" style="color:var(--muted);font-size:1rem;margin-bottom:.4rem">Account created successfully</p>
+        <div class="order-id" id="reg-order-id">MBM-2024-XXXX</div>
+        <p style="color:var(--muted);font-size:.88rem;margin-bottom:2rem">A confirmation email has been sent to your registered email address.</p>
+        <div class="plan-perks" id="reg-perks"></div>
+        <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap">
+          <button class="btn-primary-lg" onclick="finishRegistration()">Go to Dashboard →</button>
+          <button class="btn-outline" [routerLink]="['/membership']">View Full Plan Details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /register -->

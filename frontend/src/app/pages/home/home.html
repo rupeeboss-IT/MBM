@@ -1,7 +1,36 @@
 <!-- ===== HOME PAGE ===== -->
 <div class="page active" id="page-home">
 
-<section class="hero">
+<div class="hero-wrap">
+    <div class="hero-pattern"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">&#128293; Limited Offer &mdash; 1,000+ MSMEs Onboarded</div>
+        <h1 style="color:#ffffff;">Empower Your Business with MSME Bharat Manch</h1>
+        <p class="hero-sub">Access I-Verified Business Verification, Government Scheme Reports, Loan Audits &amp; Bank Statement Analysis &mdash; all in one powerful membership for growing MSMEs across India.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" style="padding: 16px 34px;" onclick="scrollToPricing()">Get Started &mdash; &#8377;9,999</button>
+          <button class="btn-ghost" onclick="scrollToPricing()">Explore Premium &mdash; &#8377;19,999</button>
+        </div>
+        <p class="hero-trust">Powered by <strong>Rupeeboss</strong> &nbsp;&middot;&nbsp; Trusted by MSMEs Across India</p>
+      </div>
+      <div class="hero-card">
+        <div class="hcard-title">What&rsquo;s Included &mdash; click to explore</div>
+        <div class="hcard-grid">
+          <div class="hcard-item" onclick="openProduct('trust')"><div class="hcard-icon">&#128202;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Trust Score</div><div class="hcard-sub">Verified report</div></div></div>
+          <div class="hcard-item" onclick="openProduct('schemes')"><div class="hcard-icon">&#127963;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Govt Schemes</div><div class="hcard-sub">Personalised report</div></div></div>
+          <div class="hcard-item" onclick="openProduct('loan')"><div class="hcard-icon">&#128269;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Loan Audit</div><div class="hcard-sub">Optimise terms</div></div></div>
+          <div class="hcard-item" onclick="openProduct('bank')"><div class="hcard-icon">&#128200;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Bank Analyzer</div><div class="hcard-sub">Smart insights</div></div></div>
+          <div class="hcard-item" onclick="openProduct('whatsapp')"><div class="hcard-icon">&#128172;</div><div style="min-width:0;flex:1;"><div class="hcard-label">WhatsApp</div><div class="hcard-sub">Business platform</div></div></div>
+          <div class="hcard-item" onclick="openProduct('rm')"><div class="hcard-icon">&#128188;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Rel. Manager</div><div class="hcard-sub">Doorstep support</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- <section class="hero">
   <div class="hero-content">
     <div class="hero-badge">🇮🇳 National Initiative by RupeeBoss.com</div>
     <h1>360° Business Solutions<br><span class="hero-accent">for Indian MSMEs</span></h1>
@@ -22,7 +51,7 @@
     <div class="hero-card"><div class="hero-card-icon">📈</div><div class="hero-card-text"><strong>IPO Listing</strong><span>Investment Banking</span></div></div>
     <div class="hero-card"><div class="hero-card-icon">🤝</div><div class="hero-card-text"><strong>500+ Partners</strong><span>Pan India Network</span></div></div>
   </div>
-</section>
+</section> -->
 
 <section class="stats-strip">
   <div class="stats-container">
@@ -68,14 +97,14 @@
         <h3>MSME Basic</h3>
         <p class="hp-desc">For any MSME with Udyam Aadhaar — start your growth journey</p>
         <ul class="hp-features">
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">Join with Udyam Aadhaar</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('trust-score')"><span class="pfl-text">Build credibility profile</span><span class="pfl-info">ℹ Learn more</span></span></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">Join with Udyam Aadhaar</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span class="pfl-text">Build credibility profile</span><span class="pfl-info">ℹ Learn more</span></a></li>
           <li><span class="tick">✓</span><span class="pfl-text">National MSME network</span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp Platform</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Basic Website</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('practo-insurance')"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('credit-report')"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></span></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
         <button class="btn-outline" style="width:100%" onclick="navPlan('MSME Basic','999')">Get MSME Basic</button>
       </div>
@@ -85,14 +114,14 @@
         <h3>MSME Standard</h3>
         <p class="hp-desc">Manage your website, automate WhatsApp replies, capture leads</p>
         <ul class="hp-features">
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Hosting + Server + DB</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Free subdomain on qobo.dev</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp automation &amp; FAQ</span><span class="pfl-info">ℹ Learn more</span></span></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Hosting + Server + DB</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Free subdomain on qobo.dev</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp automation &amp; FAQ</span><span class="pfl-info">ℹ Learn more</span></a></li>
           <li><span class="tick">✓</span><span class="pfl-text">Mobile-friendly + fast loading</span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('practo-insurance')"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('credit-report')"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></span></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
         <button class="btn-outline" style="width:100%" onclick="navPlan('MSME Standard','4999')">Get MSME Standard</button>
       </div>
@@ -103,14 +132,14 @@
         <h3>MSME Premium</h3>
         <p class="hp-desc">Perfect for MSMEs ready to build financial credibility</p>
         <ul class="hp-features">
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('trust-score')"><span class="pfl-text">Infomerics Verified Report</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('scheme-discovery')"><span class="pfl-text">Company Scheme Discovery</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('bank-statement-analyzer')"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('basic-website')"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('relationship-manager')"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('loan-audit')"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">15L Insurance + 2 Events</span><span class="pfl-info">ℹ Learn more</span></span></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span class="pfl-text">Infomerics Verified Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">15L Insurance + 2 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
         <button class="btn-primary" style="width:100%" onclick="navPlan('MSME Premium','9999')">Get MSME Premium</button>
       </div>
@@ -120,21 +149,21 @@
         <h3>MSME Pro</h3>
         <p class="hp-desc">For MSMEs seeking deeper insights and GeM access</p>
         <ul class="hp-features">
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('trust-score')"><span class="pfl-text">Infomerics Business Assessment</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('gem-registration')"><span class="pfl-text">GeM Portal Registration</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('scheme-discovery')"><span class="pfl-text">Company Scheme Discovery</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('whatsapp-platform')"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('bank-statement-analyzer')"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('relationship-manager')"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('msme-events')"><span class="pfl-text">15L Insurance + 4 Events</span><span class="pfl-info">ℹ Learn more</span></span></li>
-          <li><span class="tick">✓</span><span class="plan-feature-link" onclick="navOffering('loan-audit')"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></span></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span class="pfl-text">Infomerics Business Assessment</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal Registration</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">15L Insurance + 4 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
         <button class="btn-navy" style="width:100%" onclick="navPlan('MSME Pro','19999')">Get MSME Pro</button>
       </div>
     </div>
-    <div class="text-center mt-3">
+    <!-- <div class="text-center mt-3">
       <a class="btn-outline" onclick="nav('membership')">View Full Plan Comparison →</a>
-    </div>
+    </div> -->
   </div>
 </section>
 

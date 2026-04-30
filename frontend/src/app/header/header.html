@@ -23,9 +23,15 @@
           <a routerLink="/service/sales-digital-marketing">📣 Digital Marketing</a>
           <a routerLink="/service/ipo-investment-banking">📈 IPO & Investment</a>
           <a routerLink="/service/coaching-consulting">🎓 Coaching</a>
+          <a routerLink="/service/legal-compliance">⚖️ Legal & Compliance</a>
+          <a routerLink="/service/research-development">🔬 R &amp; D &amp; Innovation</a>
+          <a routerLink="/service/export-import">🌐 Export/Import</a>
+          <a routerLink="/service/human-resources">👥 HR & Recruitment</a>
+          <a routerLink="/service/accounting-virtual-cfo">📊 Accounting & Virtual CFO</a>
         </div>
       </div>
       <a class="nav-loans" routerLink="/loans">Loans</a>
+      <a class="nav-loans" routerLink="/membership">Pricing</a>
       <a routerLink="/schemes">Schemes</a>
       <a routerLink="/events">Events</a>
       <a routerLink="/partners">Partners</a>
@@ -35,12 +41,11 @@
           <a routerLink="/news">📰 News & Blog</a>
           <a routerLink="/contact">📞 Contact</a>
           <a routerLink="/search">🔍 Search</a>
-          <a routerLink="/membership">💎 Membership</a>
           <a routerLink="/careers">👔 Careers</a>
           <a routerLink="/media">📸 Media Kit</a>
         </div>
       </div>
-      <button class="btn-icon" onclick="toggleSearch()">🔍</button>
+      <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
       <div id="nav-auth-guest">
         <a class="btn-outline" routerLink="/login">Login</a>
         <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Free</a>
@@ -62,11 +67,23 @@
       </div>
     </div>
   </div>
-  <div class="search-drawer" id="searchDrawer">
-    <form class="search-form" onsubmit="doSearch(event)">
-      <input type="search" id="searchInput" placeholder="Search services, schemes, events, news...">
+  <div class="search-drawer" id="searchDrawer" [class.open]="searchOpen">
+    <form class="search-form" (ngSubmit)="submitSearch()">
+      <input
+        #searchInput
+        type="search"
+        name="searchQuery"
+        [(ngModel)]="searchQuery"
+        placeholder="Search services, schemes, events, news..."
+      >
       <button type="submit" class="btn-search">Search</button>
-      <button type="button" style="background:none;border:1px solid #ddd;border-radius:6px;padding:.6rem .8rem;cursor:pointer;color:#888" onclick="toggleSearch()">✕</button>
+      <button
+        type="button"
+        style="background:none;border:1px solid #ddd;border-radius:6px;padding:.6rem .8rem;cursor:pointer;color:#888"
+        (click)="toggleSearch()"
+      >
+        ✕
+      </button>
     </form>
   </div>
 </nav>

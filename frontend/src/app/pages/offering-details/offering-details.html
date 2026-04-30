@@ -1,0 +1,57 @@
+<!-- ===== OFFERING DETAIL PAGE ===== -->
+<div class="page active" id="page-offering-detail" *ngIf="offering() as off">
+<div class="offering-hero" id="offeringHero" [style.background]="off.gradient">
+  <div class="container">
+    <div class="breadcrumb">
+      <a routerLink="/home">Home</a><span class="sep">›</span><a routerLink="/membership">Plans</a><span class="sep">›</span><span id="offeringCrumb">{{ off.crumb }}</span>
+    </div>
+    <div class="offering-hero-icon" id="offeringHeroIcon">{{ off.icon }}</div>
+    <h1 id="offeringHeroTitle">{{ off.title }}</h1>
+    <p id="offeringHeroDesc">{{ off.tagline }}</p>
+    <div class="offering-hero-tags" id="offeringHeroTags">
+      <span class="offering-hero-tag" *ngFor="let t of off.tags">{{ t }}</span>
+    </div>
+  </div>
+</div>
+<section class="section"><div class="container">
+  <div class="offering-layout">
+    <div class="offering-main" id="offeringMain">
+      <div [innerHTML]="safeContent()"></div>
+    </div>
+    <div class="offering-sidebar">
+      <div class="offering-cta-card" style="background:linear-gradient(135deg,#fff5f5,#ffe0e3);border:1px solid #fcd0d4">
+        <h3 id="offeringCtaTitle">{{ off.ctaTitle }}</h3>
+        <p id="offeringCtaDesc">{{ off.ctaDesc }}</p>
+        <button class="btn-primary" style="width:100%;margin-bottom:.8rem" [routerLink]="['/register']">Get Started →</button>
+        <button class="btn-outline" style="width:100%" [routerLink]="['/membership']">View All Plans</button>
+      </div>
+      <div class="sidebar-card">
+        <h3>Included In</h3>
+        <div class="offering-included-plans" id="offeringIncludedPlans">
+          <div
+            class="offering-plan-tag"
+            *ngFor="let p of includedPlans()"
+            [style.background]="p.bg"
+          >
+            <span class="tag-icon">{{ p.icon }}</span>
+            <span style="font-size:.83rem">{{ p.name }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="offering-highlights" id="offeringSidebar">
+        <h4>Key Highlights</h4>
+        <div class="offering-highlight-item" *ngFor="let h of off.highlights">
+          <div class="hi-dot" style="background:var(--red)"></div>
+          {{ h }}
+        </div>
+      </div>
+      <div class="sidebar-card" style="background:#e8f5e9;border-color:#c8e6c9">
+        <h3 style="color:var(--green)">Talk to an Expert</h3>
+        <p style="color:var(--text);font-size:.87rem;margin-bottom:.8rem">Get free guidance on this offering from our team</p>
+        <a href="tel:+917982218029" style="color:var(--green);font-weight:700;font-size:.95rem;display:block">📞 +91 79822 18029</a>
+        <a href="mailto:info@msmebharatmanch.com" style="color:var(--green);font-size:.85rem;display:block;margin-top:.4rem">✉️ info@msmebharatmanch.com</a>
+      </div>
+    </div>
+  </div>
+</div></section>
+</div><!-- /offering detail -->
