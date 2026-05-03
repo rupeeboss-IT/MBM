@@ -1,0 +1,34 @@
+/* Register page polish + responsiveness (scoped to component) */
+
+.reg-verify-btn {
+  margin-top: 0.6rem;
+  width: 100%;
+}
+
+.reg-otp-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  align-items: center;
+}
+
+.reg-otp-row input {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  :host ::ng-deep .auth-box {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .reg-otp-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reg-otp-row button {
+    width: 100%;
+  }
+}
+

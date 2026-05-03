@@ -14,65 +14,163 @@
     </div>
 
     <!-- Step 1: Account Details -->
-    <div class="auth-box" id="reg-step-1">
+    <div class="auth-box" id="reg-step-1" *ngIf="step() === 1">
       <div class="auth-logo"><span style="font-size:2.5rem">🏛️</span><h2>Create Your Account</h2><p>Step 1 of 4 — Basic details</p></div>
-      <form id="registerForm" onsubmit="regNextStep(event,1)">
+      <form id="registerForm" [formGroup]="form" (ngSubmit)="continueToPlan()">
         <div class="form-group"><label>I am a</label>
-          <select id="regRole">
+          <select id="regRole" formControlName="role">
             <option value="member">MSME Member / Business Owner</option>
             <option value="partner">Growth Partner / Consultant</option>
           </select>
         </div>
-        <div class="form-group"><label>Full Name *</label><input type="text" id="regName" placeholder="Your full name" required></div>
-        <div class="form-row">
-          <div class="form-group"><label>Email Address *</label><input type="email" id="regEmail" placeholder="your@email.com" required></div>
-          <div class="form-group"><label>Mobile Number *</label><input type="tel" id="regPhone" placeholder="10-digit number" required></div>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="regName" placeholder="Your full name" formControlName="fullName" autocomplete="name">
+          <div style="margin-top:.35rem;font-size:.8rem">
+            <div *ngIf="form.controls.fullName.touched && form.controls.fullName.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Full name is required.</div>
+            <div *ngIf="form.controls.fullName.touched && form.controls.fullName.errors?.['nameFormat']" style="color:var(--red);font-weight:600">⚠️ Use only letters and spaces (no numbers/special characters).</div>
+            <div *ngIf="form.controls.fullName.touched && form.controls.fullName.errors?.['nameRepeats']" style="color:var(--red);font-weight:600">⚠️ Repetitive characters are not allowed.</div>
+            <div *ngIf="form.controls.fullName.touched && form.controls.fullName.errors?.['vulgarWord']" style="color:var(--red);font-weight:600">⚠️ Please enter a valid name.</div>
+            <div *ngIf="form.controls.fullName.touched && form.controls.fullName.valid" style="color:var(--green);font-weight:700">✅ Looks good.</div>
+          </div>
         </div>
-        <div class="form-group"><label>Password *</label><input type="password" id="regPass" placeholder="Min. 8 characters" required minlength="8"></div>
-        <div class="form-group"><label>Company / Business Name</label><input type="text" id="regCompany" placeholder="Your company name (optional)"></div>
+        <div class="">
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" id="regEmail" placeholder="your@email.com" formControlName="email" autocomplete="email">
+            <div style="margin-top:.35rem;font-size:.8rem">
+              <div *ngIf="form.controls.email.touched && form.controls.email.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Email is required.</div>
+              <div *ngIf="form.controls.email.touched && form.controls.email.errors?.['emailFormat']" style="color:var(--red);font-weight:600">⚠️ Enter a valid email address.</div>
+              <div *ngIf="form.controls.email.touched && (form.controls.email.errors?.['emailFake'] || form.controls.email.errors?.['emailDisposable'])" style="color:var(--red);font-weight:600">⚠️ Please use a real email address (no disposable/fake).</div>
+              <div *ngIf="emailVerified()" style="color:var(--green);font-weight:700">✅ Email verified.</div>
+            </div>
+
+            <button
+              type="button"
+              class="btn-outline reg-verify-btn"
+              (click)="sendEmailOtp()"
+              [disabled]="submitting() || emailVerified() || emailOtpCooldownSec() > 0 || form.controls.email.invalid"
+            >
+              {{ emailVerified() ? 'Verified' : (emailOtpCooldownSec() > 0 ? ('Resend OTP (' + emailOtpCooldownSec() + 's)') : 'Verify Email') }}
+            </button>
+
+            <div class="reg-otp-row" *ngIf="showEmailOtpInputs() && !emailVerified()">
+              <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter Email OTP" formControlName="emailOtp" [disabled]="!showEmailOtpInputs()">
+              <button type="button" class="btn-primary" (click)="verifyEmailOtp()" [disabled]="submitting()">Submit</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" id="regPhone" placeholder="10-digit number" formControlName="phone" autocomplete="tel" (input)="sanitizePhoneInput($event)">
+            <div style="margin-top:.35rem;font-size:.8rem">
+              <div *ngIf="form.controls.phone.touched && form.controls.phone.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Mobile number is required.</div>
+              <div *ngIf="form.controls.phone.touched && (form.controls.phone.errors?.['phoneDigits'] || form.controls.phone.errors?.['phoneIndianMobile'])" style="color:var(--red);font-weight:600">⚠️ Enter a valid Indian mobile (10 digits, starts with 6/7/8/9).</div>
+              <div *ngIf="smsVerified()" style="color:var(--green);font-weight:700">✅ Mobile verified.</div>
+            </div>
+
+            <button
+              type="button"
+              class="btn-outline reg-verify-btn"
+              (click)="sendSmsOtp()"
+              [disabled]="submitting() || smsVerified() || smsOtpCooldownSec() > 0 || form.controls.phone.invalid"
+            >
+              {{ smsVerified() ? 'Verified' : (smsOtpCooldownSec() > 0 ? ('Resend OTP (' + smsOtpCooldownSec() + 's)') : 'Verify Mobile') }}
+            </button>
+
+            <div class="reg-otp-row" *ngIf="showSmsOtpInputs() && !smsVerified()">
+              <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter Mobile OTP" formControlName="smsOtp" [disabled]="!showSmsOtpInputs()">
+              <button type="button" class="btn-primary" (click)="verifySmsOtp()" [disabled]="submitting()">Submit</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password *</label>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input [type]="showPass() ? 'text' : 'password'" id="regPass" placeholder="Min. 9 characters" formControlName="password" autocomplete="new-password" style="flex:1">
+            <button type="button" class="btn-outline" style="padding:.65rem .8rem" (click)="showPass.set(!showPass())" aria-label="Toggle password visibility">
+              {{ showPass() ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <div style="margin-top:.35rem;font-size:.8rem">
+            <div *ngIf="form.controls.password.touched && form.controls.password.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Password is required.</div>
+            <div *ngIf="form.controls.password.touched && (form.controls.password.errors?.['minLength9'] || form.controls.password.errors?.['lowercase'] || form.controls.password.errors?.['uppercase'] || form.controls.password.errors?.['number'])" style="color:var(--red);font-weight:600">
+              ⚠️ Password must be 9+ chars and include uppercase, lowercase, and a number.
+            </div>
+            <div *ngIf="form.controls.password.touched && form.controls.password.valid" style="color:var(--green);font-weight:700">✅ Strong password.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password *</label>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input
+              [type]="showConfirmPass() ? 'text' : 'password'"
+              id="regConfirmPass"
+              placeholder="Re-enter password"
+              formControlName="confirmPassword"
+              autocomplete="new-password"
+              (paste)="preventClipboard($event)"
+              (copy)="preventClipboard($event)"
+              (cut)="preventClipboard($event)"
+              style="flex:1"
+            >
+            <button type="button" class="btn-outline" style="padding:.65rem .8rem" (click)="showConfirmPass.set(!showConfirmPass())" aria-label="Toggle confirm password visibility">
+              {{ showConfirmPass() ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <div style="margin-top:.35rem;font-size:.8rem">
+            <div *ngIf="form.controls.confirmPassword.touched && form.controls.confirmPassword.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Confirm password is required.</div>
+            <div *ngIf="form.touched && form.errors?.['passwordMismatch']" style="color:var(--red);font-weight:600">⚠️ Passwords do not match.</div>
+            <div *ngIf="form.controls.confirmPassword.touched && !form.errors?.['passwordMismatch'] && form.controls.confirmPassword.valid && form.controls.password.valid" style="color:var(--green);font-weight:700">✅ Passwords match.</div>
+          </div>
+        </div>
+
+        <div class="form-group"><label>Company / Business Name</label><input type="text" id="regCompany" placeholder="Your company name (optional)" formControlName="company"></div>
         <div style="background:#f8f9fa;border:1.5px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
           <label style="display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;font-size:.85rem;color:#444;line-height:1.6;font-weight:400">
-            <input type="checkbox" id="regConsent" required style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--red);cursor:pointer">
+            <input type="checkbox" id="regConsent" formControlName="consent" required checked (change)="onConsentToggle($event)" style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--red);cursor:pointer">
             <span>By registering, you provide your consent to <strong>Rupeeboss</strong> to contact you via call, SMS, WhatsApp, and email regarding MBM product and Rupeeboss Financial products, including service updates, support, and relevant offers. You also agree to the collection and use of your personal information in accordance with our <a [routerLink]="['/privacy-policy']" style="color:var(--red);font-weight:600;cursor:pointer">Privacy Policy</a>.</span>
           </label>
           <div id="consent-error" style="display:none;color:var(--red);font-size:.8rem;margin-top:.5rem;font-weight:600">⚠️ Please accept the consent to continue.</div>
         </div>
+        <div *ngIf="formError()" style="color:var(--red);font-weight:700;font-size:.85rem;margin-bottom:.75rem">{{ formError() }}</div>
+        <div *ngIf="formSuccess()" style="color:var(--green);font-weight:700;font-size:.85rem;margin-bottom:.75rem">{{ formSuccess() }}</div>
         <button type="submit" class="btn-submit">Continue to Plan Selection →</button>
       </form>
       <div class="auth-footer">Already have an account? <a [routerLink]="['/login']">Login here</a></div>
     </div>
 
     <!-- Step 2: Choose Plan -->
-    <div class="auth-box" id="reg-step-2" style="display:none;max-width:760px;width:100%">
+    <div class="auth-box" id="reg-step-2" *ngIf="step() === 2" style="max-width:760px;width:100%">
       <div class="auth-logo"><span style="font-size:2rem">💎</span><h2>Choose Your Plan</h2><p>Step 2 of 4 — Start free, upgrade anytime</p></div>
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem" id="reg-plan-grid">
-        <div class="home-plan-card" id="rplan-MSME Basic" onclick="selectRegPlan('MSME Basic','999','🌱')" style="cursor:pointer">
+        <div class="home-plan-card" id="rplan-MSME Basic" style="cursor:pointer">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌱</div><h3 style="font-size:1rem">MSME Basic</h3></div><div class="hp-badge free">₹999/yr</div></div>
           <p class="hp-desc">Udyam Aadhaar + credibility profile + WhatsApp + Basic Website</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Join with Udyam Aadhaar</li><li><span class="tick">✓</span>WhatsApp Platform</li><li><span class="tick">✓</span>Basic Website</li><li><span class="tick">✓</span>Practo Insurance + Credit Report</li></ul>
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--green);font-size:.9rem">Select Basic — ₹999/yr</div>
         </div>
-        <div class="home-plan-card" id="rplan-MSME Standard" onclick="selectRegPlan('MSME Standard','4999','🌐')" style="cursor:pointer">
+        <div class="home-plan-card" id="rplan-MSME Standard" style="cursor:pointer">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌐</div><h3 style="font-size:1rem">MSME Standard</h3></div><div class="hp-badge silver">₹4,999/yr</div></div>
           <p class="hp-desc">Website + WhatsApp automation + hosting + lead capture</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Website Development + Hosting</li><li><span class="tick">✓</span>Free subdomain on qobo.dev</li><li><span class="tick">✓</span>WhatsApp FAQ automation</li><li><span class="tick">✓</span>Mobile-friendly + fast loading</li></ul>
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#555;font-size:.9rem">Select Standard — ₹4,999/yr</div>
         </div>
-        <div class="home-plan-card featured-plan" id="rplan-MSME Premium" onclick="selectRegPlan('MSME Premium','9999','🏆')" style="cursor:pointer">
+        <div class="home-plan-card featured-plan" id="rplan-MSME Premium" style="cursor:pointer">
           <div class="plan-popular" style="top:-10px">Most Popular</div>
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🏆</div><h3 style="font-size:1rem">MSME Premium</h3></div><div class="hp-badge gold">₹9,999/yr</div></div>
           <p class="hp-desc">Infomerics verified report + RM + Loan Audit + 15L Insurance</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Verified Report</li><li><span class="tick">✓</span>Free Relationship Manager</li><li><span class="tick">✓</span>Free Loan &amp; Insurance Audit</li><li><span class="tick">✓</span>2 Events + ₹15L Insurance</li></ul>
           <div style="background:var(--red-light);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--red);font-size:.9rem">Select Premium — ₹9,999/yr</div>
         </div>
-        <div class="home-plan-card" id="rplan-MSME Pro" onclick="selectRegPlan('MSME Pro','19999','💎')" style="cursor:pointer">
+        <div class="home-plan-card" id="rplan-MSME Pro" style="cursor:pointer">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">💎</div><h3 style="font-size:1rem">MSME Pro</h3></div><div class="hp-badge platinum">₹19,999/yr</div></div>
           <p class="hp-desc">GeM Portal + Business Assessment + 4 Events + 15L Insurance</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Business Assessment</li><li><span class="tick">✓</span>GeM Portal Registration</li><li><span class="tick">✓</span>4 MSME Events Access</li><li><span class="tick">✓</span>₹15L Insurance + Free RM</li></ul>
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#3949ab;font-size:.9rem">Select Pro — ₹19,999/yr</div>
         </div>
       </div>
-      <button class="btn-outline" style="width:100%" onclick="regGoBack(1)">← Back</button>
+      <button class="btn-outline" style="width:100%" type="button" (click)="backToAccount()">← Back</button>
     </div>
 
     <!-- Step 3: Already handled by payment page -->

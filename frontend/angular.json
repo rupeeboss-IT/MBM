@@ -63,7 +63,8 @@
               "buildTarget": "MBM-App:build:production"
             },
             "development": {
-              "buildTarget": "MBM-App:build:development"
+              "buildTarget": "MBM-App:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
