@@ -20,6 +20,8 @@ import { Terms } from './pages/terms/terms';
 import { Disclaimer } from './pages/disclaimer/disclaimer';
 import { Login as UserLogin } from './user/login/login';
 import { Register } from './user/register/register';
+import { Profile } from './user/profile/profile';
+import { authGuard } from './core/guards/auth.guard';
 import { ArticleDetail } from './pages/More/news-blog/article-detail/article-detail';
 import { ForgotPassword as UserForgotPassword } from './user/forgot-password/forgot-password';
 import { Login as AdminLogin } from './admin/login/login';
@@ -177,6 +179,12 @@ export const routes: Routes = [
     {
         path: 'register',
         component: Register,
+        pathMatch: 'full'
+    },
+    {
+        path: 'profile',
+        component: Profile,
+        canActivate: [authGuard],
         pathMatch: 'full'
     },
     {

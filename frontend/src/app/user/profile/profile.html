@@ -1,0 +1,121 @@
+<div class="page active profile-page">
+  <div class="profile-hero">
+    <div class="container">
+      <div class="profile-hero__row">
+        <div class="profile-hero__left">
+          <div class="profile-hero__badge">Account</div>
+          <h1 class="profile-hero__title">My Profile</h1>
+          <p class="profile-hero__sub" *ngIf="profile?.fullName">
+            Welcome back, <strong>{{ profile?.fullName }}</strong>.
+          </p>
+          <p class="profile-hero__sub" *ngIf="!profile?.fullName">
+            View your membership, dashboard shortcuts, and profile details.
+          </p>
+        </div>
+        <div class="profile-hero__right">
+          <div class="profile-hero__avatar">👤</div>
+          <div class="profile-hero__meta">
+            <div class="profile-hero__metaLabel">User ID</div>
+            <div class="profile-hero__metaValue">{{ userId() || '—' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container profile-shell">
+    <aside class="profile-aside">
+      <div class="profile-aside__card">
+        <div class="profile-aside__title">Quick menu</div>
+        <a class="profile-nav" [routerLink]="['/profile']">👤 Profile</a>
+        <a class="profile-nav" [routerLink]="['/membership']">💎 Pricing / Plans</a>
+        <a class="profile-nav" [routerLink]="['/home']">🏠 Home</a>
+        <div class="profile-aside__sep"></div>
+        <button type="button" class="profile-nav profile-nav--danger" (click)="logout()">⏏ Logout</button>
+      </div>
+
+      <div class="profile-aside__card">
+        <div class="profile-aside__title">Membership</div>
+        <div class="plan-pill">No active plan</div>
+        <div class="muted">Pick a plan to unlock benefits and dashboard features.</div>
+        <div style="margin-top:.8rem">
+          <a class="btn-primary" [routerLink]="['/membership']" style="width:100%;text-align:center;display:block">Choose a Plan</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="profile-main">
+      <section class="profile-grid">
+        <div class="card">
+          <div class="card__title">Dashboard</div>
+          <div class="muted">Your shortcuts and status.</div>
+
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="kpi__label">Email verified</div>
+              <div class="kpi__value" [class.ok]="!!profile?.emailVerifiedAt" [class.bad]="!profile?.emailVerifiedAt">
+                {{ profile?.emailVerifiedAt ? 'Yes' : 'No' }}
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="kpi__label">Mobile verified</div>
+              <div class="kpi__value" [class.ok]="!!profile?.phoneVerifiedAt" [class.bad]="!profile?.phoneVerifiedAt">
+                {{ profile?.phoneVerifiedAt ? 'Yes' : 'No' }}
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="kpi__label">Role</div>
+              <div class="kpi__value">{{ profile?.role || '—' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__title">Support</div>
+          <div class="muted">Need help with your account or membership?</div>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.85rem">
+            <a class="btn-outline" [routerLink]="['/contact']" style="flex:1;min-width:160px;text-align:center">Contact Us</a>
+            <a class="btn-outline" [routerLink]="['/membership']" style="flex:1;min-width:160px;text-align:center">View Plans</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:1rem">
+        <div class="card__title">Profile details</div>
+
+        <div *ngIf="loading" class="skeleton">
+          <div class="s-row"></div>
+          <div class="s-row"></div>
+          <div class="s-row"></div>
+          <div class="s-row"></div>
+          <div class="s-row"></div>
+          <div class="s-row"></div>
+        </div>
+
+        <div class="details" *ngIf="!loading">
+          <div class="row">
+            <div class="label">Full name</div>
+            <div class="value">{{ profile?.fullName || '—' }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Email</div>
+            <div class="value">{{ profile?.email || '—' }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Mobile</div>
+            <div class="value">{{ profile?.phone || '—' }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Company</div>
+            <div class="value">{{ profile?.companyName || '—' }}</div>
+          </div>
+          <div class="row">
+            <div class="label">Created</div>
+            <div class="value">{{ profile?.createdAt ? (profile?.createdAt | date:'medium') : '—' }}</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+

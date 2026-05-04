@@ -8,26 +8,42 @@ namespace RB_Website_API.Controllers;
 public sealed class AuthController : ControllerBase
 {
     private readonly IOtpService _otp;
+    private readonly ILogger<AuthController> _log;
 
-    public AuthController(IOtpService otp)
+    public AuthController(IOtpService otp, ILogger<AuthController> log)
     {
         _otp = otp;
+        _log = log;
     }
 
     [HttpPost("otp/email/send")]
-    public async Task<ActionResult<ApiOk>> SendEmailOtp([FromBody] SendEmailOtpRequest req, CancellationToken ct)
+    public async Task<ActionResult<ApiOk>> SendEmailOtp([FromBody] SendEmailOtpRequest? req, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(req.Email)) return BadRequest(new ApiOk(false, "Email is required."));
-        await _otp.SendEmailOtpAsync(req.Email, ct);
-        return Ok(new ApiOk(true, "OTP sent to email."));
+        if (string.IsNullOrWhiteSpace(req?.Email)) return BadRequest(new ApiOk(false, "Email is required."));
+        try
+        {
+            await _otp.SendEmailOtpAsync(req.Email.Trim(), ct);
+            return Ok(new ApiOk(true, "OTP sent to email."));
+        }
+        catch (OtpRateLimitExceededException ex)
+        {
+            return StatusCode(StatusCodes.Status429TooManyRequests, new ApiOk(false, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "Send email OTP failed for {Email}", req.Email);
+            return BadRequest(new ApiOk(false, $"Could not send email: {ex.Message}"));
+        }
     }
 
     [HttpPost("otp/email/verify")]
-    public async Task<ActionResult<ApiOk>> VerifyEmailOtp([FromBody] VerifyEmailOtpRequest req, CancellationToken ct)
+    public async Task<ActionResult<ApiOk>> VerifyEmailOtp([FromBody] VerifyEmailOtpRequest? req, CancellationToken ct)
     {
+        if (string.IsNullOrWhiteSpace(req?.Email)) return BadRequest(new ApiOk(false, "Email is required."));
+        if (string.IsNullOrWhiteSpace(req.Code)) return BadRequest(new ApiOk(false, "OTP code is required."));
         try
         {
-            await _otp.VerifyEmailOtpAsync(req.Email, req.Code, ct);
+            await _otp.VerifyEmailOtpAsync(req.Email.Trim(), req.Code.Trim(), ct);
             return Ok(new ApiOk(true, "Email verified."));
         }
         catch (InvalidOperationException ex)
@@ -37,19 +53,33 @@ public sealed class AuthController : ControllerBase
     }
 
     [HttpPost("otp/sms/send")]
-    public async Task<ActionResult<ApiOk>> SendSmsOtp([FromBody] SendSmsOtpRequest req, CancellationToken ct)
+    public async Task<ActionResult<ApiOk>> SendSmsOtp([FromBody] SendSmsOtpRequest? req, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(req.Phone)) return BadRequest(new ApiOk(false, "Phone is required."));
-        await _otp.SendSmsOtpAsync(req.Phone, ct);
-        return Ok(new ApiOk(true, "OTP sent via SMS."));
+        if (string.IsNullOrWhiteSpace(req?.Phone)) return BadRequest(new ApiOk(false, "Phone is required."));
+        try
+        {
+            await _otp.SendSmsOtpAsync(req.Phone.Trim(), ct);
+            return Ok(new ApiOk(true, "OTP sent via SMS."));
+        }
+        catch (OtpRateLimitExceededException ex)
+        {
+            return StatusCode(StatusCodes.Status429TooManyRequests, new ApiOk(false, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "Send SMS OTP failed for {Phone}", req.Phone);
+            return BadRequest(new ApiOk(false, $"Could not send SMS: {ex.Message}"));
+        }
     }
 
     [HttpPost("otp/sms/verify")]
-    public async Task<ActionResult<ApiOk>> VerifySmsOtp([FromBody] VerifySmsOtpRequest req, CancellationToken ct)
+    public async Task<ActionResult<ApiOk>> VerifySmsOtp([FromBody] VerifySmsOtpRequest? req, CancellationToken ct)
     {
+        if (string.IsNullOrWhiteSpace(req?.Phone)) return BadRequest(new ApiOk(false, "Phone is required."));
+        if (string.IsNullOrWhiteSpace(req.Code)) return BadRequest(new ApiOk(false, "OTP code is required."));
         try
         {
-            await _otp.VerifySmsOtpAsync(req.Phone, req.Code, ct);
+            await _otp.VerifySmsOtpAsync(req.Phone.Trim(), req.Code.Trim(), ct);
             return Ok(new ApiOk(true, "Mobile verified."));
         }
         catch (InvalidOperationException ex)

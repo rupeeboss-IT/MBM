@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthSessionService } from '../core/services/auth-session.service';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +11,12 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './header.css',
 })
 export class Header {
+  private readonly session = inject(AuthSessionService);
+  readonly isLoggedIn = this.session.isLoggedIn;
+  readonly userId = this.session.userId;
+
+  readonly userMenuOpen = signal(false);
+
   searchOpen = false;
   searchQuery = '';
 
@@ -29,5 +36,19 @@ export class Header {
     if (!q) return;
     this.router.navigate(['/search'], { queryParams: { q } });
     if (this.searchOpen) this.toggleSearch();
+  }
+
+  toggleUserMenu() {
+    this.userMenuOpen.set(!this.userMenuOpen());
+  }
+
+  closeUserMenu() {
+    this.userMenuOpen.set(false);
+  }
+
+  logout() {
+    this.session.logout();
+    this.closeUserMenu();
+    this.router.navigateByUrl('/home');
   }
 }

@@ -1,5 +1,90 @@
 /* Register page polish + responsiveness (scoped to component) */
 
+.reg-company {
+  position: relative;
+}
+
+.reg-company__inputWrap {
+  position: relative;
+}
+
+.reg-company__loader {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: rgba(0, 0, 0, 0.55);
+  animation: reg-spin 0.8s linear infinite;
+}
+
+@keyframes reg-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reg-company__dd {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  z-index: 30;
+}
+
+.reg-company__item {
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.reg-company__item:hover {
+  background: var(--gray);
+}
+
+.reg-company__item.is-active {
+  background: var(--gray);
+  outline: 2px solid rgba(230, 57, 70, 0.35);
+  outline-offset: -2px;
+}
+
+.reg-company__name {
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.reg-company__meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.reg-company__hint {
+  padding: 0.85rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.reg-company__note {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 .reg-verify-btn {
   margin-top: 0.6rem;
   width: 100%;

@@ -46,12 +46,13 @@
             </div>
 
             <button
+              *ngIf="!emailVerified()"
               type="button"
               class="btn-outline reg-verify-btn"
               (click)="sendEmailOtp()"
-              [disabled]="submitting() || emailVerified() || emailOtpCooldownSec() > 0 || form.controls.email.invalid"
+              [disabled]="submitting() || emailOtpCooldownSec() > 0 || form.controls.email.invalid"
             >
-              {{ emailVerified() ? 'Verified' : (emailOtpCooldownSec() > 0 ? ('Resend OTP (' + emailOtpCooldownSec() + 's)') : 'Verify Email') }}
+              {{ emailOtpCooldownSec() > 0 ? ('Resend OTP (' + emailOtpCooldownSec() + 's)') : (emailOtpSent() ? 'Resend OTP' : 'Send OTP') }}
             </button>
 
             <div class="reg-otp-row" *ngIf="showEmailOtpInputs() && !emailVerified()">
@@ -69,12 +70,13 @@
             </div>
 
             <button
+              *ngIf="!smsVerified()"
               type="button"
               class="btn-outline reg-verify-btn"
               (click)="sendSmsOtp()"
-              [disabled]="submitting() || smsVerified() || smsOtpCooldownSec() > 0 || form.controls.phone.invalid"
+              [disabled]="submitting() || smsOtpCooldownSec() > 0 || form.controls.phone.invalid"
             >
-              {{ smsVerified() ? 'Verified' : (smsOtpCooldownSec() > 0 ? ('Resend OTP (' + smsOtpCooldownSec() + 's)') : 'Verify Mobile') }}
+              {{ smsOtpCooldownSec() > 0 ? ('Resend OTP (' + smsOtpCooldownSec() + 's)') : (smsOtpSent() ? 'Resend OTP' : 'Send OTP') }}
             </button>
 
             <div class="reg-otp-row" *ngIf="showSmsOtpInputs() && !smsVerified()">
@@ -125,7 +127,53 @@
           </div>
         </div>
 
-        <div class="form-group"><label>Company / Business Name</label><input type="text" id="regCompany" placeholder="Your company name (optional)" formControlName="company"></div>
+        <div class="form-group reg-company">
+          <label>Company / Business Name</label>
+          <div class="reg-company__inputWrap">
+            <input style="width: 100%;"
+              type="text"
+              id="regCompany"
+              placeholder="Start typing your company name"
+              formControlName="company"
+              autocomplete="off"
+              (focus)="onCompanyFocus()"
+              (blur)="onCompanyBlur()"
+              (keydown)="onCompanyKeydown($event)"
+            >
+            <div class="reg-company__loader" *ngIf="companyLoading()" aria-label="Loading"></div>
+          </div>
+
+          <div
+            class="reg-company__dd"
+            *ngIf="companySuggestOpen() && (companyLoading() || companySuggestions().length > 0 || (form.controls.company.value.trim().length >= 2))"
+          >
+            <div class="reg-company__hint" *ngIf="companyLoading()">Searching…</div>
+
+            <ng-container *ngIf="!companyLoading()">
+              <button
+                type="button"
+                class="reg-company__item"
+                *ngFor="let s of companySuggestions(); let i = index"
+                [class.is-active]="i === companyActiveIndex()"
+                (mousedown)="selectCompany(s)"
+              >
+                <span class="reg-company__name">{{ s.name }}</span>
+                <span class="reg-company__meta">{{ s.domain }}</span>
+              </button>
+
+              <div
+                class="reg-company__hint"
+                *ngIf="companySuggestions().length === 0 && form.controls.company.value.trim().length >= 2"
+              >
+                No matching company found — you can continue typing.
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="reg-company__note">
+            Suggestions powered by Clearbit.
+          </div>
+        </div>
         <div style="background:#f8f9fa;border:1.5px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
           <label style="display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;font-size:.85rem;color:#444;line-height:1.6;font-weight:400">
             <input type="checkbox" id="regConsent" formControlName="consent" required checked (change)="onConsentToggle($event)" style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--red);cursor:pointer">
@@ -133,9 +181,7 @@
           </label>
           <div id="consent-error" style="display:none;color:var(--red);font-size:.8rem;margin-top:.5rem;font-weight:600">⚠️ Please accept the consent to continue.</div>
         </div>
-        <div *ngIf="formError()" style="color:var(--red);font-weight:700;font-size:.85rem;margin-bottom:.75rem">{{ formError() }}</div>
-        <div *ngIf="formSuccess()" style="color:var(--green);font-weight:700;font-size:.85rem;margin-bottom:.75rem">{{ formSuccess() }}</div>
-        <button type="submit" class="btn-submit">Continue to Plan Selection →</button>
+        <button type="submit" class="btn-submit" [disabled]="submitting()">Continue to Plan Selection →</button>
       </form>
       <div class="auth-footer">Already have an account? <a [routerLink]="['/login']">Login here</a></div>
     </div>
@@ -170,10 +216,24 @@
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#3949ab;font-size:.9rem">Select Pro — ₹19,999/yr</div>
         </div>
       </div>
-      <button class="btn-outline" style="width:100%" type="button" (click)="backToAccount()">← Back</button>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn-outline" style="flex:1;min-width:160px" type="button" (click)="backToAccount()">← Back</button>
+        <button class="btn-outline" style="flex:1;min-width:160px" type="button" (click)="skipPlan()">Skip Plan →</button>
+      </div>
     </div>
 
-    <!-- Step 3: Already handled by payment page -->
+    <!-- Step 3: Payment (placeholder) -->
+    <div class="auth-box" id="reg-step-3" *ngIf="step() === 3" style="max-width:760px;width:100%">
+      <div class="auth-logo"><span style="font-size:2rem">💳</span><h2>Payment</h2><p>Step 3 of 4 — Complete payment (optional)</p></div>
+      <div style="background:var(--gray);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.25rem">
+        Payment flow will be added here. You can skip for now and go to your profile.
+      </div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn-outline" style="flex:1;min-width:160px" type="button" (click)="step.set(2)">← Back</button>
+        <button class="btn-primary" style="flex:1;min-width:160px" type="button" (click)="skipPayment()">Skip Payment →</button>
+      </div>
+    </div>
+
     <!-- Step 4: Done - shown after payment -->
     <div class="auth-box" id="reg-step-4" style="display:none">
       <div class="success-animation">

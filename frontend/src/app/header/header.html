@@ -46,22 +46,28 @@
         </div>
       </div>
       <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
-      <div id="nav-auth-guest">
+      <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
         <a class="btn-outline" routerLink="/login">Login</a>
         <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Free</a>
       </div>
-      <div id="nav-auth-user" style="display:none">
-        <div class="dropdown" id="dd-user">
-          <span class="dropdown-trigger" onclick="toggleDD('dd-user')" id="user-pill" style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
-            <span style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem" id="user-avatar">A</span>
-            <span id="user-name-nav">User</span> ▾
-          </span>
-          <div class="dropdown-menu dm-right">
-            <a onclick="nav('dashboard');close()">📊 Dashboard</a>
-            <a onclick="nav('profile');close()">👤 My Profile</a>
-            <a onclick="nav('admin');close()" id="admin-link" style="display:none">⚙️ Admin Panel</a>
+      <div id="nav-auth-user" *ngIf="isLoggedIn()">
+        <div class="dropdown">
+          <button
+            type="button"
+            class="dropdown-trigger"
+            (click)="toggleUserMenu()"
+            style="display:flex;align-items:center;gap:.5rem;cursor:pointer;background:none;border:none"
+            aria-label="Open user menu"
+          >
+            <span style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem">
+              👤
+            </span>
+            <span style="font-weight:700;color:#444">My Account</span> ▾
+          </button>
+          <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
+            <a routerLink="/profile" (click)="closeUserMenu()">👤 My Profile</a>
             <div class="dd-sep"></div>
-            <button class="dd-logout" onclick="doLogout()">⏏ Logout</button>
+            <button type="button" class="dd-logout" (click)="logout()">⏏ Logout</button>
           </div>
         </div>
       </div>

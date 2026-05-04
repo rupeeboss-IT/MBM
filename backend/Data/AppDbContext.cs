@@ -8,7 +8,7 @@ namespace RB_Website_API.Data
         {
         }
 
-   
+        public DbSet<Models.User> Users => Set<Models.User>();
 
         public new DbSet<T> Set<T>() where T : class
         {
