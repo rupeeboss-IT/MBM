@@ -10,8 +10,12 @@
         <h1 style="color:#ffffff;">Empower Your Business with MSME Bharat Manch</h1>
         <p class="hero-sub">Access I-Verified Business Verification, Government Scheme Reports, Loan Audits &amp; Bank Statement Analysis &mdash; all in one powerful membership for growing MSMEs across India.</p>
         <div class="hero-btns">
-          <button class="btn-primary" style="padding: 16px 34px;" onclick="scrollToPricing()">Get Started &mdash; &#8377;9,999</button>
-          <button class="btn-ghost" onclick="scrollToPricing()">Explore Premium &mdash; &#8377;19,999</button>
+          <button class="btn-primary" style="padding: 16px 34px;" type="button" (click)="goToPlan('premium')">
+            Get Started &mdash; &#8377;9,999
+          </button>
+          <button class="btn-ghost" type="button" (click)="goToPlan('pro')">
+            Explore Premium &mdash; &#8377;19,999
+          </button>
         </div>
         <p class="hero-trust">Powered by <strong>Rupeeboss</strong> &nbsp;&middot;&nbsp; Trusted by MSMEs Across India</p>
       </div>
@@ -106,7 +110,7 @@
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
-        <button class="btn-outline" style="width:100%" onclick="navPlan('MSME Basic','999')">Get MSME Basic</button>
+        <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Basic</a>
       </div>
       <div class="home-plan-card">
         <div class="hp-icon">🌐</div>
@@ -123,7 +127,7 @@
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
-        <button class="btn-outline" style="width:100%" onclick="navPlan('MSME Standard','4999')">Get MSME Standard</button>
+        <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Standard</a>
       </div>
       <div class="home-plan-card featured-plan">
         <div class="plan-popular">Most Popular</div>
@@ -141,7 +145,7 @@
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">15L Insurance + 2 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
-        <button class="btn-primary" style="width:100%" onclick="navPlan('MSME Premium','9999')">Get MSME Premium</button>
+        <a class="btn-primary" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Premium</a>
       </div>
       <div class="home-plan-card">
         <div class="hp-icon">💎</div>
@@ -158,7 +162,7 @@
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">15L Insurance + 4 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
           <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
         </ul>
-        <button class="btn-navy" style="width:100%" onclick="navPlan('MSME Pro','19999')">Get MSME Pro</button>
+        <a class="btn-navy" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Pro</a>
       </div>
     </div>
     <!-- <div class="text-center mt-3">

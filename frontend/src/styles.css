@@ -702,3 +702,6 @@ select.status-select{padding:.3rem .7rem;border:1.5px solid var(--border);border
   .dashboard-stats{grid-template-columns:1fr 1fr}
 }
 
+.d-flex{display: flex;}
+.justify-content-center{justify-content: center;}
+.align-items-center{align-items: center;}

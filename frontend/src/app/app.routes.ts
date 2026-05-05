@@ -21,6 +21,7 @@ import { Disclaimer } from './pages/disclaimer/disclaimer';
 import { Login as UserLogin } from './user/login/login';
 import { Register } from './user/register/register';
 import { Profile } from './user/profile/profile';
+import { MyPlan } from './user/my-plan/my-plan';
 import { authGuard } from './core/guards/auth.guard';
 import { ArticleDetail } from './pages/More/news-blog/article-detail/article-detail';
 import { ForgotPassword as UserForgotPassword } from './user/forgot-password/forgot-password';
@@ -184,6 +185,12 @@ export const routes: Routes = [
     {
         path: 'profile',
         component: Profile,
+        canActivate: [authGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'my-plan',
+        component: MyPlan,
         canActivate: [authGuard],
         pathMatch: 'full'
     },

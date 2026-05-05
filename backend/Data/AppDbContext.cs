@@ -9,6 +9,10 @@ namespace RB_Website_API.Data
         }
 
         public DbSet<Models.User> Users => Set<Models.User>();
+        public DbSet<Models.Plan> Plans => Set<Models.Plan>();
+        public DbSet<Models.PaymentOrder> PaymentOrders => Set<Models.PaymentOrder>();
+        public DbSet<Models.Payment> Payments => Set<Models.Payment>();
+        public DbSet<Models.UserPlan> UserPlans => Set<Models.UserPlan>();
 
         public new DbSet<T> Set<T>() where T : class
         {

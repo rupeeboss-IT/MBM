@@ -66,8 +66,11 @@
           </button>
           <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
             <a routerLink="/profile" (click)="closeUserMenu()">👤 My Profile</a>
+            <a routerLink="/my-plan" (click)="closeUserMenu()">💎 My Plan Details</a>
             <div class="dd-sep"></div>
-            <button type="button" class="dd-logout" (click)="logout()">⏏ Logout</button>
+            <div class="d-flex justify-content-center align-items-center">
+              <button type="button" class="dd-logout btn btn-primary" (click)="logout()">Logout</button>
+            </div>
           </div>
         </div>
       </div>

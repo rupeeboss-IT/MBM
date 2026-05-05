@@ -403,6 +403,14 @@ export class Register {
         this.createdUserId.set(res.userId);
         this.session.setUserId(res.userId);
       }
+      // If the user came from /membership wanting to buy a plan, send them straight there so checkout opens.
+      const pendingPlan =
+        typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
+      if (pendingPlan) {
+        this.toast.success('Account created. Opening payment for your selected plan…');
+        this.router.navigateByUrl('/membership');
+        return;
+      }
       this.toast.success('Account created. Continue to plan selection.');
       this.step.set(2);
     } catch (e) {

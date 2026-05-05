@@ -35,9 +35,15 @@ builder.Services.Configure<RB_Website_API.Auth.EmailSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.EmailSettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.SmsSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.SmsSettings.SectionName));
+builder.Services.Configure<RB_Website_API.Auth.RazorpaySettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.RazorpaySettings.SectionName));
 builder.Services.AddHttpClient(
     RB_Website_API.Auth.HttpSmsSender.HttpClientName,
     client => client.Timeout = TimeSpan.FromSeconds(30));
+builder.Services.AddHttpClient("Razorpay", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpRateLimiter, RB_Website_API.Auth.OtpRateLimiter>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpService, RB_Website_API.Auth.InMemoryOtpService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IEmailSender, RB_Website_API.Auth.SmtpEmailSender>();

@@ -49,7 +49,14 @@ export class Login {
       }
       this.session.setUserId(res.userId);
       this.toast.success('Login successful.');
-      this.router.navigateByUrl('/profile');
+
+      // If user came here from a plan selection on /membership, send them back so checkout opens.
+      const pendingPlan = (typeof window !== 'undefined') ? window.localStorage.getItem('mbm_pending_plan') : null;
+      if (pendingPlan) {
+        this.router.navigateByUrl('/membership');
+      } else {
+        this.router.navigateByUrl('/profile');
+      }
     } catch (e: any) {
       const msg =
         (e?.error?.message as string | undefined) ||

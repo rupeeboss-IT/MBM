@@ -41,8 +41,10 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
-          </ul><button class="btn-primary" style="width:100%" onclick="navPlan('MSME Basic','999')">Get MSME
-            Basic</button>
+          </ul><button class="btn-primary" style="width:100%" type="button"
+            (click)="choosePlan('basic')" [disabled]="busyPlan() === 'basic'">
+            {{ busyPlan() === 'basic' ? 'Processing…' : 'Get MSME Basic' }}
+          </button>
         </div>
         <div class="plan-card">
           <div class="plan-icon">🌐</div>
@@ -75,8 +77,10 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
-          </ul><button class="btn-outline" style="width:100%" onclick="navPlan('MSME Standard','4999')">Get MSME
-            Standard</button>
+          </ul><button class="btn-outline" style="width:100%" type="button"
+            (click)="choosePlan('standard')" [disabled]="busyPlan() === 'standard'">
+            {{ busyPlan() === 'standard' ? 'Processing…' : 'Get MSME Standard' }}
+          </button>
         </div>
         <div class="plan-card featured">
           <div class="plan-popular">Most Popular</div>
@@ -116,8 +120,10 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
-          </ul><button class="btn-primary" style="width:100%" onclick="navPlan('MSME Premium','9999')">Get MSME
-            Premium</button>
+          </ul><button class="btn-primary" style="width:100%" type="button"
+            (click)="choosePlan('premium')" [disabled]="busyPlan() === 'premium'">
+            {{ busyPlan() === 'premium' ? 'Processing…' : 'Get MSME Premium' }}
+          </button>
         </div>
         <div class="plan-card">
           <div class="plan-icon">💎</div>
@@ -158,7 +164,10 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
-          </ul><button class="btn-navy" style="width:100%" onclick="navPlan('MSME Pro','19999')">Get MSME Pro</button>
+          </ul><button class="btn-navy" style="width:100%" type="button"
+            (click)="choosePlan('pro')" [disabled]="busyPlan() === 'pro'">
+            {{ busyPlan() === 'pro' ? 'Processing…' : 'Get MSME Pro' }}
+          </button>
         </div>
       </div>
       <div class="section-header" style="margin-bottom:1.5rem">
