@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,44 @@ builder.Services.AddDbContext<RB_Website_API.Data.AppDbContext>(options =>
         throw new InvalidOperationException("Missing ConnectionStrings:ConnectionString in configuration.");
     options.UseSqlServer(cs);
 });
+
+builder.Services.Configure<RB_Website_API.Auth.JwtSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.JwtSettings.SectionName));
+builder.Services.AddSingleton<RB_Website_API.Auth.IJwtTokenService, RB_Website_API.Auth.JwtTokenService>();
+
+builder.Services.Configure<RB_Website_API.Auth.AdminSeedSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.AdminSeedSettings.SectionName));
+builder.Services.AddHostedService<RB_Website_API.Auth.AdminSeederHostedService>();
+
+var jwt = builder.Configuration.GetSection(RB_Website_API.Auth.JwtSettings.SectionName).Get<RB_Website_API.Auth.JwtSettings>()
+          ?? new RB_Website_API.Auth.JwtSettings();
+if (string.IsNullOrWhiteSpace(jwt.Key))
+    throw new InvalidOperationException("Missing Jwt:Key in configuration.");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = !string.IsNullOrWhiteSpace(jwt.Issuer),
+            ValidateAudience = !string.IsNullOrWhiteSpace(jwt.Audience),
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwt.Issuer,
+            ValidAudience = jwt.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
+            ClockSkew = TimeSpan.FromMinutes(1),
+        };
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminAccess", policy => policy.RequireRole("admin", "superadmin"));
+    options.AddPolicy("SuperAdminOnly", policy => policy.RequireRole("superadmin"));
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendDev", policy =>
@@ -46,6 +87,7 @@ builder.Services.AddHttpClient("Razorpay", client =>
 });
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpRateLimiter, RB_Website_API.Auth.OtpRateLimiter>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpService, RB_Website_API.Auth.InMemoryOtpService>();
+builder.Services.AddSingleton<RB_Website_API.Auth.IPasswordResetService, RB_Website_API.Auth.InMemoryPasswordResetService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IEmailSender, RB_Website_API.Auth.SmtpEmailSender>();
 builder.Services.AddSingleton<RB_Website_API.Auth.ISmsSender, RB_Website_API.Auth.HttpSmsSender>();
 
@@ -65,6 +107,7 @@ app.UseCors("FrontendDev");
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

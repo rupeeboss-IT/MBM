@@ -16,6 +16,9 @@ export class Header {
   readonly userId = this.session.userId;
 
   readonly userMenuOpen = signal(false);
+  readonly mobileMenuOpen = signal(false);
+  readonly servicesMenuOpen = signal(false);
+  readonly moreMenuOpen = signal(false);
 
   searchOpen = false;
   searchQuery = '';
@@ -23,6 +26,32 @@ export class Header {
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
 
   constructor(private router: Router) {}
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen.set(!this.mobileMenuOpen());
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen.set(false);
+    this.servicesMenuOpen.set(false);
+    this.moreMenuOpen.set(false);
+  }
+
+  toggleServicesMenu() {
+    this.servicesMenuOpen.set(!this.servicesMenuOpen());
+    if (this.servicesMenuOpen()) this.moreMenuOpen.set(false);
+  }
+
+  toggleMoreMenu() {
+    this.moreMenuOpen.set(!this.moreMenuOpen());
+    if (this.moreMenuOpen()) this.servicesMenuOpen.set(false);
+  }
+
+  closeDropdowns() {
+    this.servicesMenuOpen.set(false);
+    this.moreMenuOpen.set(false);
+    this.userMenuOpen.set(false);
+  }
 
   toggleSearch() {
     this.searchOpen = !this.searchOpen;
@@ -48,7 +77,8 @@ export class Header {
 
   logout() {
     this.session.logout();
-    this.closeUserMenu();
+    this.closeDropdowns();
+    this.closeMobileMenu();
     this.router.navigateByUrl('/home');
   }
 }

@@ -1,0 +1,112 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <h2>Admin Dashboard</h2>
+      <div class="muted">Counts + admin user management</div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" href="/home">Go to Website</a>
+      <button class="btn" type="button" (click)="refresh()" [disabled]="loading()">Refresh</button>
+      <button class="btn btn-outline" type="button" (click)="logout()" [disabled]="loading()">
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="cards" *ngIf="counts() as c">
+    <div class="card"><div class="label">Blogs</div><div class="value">{{ c.blogs }}</div></div>
+    <div class="card"><div class="label">Events</div><div class="value">{{ c.events }}</div></div>
+    <div class="card"><div class="label">Schemes</div><div class="value">{{ c.schemes }}</div></div>
+    <div class="card"><div class="label">Scheme News</div><div class="value">{{ c.schemeNews }}</div></div>
+    <div class="card"><div class="label">Success Stories</div><div class="value">{{ c.successStories }}</div></div>
+    <div class="card"><div class="label">Offers</div><div class="value">{{ c.offers }}</div></div>
+    <div class="card"><div class="label">Pricing (Plans)</div><div class="value">{{ c.pricing }}</div></div>
+    <div class="card"><div class="label">Users</div><div class="value">{{ c.users }}</div></div>
+  </div>
+
+  <div class="section" *ngIf="isSuperAdmin()">
+    <h3>Create Admin User</h3>
+    <form class="form" [formGroup]="createForm" (ngSubmit)="createAdmin()">
+      <input placeholder="Full name" formControlName="fullName">
+      <input placeholder="Email" formControlName="email">
+      <input placeholder="Phone (10-digit)" formControlName="phone">
+      <input placeholder="Password (min 8 chars)" type="password" formControlName="password">
+      <button class="btn btn-primary" type="submit" [disabled]="loading()">Create</button>
+    </form>
+  </div>
+
+  <div class="section" *ngIf="isSuperAdmin()">
+    <h3>Admin Users</h3>
+    <div class="muted" *ngIf="(adminUsers()?.length ?? 0) === 0">No admin users found.</div>
+    <div class="table" *ngIf="(adminUsers()?.length ?? 0) > 0">
+      <div class="row header">
+        <div>Name</div>
+        <div>Email</div>
+        <div>Phone</div>
+        <div>Status</div>
+        <div>Created</div>
+        <div></div>
+      </div>
+      <div class="row" *ngFor="let u of adminUsers()">
+        <div>{{ u.fullName }}</div>
+        <div>{{ u.email }}</div>
+        <div>{{ u.phone }}</div>
+        <div>
+          <button
+            class="btn"
+            type="button"
+            (click)="toggleActive(u)"
+            [disabled]="loading()"
+          >
+            {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
+          </button>
+        </div>
+        <div>{{ u.createdAt | date:'medium' }}</div>
+        <div>
+          <button
+            class="btn btn-danger"
+            type="button"
+            (click)="deleteUser(u.userId)"
+            [disabled]="loading() || u.isActive"
+            [title]="u.isActive ? 'Deactivate admin before deleting' : 'Delete admin'"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Members</h3>
+    <div class="muted" *ngIf="(members()?.length ?? 0) === 0">No members found.</div>
+    <div class="table" *ngIf="(members()?.length ?? 0) > 0">
+      <div class="row header">
+        <div>Name</div>
+        <div>Email</div>
+        <div>Phone</div>
+        <div>Status</div>
+        <div>Created</div>
+        <div></div>
+      </div>
+      <div class="row" *ngFor="let u of members()">
+        <div>{{ u.fullName }}</div>
+        <div>{{ u.email }}</div>
+        <div>{{ u.phone }}</div>
+        <div>
+          <button
+            class="btn"
+            type="button"
+            (click)="toggleMemberActive(u)"
+            [disabled]="loading()"
+          >
+            {{ u.isActive ? 'Active (deactivate)' : 'Inactive (activate)' }}
+          </button>
+        </div>
+        <div>{{ u.createdAt | date:'medium' }}</div>
+        <div class="muted">{{ u.role }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+

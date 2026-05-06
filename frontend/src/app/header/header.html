@@ -5,50 +5,51 @@
       <span class="brand-icon">🏛️</span>
       <span>MSME <span class="accent">Bharat Manch</span></span>
     </a>
-    <button class="menu-toggle" onclick="toggleMobile()" id="menuBtn">
+    <button class="menu-toggle" type="button" id="menuBtn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-links" id="navLinks">
-      <a routerLink="/home">Home</a>
-      <a routerLink="/about">About</a>
-      <div class="dropdown" id="dd-services">
-        <span class="dropdown-trigger" onclick="toggleDD('dd-services')">Services ▾</span>
-        <div class="dropdown-menu">
-          <a routerLink="/our-services">All 360° Services</a>
+    <div class="nav-links" id="navLinks" [class.open]="mobileMenuOpen()">
+      <a routerLink="/home" (click)="closeMobileMenu()">Home</a>
+      <a routerLink="/about" (click)="closeMobileMenu()">About</a>
+      <div class="dropdown" [class.open]="servicesMenuOpen()">
+        <a type="button" class="dropdown-trigger" (click)="toggleServicesMenu()">Services ▾</a>
+        <div class="dropdown-menu" *ngIf="servicesMenuOpen()">
+          <a routerLink="/our-services" (click)="closeMobileMenu()">All 360° Services</a>
           <div class="dd-sep"></div>
-          <a routerLink="/service/msme-loans-finance">💰 MSME Loans</a>
-          <a routerLink="/service/company-formation">🏢 Company Formation</a>
-          <a routerLink="/service/government-subsidies">🏛️ Govt. Subsidies</a>
-          <a routerLink="/service/technology-solutions">💻 Technology</a>
-          <a routerLink="/service/sales-digital-marketing">📣 Digital Marketing</a>
-          <a routerLink="/service/ipo-investment-banking">📈 IPO & Investment</a>
-          <a routerLink="/service/coaching-consulting">🎓 Coaching</a>
-          <a routerLink="/service/legal-compliance">⚖️ Legal & Compliance</a>
-          <a routerLink="/service/research-development">🔬 R &amp; D &amp; Innovation</a>
-          <a routerLink="/service/export-import">🌐 Export/Import</a>
-          <a routerLink="/service/human-resources">👥 HR & Recruitment</a>
-          <a routerLink="/service/accounting-virtual-cfo">📊 Accounting & Virtual CFO</a>
+          <a routerLink="/service/msme-loans-finance" (click)="closeMobileMenu()">MSME Loans</a>
+          <a routerLink="/service/company-formation" (click)="closeMobileMenu()">Company Formation</a>
+          <a routerLink="/service/government-subsidies" (click)="closeMobileMenu()">Govt. Subsidies</a>
+          <a routerLink="/service/technology-solutions" (click)="closeMobileMenu()">Technology</a>
+          <a routerLink="/service/sales-digital-marketing" (click)="closeMobileMenu()">Digital Marketing</a>
+          <a routerLink="/service/ipo-investment-banking" (click)="closeMobileMenu()">IPO & Investment</a>
+          <a routerLink="/service/coaching-consulting" (click)="closeMobileMenu()">Coaching</a>
+          <a routerLink="/service/legal-compliance" (click)="closeMobileMenu()">Legal & Compliance</a>
+          <a routerLink="/service/research-development" (click)="closeMobileMenu()">R &amp; D &amp; Innovation</a>
+          <a routerLink="/service/export-import" (click)="closeMobileMenu()">Export/Import</a>
+          <a routerLink="/service/human-resources" (click)="closeMobileMenu()">HR & Recruitment</a>
+          <a routerLink="/service/accounting-virtual-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
         </div>
       </div>
-      <a class="nav-loans" routerLink="/loans">Loans</a>
-      <a class="nav-loans" routerLink="/membership">Pricing</a>
-      <a routerLink="/schemes">Schemes</a>
-      <a routerLink="/events">Events</a>
-      <a routerLink="/partners">Partners</a>
-      <div class="dropdown" id="dd-more">
-        <span class="dropdown-trigger" onclick="toggleDD('dd-more')">More ▾</span>
-        <div class="dropdown-menu">
-          <a routerLink="/news">📰 News & Blog</a>
-          <a routerLink="/contact">📞 Contact</a>
-          <a routerLink="/search">🔍 Search</a>
-          <a routerLink="/careers">👔 Careers</a>
-          <a routerLink="/media">📸 Media Kit</a>
+      <a class="nav-loans" routerLink="/loans" (click)="closeMobileMenu()">Loans</a>
+      <a class="nav-loans" routerLink="/membership" (click)="closeMobileMenu()">Pricing</a>
+      <!-- <a routerLink="/partners" (click)="closeMobileMenu()">Partners</a> -->
+      <!-- <a routerLink="/connect" (click)="closeMobileMenu()">MSME Connect</a> -->
+      <div class="dropdown" [class.open]="moreMenuOpen()">
+        <a type="button" class="dropdown-trigger" (click)="toggleMoreMenu()">More ▾</a>
+        <div class="dropdown-menu" *ngIf="moreMenuOpen()">
+          <a routerLink="/news" (click)="closeMobileMenu()">News & Blog</a>
+          <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
+          <a routerLink="/search" (click)="closeMobileMenu()">Search</a>
+          <a routerLink="/careers" (click)="closeMobileMenu()">Careers</a>
+          <a routerLink="/media" (click)="closeMobileMenu()">Media Kit</a>
+          <a routerLink="/schemes" (click)="closeMobileMenu()">Schemes</a>
+          <a routerLink="/events" (click)="closeMobileMenu()">Events</a>
         </div>
       </div>
       <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
       <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
         <a class="btn-outline" routerLink="/login">Login</a>
-        <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Free</a>
+        <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Now</a>
       </div>
       <div id="nav-auth-user" *ngIf="isLoggedIn()">
         <div class="dropdown">

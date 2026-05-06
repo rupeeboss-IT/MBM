@@ -1,0 +1,265 @@
+<div class="page active" id="page-connect">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="page-eyebrow">Business Networking</div>
+      <div class="page-title">MSME Connect</div>
+      <div class="page-desc">
+        Discover and connect with registered MSMEs across India. Find suppliers, partners, buyers, and collaborators —
+        all verified members of MSME Bharat Manch.
+      </div>
+    </div>
+  </div>
+
+  <section class="sec" style="background:var(--off-white);padding-bottom:40px;">
+    <div class="sec-inner">
+      <!-- Info strip -->
+      <div class="info-strip">
+        <div class="info-box">
+          <div class="info-ico">👥</div>
+          <div>
+            <div class="info-val">1,000+</div>
+            <div class="info-lbl">Registered MSMEs</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <div class="info-ico">🏭</div>
+          <div>
+            <div class="info-val">28+</div>
+            <div class="info-lbl">Industry Sectors</div>
+          </div>
+        </div>
+        <div class="info-box">
+          <div class="info-ico">🏛️</div>
+          <div>
+            <div class="info-val">22</div>
+            <div class="info-lbl">States Represented</div>
+          </div>
+        </div>
+        <button class="info-box info-box--cta" type="button" (click)="openUpgrade()">
+          <div class="info-ico">🔒</div>
+          <div>
+            <div class="info-cta-title">Unlock Connections</div>
+            <div class="info-cta-sub">Requires paid plan →</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="connect-filters">
+        <input
+          class="cf-search"
+          type="text"
+          placeholder="🔎  Search by business name, sector, city..."
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)"
+        />
+
+        <select class="cf-select" [ngModel]="sector()" (ngModelChange)="sector.set($event)">
+          <option value="">All Sectors</option>
+          <option>Manufacturing</option>
+          <option>Trading / Distribution</option>
+          <option>Services</option>
+          <option>Technology</option>
+          <option>Food &amp; Agriculture</option>
+          <option>Textile &amp; Apparel</option>
+          <option>Healthcare</option>
+          <option>Construction</option>
+          <option>Retail</option>
+          <option>Education &amp; Training</option>
+        </select>
+
+        <select class="cf-select" [ngModel]="state()" (ngModelChange)="state.set($event)">
+          <option value="">All States</option>
+          <option>Maharashtra</option>
+          <option>Delhi</option>
+          <option>Gujarat</option>
+          <option>Karnataka</option>
+          <option>Tamil Nadu</option>
+          <option>Uttar Pradesh</option>
+          <option>Rajasthan</option>
+          <option>West Bengal</option>
+          <option>Telangana</option>
+          <option>Punjab</option>
+          <option>Haryana</option>
+          <option>Madhya Pradesh</option>
+        </select>
+
+        <select class="cf-select" [ngModel]="turnover()" (ngModelChange)="turnover.set($event)">
+          <option value="">All Turnovers</option>
+          <option>Below ₹10 Lakh</option>
+          <option>₹10L – ₹50L</option>
+          <option>₹50L – ₹1 Cr</option>
+          <option>₹1 Cr – ₹5 Cr</option>
+          <option>Above ₹5 Cr</option>
+        </select>
+      </div>
+
+      <div class="mc-count-bar">
+        <div class="mc-count-label">
+          Showing <strong>{{ countLabel() }}</strong> registered MSMEs
+        </div>
+        <div class="mc-lock-note" *ngIf="!isUnlocked()">
+          🔒 Connect requires <a (click)="openUpgrade()">a paid plan</a>
+        </div>
+        <div class="mc-lock-note ok" *ngIf="isUnlocked()">
+          ✅ Unlocked ({{ activePlan()?.planName }})
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="connect-grid" *ngIf="filtered().length; else noRes">
+        <div class="msme-card" *ngFor="let m of filtered()">
+          <div class="mc-banner">
+            <div class="mc-banner-pattern"></div>
+            <div class="mc-verified" *ngIf="m.verified">✓ Verified</div>
+            <div class="mc-avatar" [style.color]="avatarColor(m.id)">{{ m.initials }}</div>
+          </div>
+          <div class="mc-body">
+            <div class="mc-name">{{ m.name }}</div>
+            <div class="mc-type">{{ m.type }} · {{ m.city }}</div>
+            <div class="mc-tags">
+              <span class="mc-tag sector">{{ m.sector }}</span>
+              <span class="mc-tag">{{ m.state }}</span>
+              <span class="mc-tag">{{ m.turnover }}</span>
+            </div>
+            <div class="mc-desc">{{ m.desc }}</div>
+            <div class="mc-actions">
+              <button class="mc-btn-view" type="button" (click)="openProfile(m)">View Profile</button>
+              <button
+                class="mc-btn-connect"
+                type="button"
+                [class.locked]="!isUnlocked()"
+                (click)="connectTo(m)"
+              >
+                {{ isUnlocked() ? 'Connect' : '🔒 Connect' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noRes>
+        <div class="no-results">
+          <div class="nr-ico">🔎</div>
+          <div class="nr-title">No MSMEs Found</div>
+          <div class="nr-sub">Try adjusting your search or filters.</div>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Upgrade modal -->
+  <div class="connect-upgrade-modal" *ngIf="upgradeOpen()" (click)="closeUpgrade()">
+    <div class="cum-box" (click)="$event.stopPropagation()">
+      <button class="cum-close" type="button" (click)="closeUpgrade()">✕</button>
+      <div class="cum-icon">🔓</div>
+      <div class="cum-title">Unlock MSME Connect</div>
+      <div class="cum-sub">
+        To connect with fellow MSME members, send messages, and share contact details — upgrade to a paid plan.
+      </div>
+
+      <div class="cum-plans">
+        <button
+          type="button"
+          class="cum-plan"
+          [class.sel]="selectedUpgradePlan() === 'premium'"
+          (click)="selectedUpgradePlan.set('premium')"
+        >
+          <div class="cum-plan-name">MSME Premium</div>
+          <div class="cum-plan-price">₹9,999</div>
+          <div class="cum-plan-note">Unlock Connect feature</div>
+        </button>
+        <button
+          type="button"
+          class="cum-plan"
+          [class.sel]="selectedUpgradePlan() === 'pro'"
+          (click)="selectedUpgradePlan.set('pro')"
+        >
+          <div class="cum-plan-name">MSME Pro</div>
+          <div class="cum-plan-price">₹19,999</div>
+          <div class="cum-plan-note">Full access</div>
+        </button>
+      </div>
+
+      <button class="cum-cta" type="button" (click)="proceedToUpgrade()">Upgrade &amp; Connect Now</button>
+      <button class="cum-skip" type="button" (click)="closeUpgrade()">Maybe later</button>
+    </div>
+  </div>
+
+  <!-- Profile modal -->
+  <div class="profile-modal-overlay" *ngIf="profileOpen()" (click)="closeProfile()">
+    <div class="profile-modal" (click)="$event.stopPropagation()">
+      <div class="pm-banner">
+        <div class="pm-banner-pattern"></div>
+        <button class="pm-close" type="button" (click)="closeProfile()">✕</button>
+        <div class="pm-avatar" [style.color]="currentProfile()?.id ? avatarColor(currentProfile()!.id) : '#C8102E'">
+          {{ currentProfile()?.initials }}
+        </div>
+      </div>
+
+      <div class="pm-body" *ngIf="currentProfile() as m">
+        <div class="pm-head">
+          <div>
+            <div class="pm-name">{{ m.name }}</div>
+            <div class="pm-type">{{ m.type }} · {{ m.city }}, {{ m.state }}</div>
+          </div>
+          <div class="pm-verified" *ngIf="m.verified">✓ Verified</div>
+        </div>
+
+        <div class="mc-tags" style="margin-bottom:16px;">
+          <span class="mc-tag sector">{{ m.sector }}</span>
+          <span class="mc-tag">{{ m.turnover }}</span>
+          <span class="mc-tag">Est. {{ m.established }}</span>
+        </div>
+
+        <div class="pm-section">
+          <div class="pm-label">About</div>
+          <div class="pm-value">{{ m.desc }}</div>
+        </div>
+
+        <div class="pm-row">
+          <div>
+            <div class="pm-label">Business Type</div>
+            <div class="pm-value">{{ m.type }}</div>
+          </div>
+          <div>
+            <div class="pm-label">Employees</div>
+            <div class="pm-value">{{ m.employees }}</div>
+          </div>
+        </div>
+
+        <div class="pm-row">
+          <div>
+            <div class="pm-label">Udyam No.</div>
+            <div class="pm-value">{{ m.udyam }}</div>
+          </div>
+          <div>
+            <div class="pm-label">Location</div>
+            <div class="pm-value">{{ m.city }}, {{ m.state }}</div>
+          </div>
+        </div>
+
+        <div class="pm-lock-notice" *ngIf="!isUnlocked()">
+          <p>🔒 Contact details are hidden. Upgrade to a paid plan to view phone, email, website &amp; connect.</p>
+          <button type="button" (click)="closeProfile(); openUpgrade()">Unlock Contact &amp; Connect</button>
+        </div>
+
+        <div class="pm-row" [class.pm-blurred]="!isUnlocked()">
+          <div>
+            <div class="pm-label">Phone</div>
+            <div class="pm-value">{{ m.contact }}</div>
+          </div>
+          <div>
+            <div class="pm-label">Email</div>
+            <div class="pm-value">{{ m.email }}</div>
+          </div>
+        </div>
+        <div class="pm-section" [class.pm-blurred]="!isUnlocked()">
+          <div class="pm-label">Website</div>
+          <div class="pm-value">{{ m.website }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

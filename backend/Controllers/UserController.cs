@@ -12,11 +12,13 @@ public sealed class UserController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly IOtpService _otp;
+    private readonly IPasswordResetService _pwReset;
 
-    public UserController(AppDbContext db, IOtpService otp)
+    public UserController(AppDbContext db, IOtpService otp, IPasswordResetService pwReset)
     {
         _db = db;
         _otp = otp;
+        _pwReset = pwReset;
     }
 
     public sealed record RegisterRequest(
@@ -33,6 +35,10 @@ public sealed class UserController : ControllerBase
 
     public sealed record LoginRequest(string Identifier, string Password);
     public sealed record LoginResponse(bool Success, string? Message = null, Guid? UserId = null);
+    public sealed record ForgotPasswordRequest(string Email);
+    public sealed record ForgotPasswordResponse(bool Success, string? Message = null);
+    public sealed record ResetPasswordRequest(string Email, string Code, string NewPassword);
+    public sealed record ResetPasswordResponse(bool Success, string? Message = null);
     public sealed record MeResponse(
         bool Success,
         string? Message = null,
@@ -111,6 +117,13 @@ public sealed class UserController : ControllerBase
         if (user is null)
             return Unauthorized(new LoginResponse(false, "Invalid email/phone or password."));
 
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+        if (role == "admin" || role == "superadmin")
+            return Unauthorized(new LoginResponse(false, "Please use Admin Login."));
+
+        if (user.IsActive != true)
+            return Unauthorized(new LoginResponse(false, "Account is inactive."));
+
         var ok = PasswordHasher.Verify(req.Password, user.PasswordSalt, user.PasswordHash);
         if (!ok)
             return Unauthorized(new LoginResponse(false, "Invalid email/phone or password."));
@@ -168,6 +181,70 @@ public sealed class UserController : ControllerBase
         await _db.SaveChangesAsync(ct);
 
         return Ok(new RegisterResponse(true, "Account created.", user.UserId));
+    }
+
+    [HttpPost("password/forgot")]
+    public async Task<ActionResult<ForgotPasswordResponse>> ForgotPassword([FromBody] ForgotPasswordRequest? req, CancellationToken ct)
+    {
+        if (req is null || string.IsNullOrWhiteSpace(req.Email))
+            return BadRequest(new ForgotPasswordResponse(false, "Email is required."));
+
+        var email = req.Email.Trim().ToLowerInvariant();
+
+        // Do not reveal whether user exists.
+        try
+        {
+            var exists = await _db.Users.AsNoTracking().AnyAsync(u => u.Email == email, ct);
+            if (exists)
+            {
+                await _pwReset.RequestResetAsync(email, ct);
+            }
+        }
+        catch (OtpRateLimitExceededException ex)
+        {
+            return StatusCode(StatusCodes.Status429TooManyRequests, new ForgotPasswordResponse(false, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            // Return a real failure when SMTP fails (still doesn't reveal existence).
+            return StatusCode(StatusCodes.Status502BadGateway, new ForgotPasswordResponse(false,
+                $"Could not send email right now. Please try again. ({ex.Message})"));
+        }
+
+        return Ok(new ForgotPasswordResponse(true, "If this email is registered, an OTP has been sent."));
+    }
+
+    [HttpPost("password/reset")]
+    public async Task<ActionResult<ResetPasswordResponse>> ResetPassword([FromBody] ResetPasswordRequest? req, CancellationToken ct)
+    {
+        if (req is null) return BadRequest(new ResetPasswordResponse(false, "Request is required."));
+        if (string.IsNullOrWhiteSpace(req.Email)) return BadRequest(new ResetPasswordResponse(false, "Email is required."));
+        if (string.IsNullOrWhiteSpace(req.Code)) return BadRequest(new ResetPasswordResponse(false, "OTP is required."));
+        if (string.IsNullOrWhiteSpace(req.NewPassword)) return BadRequest(new ResetPasswordResponse(false, "New password is required."));
+        if (req.NewPassword.Length < 8) return BadRequest(new ResetPasswordResponse(false, "Password must be at least 8 characters."));
+
+        var email = req.Email.Trim().ToLowerInvariant();
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
+        if (user is null)
+            return Ok(new ResetPasswordResponse(true, "Password updated.")); // do not reveal
+
+        try
+        {
+            await _pwReset.ResetAsync(email, req.Code.Trim(), req.NewPassword, ct);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new ResetPasswordResponse(false, ex.Message));
+        }
+
+        var (hash, salt) = PasswordHasher.Hash(req.NewPassword);
+        user.PasswordHash = hash;
+        user.PasswordSalt = salt;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _db.SaveChangesAsync(ct);
+        return Ok(new ResetPasswordResponse(true, "Password updated."));
     }
 }
 

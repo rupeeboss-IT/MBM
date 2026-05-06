@@ -8,10 +8,11 @@ import { SchemeDetail } from './pages/schemes/scheme-detail/scheme-detail';
 import { Events } from './pages/events/events';
 import { EventDetail } from './pages/events/event-detail/event-detail';
 import { Loans } from './pages/loans/loans';
-import { Partners } from './pages/partners/partners';
+// import { Partners } from './pages/partners/partners';
 import { Contact } from './pages/More/contact/contact';
 import { Search } from './pages/More/search/search';
 import { Membership } from './pages/More/membership/membership';
+import { Connect } from './pages/connect/connect';
 import { NewsBlog } from './pages/More/news-blog/news-blog';
 import { Careers } from './pages/More/careers/careers';
 import { MediaKit } from './pages/More/media-kit/media-kit';
@@ -29,6 +30,8 @@ import { Login as AdminLogin } from './admin/login/login';
 import { ForgotPassword as AdminForgotPassword } from './admin/forgot-password/forgot-password';
 import { OfferingDetails } from './pages/offering-details/offering-details';
 import { ErrorPage } from './error-page/error-page';
+import { adminGuard } from './core/guards/admin.guard';
+import { AdminDashboard } from './admin/dashboard/dashboard';
 
 export const routes: Routes = [
     {
@@ -99,11 +102,11 @@ export const routes: Routes = [
         component: Loans,
         pathMatch: 'full'
     },
-    {
-        path: 'partners',
-        component: Partners,
-        pathMatch: 'full'
-    },
+    // {
+    //     path: 'partners',
+    //     component: Partners,
+    //     pathMatch: 'full'
+    // },
     {
         path: 'contact',
         component: Contact,
@@ -117,6 +120,11 @@ export const routes: Routes = [
     {
         path: 'membership',
         component: Membership,
+        pathMatch: 'full'
+    },
+    {
+        path: 'connect',
+        component: Connect,
         pathMatch: 'full'
     },
     {
@@ -175,6 +183,12 @@ export const routes: Routes = [
     {
         path: 'admin-forgot-password',
         component: AdminForgotPassword,
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-dashboard',
+        component: AdminDashboard,
+        canActivate: [adminGuard],
         pathMatch: 'full'
     },
     {

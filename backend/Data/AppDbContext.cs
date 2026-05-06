@@ -9,6 +9,7 @@ namespace RB_Website_API.Data
         }
 
         public DbSet<Models.User> Users => Set<Models.User>();
+        public DbSet<Models.UserStatusAudit> UserStatusAudit => Set<Models.UserStatusAudit>();
         public DbSet<Models.Plan> Plans => Set<Models.Plan>();
         public DbSet<Models.PaymentOrder> PaymentOrders => Set<Models.PaymentOrder>();
         public DbSet<Models.Payment> Payments => Set<Models.Payment>();
