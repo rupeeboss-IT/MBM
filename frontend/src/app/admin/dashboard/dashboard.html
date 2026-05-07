@@ -36,21 +36,32 @@
   </div>
 
   <div class="section" *ngIf="isSuperAdmin()">
-    <h3>Admin Users</h3>
+    <div class="section-head">
+      <h3>Admin Users</h3>
+      <div class="section-tools">
+        <input
+          class="table-search"
+          type="search"
+          [value]="adminSearch()"
+          (input)="adminSearch.set(($any($event.target).value || ''))"
+          placeholder="Search admins..."
+        >
+      </div>
+    </div>
     <div class="muted" *ngIf="(adminUsers()?.length ?? 0) === 0">No admin users found.</div>
-    <div class="table" *ngIf="(adminUsers()?.length ?? 0) > 0">
+    <div class="table" *ngIf="filteredAdminUsers().length > 0">
       <div class="row header">
         <div>Name</div>
         <div>Email</div>
         <div>Phone</div>
         <div>Status</div>
         <div>Created</div>
-        <div></div>
+        <div>Actions</div>
       </div>
-      <div class="row" *ngFor="let u of adminUsers()">
-        <div>{{ u.fullName }}</div>
-        <div>{{ u.email }}</div>
-        <div>{{ u.phone }}</div>
+      <div class="row" *ngFor="let u of filteredAdminUsers()">
+        <div class="text-truncate" title="{{ u.fullName }}">{{ u.fullName }}</div>
+        <div class="text-truncate" title="{{ u.email }}">{{ u.email }}</div>
+        <div class="text-truncate" title="{{ u.phone }}">{{ u.phone }}</div>
         <div>
           <button
             class="btn"
@@ -61,7 +72,7 @@
             {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
           </button>
         </div>
-        <div>{{ u.createdAt | date:'medium' }}</div>
+        <div>{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
         <div>
           <button
             class="btn btn-danger"
@@ -75,24 +86,38 @@
         </div>
       </div>
     </div>
+    <div class="muted" *ngIf="(adminUsers()?.length ?? 0) > 0 && filteredAdminUsers().length === 0">
+      No admins match your search.
+    </div>
   </div>
 
   <div class="section">
-    <h3>Members</h3>
+    <div class="section-head">
+      <h3>Members</h3>
+      <div class="section-tools">
+        <input
+          class="table-search"
+          type="search"
+          [value]="memberSearch()"
+          (input)="memberSearch.set(($any($event.target).value || ''))"
+          placeholder="Search members..."
+        >
+      </div>
+    </div>
     <div class="muted" *ngIf="(members()?.length ?? 0) === 0">No members found.</div>
-    <div class="table" *ngIf="(members()?.length ?? 0) > 0">
+    <div class="table" *ngIf="filteredMembers().length > 0">
       <div class="row header">
         <div>Name</div>
         <div>Email</div>
         <div>Phone</div>
         <div>Status</div>
         <div>Created</div>
-        <div></div>
+        <div>Role</div>
       </div>
-      <div class="row" *ngFor="let u of members()">
-        <div>{{ u.fullName }}</div>
-        <div>{{ u.email }}</div>
-        <div>{{ u.phone }}</div>
+      <div class="row" *ngFor="let u of filteredMembers()">
+        <div class="text-truncate" title="{{ u.fullName }}">{{ u.fullName }}</div>
+        <div class="text-truncate" title="{{ u.email }}">{{ u.email }}</div>
+        <div class="text-truncate" title="{{ u.phone }}">{{ u.phone }}</div>
         <div>
           <button
             class="btn"
@@ -100,13 +125,15 @@
             (click)="toggleMemberActive(u)"
             [disabled]="loading()"
           >
-            {{ u.isActive ? 'Active (deactivate)' : 'Inactive (activate)' }}
+            {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
           </button>
         </div>
-        <div>{{ u.createdAt | date:'medium' }}</div>
-        <div class="muted">{{ u.role }}</div>
+        <div>{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
+        <div class="muted text-truncate" title="{{ u.role }}">{{ u.role }}</div>
       </div>
+    </div>
+    <div class="muted" *ngIf="(members()?.length ?? 0) > 0 && filteredMembers().length === 0">
+      No members match your search.
     </div>
   </div>
 </div>
-

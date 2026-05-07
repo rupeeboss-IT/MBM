@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -71,6 +71,27 @@ export class AdminDashboard {
   readonly adminUsers = signal<AdminUsersRes['users']>([]);
   readonly members = signal<MembersRes['users']>([]);
   readonly isSuperAdmin = this.session.isSuperAdmin;
+
+  readonly adminSearch = signal('');
+  readonly memberSearch = signal('');
+
+  readonly filteredAdminUsers = computed(() => {
+    const list = this.adminUsers() ?? [];
+    const q = this.adminSearch().trim().toLowerCase();
+    if (!q) return list;
+    return list.filter((u) =>
+      [u.fullName, u.email, u.phone].some((v) => (v ?? '').toLowerCase().includes(q))
+    );
+  });
+
+  readonly filteredMembers = computed(() => {
+    const list = this.members() ?? [];
+    const q = this.memberSearch().trim().toLowerCase();
+    if (!q) return list;
+    return list.filter((u) =>
+      [u.fullName, u.email, u.phone, u.role].some((v) => (v ?? '').toLowerCase().includes(q))
+    );
+  });
 
   readonly createForm = this.fb.nonNullable.group({
     fullName: this.fb.nonNullable.control('', { validators: [Validators.required, Validators.maxLength(160)] }),
