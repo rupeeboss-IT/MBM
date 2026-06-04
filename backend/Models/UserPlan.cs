@@ -25,6 +25,20 @@ public sealed class UserPlan
     [MaxLength(20)]
     public string Status { get; set; } = "Active";
 
+    /// <summary>Member opted out of renewal; access continues until ActiveTo.</summary>
+    public bool CancelAtPeriodEnd { get; set; }
+
+    public DateTime? CancelledAt { get; set; }
+
+    /// <summary>Phase 2: Razorpay auto-renewal enabled.</summary>
+    public bool AutoRenewEnabled { get; set; }
+
+    [MaxLength(64)]
+    public string? RazorpaySubscriptionId { get; set; }
+
+    [MaxLength(64)]
+    public string? RazorpayCustomerId { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }

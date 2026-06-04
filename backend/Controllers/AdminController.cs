@@ -58,10 +58,14 @@ public sealed class AdminController : ControllerBase
         bool Success,
         string? Message = null,
         int Users = 0,
+        int Members = 0,
         int Plans = 0,
         int PaymentOrders = 0,
         int Payments = 0,
         int UserPlans = 0,
+        int ActiveSubscriptions = 0,
+        int ExpiringSoon = 0,
+        int ExpiredSubscriptions = 0,
         int Blogs = 0,
         int Events = 0,
         int Schemes = 0,
@@ -69,6 +73,65 @@ public sealed class AdminController : ControllerBase
         int SuccessStories = 0,
         int Offers = 0,
         int Pricing = 0
+    );
+
+    public sealed record SubscriptionRowDto(
+        Guid UserPlanId,
+        Guid UserId,
+        string FullName,
+        string Email,
+        string Phone,
+        string PlanCode,
+        string PlanName,
+        DateTime ActiveFrom,
+        DateTime? ActiveTo,
+        string Status,
+        int? DaysRemaining
+    );
+
+    public sealed record PlanRowDto(
+        int PlanId,
+        string Code,
+        string Name,
+        long TotalAmountPaise,
+        int DurationDays,
+        bool IsActive
+    );
+
+    public sealed record PaymentOrderRowDto(
+        Guid PaymentOrderId,
+        Guid UserId,
+        string FullName,
+        string Email,
+        string PlanCode,
+        string PlanName,
+        long TotalAmountPaise,
+        string Status,
+        DateTime CreatedAt
+    );
+
+    public sealed record PaymentRowDto(
+        Guid PaymentId,
+        Guid PaymentOrderId,
+        string FullName,
+        string Email,
+        string PlanCode,
+        long AmountPaise,
+        string Status,
+        DateTime PaidAt
+    );
+
+    public sealed record DashboardDetailResponse(
+        bool Success,
+        string? Message = null,
+        string? Category = null,
+        string? Title = null,
+        List<AdminUserDto>? Users = null,
+        List<MemberDto>? Members = null,
+        List<PlanRowDto>? Plans = null,
+        List<PaymentOrderRowDto>? PaymentOrders = null,
+        List<PaymentRowDto>? Payments = null,
+        List<SubscriptionRowDto>? Subscriptions = null
     );
 
     public sealed record SetAdminActiveRequest(bool IsActive);
@@ -240,28 +303,200 @@ public sealed class AdminController : ControllerBase
     [HttpGet("dashboard/counts")]
     public async Task<ActionResult<DashboardCountsResponse>> DashboardCounts(CancellationToken ct)
     {
+        var now = DateTime.UtcNow;
+        var expiringCutoff = now.AddDays(30);
+
         var users = await _db.Users.AsNoTracking().CountAsync(ct);
+        var members = await _db.Users.AsNoTracking()
+            .CountAsync(u => u.Role != "admin" && u.Role != "superadmin", ct);
         var plans = await _db.Plans.AsNoTracking().CountAsync(ct);
         var paymentOrders = await _db.PaymentOrders.AsNoTracking().CountAsync(ct);
         var payments = await _db.Payments.AsNoTracking().CountAsync(ct);
         var userPlans = await _db.UserPlans.AsNoTracking().CountAsync(ct);
 
+        var activeSubscriptions = await _db.UserPlans.AsNoTracking()
+            .CountAsync(up => up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now), ct);
+
+        var expiringSoon = await _db.UserPlans.AsNoTracking()
+            .CountAsync(up =>
+                up.Status == "Active"
+                && up.ActiveTo != null
+                && up.ActiveTo > now
+                && up.ActiveTo <= expiringCutoff, ct);
+
+        var expiredSubscriptions = await _db.UserPlans.AsNoTracking()
+            .CountAsync(up =>
+                up.Status != "Active"
+                || (up.ActiveTo != null && up.ActiveTo <= now), ct);
+
         return Ok(new DashboardCountsResponse(
             true,
             "OK",
             Users: users,
+            Members: members,
             Plans: plans,
             PaymentOrders: paymentOrders,
             Payments: payments,
             UserPlans: userPlans,
-            Blogs: 0,
-            Events: 0,
-            Schemes: 0,
+            ActiveSubscriptions: activeSubscriptions,
+            ExpiringSoon: expiringSoon,
+            ExpiredSubscriptions: expiredSubscriptions,
+            Blogs: ContentCatalog.Blogs,
+            Events: ContentCatalog.Events,
+            Schemes: ContentCatalog.Schemes,
             SchemeNews: 0,
             SuccessStories: 0,
             Offers: 0,
             Pricing: plans
         ));
+    }
+
+    [Authorize(Policy = "AdminAccess")]
+    [HttpGet("dashboard/details/{category}")]
+    public async Task<ActionResult<DashboardDetailResponse>> DashboardDetails(
+        string category,
+        [FromQuery] int days = 30,
+        CancellationToken ct = default)
+    {
+        var key = (category ?? "").Trim().ToLowerInvariant();
+        var now = DateTime.UtcNow;
+        days = Math.Clamp(days, 1, 365);
+        var expiringCutoff = now.AddDays(days);
+
+        switch (key)
+        {
+            case "users":
+            {
+                var users = await _db.Users.AsNoTracking()
+                    .OrderByDescending(u => u.CreatedAt)
+                    .Select(u => new AdminUserDto(u.UserId, u.Role, u.FullName, u.Email, u.Phone, u.IsActive, u.CreatedAt))
+                    .ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "All Users", Users: users));
+            }
+            case "members":
+            {
+                var members = await _db.Users.AsNoTracking()
+                    .Where(u => u.Role != "admin" && u.Role != "superadmin")
+                    .OrderByDescending(u => u.CreatedAt)
+                    .Select(u => new MemberDto(u.UserId, u.Role, u.FullName, u.Email, u.Phone, u.IsActive, u.CreatedAt))
+                    .ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Members", Members: members));
+            }
+            case "plans":
+            case "pricing":
+            {
+                var planRows = await _db.Plans.AsNoTracking()
+                    .OrderBy(p => p.TotalAmountPaise)
+                    .Select(p => new PlanRowDto(p.PlanId, p.Code, p.Name, p.TotalAmountPaise, p.DurationDays, p.IsActive))
+                    .ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Membership Plans", Plans: planRows));
+            }
+            case "payment-orders":
+            {
+                var orders = await (
+                    from po in _db.PaymentOrders.AsNoTracking()
+                    join u in _db.Users.AsNoTracking() on po.UserId equals u.UserId
+                    join p in _db.Plans.AsNoTracking() on po.PlanId equals p.PlanId
+                    orderby po.CreatedAt descending
+                    select new PaymentOrderRowDto(
+                        po.PaymentOrderId,
+                        po.UserId,
+                        u.FullName,
+                        u.Email,
+                        po.PlanCode,
+                        p.Name,
+                        po.TotalAmountPaise,
+                        po.Status,
+                        po.CreatedAt)
+                ).ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Payment Orders", PaymentOrders: orders));
+            }
+            case "payments":
+            {
+                var rows = await (
+                    from pay in _db.Payments.AsNoTracking()
+                    join po in _db.PaymentOrders.AsNoTracking() on pay.PaymentOrderId equals po.PaymentOrderId
+                    join u in _db.Users.AsNoTracking() on po.UserId equals u.UserId
+                    orderby pay.PaidAt descending
+                    select new PaymentRowDto(
+                        pay.PaymentId,
+                        pay.PaymentOrderId,
+                        u.FullName,
+                        u.Email,
+                        po.PlanCode,
+                        pay.AmountPaise,
+                        pay.Status,
+                        pay.PaidAt)
+                ).ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Payments", Payments: rows));
+            }
+            case "subscriptions":
+            case "user-plans":
+            {
+                var subs = await LoadSubscriptionRows(
+                    _db.UserPlans.AsNoTracking()
+                        .Where(up => up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now)),
+                    now,
+                    ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Active Subscriptions", Subscriptions: subs));
+            }
+            case "expiring":
+            {
+                var subs = await LoadSubscriptionRows(
+                    _db.UserPlans.AsNoTracking()
+                        .Where(up =>
+                            up.Status == "Active"
+                            && up.ActiveTo != null
+                            && up.ActiveTo > now
+                            && up.ActiveTo <= expiringCutoff),
+                    now,
+                    ct);
+                return Ok(new DashboardDetailResponse(
+                    true,
+                    "OK",
+                    key,
+                    $"Subscriptions Expiring (next {days} days)",
+                    Subscriptions: subs));
+            }
+            case "expired":
+            {
+                var subs = await LoadSubscriptionRows(
+                    _db.UserPlans.AsNoTracking()
+                        .Where(up => up.Status != "Active" || (up.ActiveTo != null && up.ActiveTo <= now)),
+                    now,
+                    ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Expired / Inactive Subscriptions", Subscriptions: subs));
+            }
+            default:
+                return NotFound(new DashboardDetailResponse(false, "Unknown category."));
+        }
+    }
+
+    private async Task<List<SubscriptionRowDto>> LoadSubscriptionRows(
+        IQueryable<UserPlan> query,
+        DateTime now,
+        CancellationToken ct)
+    {
+        return await (
+            from up in query
+            join u in _db.Users.AsNoTracking() on up.UserId equals u.UserId
+            join p in _db.Plans.AsNoTracking() on up.PlanId equals p.PlanId
+            orderby up.ActiveTo ?? DateTime.MaxValue
+            select new SubscriptionRowDto(
+                up.UserPlanId,
+                up.UserId,
+                u.FullName,
+                u.Email,
+                u.Phone,
+                up.PlanCode,
+                p.Name,
+                up.ActiveFrom,
+                up.ActiveTo,
+                up.Status,
+                up.ActiveTo == null
+                    ? (int?)null
+                    : (int)Math.Ceiling((up.ActiveTo.Value - now).TotalDays))
+        ).ToListAsync(ct);
     }
 
     [Authorize(Policy = "AdminAccess")]

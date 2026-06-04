@@ -29,7 +29,7 @@ input,select,textarea{font-family:inherit}
 
 /* ===== UTILITIES ===== */
 .container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
-.section{padding:4.5rem 1.5rem}
+.section{padding:2.5rem 1.5rem}
 .section.bg-light{background:var(--gray)}
 .section.bg-navy{background:var(--navy);color:#fff}
 .section-tag{display:inline-block;background:var(--red-light);color:var(--red);font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.3rem .9rem;border-radius:20px;margin-bottom:.9rem}
@@ -66,7 +66,11 @@ input,select,textarea{font-family:inherit}
 /* ===== NAVBAR ===== */
 .navbar{background:#fff;box-shadow:0 2px 20px rgba(0,0,0,.08);position:sticky;top:0;z-index:1000}
 .nav-container{max-width:1280px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:68px}
-.brand{display:flex;align-items:center;gap:.5rem;font-size:1.15rem;font-weight:800;color:var(--navy);cursor:pointer}
+.brand{display:flex;align-items:center;gap:.55rem;font-size:1.15rem;font-weight:800;color:var(--navy);cursor:pointer;text-decoration:none}
+.brand-logo{display:block;object-fit:contain;flex-shrink:0}
+.brand-logo--nav{width:94px;height:64px}
+.brand-logo--footer{width:56px;height:33px;margin-bottom:.25rem}
+.brand-logo--auth{width:72px;height:72px;margin:0 auto .35rem}
 .brand-icon{font-size:1.4rem}
 .brand .accent{color:var(--red)}
 .nav-links{display:flex;align-items:center;gap:1rem}
@@ -116,7 +120,7 @@ input,select,textarea{font-family:inherit}
 .hero-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--rxl);padding:32px;backdrop-filter:blur(10px);}
 .hcard-title{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;}
 .hcard-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.hcard-item{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 10px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background .2s,border-color .2s,transform .15s;min-width:0;overflow:hidden;}
+.hcard-item{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 10px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:background .2s,border-color .2s,transform .15s;min-width:0;overflow:hidden;text-decoration:none;color:inherit;}
 .hcard-item:hover{background:rgba(255,255,255,0.14);border-color:rgba(200,16,46,0.5);transform:translateY(-2px);}
 .hcard-icon{font-size:18px;flex-shrink:0;}
 .hcard-label{font-size:12px;font-weight:700;color:#fff;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -206,6 +210,7 @@ input,select,textarea{font-family:inherit}
 .footer{background:#111827;color:#9ca3af;padding:4rem 1.5rem 0}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
 .footer-brand .brand-icon{font-size:2rem}
+.footer-brand .brand-logo--footer{display:block}
 .footer-brand h3{color:#fff;font-size:1.15rem;font-weight:800;margin:.5rem 0 .3rem}
 .footer-brand h3 span{color:var(--red)}
 .footer-brand p{font-size:.85rem;line-height:1.7;margin-bottom:1rem}
@@ -375,7 +380,7 @@ input,select,textarea{font-family:inherit}
 .ci-icon{width:44px;height:44px;border-radius:10px;background:var(--red-light);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .ci-text strong{display:block;font-weight:700;color:var(--navy);margin-bottom:.2rem}
 .ci-text span,.ci-text a{font-size:.9rem;color:var(--text)}
-.offices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.offices-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 .office-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem}
 .office-card h4{font-weight:700;color:var(--navy);margin-bottom:.4rem}
 .office-card p{font-size:.83rem;color:var(--muted);line-height:1.6}
@@ -637,6 +642,7 @@ select.status-select{padding:.3rem .7rem;border:1.5px solid var(--border);border
 .auth-wrap{min-height:calc(100vh - 68px);background:linear-gradient(135deg,#f8f9fa,#fff);display:flex;align-items:center;justify-content:center;padding:3rem 1.5rem}
 .auth-box{background:#fff;border:1px solid var(--border);border-radius:20px;padding:2.5rem;width:100%;max-width:480px;box-shadow:0 8px 40px rgba(0,0,0,.07)}
 .auth-logo{text-align:center;margin-bottom:1.5rem}
+.auth-logo .brand-logo--auth{display:block}
 .auth-logo .brand-icon{font-size:2.5rem}
 .auth-logo h2{font-size:1.5rem;font-weight:800;color:var(--navy);margin-top:.5rem}
 .auth-logo p{color:var(--muted);font-size:.9rem}

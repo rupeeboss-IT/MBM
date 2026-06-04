@@ -36,13 +36,17 @@
       <ng-template #planLoaded>
         <ng-container *ngIf="activePlan() as plan; else noPlan">
           <div class="plan-pill plan-pill--active">{{ plan.planName }} · Active</div>
-          <div class="muted" *ngIf="plan.activeFrom">
-            Active since {{ plan.activeFrom | date:'dd MMM yyyy' }}
+          <div class="muted d-flex" *ngIf="plan.activeFrom"  style="justify-content: space-between;">
+            <span class="k">Active since</span>
+            <span class="v">{{ plan.activeFrom | date:'dd MMM yyyy' }}</span>
+          </div><hr/>
+          <div class="muted d-flex" *ngIf="plan.activeTo" style="justify-content: space-between;">
+            <span class="k">Renews on</span>
+            <span class="v">{{ plan.activeTo | date:'dd MMM yyyy' }}</span>
           </div>
-          <div class="muted" *ngIf="plan.activeTo">
-            Renews on {{ plan.activeTo | date:'dd MMM yyyy' }}
-          </div>
-          <div style="margin-top:.8rem">
+          <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:.5rem">
+            <a class="btn-outline" [routerLink]="['/my-plan']"
+               style="width:100%;text-align:center;display:block">View benefits &amp; invoices</a>
             <a class="btn-outline" [routerLink]="['/membership']"
                style="width:100%;text-align:center;display:block">Upgrade Plan</a>
           </div>
@@ -73,30 +77,112 @@
         </div>
 
         <div class="details" *ngIf="!loading()">
+          <div class="row" *ngIf="profile()?.memberId">
+            <div class="label">Member ID</div>
+            <div class="value">{{ profile()?.memberId }}</div>
+          </div>
           <div class="row">
             <div class="label">Full name</div>
-            <div class="value">{{ profile()?.fullName || '—' }}</div>
+            <div class="">{{ profile()?.fullName || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">Email</div>
-            <div class="value">{{ profile()?.email || '—' }}</div>
+            <div class="">{{ profile()?.email || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">Mobile</div>
-            <div class="value">{{ profile()?.phone || '—' }}</div>
+            <div class="">{{ profile()?.phone || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">Company</div>
-            <div class="value">{{ profile()?.companyName || '—' }}</div>
+            <div class="">{{ profile()?.companyName || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">User Since</div>
-            <div class="value">{{ profile()?.createdAt ? (profile()?.createdAt | date:'dd MMM yyyy') : '—' }}</div>
+            <div class="">{{ profile()?.createdAt ? (profile()?.createdAt | date:'dd MMM yyyy') : '—' }}</div>
           </div>
         </div>
       </section>
 
+      <section id="reports" class="card profile-card profile-card--reports">
+        <div class="card__title">My Reports</div>
+        <div class="muted">Download your credit and other reports uploaded by our team.</div>
+
+        <div *ngIf="reportsLoading()" class="muted" style="margin-top:.75rem">Loading reports…</div>
+
+        <div class="invoice-table report-table" *ngIf="!reportsLoading() && reports().length > 0">
+          <div class="invoice-row invoice-row--head report-row">
+            <div>Report name</div>
+            <div>Upload date</div>
+            <div>Plan</div>
+            <div>Size</div>
+            <div>Action</div>
+          </div>
+          <div class="invoice-row report-row" *ngFor="let r of reports()">
+            <div>{{ r.reportName }}</div>
+            <div>{{ r.uploadDate | date:'dd MMM yyyy' }}</div>
+            <div>{{ r.planName }}</div>
+            <div>{{ formatFileSize(r.fileSize) }}</div>
+            <div>
+              <button
+                type="button"
+                class="btn-outline btn-sm"
+                (click)="downloadReport(r)"
+                [disabled]="reportDownloading() === r.id">
+                {{ reportDownloading() === r.id ? '…' : 'Download' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="muted" *ngIf="!reportsLoading() && reports().length === 0" style="margin-top:.75rem">
+          No reports available yet. Reports appear here after your admin uploads them.
+        </div>
+      </section>
+
+      <section id="invoices" class="card profile-card profile-card--invoices">
+        <div class="card__title">Invoices</div>
+        <div class="muted">Download receipts for your membership payments.</div>
+
+        <div *ngIf="invoicesLoading()" class="muted" style="margin-top:.75rem">Loading invoices…</div>
+
+        <div class="invoice-table" *ngIf="!invoicesLoading() && invoices().length > 0">
+          <div class="invoice-row invoice-row--head">
+            <div>Date</div>
+            <div>Plan</div>
+            <div>Amount</div>
+            <div>Invoice #</div>
+            <div>Action</div>
+          </div>
+          <div class="invoice-row" *ngFor="let inv of invoices()">
+            <div>{{ inv.paidAt | date:'dd MMM yyyy' }}</div>
+            <div>{{ inv.planName }}</div>
+            <div>{{ inr(inv.amountPaise) }}</div>
+            <div class="invoice-num">{{ inv.invoiceNumber }}</div>
+            <div>
+              <button
+                type="button"
+                class="btn-outline btn-sm"
+                (click)="downloadInvoice(inv)"
+                [disabled]="invoiceDownloading() === inv.paymentId">
+                {{ invoiceDownloading() === inv.paymentId ? '…' : 'Download' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="muted" *ngIf="!invoicesLoading() && invoices().length === 0" style="margin-top:.75rem">
+          No invoices yet. Invoices appear after a successful plan payment.
+        </div>
+      </section>
+
       <section class="profile-grid">
+        <a class="card profile-card profile-card--shortcut" routerLink="." fragment="reports">
+          <div class="card__title">Reports</div>
+          <div class="muted">Credit &amp; financial reports</div>
+          <div class="shortcut-value">{{ reports().length }} available</div>
+        </a>
+
         <div class="card profile-card profile-card--dashboard">
           <div class="card__title">Dashboard</div>
           <div class="muted">Your shortcuts and status.</div>
@@ -138,6 +224,9 @@
     <div class="profile-aside__card profile-aside__card--quick">
       <div class="profile-aside__title">Quick menu</div>
       <a class="profile-nav" [routerLink]="['/profile']"> Profile</a>
+      <a class="profile-nav" routerLink="." fragment="invoices"> Invoices</a>
+      <a class="profile-nav" [routerLink]="['/my-plan']"> Subscription</a>
+      <a class="profile-nav" routerLink="." fragment="reports"> Reports</a>
       <a class="profile-nav" [routerLink]="['/membership']"> Pricing / Plans</a>
       <div class="profile-aside__sep"></div>
       <button type="button" class="profile-nav profile-nav--danger" (click)="logout()">Logout</button>

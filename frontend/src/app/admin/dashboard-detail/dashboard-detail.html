@@ -1,0 +1,159 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <h2>{{ title() }}</h2>
+      <div class="muted">Category: {{ category() }}</div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" routerLink="/admin-dashboard">← Back to Dashboard</a>
+      <button class="btn" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="section-tools detail-search">
+    <input
+      class="table-search"
+      type="search"
+      [value]="search()"
+      (input)="search.set(($any($event.target).value || ''))"
+      placeholder="Search in this list..."
+    >
+  </div>
+
+  <div class="muted" *ngIf="loading()">Loading...</div>
+
+  <ng-container *ngIf="!loading() && data() as d">
+    <!-- Users -->
+    <div class="section" *ngIf="d.users">
+      <div class="table" *ngIf="filteredUsers().length > 0">
+        <div class="row header row-users">
+          <div>Name</div><div>Email</div><div>Phone</div><div>Role</div><div>Status</div><div>Joined</div>
+        </div>
+        <div class="row row-users" *ngFor="let u of filteredUsers()">
+          <div class="text-truncate" [title]="u.fullName">{{ u.fullName }}</div>
+          <div class="text-truncate" [title]="u.email">{{ u.email }}</div>
+          <div>{{ u.phone }}</div>
+          <div>{{ u.role }}</div>
+          <div>{{ u.isActive ? 'Active' : 'Inactive' }}</div>
+          <div>{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredUsers().length === 0">No users match your search.</div>
+    </div>
+
+    <!-- Members -->
+    <div class="section" *ngIf="d.members">
+      <div class="table" *ngIf="filteredMembers().length > 0">
+        <div class="row header row-members">
+          <div>Name</div><div>Email</div><div>Phone</div><div>Role</div><div>Status</div><div>Joined</div>
+        </div>
+        <div class="row row-members" *ngFor="let u of filteredMembers()">
+          <div class="text-truncate" [title]="u.fullName">{{ u.fullName }}</div>
+          <div class="text-truncate" [title]="u.email">{{ u.email }}</div>
+          <div>{{ u.phone }}</div>
+          <div>{{ u.role }}</div>
+          <div>{{ u.isActive ? 'Active' : 'Inactive' }}</div>
+          <div>{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredMembers().length === 0">No members match your search.</div>
+    </div>
+
+    <!-- Plans -->
+    <div class="section" *ngIf="d.plans">
+      <div class="table" *ngIf="filteredPlans().length > 0">
+        <div class="row header row-plans">
+          <div>Code</div><div>Name</div><div>Price</div><div>Duration</div><div>Status</div>
+        </div>
+        <div class="row row-plans" *ngFor="let p of filteredPlans()">
+          <div>{{ p.code }}</div>
+          <div>{{ p.name }}</div>
+          <div>{{ inr(p.totalAmountPaise) }}</div>
+          <div>{{ p.durationDays }} days</div>
+          <div>{{ p.isActive ? 'Active' : 'Inactive' }}</div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredPlans().length === 0">No plans match your search.</div>
+    </div>
+
+    <!-- Payment orders -->
+    <div class="section" *ngIf="d.paymentOrders">
+      <div class="table" *ngIf="filteredPaymentOrders().length > 0">
+        <div class="row header row-orders">
+          <div>Member</div><div>Email</div><div>Plan</div><div>Amount</div><div>Status</div><div>Date</div>
+        </div>
+        <div class="row row-orders" *ngFor="let o of filteredPaymentOrders()">
+          <div class="text-truncate" [title]="o.fullName">{{ o.fullName }}</div>
+          <div class="text-truncate" [title]="o.email">{{ o.email }}</div>
+          <div>{{ o.planName }} ({{ o.planCode }})</div>
+          <div>{{ inr(o.totalAmountPaise) }}</div>
+          <div>{{ o.status }}</div>
+          <div>{{ o.createdAt | date:'dd-MMM-yyyy HH:mm' }}</div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredPaymentOrders().length === 0">No payment orders match your search.</div>
+    </div>
+
+    <!-- Payments -->
+    <div class="section" *ngIf="d.payments">
+      <div class="table" *ngIf="filteredPayments().length > 0">
+        <div class="row header row-payments">
+          <div>Member</div><div>Email</div><div>Plan</div><div>Amount</div><div>Status</div><div>Paid at</div>
+        </div>
+        <div class="row row-payments" *ngFor="let p of filteredPayments()">
+          <div class="text-truncate" [title]="p.fullName">{{ p.fullName }}</div>
+          <div class="text-truncate" [title]="p.email">{{ p.email }}</div>
+          <div>{{ p.planCode }}</div>
+          <div>{{ inr(p.amountPaise) }}</div>
+          <div>{{ p.status }}</div>
+          <div>{{ p.paidAt | date:'dd-MMM-yyyy HH:mm' }}</div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredPayments().length === 0">No payments match your search.</div>
+    </div>
+
+    <!-- Blogs / Events / Schemes -->
+    <div class="section" *ngIf="d.contentItems">
+      <div class="table" *ngIf="filteredContentItems().length > 0">
+        <div class="row header row-content">
+          <div>Title</div><div>Summary</div><div>Category</div><div>Date / Meta</div><div>Slug</div><div>Link</div>
+        </div>
+        <div class="row row-content" *ngFor="let item of filteredContentItems()">
+          <div class="text-truncate" [title]="item.title">{{ item.title }}</div>
+          <div class="text-wrap">{{ item.subtitle }}</div>
+          <div>{{ item.category }}</div>
+          <div>{{ item.meta }}</div>
+          <div class="muted text-truncate" [title]="item.slug">{{ item.slug }}</div>
+          <div><a class="btn btn-outline" [href]="item.publicPath" target="_blank" rel="noopener">View on site</a></div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredContentItems().length === 0">No items match your search.</div>
+    </div>
+
+    <!-- Subscriptions -->
+    <div class="section" *ngIf="d.subscriptions">
+      <div class="table" *ngIf="filteredSubscriptions().length > 0">
+        <div class="row header row-subs">
+          <div>Member</div><div>Email</div><div>Phone</div><div>Plan</div>
+          <div>Started</div><div>Ends</div><div>Days left</div><div>Status</div>
+        </div>
+        <div class="row row-subs" *ngFor="let s of filteredSubscriptions()">
+          <div class="text-truncate" [title]="s.fullName">{{ s.fullName }}</div>
+          <div class="text-truncate" [title]="s.email">{{ s.email }}</div>
+          <div>{{ s.phone }}</div>
+          <div>{{ s.planName }} ({{ s.planCode }})</div>
+          <div>{{ s.activeFrom | date:'dd-MMM-yyyy' }}</div>
+          <div>{{ s.activeTo ? (s.activeTo | date:'dd-MMM-yyyy') : '—' }}</div>
+          <div>
+            <span *ngIf="s.daysRemaining != null" [ngClass]="expiryClass(s.daysRemaining)">
+              {{ s.daysRemaining }} day(s)
+            </span>
+            <span *ngIf="s.daysRemaining == null" class="muted">No end date</span>
+          </div>
+          <div>{{ s.status }}</div>
+        </div>
+      </div>
+      <div class="muted" *ngIf="filteredSubscriptions().length === 0">No subscriptions match your search.</div>
+    </div>
+  </ng-container>
+</div>

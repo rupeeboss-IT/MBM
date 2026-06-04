@@ -1,14 +1,18 @@
 using System.Globalization;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RB_Website_API.Auth;
 using RB_Website_API.Data;
 using RB_Website_API.Models;
+using RB_Website_API.Referrals.Services;
+using RB_Website_API.Services;
 
 namespace RB_Website_API.Controllers;
 
@@ -19,22 +23,39 @@ public sealed class PaymentController : ControllerBase
     private readonly AppDbContext _db;
     private readonly RazorpaySettings _rzp;
     private readonly IHttpClientFactory _http;
+    private readonly PaymentActivationService _activation;
+    private readonly InvoicePdfService _invoices;
+    private readonly IReferralService _referral;
+    private readonly ILeadPushService _leadPush;
+    private readonly IEmployeeValidationService _employeeValidation;
+    private readonly ReferralSettings _referralSettings;
     private readonly ILogger<PaymentController> _logger;
 
     public PaymentController(
         AppDbContext db,
         IOptions<RazorpaySettings> rzp,
         IHttpClientFactory http,
+        PaymentActivationService activation,
+        InvoicePdfService invoices,
+        IReferralService referral,
+        ILeadPushService leadPush,
+        IEmployeeValidationService employeeValidation,
+        IOptions<ReferralSettings> referralSettings,
         ILogger<PaymentController> logger)
     {
         _db = db;
         _rzp = rzp.Value;
         _http = http;
+        _activation = activation;
+        _invoices = invoices;
+        _referral = referral;
+        _leadPush = leadPush;
+        _employeeValidation = employeeValidation;
+        _referralSettings = referralSettings.Value;
         _logger = logger;
     }
 
-    // -------- DTOs --------
-    public sealed record CreateOrderRequest(Guid UserId, string PlanCode);
+    public sealed record CreateOrderRequest(string PlanCode, string? ReferralCode = null);
 
     public sealed record CreateOrderResponse(
         bool Success,
@@ -52,7 +73,6 @@ public sealed class PaymentController : ControllerBase
     );
 
     public sealed record VerifyRequest(
-        Guid UserId,
         Guid PaymentOrderId,
         string RazorpayOrderId,
         string RazorpayPaymentId,
@@ -64,7 +84,9 @@ public sealed class PaymentController : ControllerBase
         string? Message = null,
         string? PlanCode = null,
         DateTime? ActiveFrom = null,
-        DateTime? ActiveTo = null
+        DateTime? ActiveTo = null,
+        string? ActivationKind = null,
+        string? PreviousPlanName = null
     );
 
     public sealed record ActivePlanDto(
@@ -72,32 +94,74 @@ public sealed class PaymentController : ControllerBase
         string PlanName,
         DateTime ActiveFrom,
         DateTime? ActiveTo,
-        string Status
+        string Status,
+        bool CancelAtPeriodEnd,
+        bool AutoRenewEnabled,
+        int? DaysRemaining
     );
 
     public sealed record MyPlanResponse(bool Success, string? Message = null, ActivePlanDto? Plan = null);
 
-    // -------- 1) Create order --------
+    public sealed record CancelSubscriptionResponse(bool Success, string? Message = null, DateTime? ActiveTo = null);
+
+    public sealed record PaymentHistoryItemDto(
+        Guid PaymentOrderId,
+        string PlanCode,
+        string PlanName,
+        long AmountPaise,
+        string OrderStatus,
+        string? PaymentStatus,
+        DateTime CreatedAt,
+        DateTime? PaidAt
+    );
+
+    public sealed record PaymentHistoryResponse(bool Success, string? Message = null, List<PaymentHistoryItemDto>? Items = null);
+
+    public sealed record InvoiceListItemDto(
+        Guid PaymentId,
+        string InvoiceNumber,
+        string PlanCode,
+        string PlanName,
+        long AmountPaise,
+        DateTime PaidAt,
+        DateTime? ActiveTo
+    );
+
+    public sealed record InvoiceListResponse(bool Success, string? Message = null, List<InvoiceListItemDto>? Items = null);
+
+    [Authorize(Policy = "MemberAccess")]
     [HttpPost("razorpay/order")]
     public async Task<ActionResult<CreateOrderResponse>> CreateOrder([FromBody] CreateOrderRequest? req, CancellationToken ct)
     {
-        if (req is null) return BadRequest(new CreateOrderResponse(false, "Request is required."));
-        if (req.UserId == Guid.Empty) return BadRequest(new CreateOrderResponse(false, "Login required."));
-        if (string.IsNullOrWhiteSpace(req.PlanCode)) return BadRequest(new CreateOrderResponse(false, "Plan code is required."));
+        var userId = CurrentUser.RequireUserId(User);
+        if (req is null || string.IsNullOrWhiteSpace(req.PlanCode))
+            return BadRequest(new CreateOrderResponse(false, "Plan code is required."));
 
-        var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == req.UserId, ct);
+        var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == userId, ct);
         if (user is null) return Unauthorized(new CreateOrderResponse(false, "User not found. Please login again."));
 
         var planCode = req.PlanCode.Trim().ToLowerInvariant();
         var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.Code == planCode && p.IsActive, ct);
         if (plan is null) return NotFound(new CreateOrderResponse(false, "Plan not found."));
 
-        // Block duplicate purchase of the currently active plan
+        var now = DateTime.UtcNow;
         var existingActive = await _db.UserPlans.AsNoTracking()
-            .FirstOrDefaultAsync(up => up.UserId == user.UserId && up.Status == "Active", ct);
+            .FirstOrDefaultAsync(up =>
+                up.UserId == userId
+                && up.Status == "Active"
+                && (up.ActiveTo == null || up.ActiveTo > now), ct);
         if (existingActive is not null && string.Equals(existingActive.PlanCode, plan.Code, StringComparison.OrdinalIgnoreCase))
-        {
             return Conflict(new CreateOrderResponse(false, $"You already have {plan.Name} active."));
+
+        if (!string.IsNullOrWhiteSpace(req.ReferralCode))
+        {
+            var validation = await _employeeValidation.ValidateReferralCodeAsync(req.ReferralCode, ct);
+            if (!validation.IsValid)
+            {
+                if (_referralSettings.StrictReferralValidationOnOrderCreate)
+                    return BadRequest(new CreateOrderResponse(false, validation.Message ?? "Invalid referral code."));
+                _logger.LogWarning("Invalid referral code on order create (non-strict): {Code}", req.ReferralCode);
+            }
         }
 
         if (string.IsNullOrWhiteSpace(_rzp.KeyId) || string.IsNullOrWhiteSpace(_rzp.KeySecret))
@@ -107,12 +171,12 @@ public sealed class PaymentController : ControllerBase
         }
 
         var orderId = Guid.NewGuid();
-        var receipt = $"mbm_{orderId.ToString("N").Substring(0, 16)}";
+        var receipt = $"mbm_{orderId.ToString("N")[..16]}";
 
         var po = new PaymentOrder
         {
             PaymentOrderId   = orderId,
-            UserId           = user.UserId,
+            UserId           = userId,
             PlanId           = plan.PlanId,
             PlanCode         = plan.Code,
             BaseAmountPaise  = plan.BaseAmountPaise,
@@ -122,13 +186,14 @@ public sealed class PaymentController : ControllerBase
             Provider         = "Razorpay",
             Receipt          = receipt,
             Status           = "Created",
-            CreatedAt        = DateTime.UtcNow,
-            UpdatedAt        = DateTime.UtcNow,
+            CreatedAt        = now,
+            UpdatedAt        = now,
         };
         _db.PaymentOrders.Add(po);
         await _db.SaveChangesAsync(ct);
 
-        // Call Razorpay Orders API
+        await _referral.SaveReferralForOrderAsync(orderId, req.ReferralCode, ct);
+
         try
         {
             var client = _http.CreateClient("Razorpay");
@@ -144,7 +209,7 @@ public sealed class PaymentController : ControllerBase
                 ["payment_capture"] = 1,
                 ["notes"] = new Dictionary<string, string>
                 {
-                    ["user_id"]          = user.UserId.ToString(),
+                    ["user_id"]          = userId.ToString(),
                     ["plan_code"]        = plan.Code,
                     ["payment_order_id"] = orderId.ToString(),
                 }
@@ -161,8 +226,6 @@ public sealed class PaymentController : ControllerBase
                 po.UpdatedAt = DateTime.UtcNow;
                 await _db.SaveChangesAsync(ct);
                 var friendly = TryExtractRazorpayError(body) ?? "Could not initiate payment. Please try again.";
-                if (res.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    friendly = "Razorpay authentication failed. Please check KeyId/KeySecret in backend configuration.";
                 return StatusCode(502, new CreateOrderResponse(false, friendly));
             }
 
@@ -207,27 +270,24 @@ public sealed class PaymentController : ControllerBase
         }
     }
 
-    // -------- 2) Verify signature & activate plan --------
+    [Authorize(Policy = "MemberAccess")]
     [HttpPost("razorpay/verify")]
     public async Task<ActionResult<VerifyResponse>> Verify([FromBody] VerifyRequest? req, CancellationToken ct)
     {
+        var userId = CurrentUser.RequireUserId(User);
         if (req is null
-            || req.UserId == Guid.Empty
             || req.PaymentOrderId == Guid.Empty
             || string.IsNullOrWhiteSpace(req.RazorpayOrderId)
             || string.IsNullOrWhiteSpace(req.RazorpayPaymentId)
             || string.IsNullOrWhiteSpace(req.RazorpaySignature))
-        {
             return BadRequest(new VerifyResponse(false, "Missing required fields."));
-        }
 
         var po = await _db.PaymentOrders.FirstOrDefaultAsync(p => p.PaymentOrderId == req.PaymentOrderId, ct);
         if (po is null) return NotFound(new VerifyResponse(false, "Order not found."));
-        if (po.UserId != req.UserId) return Unauthorized(new VerifyResponse(false, "Order does not belong to this user."));
+        if (po.UserId != userId) return Unauthorized(new VerifyResponse(false, "Order does not belong to this user."));
         if (!string.Equals(po.RazorpayOrderId, req.RazorpayOrderId, StringComparison.Ordinal))
             return BadRequest(new VerifyResponse(false, "Order id mismatch."));
 
-        // Verify HMAC SHA256(razorpay_order_id|razorpay_payment_id, key_secret)
         var expected = HmacSha256Hex($"{req.RazorpayOrderId}|{req.RazorpayPaymentId}", _rzp.KeySecret);
         if (!FixedTimeEqualsCaseInsensitive(expected, req.RazorpaySignature))
         {
@@ -238,63 +298,28 @@ public sealed class PaymentController : ControllerBase
             return BadRequest(new VerifyResponse(false, "Payment verification failed."));
         }
 
-        // Already verified previously? (idempotent)
-        var alreadyPaid = await _db.Payments.AnyAsync(p => p.RazorpayPaymentId == req.RazorpayPaymentId, ct);
-        var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.PlanId == po.PlanId, ct);
-
         await using var tx = await _db.Database.BeginTransactionAsync(ct);
         try
         {
-            if (!alreadyPaid)
-            {
-                _db.Payments.Add(new Payment
-                {
-                    PaymentId         = Guid.NewGuid(),
-                    PaymentOrderId    = po.PaymentOrderId,
-                    RazorpayOrderId   = req.RazorpayOrderId,
-                    RazorpayPaymentId = req.RazorpayPaymentId,
-                    RazorpaySignature = req.RazorpaySignature,
-                    AmountPaise       = po.TotalAmountPaise,
-                    Currency          = po.Currency,
-                    Status            = "Captured",
-                    PaidAt            = DateTime.UtcNow,
-                    CreatedAt         = DateTime.UtcNow,
-                });
-            }
-
-            po.Status = "Paid";
-            po.UpdatedAt = DateTime.UtcNow;
-
-            // Expire any other active plan for the user, then activate this one
-            var others = await _db.UserPlans.Where(up => up.UserId == po.UserId && up.Status == "Active").ToListAsync(ct);
-            foreach (var up in others)
-            {
-                up.Status = "Cancelled";
-                up.ActiveTo = DateTime.UtcNow;
-                up.UpdatedAt = DateTime.UtcNow;
-            }
-
-            var activeFrom = DateTime.UtcNow;
-            var activeTo = activeFrom.AddDays(plan?.DurationDays ?? 365);
-            var newUp = new UserPlan
-            {
-                UserPlanId     = Guid.NewGuid(),
-                UserId         = po.UserId,
-                PlanId         = po.PlanId,
-                PlanCode       = po.PlanCode,
-                PaymentOrderId = po.PaymentOrderId,
-                ActiveFrom     = activeFrom,
-                ActiveTo       = activeTo,
-                Status         = "Active",
-                CreatedAt      = activeFrom,
-                UpdatedAt      = activeFrom,
-            };
-            _db.UserPlans.Add(newUp);
-
-            await _db.SaveChangesAsync(ct);
+            var result = await _activation.ActivatePaidOrderAsync(
+                po,
+                req.RazorpayOrderId,
+                req.RazorpayPaymentId,
+                req.RazorpaySignature,
+                rawWebhookPayload: null,
+                ct);
             await tx.CommitAsync(ct);
 
-            return Ok(new VerifyResponse(true, "Payment verified.", po.PlanCode, activeFrom, activeTo));
+            await TryCreateReferralLeadAsync(po.PaymentOrderId, ct);
+
+            return Ok(new VerifyResponse(
+                true,
+                result.Activated ? "Payment verified." : "Payment already verified.",
+                result.PlanCode,
+                result.ActiveFrom,
+                result.ActiveTo,
+                result.Kind == ActivationKind.None ? null : result.Kind.ToString(),
+                result.PreviousPlanName));
         }
         catch (Exception ex)
         {
@@ -304,28 +329,147 @@ public sealed class PaymentController : ControllerBase
         }
     }
 
-    // -------- 3) Get current user's active plan --------
+    [Authorize(Policy = "MemberAccess")]
     [HttpGet("my-plan")]
-    public async Task<ActionResult<MyPlanResponse>> MyPlan([FromQuery] Guid userId, CancellationToken ct)
+    public async Task<ActionResult<MyPlanResponse>> MyPlan(CancellationToken ct)
     {
-        if (userId == Guid.Empty) return BadRequest(new MyPlanResponse(false, "userId is required."));
-
-        var row = await (
-            from up in _db.UserPlans.AsNoTracking()
-            join p in _db.Plans.AsNoTracking() on up.PlanId equals p.PlanId
-            where up.UserId == userId && up.Status == "Active"
-            orderby up.ActiveFrom descending
-            select new ActivePlanDto(up.PlanCode, p.Name, up.ActiveFrom, up.ActiveTo, up.Status)
-        ).FirstOrDefaultAsync(ct);
-
+        var userId = CurrentUser.RequireUserId(User);
+        var row = await _activation.GetActivePlanRowAsync(userId, ct);
         if (row is null) return Ok(new MyPlanResponse(true, "No active plan.", null));
-        return Ok(new MyPlanResponse(true, "OK", row));
+        return Ok(new MyPlanResponse(true, "OK", ToDto(row)));
     }
 
-    // -------- 4) Cancel an unpaid order (user closed checkout) --------
-    [HttpPost("razorpay/cancel/{paymentOrderId:guid}")]
-    public async Task<IActionResult> Cancel(Guid paymentOrderId, [FromQuery] Guid userId, CancellationToken ct)
+    [Authorize(Policy = "MemberAccess")]
+    [HttpPost("subscription/cancel")]
+    public async Task<ActionResult<CancelSubscriptionResponse>> CancelSubscription(CancellationToken ct)
     {
+        var userId = CurrentUser.RequireUserId(User);
+        var now = DateTime.UtcNow;
+
+        var up = await _db.UserPlans.FirstOrDefaultAsync(p =>
+            p.UserId == userId
+            && p.Status == "Active"
+            && (p.ActiveTo == null || p.ActiveTo > now), ct);
+
+        if (up is null)
+            return NotFound(new CancelSubscriptionResponse(false, "No active subscription to cancel."));
+
+        if (up.CancelAtPeriodEnd)
+            return Ok(new CancelSubscriptionResponse(true, "Renewal is already cancelled. Access continues until your plan end date.", up.ActiveTo));
+
+        up.CancelAtPeriodEnd = true;
+        up.CancelledAt = now;
+        up.UpdatedAt = now;
+        await _db.SaveChangesAsync(ct);
+
+        return Ok(new CancelSubscriptionResponse(
+            true,
+            "Renewal cancelled. You keep access until your current period ends. No refund is issued for the remaining term.",
+            up.ActiveTo));
+    }
+
+    [Authorize(Policy = "MemberAccess")]
+    [HttpGet("subscription/history")]
+    public async Task<ActionResult<PaymentHistoryResponse>> PaymentHistory(CancellationToken ct)
+    {
+        var userId = CurrentUser.RequireUserId(User);
+
+        var items = await (
+            from po in _db.PaymentOrders.AsNoTracking()
+            join p in _db.Plans.AsNoTracking() on po.PlanId equals p.PlanId
+            join pay in _db.Payments.AsNoTracking() on po.PaymentOrderId equals pay.PaymentOrderId into pays
+            from pay in pays.DefaultIfEmpty()
+            where po.UserId == userId
+            orderby po.CreatedAt descending
+            select new PaymentHistoryItemDto(
+                po.PaymentOrderId,
+                po.PlanCode,
+                p.Name,
+                po.TotalAmountPaise,
+                po.Status,
+                pay != null ? pay.Status : null,
+                po.CreatedAt,
+                pay != null ? pay.PaidAt : (DateTime?)null)
+        ).Take(50).ToListAsync(ct);
+
+        return Ok(new PaymentHistoryResponse(true, "OK", items));
+    }
+
+    [Authorize(Policy = "MemberAccess")]
+    [HttpGet("invoices")]
+    public async Task<ActionResult<InvoiceListResponse>> ListInvoices(CancellationToken ct)
+    {
+        var userId = CurrentUser.RequireUserId(User);
+
+        var rows = await (
+            from pay in _db.Payments.AsNoTracking()
+            join po in _db.PaymentOrders.AsNoTracking() on pay.PaymentOrderId equals po.PaymentOrderId
+            join p in _db.Plans.AsNoTracking() on po.PlanId equals p.PlanId
+            join up in _db.UserPlans.AsNoTracking() on po.PaymentOrderId equals up.PaymentOrderId into ups
+            from up in ups.DefaultIfEmpty()
+            where po.UserId == userId && pay.Status == "Captured"
+            orderby pay.PaidAt descending
+            select new
+            {
+                pay.PaymentId,
+                pay.PaidAt,
+                po.TotalAmountPaise,
+                p.Name,
+                po.PlanCode,
+                ActiveTo = up != null ? up.ActiveTo : (DateTime?)null,
+            }
+        ).Take(50).ToListAsync(ct);
+
+        var items = rows.Select(r => new InvoiceListItemDto(
+            r.PaymentId,
+            InvoiceNumber.ForPayment(r.PaymentId, r.PaidAt),
+            r.PlanCode,
+            r.Name,
+            r.TotalAmountPaise,
+            r.PaidAt,
+            r.ActiveTo)).ToList();
+
+        return Ok(new InvoiceListResponse(true, "OK", items));
+    }
+
+    [Authorize(Policy = "MemberAccess")]
+    [HttpGet("invoices/{paymentId:guid}/download")]
+    public async Task<IActionResult> DownloadInvoice(Guid paymentId, CancellationToken ct)
+    {
+        var userId = CurrentUser.RequireUserId(User);
+
+        var row = await (
+            from pay in _db.Payments.AsNoTracking()
+            join po in _db.PaymentOrders.AsNoTracking() on pay.PaymentOrderId equals po.PaymentOrderId
+            join p in _db.Plans.AsNoTracking() on po.PlanId equals p.PlanId
+            join u in _db.Users.AsNoTracking() on po.UserId equals u.UserId
+            join up in _db.UserPlans.AsNoTracking() on po.PaymentOrderId equals up.PaymentOrderId into ups
+            from up in ups.DefaultIfEmpty()
+            where pay.PaymentId == paymentId && po.UserId == userId && pay.Status == "Captured"
+            select new
+            {
+                Payment = pay,
+                Order = po,
+                Plan = p,
+                User = u,
+                up.ActiveFrom,
+                up.ActiveTo,
+            }
+        ).FirstOrDefaultAsync(ct);
+
+        if (row is null) return NotFound();
+
+        var activeFrom = row.ActiveFrom != default ? row.ActiveFrom : row.Payment.PaidAt;
+        var pdf = _invoices.Generate(row.Payment, row.Order, row.Plan, row.User, activeFrom, row.ActiveTo);
+        var fileName = $"{InvoiceNumber.ForPayment(row.Payment.PaymentId, row.Payment.PaidAt)}.pdf";
+        return File(pdf, "application/pdf", fileName);
+    }
+
+    [Authorize(Policy = "MemberAccess")]
+    [HttpPost("razorpay/cancel/{paymentOrderId:guid}")]
+    public async Task<IActionResult> CancelCheckout(Guid paymentOrderId, CancellationToken ct)
+    {
+        var userId = CurrentUser.RequireUserId(User);
         var po = await _db.PaymentOrders.FirstOrDefaultAsync(p => p.PaymentOrderId == paymentOrderId, ct);
         if (po is null) return NotFound();
         if (po.UserId != userId) return Unauthorized();
@@ -338,7 +482,7 @@ public sealed class PaymentController : ControllerBase
         return Ok();
     }
 
-    // -------- 5) Webhook (optional reconciliation) --------
+    [AllowAnonymous]
     [HttpPost("razorpay/webhook")]
     public async Task<IActionResult> Webhook(CancellationToken ct)
     {
@@ -349,8 +493,8 @@ public sealed class PaymentController : ControllerBase
 
         if (string.IsNullOrWhiteSpace(_rzp.WebhookSecret))
         {
-            _logger.LogWarning("Razorpay webhook received but WebhookSecret is not configured. Ignoring.");
-            return Ok();
+            _logger.LogWarning("Razorpay webhook received but WebhookSecret is not configured.");
+            return Ok(new { ignored = true, reason = "WebhookSecret not configured" });
         }
 
         var signature = Request.Headers["X-Razorpay-Signature"].ToString();
@@ -366,7 +510,7 @@ public sealed class PaymentController : ControllerBase
             using var json = JsonDocument.Parse(body);
             var evt = json.RootElement.GetProperty("event").GetString();
 
-            if (evt == "payment.captured" || evt == "order.paid")
+            if (evt is "payment.captured" or "order.paid")
             {
                 var paymentEntity = json.RootElement
                     .GetProperty("payload").GetProperty("payment").GetProperty("entity");
@@ -376,67 +520,61 @@ public sealed class PaymentController : ControllerBase
                 var po = await _db.PaymentOrders.FirstOrDefaultAsync(p => p.RazorpayOrderId == rzpOrderId, ct);
                 if (po is not null && po.Status != "Paid")
                 {
-                    var alreadyPaid = await _db.Payments.AnyAsync(p => p.RazorpayPaymentId == rzpPaymentId, ct);
-                    if (!alreadyPaid)
+                    ActivationResult activationResult;
+                    await using (var tx = await _db.Database.BeginTransactionAsync(ct))
                     {
-                        _db.Payments.Add(new Payment
-                        {
-                            PaymentId         = Guid.NewGuid(),
-                            PaymentOrderId    = po.PaymentOrderId,
-                            RazorpayOrderId   = rzpOrderId,
-                            RazorpayPaymentId = rzpPaymentId,
-                            AmountPaise       = po.TotalAmountPaise,
-                            Currency          = po.Currency,
-                            Status            = "Captured",
-                            RawPayload        = Truncate(body, 4000),
-                            PaidAt            = DateTime.UtcNow,
-                            CreatedAt         = DateTime.UtcNow,
-                        });
+                        activationResult = await _activation.ActivatePaidOrderAsync(
+                            po, rzpOrderId, rzpPaymentId, razorpaySignature: null,
+                            rawWebhookPayload: Truncate(body, 4000), ct);
+                        await tx.CommitAsync(ct);
                     }
-                    po.Status = "Paid";
-                    po.UpdatedAt = DateTime.UtcNow;
 
-                    // Activate plan if not already
-                    var hasActive = await _db.UserPlans.AnyAsync(
-                        up => up.UserId == po.UserId && up.PaymentOrderId == po.PaymentOrderId && up.Status == "Active", ct);
-                    if (!hasActive)
-                    {
-                        var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.PlanId == po.PlanId, ct);
-                        var others = await _db.UserPlans.Where(up => up.UserId == po.UserId && up.Status == "Active").ToListAsync(ct);
-                        foreach (var up in others)
-                        {
-                            up.Status = "Cancelled";
-                            up.ActiveTo = DateTime.UtcNow;
-                            up.UpdatedAt = DateTime.UtcNow;
-                        }
-                        var activeFrom = DateTime.UtcNow;
-                        _db.UserPlans.Add(new UserPlan
-                        {
-                            UserPlanId     = Guid.NewGuid(),
-                            UserId         = po.UserId,
-                            PlanId         = po.PlanId,
-                            PlanCode       = po.PlanCode,
-                            PaymentOrderId = po.PaymentOrderId,
-                            ActiveFrom     = activeFrom,
-                            ActiveTo       = activeFrom.AddDays(plan?.DurationDays ?? 365),
-                            Status         = "Active",
-                            CreatedAt      = activeFrom,
-                            UpdatedAt      = activeFrom,
-                        });
-                    }
-                    await _db.SaveChangesAsync(ct);
+                    await TryCreateReferralLeadAsync(po.PaymentOrderId, ct);
+                    _logger.LogInformation("Webhook activated plan for order {OrderId}.", po.PaymentOrderId);
+                }
+                else if (po is not null && po.Status == "Paid")
+                {
+                    await TryCreateReferralLeadAsync(po.PaymentOrderId, ct);
                 }
             }
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error processing Razorpay webhook.");
-            // Do not fail the webhook with 500; respond 200 to avoid retries flood.
         }
+
         return Ok();
     }
 
-    // -------- helpers --------
+    private async Task TryCreateReferralLeadAsync(Guid paymentOrderId, CancellationToken ct)
+    {
+        try
+        {
+            await _leadPush.CreateLeadAfterPaymentAsync(paymentOrderId, ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Lead insert into lead_data failed for order {PaymentOrderId}.", paymentOrderId);
+        }
+    }
+
+    private static ActivePlanDto ToDto(PaymentActivationService.ActivePlanRow row)
+    {
+        int? days = null;
+        if (row.ActiveTo is not null)
+            days = (int)Math.Ceiling((row.ActiveTo.Value - DateTime.UtcNow).TotalDays);
+
+        return new ActivePlanDto(
+            row.PlanCode,
+            row.PlanName,
+            row.ActiveFrom,
+            row.ActiveTo,
+            row.Status,
+            row.CancelAtPeriodEnd,
+            row.AutoRenewEnabled,
+            days);
+    }
+
     private static string HmacSha256Hex(string payload, string secret)
     {
         using var h = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
@@ -455,15 +593,15 @@ public sealed class PaymentController : ControllerBase
     }
 
     private static string Truncate(string s, int max)
-        => string.IsNullOrEmpty(s) ? s : (s.Length <= max ? s : s.Substring(0, max));
+        => string.IsNullOrEmpty(s) ? s : (s.Length <= max ? s : s[..max]);
 
     private static string? TryExtractRazorpayError(string body)
     {
         try
         {
             using var json = JsonDocument.Parse(body);
-            if (!json.RootElement.TryGetProperty("error", out var err)) return null;
-            if (err.ValueKind != JsonValueKind.Object) return null;
+            if (!json.RootElement.TryGetProperty("error", out var err) || err.ValueKind != JsonValueKind.Object)
+                return null;
             if (err.TryGetProperty("description", out var d) && d.ValueKind == JsonValueKind.String)
             {
                 var s = d.GetString();

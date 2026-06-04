@@ -1,0 +1,23 @@
+-- DB2 (RBMAIN) — lead_data
+-- Table already exists with full schema. MBM payment flow inserts only these columns:
+--
+--   Lead_id            (int, identity) — auto-generated
+--   mobile             varchar(50)
+--   name               varchar(100)
+--   email              varchar(300)
+--   productid          int             — default 1039 (ReferralSettings:ProductId)
+--   Pincode            varchar(10)     — optional
+--   profession         int             — default 0 (ReferralSettings:DefaultProfession)
+--   source_id          int             — default 0
+--   lead_source        varchar(500)    — "Main Website"
+--   lead_type          varchar(50)     — "Telecalling"
+--   campaignName       varchar(200)    — "Online Leads"
+--   sysdate            datetime        — DateTime.Now at insert
+--   emp_code           varchar(20)     — RB600000251 or validated referral Emp_Code
+--   Lead_Status_id     int             — 46
+--   lead_date          datetime        — DateTime.Now at insert
+--   Created_Datetime   datetime        — DateTime.Now at insert
+--   CompanyName        varchar(550)    — from user profile when available
+--
+-- No ALTER required if table matches production. Verify column names are case-compatible
+-- (SQL Server is usually case-insensitive for identifiers).

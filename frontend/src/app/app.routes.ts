@@ -32,6 +32,9 @@ import { OfferingDetails } from './pages/offering-details/offering-details';
 import { ErrorPage } from './error-page/error-page';
 import { adminGuard } from './core/guards/admin.guard';
 import { AdminDashboard } from './admin/dashboard/dashboard';
+import { AdminDashboardDetail } from './admin/dashboard-detail/dashboard-detail';
+import { AdminUploadReports } from './admin/reports/upload-reports/upload-reports';
+import { AdminViewReports } from './admin/reports/view-reports/view-reports';
 
 export const routes: Routes = [
     {
@@ -189,6 +192,29 @@ export const routes: Routes = [
         path: 'admin-dashboard',
         component: AdminDashboard,
         canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-dashboard/detail/:category',
+        component: AdminDashboardDetail,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-reports/upload',
+        component: AdminUploadReports,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-reports/history',
+        component: AdminViewReports,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-reports',
+        redirectTo: 'admin-reports/upload',
         pathMatch: 'full'
     },
     {

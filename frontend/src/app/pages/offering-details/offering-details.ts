@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { OfferingCtaActions } from '../../core/components/offering-cta-actions/offering-cta-actions';
 import { OfferingsService } from '../../core/services/offerings.service';
 import type { OfferingModel, OfferingSlug } from '../../data/offerings.data';
 
 @Component({
   selector: 'app-offering-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, OfferingCtaActions],
   templateUrl: './offering-details.html',
   styleUrl: './offering-details.css'
 })

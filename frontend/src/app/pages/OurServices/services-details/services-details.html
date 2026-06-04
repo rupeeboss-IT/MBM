@@ -25,9 +25,26 @@
     <div class="detail-sidebar">
       <div class="sidebar-card">
         <h3>Quick Apply</h3>
-        <p style="color:var(--text);font-size:.88rem;margin-bottom:1rem">Get expert help with this service today</p>
-        <a class="btn-primary" style="width:100%;text-align:center;display:block" routerLink="/contact">Request Callback</a>
-        <div style="margin-top:1rem;text-align:center"><a href="tel:+917982218029" style="color:var(--red);font-weight:700;font-size:.95rem">📞 +91 79822 18029</a></div>
+        <ng-container *ngIf="slug() === 'msme-loans-finance'">
+          <p style="color:var(--text);font-size:.88rem;line-height:1.55;margin-bottom:1rem">
+            Need funds to grow? <br/>
+            Apply online for MSME business loans — working capital, machinery, and more from <strong>100+ banks &amp; NBFCs</strong>.
+          </p>
+          <a class="btn-primary" style="width:100%;text-align:center;display:block;margin-bottom:.75rem" routerLink="/loans">
+            Apply for Loan →
+          </a>
+          <hr/>
+        </ng-container>
+        <p style="color:var(--text);font-size:.88rem;margin-bottom:0.5rem; margin-top:0.5rem">
+          {{ slug() === 'msme-loans-finance' ? 'Prefer to speak with an expert first?' : 'Get expert help with this service today' }}
+        </p>
+        <div style="margin-bottom:1rem;text-align:center"><a href="tel:+919005900921" style="color:var(--red);font-weight:700;font-size:.95rem">📞 +91 90059 00921</a></div>
+        <a
+          [class]="slug() === 'msme-loans-finance' ? 'btn-outline' : 'btn-primary'"
+          style="width:100%;text-align:center;display:block"
+          routerLink="/contact"
+        >Request Callback</a>
+        
       </div>
       <div class="sidebar-card">
         <h3>Why Choose Us</h3>

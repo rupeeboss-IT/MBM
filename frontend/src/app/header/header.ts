@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { MBM_LOGO_ALT, MBM_LOGO_SRC } from '../core/brand';
 import { AuthSessionService } from '../core/services/auth-session.service';
 
 @Component({
@@ -11,6 +12,9 @@ import { AuthSessionService } from '../core/services/auth-session.service';
   styleUrl: './header.css',
 })
 export class Header {
+  readonly logoSrc = MBM_LOGO_SRC;
+  readonly logoAlt = MBM_LOGO_ALT;
+
   private readonly session = inject(AuthSessionService);
   readonly isLoggedIn = this.session.isLoggedIn;
   readonly userId = this.session.userId;

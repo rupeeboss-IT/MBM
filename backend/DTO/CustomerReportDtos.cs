@@ -1,0 +1,39 @@
+namespace RB_Website_API.DTO;
+
+public sealed record CustomerSearchResultDto(
+    Guid UserId,
+    string MemberId,
+    string FullName,
+    string Email,
+    string Phone,
+    bool HasActiveSubscription,
+    string? PlanName,
+    DateTime? ActiveTo);
+
+public sealed record CustomerReportListItemDto(
+    Guid Id,
+    string ReportName,
+    DateTime UploadDate,
+    string PlanName,
+    long FileSize,
+    string MemberId);
+
+public sealed record AdminReportHistoryItemDto(
+    Guid Id,
+    string CustomerName,
+    string MemberId,
+    string Email,
+    DateTime UploadDate,
+    int DownloadCount,
+    DateTime? LastDownloadDate,
+    string OriginalFileName,
+    long FileSize,
+    string? PlanName);
+
+public sealed record PagedResultDto<T>(
+    bool Success,
+    string? Message,
+    IReadOnlyList<T> Items,
+    int TotalCount,
+    int Page,
+    int PageSize);

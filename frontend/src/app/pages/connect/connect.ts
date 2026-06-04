@@ -116,7 +116,7 @@ export class Connect {
   private async loadPlan(userId: string) {
     try {
       this.planLoading.set(true);
-      const res = await firstValueFrom(this.payments.myPlan(userId).pipe(timeout(15000)));
+      const res = await firstValueFrom(this.payments.myPlan().pipe(timeout(15000)));
       this.activePlan.set(res?.plan ?? null);
     } catch {
       this.activePlan.set(null);

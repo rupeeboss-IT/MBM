@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import { JoinTodayButton } from '../../core/components/join-today-button/join-today-button';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [RouterLink, JoinTodayButton],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

@@ -9,6 +9,10 @@ public sealed class User
     [Key]
     public Guid UserId { get; set; }
 
+    /// <summary>Customer-facing member code (e.g. MBM260001). Null for legacy accounts and admins.</summary>
+    [MaxLength(16)]
+    public string? MemberId { get; set; }
+
     [MaxLength(40)]
     public string Role { get; set; } = "";
 

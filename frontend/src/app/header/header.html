@@ -2,8 +2,8 @@
 <nav class="navbar" id="navbar">
   <div class="nav-container">
     <a class="brand" routerLink="/home">
-      <span class="brand-icon">🏛️</span>
-      <span>MSME <span class="accent">Bharat Manch</span></span>
+      <img class="brand-logo brand-logo--nav" [src]="logoSrc" [alt]="logoAlt" width="64" height="64" />
+      <!-- <span>MSME <span class="accent">Bharat Manch</span></span> -->
     </a>
     <button class="menu-toggle" type="button" id="menuBtn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -41,7 +41,7 @@
           <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
           <a routerLink="/search" (click)="closeMobileMenu()">Search</a>
           <a routerLink="/careers" (click)="closeMobileMenu()">Careers</a>
-          <a routerLink="/media" (click)="closeMobileMenu()">Media Kit</a>
+          <!-- <a routerLink="/media" (click)="closeMobileMenu()">Media Kit</a> -->
           <a routerLink="/schemes" (click)="closeMobileMenu()">Schemes</a>
           <a routerLink="/events" (click)="closeMobileMenu()">Events</a>
         </div>

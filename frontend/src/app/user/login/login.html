@@ -2,7 +2,10 @@
 <div class="page active" id="page-login">
 <div class="auth-wrap">
   <div class="auth-box">
-    <div class="auth-logo"><span class="brand-icon" style="font-size:2.5rem">🏛️</span><h2>Welcome Back</h2><p>Login to your MSME Bharat Manch account</p></div>
+    <div class="auth-logo">
+      <img class="brand-logo brand-logo--auth" src="/assets/mbmlogo.png" alt="MSME Bharat Manch" width="72" height="72" />
+      <h2>Welcome Back</h2><p>Login to your MSME Bharat Manch account</p>
+    </div>
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
         <label>Email or Mobile Number *</label>
@@ -26,10 +29,6 @@
     </form>
     <div style="text-align:center;margin-top:1rem"><a [routerLink]="['/forgot-password']" style="color:var(--red);font-size:.88rem;cursor:pointer">Forgot Password?</a></div>
     <div class="auth-divider">or</div>
-    <!-- <div style="text-align:center;background:var(--gray);border-radius:8px;padding:1rem;font-size:.85rem;color:var(--muted)">
-      <strong style="color:var(--navy);display:block;margin-bottom:.3rem">Demo User Login</strong>
-      Email: user@msmebharatmanch.com<br>Password: User@123
-    </div> -->
     <div class="auth-footer">New here? <a [routerLink]="['/register']">Create free account</a></div>
   </div>
 </div>

@@ -15,7 +15,10 @@
 
     <!-- Step 1: Account Details -->
     <div class="auth-box" id="reg-step-1" *ngIf="step() === 1">
-      <div class="auth-logo"><span style="font-size:2.5rem">🏛️</span><h2>Create Your Account</h2><p>Step 1 of 4 — Basic details</p></div>
+      <div class="auth-logo">
+        <img class="brand-logo brand-logo--auth" src="/assets/mbmlogo.png" alt="MSME Bharat Manch" width="72" height="72" />
+        <h2>Create Your Account</h2><p>Step 1 of 4 — Basic details</p>
+      </div>
       <form id="registerForm" [formGroup]="form" (ngSubmit)="continueToPlan()">
         <div class="form-group"><label>I am a</label>
           <select id="regRole" formControlName="role">
@@ -50,14 +53,16 @@
               type="button"
               class="btn-outline reg-verify-btn"
               (click)="sendEmailOtp()"
-              [disabled]="submitting() || emailOtpCooldownSec() > 0 || form.controls.email.invalid"
+              [disabled]="submitting() || emailOtpSending() || emailOtpCooldownSec() > 0 || form.controls.email.invalid"
             >
-              {{ emailOtpCooldownSec() > 0 ? ('Resend OTP (' + emailOtpCooldownSec() + 's)') : (emailOtpSent() ? 'Resend OTP' : 'Send OTP') }}
+              {{ emailOtpSending() ? 'Sending…' : (emailOtpCooldownSec() > 0 ? ('Resend OTP (' + emailOtpCooldownSec() + 's)') : (emailOtpSent() ? 'Resend OTP' : 'Send OTP')) }}
             </button>
 
             <div class="reg-otp-row" *ngIf="showEmailOtpInputs() && !emailVerified()">
               <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter Email OTP" formControlName="emailOtp" [disabled]="!showEmailOtpInputs()">
-              <button type="button" class="btn-primary" (click)="verifyEmailOtp()" [disabled]="submitting()">Submit</button>
+              <button type="button" class="btn-primary" (click)="verifyEmailOtp()" [disabled]="submitting() || emailOtpVerifying()">
+                {{ emailOtpVerifying() ? 'Verifying…' : 'Submit' }}
+              </button>
             </div>
           </div>
           <div class="form-group">
@@ -74,14 +79,16 @@
               type="button"
               class="btn-outline reg-verify-btn"
               (click)="sendSmsOtp()"
-              [disabled]="submitting() || smsOtpCooldownSec() > 0 || form.controls.phone.invalid"
+              [disabled]="submitting() || smsOtpSending() || smsOtpCooldownSec() > 0 || form.controls.phone.invalid"
             >
-              {{ smsOtpCooldownSec() > 0 ? ('Resend OTP (' + smsOtpCooldownSec() + 's)') : (smsOtpSent() ? 'Resend OTP' : 'Send OTP') }}
+              {{ smsOtpSending() ? 'Sending…' : (smsOtpCooldownSec() > 0 ? ('Resend OTP (' + smsOtpCooldownSec() + 's)') : (smsOtpSent() ? 'Resend OTP' : 'Send OTP')) }}
             </button>
 
             <div class="reg-otp-row" *ngIf="showSmsOtpInputs() && !smsVerified()">
               <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter Mobile OTP" formControlName="smsOtp" [disabled]="!showSmsOtpInputs()">
-              <button type="button" class="btn-primary" (click)="verifySmsOtp()" [disabled]="submitting()">Submit</button>
+              <button type="button" class="btn-primary" (click)="verifySmsOtp()" [disabled]="submitting() || smsOtpVerifying()">
+                {{ smsOtpVerifying() ? 'Verifying…' : 'Submit' }}
+              </button>
             </div>
           </div>
         </div>
@@ -177,7 +184,13 @@
         <div style="background:#f8f9fa;border:1.5px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
           <label style="display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;font-size:.85rem;color:#444;line-height:1.6;font-weight:400">
             <input type="checkbox" id="regConsent" formControlName="consent" required checked (change)="onConsentToggle($event)" style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--red);cursor:pointer">
-            <span>By registering, you provide your consent to <strong>Rupeeboss</strong> to contact you via call, SMS, WhatsApp, and email regarding MBM product and Rupeeboss Financial products, including service updates, support, and relevant offers. You also agree to the collection and use of your personal information in accordance with our <a [routerLink]="['/privacy-policy']" style="color:var(--red);font-weight:600;cursor:pointer">Privacy Policy</a>.</span>
+            <span>
+              By registering with <strong>MSME Bharat Manch</strong>, you consent to receive calls, SMS, WhatsApp messages, and emails regarding your membership, reports, support services, and important account updates. Your personal information will be collected, processed, and handled in accordance with our
+              <a [routerLink]="['/privacy-policy']"
+                style="color:var(--red);font-weight:600;cursor:pointer">
+                Privacy Policy
+              </a>.
+            </span>
           </label>
           <div id="consent-error" style="display:none;color:var(--red);font-size:.8rem;margin-top:.5rem;font-weight:600">⚠️ Please accept the consent to continue.</div>
         </div>

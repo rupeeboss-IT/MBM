@@ -12,9 +12,9 @@ type RegisterReq = {
   password: string;
   consentAccepted: boolean;
 };
-type RegisterRes = { success: boolean; message?: string; userId?: string };
+type RegisterRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
 type LoginReq = { identifier: string; password: string };
-type LoginRes = { success: boolean; message?: string; userId?: string };
+type LoginRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
 type AdminLoginReq = { identifier: string; password: string };
 type AdminLoginRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
 type ForgotPasswordReq = { email: string };
@@ -25,6 +25,7 @@ export type MeRes = {
   success: boolean;
   message?: string;
   userId?: string;
+  memberId?: string | null;
   role?: string;
   fullName?: string;
   email?: string;
@@ -74,6 +75,12 @@ export class AuthService {
     return this.http.get(`${this.adminBaseUrl}/dashboard/counts`);
   }
 
+  adminDashboardDetail(category: string, opts?: { days?: number }): Observable<any> {
+    const params: Record<string, string> = {};
+    if (opts?.days != null) params['days'] = String(opts.days);
+    return this.http.get(`${this.adminBaseUrl}/dashboard/details/${encodeURIComponent(category)}`, { params });
+  }
+
   adminListUsers(role?: string): Observable<any> {
     const params: any = {};
     if (role) params.role = role;
@@ -112,8 +119,8 @@ export class AuthService {
     return this.http.post<ResetPasswordRes>(`${this.userBaseUrl}/password/reset`, req);
   }
 
-  me(userId: string): Observable<MeRes> {
-    return this.http.get<MeRes>(`${this.userBaseUrl}/me`, { params: { userId } });
+  me(): Observable<MeRes> {
+    return this.http.get<MeRes>(`${this.userBaseUrl}/me`);
   }
 }
 

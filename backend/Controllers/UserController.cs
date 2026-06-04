@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RB_Website_API.Auth;
 using RB_Website_API.Data;
 using RB_Website_API.Models;
+using RB_Website_API.Services;
 
 namespace RB_Website_API.Controllers;
 
@@ -13,12 +15,21 @@ public sealed class UserController : ControllerBase
     private readonly AppDbContext _db;
     private readonly IOtpService _otp;
     private readonly IPasswordResetService _pwReset;
+    private readonly IJwtTokenService _jwt;
+    private readonly IMemberIdGeneratorService _memberIds;
 
-    public UserController(AppDbContext db, IOtpService otp, IPasswordResetService pwReset)
+    public UserController(
+        AppDbContext db,
+        IOtpService otp,
+        IPasswordResetService pwReset,
+        IJwtTokenService jwt,
+        IMemberIdGeneratorService memberIds)
     {
         _db = db;
         _otp = otp;
         _pwReset = pwReset;
+        _jwt = jwt;
+        _memberIds = memberIds;
     }
 
     public sealed record RegisterRequest(
@@ -31,10 +42,16 @@ public sealed class UserController : ControllerBase
         bool ConsentAccepted
     );
 
-    public sealed record RegisterResponse(bool Success, string? Message = null, Guid? UserId = null);
+    public sealed record RegisterResponse(
+        bool Success,
+        string? Message = null,
+        Guid? UserId = null,
+        string? MemberId = null,
+        string? Role = null,
+        string? Token = null);
 
     public sealed record LoginRequest(string Identifier, string Password);
-    public sealed record LoginResponse(bool Success, string? Message = null, Guid? UserId = null);
+    public sealed record LoginResponse(bool Success, string? Message = null, Guid? UserId = null, string? Role = null, string? Token = null);
     public sealed record ForgotPasswordRequest(string Email);
     public sealed record ForgotPasswordResponse(bool Success, string? Message = null);
     public sealed record ResetPasswordRequest(string Email, string Code, string NewPassword);
@@ -50,15 +67,16 @@ public sealed class UserController : ControllerBase
         string? CompanyName = null,
         DateTime? EmailVerifiedAt = null,
         DateTime? PhoneVerifiedAt = null,
-        DateTime? CreatedAt = null
+        DateTime? CreatedAt = null,
+        string? MemberId = null
     );
 
+    [Authorize(Policy = "MemberAccess")]
     [HttpGet("me")]
-    public async Task<ActionResult<MeResponse>> Me([FromQuery] Guid userId, CancellationToken ct)
+    public async Task<ActionResult<MeResponse>> Me(CancellationToken ct)
     {
-        if (userId == Guid.Empty) return BadRequest(new MeResponse(false, "userId is required."));
+        var userId = CurrentUser.RequireUserId(User);
 
-        // Projection avoids fetching varbinary PasswordHash/PasswordSalt which are large and not needed for profile.
         var dto = await _db.Users
             .AsNoTracking()
             .Where(u => u.UserId == userId)
@@ -72,7 +90,8 @@ public sealed class UserController : ControllerBase
                 u.CompanyName,
                 u.EmailVerifiedAt,
                 u.PhoneVerifiedAt,
-                u.CreatedAt
+                u.CreatedAt,
+                u.MemberId
             })
             .FirstOrDefaultAsync(ct);
 
@@ -89,7 +108,8 @@ public sealed class UserController : ControllerBase
             dto.CompanyName,
             dto.EmailVerifiedAt,
             dto.PhoneVerifiedAt,
-            dto.CreatedAt
+            dto.CreatedAt,
+            dto.MemberId
         ));
     }
 
@@ -128,7 +148,8 @@ public sealed class UserController : ControllerBase
         if (!ok)
             return Unauthorized(new LoginResponse(false, "Invalid email/phone or password."));
 
-        return Ok(new LoginResponse(true, "Login successful.", user.UserId));
+        var token = _jwt.CreateToken(user.UserId, role, user.Email);
+        return Ok(new LoginResponse(true, "Login successful.", user.UserId, role, token));
     }
 
     [HttpPost("register")]
@@ -156,31 +177,55 @@ public sealed class UserController : ControllerBase
         var phoneExists = await _db.Users.AnyAsync(u => u.Phone == phoneDigits, ct);
         if (phoneExists) return Conflict(new RegisterResponse(false, "Phone already exists."));
 
+        var memberRole = req.Role.Trim().ToLowerInvariant();
+        if (memberRole is not ("member" or "partner"))
+            return BadRequest(new RegisterResponse(false, "Invalid role for registration."));
+
         var (hash, salt) = PasswordHasher.Hash(req.Password);
         var now = DateTime.UtcNow;
 
-        var user = new User
+        await using var tx = await _db.Database.BeginTransactionAsync(ct);
+        try
         {
-            UserId = Guid.NewGuid(),
-            Role = req.Role.Trim(),
-            FullName = req.FullName.Trim(),
-            Email = email,
-            Phone = phoneDigits,
-            CompanyName = string.IsNullOrWhiteSpace(req.CompanyName) ? null : req.CompanyName.Trim(),
-            PasswordHash = hash,
-            PasswordSalt = salt,
-            EmailVerifiedAt = now,
-            PhoneVerifiedAt = now,
-            ConsentAccepted = true,
-            ConsentAcceptedAt = now,
-            CreatedAt = now,
-            UpdatedAt = now,
-        };
+            var allocatedMemberId = await _memberIds.AllocateNextMemberIdAsync(ct);
 
-        _db.Users.Add(user);
-        await _db.SaveChangesAsync(ct);
+            var user = new User
+            {
+                UserId = Guid.NewGuid(),
+                MemberId = allocatedMemberId,
+                Role = req.Role.Trim(),
+                FullName = req.FullName.Trim(),
+                Email = email,
+                Phone = phoneDigits,
+                CompanyName = string.IsNullOrWhiteSpace(req.CompanyName) ? null : req.CompanyName.Trim(),
+                PasswordHash = hash,
+                PasswordSalt = salt,
+                EmailVerifiedAt = now,
+                PhoneVerifiedAt = now,
+                ConsentAccepted = true,
+                ConsentAcceptedAt = now,
+                CreatedAt = now,
+                UpdatedAt = now,
+            };
 
-        return Ok(new RegisterResponse(true, "Account created.", user.UserId));
+            _db.Users.Add(user);
+            await _db.SaveChangesAsync(ct);
+            await tx.CommitAsync(ct);
+
+            var token = _jwt.CreateToken(user.UserId, memberRole, user.Email);
+            return Ok(new RegisterResponse(
+                true,
+                "Account created.",
+                user.UserId,
+                user.MemberId,
+                memberRole,
+                token));
+        }
+        catch
+        {
+            await tx.RollbackAsync(ct);
+            throw;
+        }
     }
 
     [HttpPost("password/forgot")]
@@ -202,13 +247,13 @@ public sealed class UserController : ControllerBase
         }
         catch (OtpRateLimitExceededException ex)
         {
-            return StatusCode(StatusCodes.Status429TooManyRequests, new ForgotPasswordResponse(false, ex.Message));
+            return StatusCode(StatusCodes.Status429TooManyRequests,
+                new ForgotPasswordResponse(false, UserFriendlyErrorMapper.GetUserMessage(ex, "forgot_password")));
         }
         catch (Exception ex)
         {
-            // Return a real failure when SMTP fails (still doesn't reveal existence).
-            return StatusCode(StatusCodes.Status502BadGateway, new ForgotPasswordResponse(false,
-                $"Could not send email right now. Please try again. ({ex.Message})"));
+            return StatusCode(StatusCodes.Status502BadGateway,
+                new ForgotPasswordResponse(false, UserFriendlyErrorMapper.GetUserMessage(ex, "forgot_password")));
         }
 
         return Ok(new ForgotPasswordResponse(true, "If this email is registered, an OTP has been sent."));
@@ -235,7 +280,7 @@ public sealed class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new ResetPasswordResponse(false, ex.Message));
+            return BadRequest(new ResetPasswordResponse(false, UserFriendlyErrorMapper.GetUserMessage(ex, "reset_password")));
         }
 
         var (hash, salt) = PasswordHasher.Hash(req.NewPassword);

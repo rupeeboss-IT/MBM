@@ -22,8 +22,7 @@
       <div class="offering-cta-card" style="background:linear-gradient(135deg,#fff5f5,#ffe0e3);border:1px solid #fcd0d4">
         <h3 id="offeringCtaTitle">{{ off.ctaTitle }}</h3>
         <p id="offeringCtaDesc">{{ off.ctaDesc }}</p>
-        <button class="btn-primary" style="width:100%;margin-bottom:.8rem" [routerLink]="['/register']">Get Started →</button>
-        <button class="btn-outline" style="width:100%" [routerLink]="['/membership']">View All Plans</button>
+        <app-offering-cta-actions [ctaTitle]="off.ctaTitle" />
       </div>
       <div class="sidebar-card">
         <h3>Included In</h3>
@@ -48,7 +47,7 @@
       <div class="sidebar-card" style="background:#e8f5e9;border-color:#c8e6c9">
         <h3 style="color:var(--green)">Talk to an Expert</h3>
         <p style="color:var(--text);font-size:.87rem;margin-bottom:.8rem">Get free guidance on this offering from our team</p>
-        <a href="tel:+917982218029" style="color:var(--green);font-weight:700;font-size:.95rem;display:block">📞 +91 79822 18029</a>
+        <a href="tel:+919005900921" style="color:var(--green);font-weight:700;font-size:.95rem;display:block">📞 +91 90059 00921</a>
         <a href="mailto:info@msmebharatmanch.com" style="color:var(--green);font-size:.85rem;display:block;margin-top:.4rem">✉️ info@msmebharatmanch.com</a>
       </div>
     </div>

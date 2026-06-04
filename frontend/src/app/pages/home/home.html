@@ -1,14 +1,15 @@
 <!-- ===== HOME PAGE ===== -->
 <div class="page active" id="page-home">
 
-<div class="hero-wrap">
+  <div class="hero-wrap">
     <div class="hero-pattern"></div>
     <div class="hero-lines"></div>
     <div class="hero-inner">
       <div>
         <div class="hero-badge">&#128293; Limited Offer &mdash; 1,000+ MSMEs Onboarded</div>
         <h1 style="color:#ffffff;">Empower Your Business with MSME Bharat Manch</h1>
-        <p class="hero-sub">Access I-Verified Business Verification, Government Scheme Reports, Loan Audits &amp; Bank Statement Analysis &mdash; all in one powerful membership for growing MSMEs across India.</p>
+        <p class="hero-sub">Access I-Verified Business Verification, Government Scheme Reports, Loan Audits &amp; Bank
+          Statement Analysis &mdash; all in one powerful membership for growing MSMEs across India.</p>
         <div class="hero-btns">
           <button class="btn-primary" style="padding: 16px 34px;" type="button" (click)="goToPlan('premium')">
             Get Started &mdash; &#8377;9,999
@@ -17,261 +18,493 @@
             Explore Premium &mdash; &#8377;19,999
           </button>
         </div>
-        <p class="hero-trust">Powered by <strong>Rupeeboss</strong> &nbsp;&middot;&nbsp; Trusted by MSMEs Across India</p>
+        <p class="hero-trust">Powered by <strong>Rupeeboss</strong> &nbsp;&middot;&nbsp; Trusted by MSMEs Across India
+        </p>
       </div>
       <div class="hero-card">
         <div class="hcard-title">What&rsquo;s Included &mdash; click to explore</div>
         <div class="hcard-grid">
-          <div class="hcard-item" onclick="openProduct('trust')"><div class="hcard-icon">&#128202;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Trust Score</div><div class="hcard-sub">Verified report</div></div></div>
-          <div class="hcard-item" onclick="openProduct('schemes')"><div class="hcard-icon">&#127963;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Govt Schemes</div><div class="hcard-sub">Personalised report</div></div></div>
-          <div class="hcard-item" onclick="openProduct('loan')"><div class="hcard-icon">&#128269;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Loan Audit</div><div class="hcard-sub">Optimise terms</div></div></div>
-          <div class="hcard-item" onclick="openProduct('bank')"><div class="hcard-icon">&#128200;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Bank Analyzer</div><div class="hcard-sub">Smart insights</div></div></div>
-          <div class="hcard-item" onclick="openProduct('whatsapp')"><div class="hcard-icon">&#128172;</div><div style="min-width:0;flex:1;"><div class="hcard-label">WhatsApp</div><div class="hcard-sub">Business platform</div></div></div>
-          <div class="hcard-item" onclick="openProduct('rm')"><div class="hcard-icon">&#128188;</div><div style="min-width:0;flex:1;"><div class="hcard-label">Rel. Manager</div><div class="hcard-sub">Doorstep support</div></div></div>
+          <a class="hcard-item" [routerLink]="['/offering', 'trust-score']">
+            <div class="hcard-icon">&#128202;</div>
+            <div style="min-width:0;flex:1;">
+              <div class="hcard-label">Trust Score</div>
+              <div class="hcard-sub">Verified report</div>
+            </div>
+          </a>
+          <a class="hcard-item" [routerLink]="['/offering', 'scheme-discovery']">
+            <div class="hcard-icon">&#127963;</div>
+            <div style="min-width:0;flex:1;">
+              <div class="hcard-label">Govt Schemes</div>
+              <div class="hcard-sub">Personalised report</div>
+            </div>
+          </a>
+          <a class="hcard-item" [routerLink]="['/offering', 'loan-audit']">
+            <div class="hcard-icon">&#128269;</div>
+            <div style="min-width:0;flex:1;">
+              <div class="hcard-label">Loan Audit</div>
+              <div class="hcard-sub">Optimise terms</div>
+            </div>
+          </a>
+          <a class="hcard-item" [routerLink]="['/offering', 'bank-statement-analyzer']">
+            <div class="hcard-icon">&#128200;</div>
+            <div style="min-width:0;flex:1;">
+              <div class="hcard-label">Bank Analyzer</div>
+              <div class="hcard-sub">Smart insights</div>
+            </div>
+          </a>
+          <a class="hcard-item" [routerLink]="['/offering', 'whatsapp-platform']">
+            <div class="hcard-icon">&#128172;</div>
+            <div style="min-width:0;flex:1;">
+              <div class="hcard-label">WhatsApp</div>
+              <div class="hcard-sub">Business platform</div>
+            </div>
+          </a>
+          <a class="hcard-item" [routerLink]="['/offering', 'gem-registration']">
+            <div class="hcard-icon">&#128188;</div>
+            <div style="min-width:0;flex:1;">
+              <div class="hcard-label">GeM Registration</div>
+              <div class="hcard-sub">Online Marketplace</div>
+            </div>
+          </a>
         </div>
       </div>
     </div>
   </div>
 
-
-<!-- <section class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">🇮🇳 National Initiative by RupeeBoss.com</div>
-    <h1>360° Business Solutions<br><span class="hero-accent">for Indian MSMEs</span></h1>
-    <p class="hero-sub">Empowering 7 Crore+ MSMEs with Financial, Legal, Technology & Marketing Support — From Company Formation to IPO Listing</p>
-    <div class="hero-actions">
-      <a class="btn-primary-lg" routerLink="/register">Join Today</a>
-      <a class="btn-outline-lg" routerLink="/loans">Apply for Loan</a>
-    </div>
-    <div class="hero-trust">
-      <span>✅ 500+ Growth Partners</span>
-      <span>✅ 100+ Banks & NBFCs</span>
-      <span>✅ Free Doorstep Service</span>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="hero-card"><div class="hero-card-icon">🏦</div><div class="hero-card-text"><strong>Business Loan</strong><span>₹1 Lakh – ₹1000 Cr</span></div></div>
-    <div class="hero-card"><div class="hero-card-icon">🏛️</div><div class="hero-card-text"><strong>Govt. Schemes</strong><span>Central & State Subsidies</span></div></div>
-    <div class="hero-card"><div class="hero-card-icon">📈</div><div class="hero-card-text"><strong>IPO Listing</strong><span>Investment Banking</span></div></div>
-    <div class="hero-card"><div class="hero-card-icon">🤝</div><div class="hero-card-text"><strong>500+ Partners</strong><span>Pan India Network</span></div></div>
-  </div>
-</section> -->
-
-<section class="stats-strip">
-  <div class="stats-container">
-    <div class="stat-item"><div class="stat-value">7 Cr+</div><div class="stat-label">MSMEs Served</div></div>
-    <div class="stat-item"><div class="stat-value">500+</div><div class="stat-label">Growth Partners</div></div>
-    <div class="stat-item"><div class="stat-value">100+</div><div class="stat-label">Banks & NBFCs</div></div>
-    <div class="stat-item"><div class="stat-value">28+</div><div class="stat-label">States Covered</div></div>
-    <div class="stat-item"><div class="stat-value">2000+</div><div class="stat-label">Years Combined Experience</div></div>
-  </div>
-</section>
-
-<section class="about-strip section">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <div class="section-tag">Who We Are</div>
-        <h2>India's #1 One-Stop Platform for MSMEs</h2>
-        <p>MSME Bharat Manch provides <strong>360° solutions</strong> to cater to all entrepreneurial needs — right from starting your company to taking it public. Our mission is to create a unique platform for MSMEs to become Self-Reliant and grow exponentially.</p>
-        <p>With a seasoned team holding <strong>2,000+ years of collective experience</strong> and over <strong>500+ trusted Growth Partners</strong> across all 4 zones of India, we meet <strong>500+ new MSMEs daily</strong>.</p>
-        <a class="btn-primary" routerLink="/about">Learn More →</a>
+  <section class="stats-strip">
+    <div class="stats-container">
+      <div class="stat-item">
+        <div class="stat-value">7 Cr+</div>
+        <div class="stat-label">MSMEs Served</div>
       </div>
-      <div class="about-features">
-        <div class="feature-item"><span class="feature-icon">💰</span><div><strong>Financial Solutions</strong><p>Business loans from ₹1 Lakh to ₹1000 Crore</p></div></div>
-        <div class="feature-item"><span class="feature-icon">🏛️</span><div><strong>Government Schemes</strong><p>Central & state subsidies unlocked for you</p></div></div>
-        <div class="feature-item"><span class="feature-icon">💻</span><div><strong>Technology</strong><p>Digital transformation for your MSME</p></div></div>
-        <div class="feature-item"><span class="feature-icon">📣</span><div><strong>Marketing</strong><p>Sales, SEO, social media & brand building</p></div></div>
+      <div class="stat-item">
+        <div class="stat-value">500+</div>
+        <div class="stat-label">Growth Partners</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">100+</div>
+        <div class="stat-label">Banks & NBFCs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">28+</div>
+        <div class="stat-label">States Covered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">30+</div>
+        <div class="stat-label">Years Experience</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section bg-light" id="home-plans-section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Membership Plans</div>
-      <h2>Choose Your Plan & Start Growing</h2>
-      <p>Join or unlock priority support — upgrade anytime as your MSME grows</p>
-    </div>
-    <div class="home-plans-grid">
-      <div class="home-plan-card">
-        <div class="hp-icon">🌱</div>
-        <div class="hp-badge free">₹999/yr</div>
-        <h3>MSME Basic</h3>
-        <p class="hp-desc">For any MSME with Udyam Aadhaar — start your growth journey</p>
-        <ul class="hp-features">
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">Join with Udyam Aadhaar</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span class="pfl-text">Build credibility profile</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><span class="pfl-text">National MSME network</span></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
-        </ul>
-        <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Basic</a>
-      </div>
-      <div class="home-plan-card">
-        <div class="hp-icon">🌐</div>
-        <div class="hp-badge silver">₹4,999/yr</div>
-        <h3>MSME Standard</h3>
-        <p class="hp-desc">Manage your website, automate WhatsApp replies, capture leads</p>
-        <ul class="hp-features">
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Hosting + Server + DB</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Free subdomain on qobo.dev</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp automation &amp; FAQ</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><span class="pfl-text">Mobile-friendly + fast loading</span></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
-        </ul>
-        <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Standard</a>
-      </div>
-      <div class="home-plan-card featured-plan">
-        <div class="plan-popular">Most Popular</div>
-        <div class="hp-icon">🏆</div>
-        <div class="hp-badge gold">₹9,999/yr</div>
-        <h3>MSME Premium</h3>
-        <p class="hp-desc">Perfect for MSMEs ready to build financial credibility</p>
-        <ul class="hp-features">
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span class="pfl-text">Infomerics Verified Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">15L Insurance + 2 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
-        </ul>
-        <a class="btn-primary" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Premium</a>
-      </div>
-      <div class="home-plan-card">
-        <div class="hp-icon">💎</div>
-        <div class="hp-badge platinum">₹19,999/yr</div>
-        <h3>MSME Pro</h3>
-        <p class="hp-desc">For MSMEs seeking deeper insights and GeM access</p>
-        <ul class="hp-features">
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span class="pfl-text">Infomerics Business Assessment</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal Registration</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span class="pfl-text">15L Insurance + 4 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a></li>
-        </ul>
-        <a class="btn-navy" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME Pro</a>
+  <section class="about-strip section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-tag">Who We Are</div>
+          <h2>India's #1 One-Stop Platform for MSMEs</h2>
+          <p>MSME Bharat Manch provides <strong>360° solutions</strong> to cater to all entrepreneurial needs — right
+            from starting your company to taking it public. Our mission is to create a unique platform for MSMEs to
+            become Self-Reliant and grow exponentially.</p>
+          <p>With a seasoned team holding <strong>30+ years of experience</strong> and over <strong>500+
+              trusted Growth Partners</strong> across all 4 zones of India, we meet <strong>500+ new MSMEs
+              daily</strong>.</p>
+          <a class="btn-primary" routerLink="/about">Learn More →</a>
+        </div>
+        <div class="about-features">
+          <div class="feature-item"><span class="feature-icon">🪙</span>
+            <div><strong>Financial Solutions</strong>
+              <p>Loans from ₹10 Lakh - ₹1000 Crore</p>
+            </div>
+          </div>
+          <div class="feature-item"><span class="feature-icon">🏛️</span>
+            <div><strong>Government Schemes</strong>
+              <p>Central & state subsidies unlocked for you</p>
+            </div>
+          </div>
+          <div class="feature-item"><span class="feature-icon">💻</span>
+            <div><strong>Technology</strong>
+              <p>Digital transformation for your MSME</p>
+            </div>
+          </div>
+          <div class="feature-item"><span class="feature-icon">📣</span>
+            <div><strong>Marketing</strong>
+              <p>Sales, SEO, social media & brand building</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <div class="text-center mt-3">
-      <a class="btn-outline" routerLink="/membership">View Full Plan Comparison →</a>
-    </div> -->
-  </div>
-</section>
+  </section>
 
-<section class="section services-section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">What We Offer</div>
-      <h2>360° Business Solutions</h2>
-      <p>Everything your enterprise needs — under one roof</p>
+  <section class="section bg-light" id="home-plans-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Membership Plans</div>
+        <h2>Choose Your Plan & Start Growing</h2>
+        <p>Join or unlock priority support — upgrade anytime as your MSME grows</p>
+      </div>
+      <div class="home-plans-grid">
+        <div class="home-plan-card">
+          <div class="hp-icon">🌱</div>
+          <div class="hp-badge free">₹999/yr</div>
+          <h3>MSME Basic</h3>
+          <p class="hp-desc">For any MSME with Udyam Aadhaar — start your growth journey</p>
+          <ul class="hp-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">Join with Udyam
+                  Aadhaar</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
+                  class="pfl-text">Build credibility profile</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><span class="pfl-text">National MSME network</span></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a>
+            </li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Platform</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
+                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+          </ul>
+          <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
+            Basic</a>
+        </div>
+        <div class="home-plan-card">
+          <div class="hp-icon">🌐</div>
+          <div class="hp-badge silver">₹4,999/yr</div>
+          <h3>MSME Standard</h3>
+          <p class="hp-desc">Manage your website, automate WhatsApp replies, capture leads</p>
+          <ul class="hp-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Hosting + Server + DB</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Free subdomain on
+                  qobo.dev</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp automation &amp;
+                  FAQ</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><span class="pfl-text">Mobile-friendly + fast loading</span></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a>
+            </li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
+                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+          </ul>
+          <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
+            Standard</a>
+        </div>
+        <div class="home-plan-card featured-plan">
+          <div class="plan-popular">Most Popular</div>
+          <div class="hp-icon">🏆</div>
+          <div class="hp-badge gold">₹9,999/yr</div>
+          <h3>MSME Premium</h3>
+          <p class="hp-desc">Perfect for MSMEs ready to build financial credibility</p>
+          <ul class="hp-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
+                  class="pfl-text">Infomerics Trust Score Report</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme
+                  Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
+                  Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
+                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
+                  Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
+                  class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a>
+            </li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">10L Insurance + 2 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          </ul>
+          <a class="btn-primary" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
+            Premium</a>
+        </div>
+        <div class="home-plan-card">
+          <div class="hp-icon">💎</div>
+          <div class="hp-badge platinum">₹19,999/yr</div>
+          <h3>MSME Pro</h3>
+          <p class="hp-desc">For MSMEs seeking deeper insights and GeM access</p>
+          <ul class="hp-features">
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
+                  class="pfl-text">Infomerics Business Assessment</span><span class="pfl-info">ℹ Learn more</span></a>
+            </li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme
+                  Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal
+                  Registration</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
+                  Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
+                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
+                  Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
+                  class="pfl-text">Free Loan &amp; Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a>
+            </li>
+            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
+                  class="pfl-text">15L Insurance + 4 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
+          </ul>
+          <a class="btn-navy" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
+            Pro</a>
+        </div>
+      </div>
+      <div class="text-left mt-3">
+      <small style="color:var(--red);font-weight:500"><strong>Note:Plan prices are exclusive of taxes</strong></small>
     </div>
-    <div class="services-grid">
-      <a class="service-card" [routerLink]="['/service','msme-loans-finance']"><div class="service-icon">💰</div><h3>MSME Loans & Finance</h3><p>Business loans, working capital, machinery finance from 100+ banks and NBFCs.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','company-formation']"><div class="service-icon">🏢</div><h3>Company Formation</h3><p>Pvt Ltd, LLP, OPC, Partnership — legal structure and compliance made easy.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','government-subsidies']"><div class="service-icon">🏛️</div><h3>Government Subsidies</h3><p>PMEGP, CGTMSE, MUDRA, Capital subsidy & sector-specific schemes.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','technology-solutions']"><div class="service-icon">💻</div><h3>Technology Solutions</h3><p>ERP, websites, mobile apps, cloud & digital tools for MSME growth.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','sales-digital-marketing']"><div class="service-icon">📣</div><h3>Sales & Digital Marketing</h3><p>SEO, Google Ads, social media marketing, brand building and lead generation.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','ipo-investment-banking']"><div class="service-icon">📈</div><h3>IPO & Investment Banking</h3><p>SME IPO listing, fund raising, M&A advisory and investment banking services.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','coaching-consulting']"><div class="service-icon">🎓</div><h3>Coaching & Consulting</h3><p>Business strategy, management consulting, leadership coaching and mentorship.</p><span class="service-link">Learn More →</span></a>
-      <a class="service-card" [routerLink]="['/service','legal-compliance']"><div class="service-icon">⚖️</div><h3>Legal & Compliance</h3><p>GST, income tax, trademark, ISO certification and all regulatory compliance.</p><span class="service-link">Learn More →</span></a>
     </div>
-    <div class="text-center mt-3">
-      <a class="btn-outline" routerLink="/our-services">View All Services</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="loan-banner">
-  <div class="loan-banner-inner">
-    <div class="loan-text">
-      <h2>Need Business Funding?</h2>
-      <p>Access to <strong>100+ Banks & NBFCs</strong> — Free Doorstep Service. Loans from <strong>₹1 Lakh to ₹1000 Crore</strong>. No hidden charges.</p>
-      <div class="loan-types">
-        <span>Business Loan</span><span>Working Capital</span><span>Machinery Loan</span><span>MSME Loan</span><span>IPO Funding</span><span>NPA Revival</span>
+  <section class="section services-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">What We Offer</div>
+        <h2>360° Business Solutions</h2>
+        <p>Everything your enterprise needs — under one roof</p>
+      </div>
+      <div class="services-grid">
+        <a class="service-card" [routerLink]="['/service','msme-loans-finance']">
+          <!-- <div class="service-icon">💰</div> -->
+          <div class="service-icon">🪙</div>
+          <h3>MSME Loans & Finance</h3>
+          <p>Business loans, working capital, machinery finance from 100+ banks and NBFCs.</p><span
+            class="service-link">Learn More →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','company-formation']">
+          <div class="service-icon">🏢</div>
+          <h3>Company Formation</h3>
+          <p>Pvt Ltd, LLP, OPC, Partnership — legal structure and compliance made easy.</p><span
+            class="service-link">Learn More →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','government-subsidies']">
+          <div class="service-icon">🏛️</div>
+          <h3>Government Subsidies</h3>
+          <p>PMEGP, CGTMSE, MUDRA, Capital subsidy & sector-specific schemes.</p><span class="service-link">Learn More
+            →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','technology-solutions']">
+          <div class="service-icon">💻</div>
+          <h3>Technology Solutions</h3>
+          <p>ERP, websites, mobile apps, cloud & digital tools for MSME growth.</p><span class="service-link">Learn More
+            →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','sales-digital-marketing']">
+          <div class="service-icon">📣</div>
+          <h3>Sales & Digital Marketing</h3>
+          <p>SEO, Google Ads, social media marketing, brand building and lead generation.</p><span
+            class="service-link">Learn More →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','ipo-investment-banking']">
+          <div class="service-icon">📈</div>
+          <h3>IPO & Investment Banking</h3>
+          <p>SME IPO listing, fund raising, M&A advisory and investment banking services.</p><span
+            class="service-link">Learn More →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','coaching-consulting']">
+          <div class="service-icon">🎓</div>
+          <h3>Coaching & Consulting</h3>
+          <p>Business strategy, management consulting, leadership coaching and mentorship.</p><span
+            class="service-link">Learn More →</span>
+        </a>
+        <a class="service-card" [routerLink]="['/service','legal-compliance']">
+          <div class="service-icon">⚖️</div>
+          <h3>Legal & Compliance</h3>
+          <p>GST, income tax, trademark, ISO certification and all regulatory compliance.</p><span
+            class="service-link">Learn More →</span>
+        </a>
+      </div>
+      <div class="text-center mt-3">
+        <a class="btn-outline" routerLink="/our-services">View All Services</a>
       </div>
     </div>
-    <div class="loan-action">
-      <a class="btn-white-lg" routerLink="/loans">Apply Now — Free</a>
-      <p class="loan-note">📞 Call: 79822 18029</p>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="section bg-light">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Government Benefits</div>
-      <h2>Central & State Schemes for MSMEs</h2>
-      <p>Unlock subsidies, grants and government support worth crores for your business</p>
+  <section class="loan-banner">
+    <div class="loan-banner-inner">
+      <div class="loan-text">
+        <h2>Need Business Funding?</h2>
+        <p>Access to <strong>100+ Banks & NBFCs</strong> — Free Doorstep Service. Loans from <strong>₹1 Lakh to ₹1000
+            Crore</strong>. No hidden charges.</p>
+        <div class="loan-types">
+          <span>Business Loan</span><span>Working Capital</span><span>Machinery Loan</span><span>MSME
+            Loan</span><span>IPO Funding</span><span>Credit Rectification</span>
+        </div>
+      </div>
+      <div class="loan-action">
+        <a class="btn-white-lg" routerLink="/loans">Apply Now — Free</a>
+        <p class="loan-note">📞 Call: 90059 00921</p>
+      </div>
     </div>
-    <div class="schemes-grid">
-      <div class="scheme-card" [routerLink]="['/scheme','pmegp']"><div class="scheme-badge badge badge-green">Central</div><h3>PMEGP Scheme</h3><p>Prime Minister's Employment Generation Programme — up to 35% subsidy for new enterprises. Max project cost ₹50 Lakh for manufacturing.</p></div>
-      <div class="scheme-card" [routerLink]="['/scheme','cgtmse']"><div class="scheme-badge badge badge-blue">Credit</div><h3>CGTMSE Scheme</h3><p>Collateral-free loans up to ₹2 Crore for MSMEs under Credit Guarantee Fund Trust. No third-party guarantee required.</p></div>
-      <div class="scheme-card" [routerLink]="['/scheme','mudra']"><div class="scheme-badge badge badge-red">Central</div><h3>MUDRA Yojana</h3><p>Loans up to ₹10 Lakh under Shishu, Kishore and Tarun categories for micro enterprises and small businesses.</p></div>
-      <div class="scheme-card" [routerLink]="['/scheme','digital-msme']"><div class="scheme-badge badge badge-orange">Technology</div><h3>Digital MSME Scheme</h3><p>Cloud computing, ERP and digital solutions with government subsidy under the Digital MSME Scheme.</p></div>
-      <div class="scheme-card" [routerLink]="['/scheme','trade-fair']"><div class="scheme-badge badge badge-green">Marketing</div><h3>Trade Fair Subsidy</h3><p>Government subsidized participation in national and international trade fairs for MSME exporters and manufacturers.</p></div>
-      <div class="scheme-card" [routerLink]="['/scheme','design-clinic']"><div class="scheme-badge badge badge-blue">Design</div><h3>Design Clinic Scheme</h3><p>50–75% subsidy for design consultancy services to improve product quality, packaging and marketability of MSME products.</p></div>
-    </div>
-    <div class="text-center">
-      <a class="btn-outline" routerLink="/schemes">View All Schemes</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Upcoming Events</div>
-      <h2>MSME Summits & Webinars</h2>
-      <p>Connect, learn and grow with India's MSME community</p>
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Government Benefits</div>
+        <h2>Central & State Schemes for MSMEs</h2>
+        <p>Unlock subsidies, grants and government support worth crores for your business</p>
+      </div>
+      <div class="schemes-grid">
+        <div class="scheme-card" [routerLink]="['/scheme','pmegp']">
+          <div class="scheme-badge badge badge-green">Central</div>
+          <h3>PMEGP Scheme</h3>
+          <p>Prime Minister's Employment Generation Programme — up to 35% subsidy for new enterprises. Max project cost
+            ₹50 Lakh for manufacturing.</p>
+        </div>
+        <div class="scheme-card" [routerLink]="['/scheme','cgtmse']">
+          <div class="scheme-badge badge badge-blue">Credit</div>
+          <h3>CGTMSE Scheme</h3>
+          <p>Collateral-free loans up to ₹2 Crore for MSMEs under Credit Guarantee Fund Trust. No third-party guarantee
+            required.</p>
+        </div>
+        <div class="scheme-card" [routerLink]="['/scheme','mudra']">
+          <div class="scheme-badge badge badge-red">Central</div>
+          <h3>MUDRA Yojana</h3>
+          <p>Loans up to ₹10 Lakh under Shishu, Kishore and Tarun categories for micro enterprises and small businesses.
+          </p>
+        </div>
+        <div class="scheme-card" [routerLink]="['/scheme','digital-msme']">
+          <div class="scheme-badge badge badge-orange">Technology</div>
+          <h3>Digital MSME Scheme</h3>
+          <p>Cloud computing, ERP and digital solutions with government subsidy under the Digital MSME Scheme.</p>
+        </div>
+        <div class="scheme-card" [routerLink]="['/scheme','trade-fair']">
+          <div class="scheme-badge badge badge-green">Marketing</div>
+          <h3>Trade Fair Subsidy</h3>
+          <p>Government subsidized participation in national and international trade fairs for MSME exporters and
+            manufacturers.</p>
+        </div>
+        <div class="scheme-card" [routerLink]="['/scheme','design-clinic']">
+          <div class="scheme-badge badge badge-blue">Design</div>
+          <h3>Design Clinic Scheme</h3>
+          <p>50–75% subsidy for design consultancy services to improve product quality, packaging and marketability of
+            MSME products.</p>
+        </div>
+      </div>
+      <div class="text-center">
+        <a class="btn-outline" routerLink="/schemes">View All Schemes</a>
+      </div>
     </div>
-    <div class="events-grid">
-      <div class="event-card" [routerLink]="['/event','national-msme-summit-2024']"><div class="event-img">🏆</div><div class="event-body"><div class="event-meta"><span class="badge badge-red">Summit</span><span class="badge badge-green">Mumbai</span></div><h3>National MSME Summit 2024</h3><p>India's largest MSME gathering with 1,200+ entrepreneurs, keynote speakers and panel discussions.</p><div class="event-date">📅 March 15–16, 2024 · BKC, Mumbai</div></div></div>
-      <div class="event-card" [routerLink]="['/event','digital-transformation-webinar']"><div class="event-img">💻</div><div class="event-body"><div class="event-meta"><span class="badge badge-blue">Webinar</span><span class="badge badge-orange">Free</span></div><h3>Digital Transformation for MSMEs</h3><p>Learn how to leverage technology, AI and digital marketing to 10x your MSME growth.</p><div class="event-date">📅 Every Saturday, 11:00 AM · Online</div></div></div>
-      <div class="event-card" [routerLink]="['/event','msme-loan-workshop']"><div class="event-img">💰</div><div class="event-body"><div class="event-meta"><span class="badge badge-green">Workshop</span><span class="badge badge-blue">Delhi</span></div><h3>MSME Loan & Finance Workshop</h3><p>Step-by-step guide to securing business loans, improving CIBIL score and accessing government credit schemes.</p><div class="event-date">📅 Feb 28, 2024 · Connaught Place, Delhi</div></div></div>
-    </div>
-    <div class="text-center mt-3">
-      <a class="btn-outline" routerLink="/events">View All Events</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="section bg-light">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-tag">Success Stories</div>
-      <h2>What Our Members Say</h2>
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Upcoming Events</div>
+        <h2>MSME Summits & Webinars</h2>
+        <p>Connect, learn and grow with India's MSME community</p>
+      </div>
+      <div class="events-grid">
+        <div class="event-card" [routerLink]="['/event','national-msme-summit-2024']">
+          <div class="event-img">🏆</div>
+          <div class="event-body">
+            <div class="event-meta"><span class="badge badge-red">Summit</span><span
+                class="badge badge-green">Mumbai</span></div>
+            <h3>National MSME Summit 2024</h3>
+            <p>India's largest MSME gathering with 1,200+ entrepreneurs, keynote speakers and panel discussions.</p>
+            <div class="event-date">📅 March 15–16, 2024 · BKC, Mumbai</div>
+          </div>
+        </div>
+        <div class="event-card" [routerLink]="['/event','digital-transformation-webinar']">
+          <div class="event-img">💻</div>
+          <div class="event-body">
+            <div class="event-meta"><span class="badge badge-blue">Webinar</span><span
+                class="badge badge-orange">Free</span></div>
+            <h3>Digital Transformation for MSMEs</h3>
+            <p>Learn how to leverage technology, AI and digital marketing to 10x your MSME growth.</p>
+            <div class="event-date">📅 Every Saturday, 11:00 AM · Online</div>
+          </div>
+        </div>
+        <div class="event-card" [routerLink]="['/event','msme-loan-workshop']">
+          <div class="event-img">💰</div>
+          <div class="event-body">
+            <div class="event-meta"><span class="badge badge-green">Workshop</span><span
+                class="badge badge-blue">Delhi</span></div>
+            <h3>MSME Loan & Finance Workshop</h3>
+            <p>Step-by-step guide to securing business loans, improving CIBIL score and accessing government credit
+              schemes.</p>
+            <div class="event-date">📅 Feb 28, 2024 · Connaught Place, Delhi</div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a class="btn-outline" routerLink="/events">View All Events</a>
+      </div>
     </div>
-    <div class="testimonials-grid">
-      <div class="testimonial-card"><div class="stars">★★★★★</div><p>"MSME Bharat Manch helped us secure a ₹50 Lakh business loan in just 2 weeks. The dedicated relationship manager guided us through every step. Truly a one-stop solution for our MSME needs."</p><div class="t-author"><div class="t-avatar">R</div><div class="t-name"><strong>Ramesh Gupta</strong><span>RG Textiles, Surat</span></div></div></div>
-      <div class="testimonial-card"><div class="stars">★★★★★</div><p>"We got PMEGP subsidy of ₹8 Lakh through their guidance. The team's knowledge of government schemes is unmatched. Our food processing unit is now running at full capacity thanks to their support."</p><div class="t-author"><div class="t-avatar">P</div><div class="t-name"><strong>Priya Sharma</strong><span>Flavours Kitchen, Pune</span></div></div></div>
-      <div class="testimonial-card"><div class="stars">★★★★★</div><p>"Digital Marketing services transformed our online presence. We went from zero to 500+ daily inquiries in just 3 months. The ROI has been phenomenal for our engineering components business."</p><div class="t-author"><div class="t-avatar">A</div><div class="t-name"><strong>Amit Patel</strong><span>Patel Engineering, Ahmedabad</span></div></div></div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="cta-section">
-  <div class="container">
-    <h2>Ready to Grow Your MSME?</h2>
-    <p>Join 7 Crore+ MSMEs who trust MSME Bharat Manch for 360° business support</p>
-    <div class="cta-actions">
-      <a class="btn-white-lg" routerLink="/register">Join Today</a>
-      <a class="btn-outline-lg" routerLink="/contact">Talk to an Expert</a>
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Success Stories</div>
+        <h2>What Our Members Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"MSME Bharat Manch helped us secure a ₹50 Lakh business loan in just 2 weeks. The dedicated relationship
+            manager guided us through every step. Truly a one-stop solution for our MSME needs."</p>
+          <div class="t-author">
+            <div class="t-avatar">R</div>
+            <div class="t-name"><strong>Ramesh Gupta</strong><span>RG Textiles, Surat</span></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"We got PMEGP subsidy of ₹8 Lakh through their guidance. The team's knowledge of government schemes is
+            unmatched. Our food processing unit is now running at full capacity thanks to their support."</p>
+          <div class="t-author">
+            <div class="t-avatar">P</div>
+            <div class="t-name"><strong>Priya Sharma</strong><span>Flavours Kitchen, Pune</span></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Digital Marketing services transformed our online presence. We went from zero to 500+ daily inquiries in
+            just 3 months. The ROI has been phenomenal for our engineering components business."</p>
+          <div class="t-author">
+            <div class="t-avatar">A</div>
+            <div class="t-name"><strong>Amit Patel</strong><span>Patel Engineering, Ahmedabad</span></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to Grow Your MSME?</h2>
+      <p>Join 7 Crore+ MSMEs who trust MSME Bharat Manch for 360° business support</p>
+      <div class="cta-actions">
+        <app-join-today-button variant="white-lg" />
+        <a class="btn-outline-lg" routerLink="/contact">Talk to an Expert</a>
+      </div>
+    </div>
+  </section>
 
 </div><!-- /home page -->

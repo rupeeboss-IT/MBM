@@ -8,6 +8,8 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
 import { ToastService } from '../../core/services/toast.service';
+import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
+import { getHttpErrorMessage, sanitizeUserMessage } from '../../core/utils/http-error-message';
 import { bannedWordsNameValidator, nameNoRepeatsValidator, strictFullNameValidator } from '../../core/validators/name.validators';
 import { passwordComplexityValidator } from '../../core/validators/password.validators';
 import { strictEmailValidator } from '../../core/validators/email.validators';
@@ -60,6 +62,10 @@ export class Register {
   readonly smsOtpCooldownSec = signal(0);
 
   readonly submitting = signal(false);
+  readonly emailOtpSending = signal(false);
+  readonly emailOtpVerifying = signal(false);
+  readonly smsOtpSending = signal(false);
+  readonly smsOtpVerifying = signal(false);
 
   // Company autocomplete
   readonly companyLoading = signal(false);
@@ -273,7 +279,7 @@ export class Register {
     }
 
     try {
-      this.submitting.set(true);
+      this.emailOtpSending.set(true);
       await firstValueFrom(this.auth.sendEmailOtp(this.form.controls.email.value));
       this.emailOtpIssuedForNorm.set(this.normalizeEmail(this.form.controls.email.value));
       this.emailOtpSent.set(true);
@@ -283,7 +289,7 @@ export class Register {
     } catch (e) {
       this.toast.error(this.mapOtpSendError(e, 'Failed to send email OTP.'));
     } finally {
-      this.submitting.set(false);
+      this.emailOtpSending.set(false);
     }
   }
 
@@ -299,7 +305,7 @@ export class Register {
     }
 
     try {
-      this.submitting.set(true);
+      this.emailOtpVerifying.set(true);
       await firstValueFrom(this.auth.verifyEmailOtp(this.form.controls.email.value, code));
       const norm = this.normalizeEmail(this.form.controls.email.value);
       this.verifiedEmailsThisSession.update((s) => new Set(s).add(norm));
@@ -309,7 +315,7 @@ export class Register {
       this.syncEmailVerificationUi();
       this.toast.error(this.mapVerifyOtpFailure(e));
     } finally {
-      this.submitting.set(false);
+      this.emailOtpVerifying.set(false);
     }
   }
 
@@ -325,7 +331,7 @@ export class Register {
     }
 
     try {
-      this.submitting.set(true);
+      this.smsOtpSending.set(true);
       await firstValueFrom(this.auth.sendSmsOtp(this.form.controls.phone.value));
       this.smsOtpIssuedForNorm.set(this.normalizePhoneDigits(this.form.controls.phone.value));
       this.smsOtpSent.set(true);
@@ -335,7 +341,7 @@ export class Register {
     } catch (e) {
       this.toast.error(this.mapOtpSendError(e, 'Failed to send SMS OTP.'));
     } finally {
-      this.submitting.set(false);
+      this.smsOtpSending.set(false);
     }
   }
 
@@ -351,7 +357,7 @@ export class Register {
     }
 
     try {
-      this.submitting.set(true);
+      this.smsOtpVerifying.set(true);
       await firstValueFrom(this.auth.verifySmsOtp(this.form.controls.phone.value, code));
       const norm = this.normalizePhoneDigits(this.form.controls.phone.value);
       this.verifiedPhonesThisSession.update((s) => new Set(s).add(norm));
@@ -361,7 +367,7 @@ export class Register {
       this.syncPhoneVerificationUi();
       this.toast.error(this.mapVerifyOtpFailure(e));
     } finally {
-      this.submitting.set(false);
+      this.smsOtpVerifying.set(false);
     }
   }
 
@@ -399,9 +405,9 @@ export class Register {
         this.toast.error(res?.message || 'Registration failed. Please try again.');
         return;
       }
-      if (typeof res.userId === 'string' && res.userId) {
+      if (typeof res.userId === 'string' && res.userId && res.token) {
         this.createdUserId.set(res.userId);
-        this.session.setUserId(res.userId);
+        this.session.setSession(res.userId, res.token, res.role);
       }
       // If the user came from /membership wanting to buy a plan, send them straight there so checkout opens.
       const pendingPlan =
@@ -414,7 +420,7 @@ export class Register {
       this.toast.success('Account created. Continue to plan selection.');
       this.step.set(2);
     } catch (e) {
-      this.toast.error(this.httpErr(e, 'Registration failed. Please try again.'));
+      this.toast.error(this.httpErr(e, API_USER_MESSAGES.register));
     } finally {
       this.submitting.set(false);
     }
@@ -525,26 +531,12 @@ export class Register {
   }
 
   private httpErr(e: unknown, fallback: string) {
-    if (e instanceof HttpErrorResponse) {
-      const body = e.error;
-      if (typeof body === 'string' && body.trim()) return body.trim();
-      if (body && typeof body === 'object') {
-        const o = body as Record<string, unknown>;
-        const apiMsg = o['message'] ?? o['Message'];
-        if (typeof apiMsg === 'string' && apiMsg.trim()) return apiMsg.trim();
-        const detail = o['detail'] ?? o['Detail'];
-        if (typeof detail === 'string' && detail.trim()) return detail.trim();
-        const title = o['title'] ?? o['Title'];
-        if (typeof title === 'string' && title.trim()) return title.trim();
-      }
-      if (e.message) return e.message;
-    }
-    return fallback;
+    return getHttpErrorMessage(e, fallback);
   }
 
   /** Maps API errors to clear copy; wrong OTP gets an explicit message. */
   private mapVerifyOtpFailure(e: unknown): string {
-    const raw = this.httpErr(e, '').trim();
+    const raw = sanitizeUserMessage(this.httpErr(e, '')) ?? '';
     if (/invalid otp/i.test(raw)) {
       return 'The OTP you entered is wrong. Please try again.';
     }

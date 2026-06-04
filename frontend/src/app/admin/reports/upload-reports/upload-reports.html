@@ -1,0 +1,85 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <h2>Reports Management</h2>
+      <div class="muted">Search a customer, verify active subscription, and upload a ZIP report.</div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" href="/home">Go to Website</a>
+      <a class="btn btn-outline" routerLink="/admin-dashboard">← Dashboard</a>
+      <button class="btn btn-outline" type="button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <nav class="admin-subnav">
+    <a routerLink="/admin-reports/upload" routerLinkActive="active">Upload Reports</a>
+    <a routerLink="/admin-reports/history" routerLinkActive="active">View Uploaded Reports</a>
+  </nav>
+
+  <div class="section">
+    <div class="section-head">
+      <h3>Search customer</h3>
+    </div>
+    <form class="form form-reports-search" [formGroup]="searchForm" (ngSubmit)="search()">
+      <input placeholder="Member ID" formControlName="memberId" />
+      <input placeholder="Mobile number" formControlName="mobile" />
+      <input placeholder="Email" formControlName="email" />
+      <input placeholder="Customer name" formControlName="customerName" />
+      <button class="btn btn-primary" type="submit" [disabled]="searching()">
+        {{ searching() ? 'Searching…' : 'Search' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="section" *ngIf="results().length > 0">
+    <div class="section-head">
+      <h3>Search results</h3>
+      <div class="muted">{{ results().length }} found</div>
+    </div>
+    <div class="table">
+      <div class="row header row-customers">
+        <div>Name</div>
+        <div>Member ID</div>
+        <div>Email</div>
+        <div>Phone</div>
+        <div>Subscription</div>
+        <div>Actions</div>
+      </div>
+      <div class="row row-customers" *ngFor="let c of results()">
+        <div class="text-truncate" [title]="c.fullName">{{ c.fullName }}</div>
+        <div class="mono text-truncate" [title]="c.memberId">{{ c.memberId }}</div>
+        <div class="text-truncate" [title]="c.email">{{ c.email }}</div>
+        <div>{{ c.phone }}</div>
+        <div>
+          <span class="badge" [class.badge-ok]="c.hasActiveSubscription" [class.badge-danger]="!c.hasActiveSubscription">
+            {{ c.hasActiveSubscription ? (c.planName || 'Active') : 'Inactive' }}
+          </span>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="selectCustomer(c)"
+            [disabled]="!c.hasActiveSubscription">
+            Select
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-highlight" *ngIf="selected() as c">
+    <div class="section-head">
+      <h3>Upload report</h3>
+    </div>
+    <p class="muted" style="margin: 0 0 10px">
+      <strong>{{ c.fullName }}</strong> · Member ID {{ c.memberId }} · {{ c.planName || 'Active plan' }}
+    </p>
+    <div class="upload-actions">
+      <input type="file" accept=".zip,application/zip" (change)="onFileChange($event)" />
+      <button class="btn btn-primary" type="button" (click)="upload()" [disabled]="uploading() || !selectedFile()">
+        {{ uploading() ? 'Uploading…' : 'Upload ZIP' }}
+      </button>
+    </div>
+  </div>
+</div>

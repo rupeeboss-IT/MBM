@@ -6,6 +6,8 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
 import { ToastService } from '../../core/services/toast.service';
+import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
+import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 
 @Component({
   selector: 'app-login',
@@ -43,11 +45,11 @@ export class Login {
           password: this.form.controls.password.value,
         })
       );
-      if (!res?.success || !res.userId) {
+      if (!res?.success || !res.userId || !res.token) {
         this.toast.error(res?.message || 'Login failed.');
         return;
       }
-      this.session.setUserId(res.userId);
+      this.session.setSession(res.userId, res.token, res.role);
       this.toast.success('Login successful.');
 
       // If user came here from a plan selection on /membership, send them back so checkout opens.
@@ -57,13 +59,8 @@ export class Login {
       } else {
         this.router.navigateByUrl('/profile');
       }
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Login failed.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.login));
     } finally {
       this.submitting.set(false);
     }

@@ -8,6 +8,21 @@ namespace RB_Website_API.Auth;
 public interface IEmailSender
 {
     Task SendAsync(string toEmail, string subject, string body, CancellationToken ct);
+
+    Task SendAsync(
+        string toEmail,
+        string subject,
+        string body,
+        bool isHtml,
+        IReadOnlyList<EmailAttachment>? attachments,
+        CancellationToken ct,
+        string? fromEmail = null,
+        string? fromDisplayName = null,
+        string? replyToEmail = null,
+        string? smtpHost = null,
+        int? smtpPort = null,
+        string? smtpUsername = null,
+        string? smtpPassword = null);
 }
 
 public interface ISmsSender
@@ -26,38 +41,74 @@ public sealed class SmtpEmailSender : IEmailSender
         _logger = logger;
     }
 
-    public async Task SendAsync(string toEmail, string subject, string body, CancellationToken ct)
+    public Task SendAsync(string toEmail, string subject, string body, CancellationToken ct)
+        => SendAsync(toEmail, subject, body, isHtml: false, attachments: null, ct);
+
+    public async Task SendAsync(
+        string toEmail,
+        string subject,
+        string body,
+        bool isHtml,
+        IReadOnlyList<EmailAttachment>? attachments,
+        CancellationToken ct,
+        string? fromEmail = null,
+        string? fromDisplayName = null,
+        string? replyToEmail = null,
+        string? smtpHost = null,
+        int? smtpPort = null,
+        string? smtpUsername = null,
+        string? smtpPassword = null)
     {
-        if (string.IsNullOrWhiteSpace(_settings.Host))
+        var host = string.IsNullOrWhiteSpace(smtpHost) ? _settings.Host : smtpHost.Trim();
+        var port = smtpPort ?? _settings.Port;
+
+        if (string.IsNullOrWhiteSpace(host))
         {
-            _logger.LogWarning("EmailSettings.Host is not set; email not sent to {To}", toEmail);
-            throw new InvalidOperationException("Email is not configured (missing EmailSettings:Host).");
+            _logger.LogWarning("SMTP host is not set; email not sent to {To}", toEmail);
+            throw new InvalidOperationException("Email is not configured (missing EmailSettings:Host or contact SMTP host).");
         }
 
-        var fromAddress = string.IsNullOrWhiteSpace(_settings.From)
-            ? _settings.Username
-            : _settings.From;
+        var fromAddress = string.IsNullOrWhiteSpace(fromEmail)
+            ? (string.IsNullOrWhiteSpace(_settings.From) ? _settings.Username : _settings.From)
+            : fromEmail.Trim();
         if (string.IsNullOrWhiteSpace(fromAddress))
             throw new InvalidOperationException("Email is not configured (missing EmailSettings:From or Username).");
 
-        var user = string.IsNullOrWhiteSpace(_settings.Username) ? fromAddress : _settings.Username;
+        var user = string.IsNullOrWhiteSpace(smtpUsername) ? _settings.Username : smtpUsername.Trim();
+        if (string.IsNullOrWhiteSpace(user))
+            user = fromAddress;
+
+        var password = string.IsNullOrWhiteSpace(smtpPassword) ? _settings.Password : smtpPassword;
+        var displayName = fromDisplayName ?? _settings.FromDisplayName;
 
         using var message = new MailMessage
         {
-            From = string.IsNullOrEmpty(_settings.FromDisplayName)
+            From = string.IsNullOrEmpty(displayName)
                 ? new MailAddress(fromAddress)
-                : new MailAddress(fromAddress, _settings.FromDisplayName),
+                : new MailAddress(fromAddress, displayName),
             Subject = subject,
             Body = body,
-            IsBodyHtml = false,
+            IsBodyHtml = isHtml,
         };
         message.To.Add(toEmail);
 
-        using var client = new SmtpClient(_settings.Host, _settings.Port)
+        if (!string.IsNullOrWhiteSpace(replyToEmail))
+            message.ReplyToList.Add(new MailAddress(replyToEmail.Trim()));
+
+        if (attachments is not null)
+        {
+            foreach (var att in attachments)
+            {
+                var stream = new MemoryStream(att.Content);
+                message.Attachments.Add(new Attachment(stream, att.FileName, att.ContentType));
+            }
+        }
+
+        using var client = new SmtpClient(host, port)
         {
             EnableSsl = true,
             UseDefaultCredentials = false,
-            Credentials = new NetworkCredential(user, _settings.Password),
+            Credentials = new NetworkCredential(user, password),
             DeliveryMethod = SmtpDeliveryMethod.Network,
             Timeout = 30000,
         };
@@ -68,7 +119,7 @@ public sealed class SmtpEmailSender : IEmailSender
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "SMTP send failed to {To} via {Host}:{Port}", toEmail, _settings.Host, _settings.Port);
+            _logger.LogError(ex, "SMTP send failed to {To} via {Host}:{Port}", toEmail, host, port);
             throw;
         }
     }
@@ -77,8 +128,25 @@ public sealed class SmtpEmailSender : IEmailSender
 public sealed class ConsoleEmailSender : IEmailSender
 {
     public Task SendAsync(string toEmail, string subject, string body, CancellationToken ct)
+        => SendAsync(toEmail, subject, body, isHtml: false, attachments: null, ct);
+
+    public Task SendAsync(
+        string toEmail,
+        string subject,
+        string body,
+        bool isHtml,
+        IReadOnlyList<EmailAttachment>? attachments,
+        CancellationToken ct,
+        string? fromEmail = null,
+        string? fromDisplayName = null,
+        string? replyToEmail = null,
+        string? smtpHost = null,
+        int? smtpPort = null,
+        string? smtpUsername = null,
+        string? smtpPassword = null)
     {
-        Console.WriteLine($"[EMAIL] To={toEmail} Subject={subject} Body={body}");
+        var attCount = attachments?.Count ?? 0;
+        Console.WriteLine($"[EMAIL] SMTP={smtpHost ?? "(default)"} From={fromEmail ?? "(default)"} ReplyTo={replyToEmail ?? "-"} To={toEmail} Subject={subject} Html={isHtml} Attachments={attCount}");
         return Task.CompletedTask;
     }
 }

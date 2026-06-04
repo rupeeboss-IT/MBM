@@ -1,0 +1,75 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <h2>Reports Management</h2>
+      <div class="muted">View upload history, download counts, and search by customer.</div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" href="/home">Go to Website</a>
+      <a class="btn btn-outline" routerLink="/admin-dashboard">← Dashboard</a>
+      <button class="btn btn-outline" type="button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <nav class="admin-subnav">
+    <a routerLink="/admin-reports/upload" routerLinkActive="active">Upload Reports</a>
+    <a routerLink="/admin-reports/history" routerLinkActive="active">View Uploaded Reports</a>
+  </nav>
+
+  <div class="section">
+    <div class="section-head">
+      <h3>Report history</h3>
+      <div class="section-tools">
+        <input
+          class="table-search"
+          type="search"
+          [value]="search()"
+          (input)="onSearchInput($event)"
+          (keyup.enter)="runSearch()"
+          placeholder="Customer name, Member ID, or email…"
+        />
+        <button type="button" class="btn btn-primary" (click)="runSearch()" [disabled]="loading()">Search</button>
+      </div>
+    </div>
+
+    <div class="muted" *ngIf="loading()">Loading…</div>
+
+    <div class="table" *ngIf="!loading() && items().length > 0">
+      <div class="row header row-history">
+        <div>Customer</div>
+        <div>Member ID</div>
+        <div>Upload date</div>
+        <div>Downloads</div>
+        <div>Last download</div>
+        <div>File</div>
+      </div>
+      <div class="row row-history" *ngFor="let r of items()">
+        <div class="text-truncate" [title]="r.customerName">{{ r.customerName }}</div>
+        <div class="mono text-truncate" [title]="r.memberId">{{ r.memberId }}</div>
+        <div>{{ r.uploadDate | date:'dd-MMM-yyyy HH:mm' }}</div>
+        <div>{{ r.downloadCount }}</div>
+        <div>{{ r.lastDownloadDate ? (r.lastDownloadDate | date:'dd-MMM-yyyy HH:mm') : '—' }}</div>
+        <div class="file-meta">
+          <div class="text-truncate" [title]="r.originalFileName">{{ r.originalFileName }}</div>
+          <div class="muted">{{ formatSize(r.fileSize) }} · {{ r.planName || '—' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="muted" *ngIf="!loading() && items().length === 0">No reports found.</div>
+
+    <div class="pager" *ngIf="totalCount() > pageSize">
+      <button type="button" class="btn btn-outline" (click)="prevPage()" [disabled]="page() <= 1 || loading()">
+        Previous
+      </button>
+      <span class="muted">Page {{ page() }} · {{ totalCount() }} total</span>
+      <button
+        type="button"
+        class="btn btn-outline"
+        (click)="nextPage()"
+        [disabled]="loading() || page() * pageSize >= totalCount()">
+        Next
+      </button>
+    </div>
+  </div>
+</div>

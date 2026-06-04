@@ -15,6 +15,7 @@
         <span><strong>Tip:</strong> Click on any underlined feature in the plan cards to learn exactly what that
           offering includes.</span>
       </div>
+
       <div class="plans-grid">
         <div class="plan-card">
           <div class="plan-icon">🌱</div>
@@ -42,7 +43,7 @@
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
           </ul><button class="btn-primary" style="width:100%" type="button"
-            (click)="choosePlan('basic')" [disabled]="busyPlan() === 'basic'">
+            (click)="choosePlan('basic')" [disabled]="busyPlan() === 'basic' || referralModalOpen() || checkingPlan()">
             {{ busyPlan() === 'basic' ? 'Processing…' : 'Get MSME Basic' }}
           </button>
         </div>
@@ -78,7 +79,7 @@
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
           </ul><button class="btn-outline" style="width:100%" type="button"
-            (click)="choosePlan('standard')" [disabled]="busyPlan() === 'standard'">
+            (click)="choosePlan('standard')" [disabled]="busyPlan() === 'standard' || referralModalOpen() || checkingPlan()">
             {{ busyPlan() === 'standard' ? 'Processing…' : 'Get MSME Standard' }}
           </button>
         </div>
@@ -96,14 +97,17 @@
                 [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery
                   report</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
-                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
                   Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
+                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
                   Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
@@ -117,11 +121,8 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">₹15 Lakh Insurance
                   Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
           </ul><button class="btn-primary" style="width:100%" type="button"
-            (click)="choosePlan('premium')" [disabled]="busyPlan() === 'premium'">
+            (click)="choosePlan('premium')" [disabled]="busyPlan() === 'premium' || referralModalOpen() || checkingPlan()">
             {{ busyPlan() === 'premium' ? 'Processing…' : 'Get MSME Premium' }}
           </button>
         </div>
@@ -134,20 +135,23 @@
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
                   class="pfl-text">Infomerics business assessment report</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal Registration &amp;
-                  Support</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme Discovery
                   report</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
-                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
+                [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal Registration &amp;
+                  Support</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
                   Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
+                  class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
+            <li><span class="tick">✓</span><a class="plan-feature-link"
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
+                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
                   Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
@@ -161,11 +165,8 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">₹15 Lakh Insurance
                   Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
           </ul><button class="btn-navy" style="width:100%" type="button"
-            (click)="choosePlan('pro')" [disabled]="busyPlan() === 'pro'">
+            (click)="choosePlan('pro')" [disabled]="busyPlan() === 'pro' || referralModalOpen() || checkingPlan()">
             {{ busyPlan() === 'pro' ? 'Processing…' : 'Get MSME Pro' }}
           </button>
         </div>
@@ -225,173 +226,27 @@
         <p>Click any offering card to read the full details — what it is, how it works, and what you get</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem" id="offerings-explorer-grid">
-        <div class="offering-explorer-card" [routerLink]="['/offering','whatsapp-platform']"
+        <div
+          class="offering-explorer-card"
+          *ngFor="let card of offeringExplorerCards"
+          [routerLink]="['/offering', card.slug]"
           style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
           onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
+          onmouseout="this.style.boxShadow='';this.style.transform=''"
+        >
           <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            💬</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">WhatsApp Platform</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Run WhatsApp campaigns, automate replies,
-            capture leads</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All
-              Plans</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','basic-website']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0f3460,#1a56db);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🌐</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Website Development</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Business/Portfolio/E-commerce site + hosting +
-            qobo.dev subdomain</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All
-              Plans</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','credit-report']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e63946,#c1121f);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            📊</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Free Credit Report</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">CIBIL score + full credit history + monthly
-            updates</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#e8f5e9;color:#2d6a4f;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">All
-              Plans</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','practo-insurance']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2d6a4f,#52b788);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🛡️</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Practo Health Plan</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Family health cover + accident protection +
-            hospital cash</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#e3f2fd;color:#1565c0;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Basic
-              & Standard</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','trust-score']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#7b1fa2,#4a148c);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            ⭐</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Infomerics Trust Score</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">SEBI-registered business verification report —
-            build credibility</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','scheme-discovery']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2d6a4f,#1b4332);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🏛️</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Scheme Discovery Report</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Personalized govt schemes list based on your
-            Udyam profile</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','bank-statement-analyzer']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1a56db,#0f3460);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🏦</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Bank Statement Analyzer</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Automated cash flow analysis + loan eligibility
-            report</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','relationship-manager']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#4c1d95);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            👔</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Free Relationship Manager</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Dedicated financial expert — single point of
-            contact, free</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','loan-audit']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e65100,#bf360c);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🔍</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Free Loan Audit</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Reduce EMIs, save on interest, restructure
-            existing loans</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','insurance-audit']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#0277bd,#01579b);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🛡️</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">Free Insurance Audit</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Optimize premiums, fix coverage gaps, eliminate
-            duplicates</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','msme-events']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#e63946,#c1121f);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🎟️</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">MSME Events Access</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Summits, trade fairs, workshops — meet buyers
-            and investors</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#fff3e0;color:#e65100;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Premium
-              & Pro</span></div>
-        </div>
-        <div class="offering-explorer-card" [routerLink]="['/offering','gem-registration']"
-          style="background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:.6rem"
-          onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)';this.style.transform='translateY(-3px)'"
-          onmouseout="this.style.boxShadow='';this.style.transform=''">
-          <div
-            style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1565c0,#0d47a1);display:flex;align-items:center;justify-content:center;font-size:1.5rem">
-            🏛️</div>
-          <strong style="color:#1a1a2e;font-size:.92rem">GeM Portal Registration</strong>
-          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">Sell to government buyers — 25% MSME quota, no
-            EMD</p>
-          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto"><span
-              style="background:#ede7f6;color:#4a148c;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px">Pro
-              Only</span></div>
+            style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem"
+            [style.background]="card.iconBg"
+          >{{ card.icon }}</div>
+          <strong style="color:#1a1a2e;font-size:.92rem">{{ card.title }}</strong>
+          <p style="font-size:.8rem;color:#888;line-height:1.5;margin:0">{{ card.description }}</p>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:auto">
+            <span
+              style="font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px"
+              [style.background]="card.badgeBg"
+              [style.color]="card.badgeColor"
+            >{{ card.badge }}</span>
+          </div>
         </div>
       </div>
       <style>
@@ -409,4 +264,97 @@
       </style>
     </div>
   </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container" style="max-width:720px;margin:0 auto">
+      <h3 style="margin-bottom:.75rem">Billing &amp; cancellation</h3>
+      <ul style="color:#555;font-size:.92rem;line-height:1.6;padding-left:1.2rem">
+        <li>One payment = <strong>12 months</strong> membership (GST-inclusive amount shown at Razorpay checkout).</li>
+        <li><strong>Manual renewal</strong> — you are not auto-charged; renew from this page before your plan ends.</li>
+        <li><strong>Cancel renewal</strong> (from My Plan) keeps access until your end date; no mid-term refund.</li>
+        <li><strong>Upgrades</strong> take effect immediately when you pay for a higher plan.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Referral code popup (before Razorpay) -->
+  <div
+    class="modal-overlay referral-modal-overlay"
+    [class.open]="referralModalOpen()"
+    (click)="closeReferralModal()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="referral-modal-title">
+    <div class="modal-box referral-modal-box" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="modal-close"
+        (click)="$event.stopPropagation(); closeReferralModal()"
+        aria-label="Close">&times;</button>
+      <h2 id="referral-modal-title">Referral code</h2>
+      <p class="sub">Optional — have a referral code? Enter it below or skip to continue to payment.</p>
+
+      <label class="referral-modal-label" for="referral-code-input">Referral code</label>
+      <div
+        class="referral-input-wrap"
+        [class.referral-input-wrap--valid]="referralValidationState() === 'valid'"
+        [class.referral-input-wrap--invalid]="referralValidationState() === 'invalid'"
+        [class.referral-input-wrap--validating]="referralValidationState() === 'validating'">
+        <input
+          id="referral-code-input"
+          type="text"
+          class="referral-modal-input"
+          [ngModel]="referralCodeInput()"
+          (ngModelChange)="onReferralModelChange($event)"
+          placeholder="Enter referral code"
+          maxlength="50"
+          autocomplete="off" />
+        <span
+          class="referral-input-status referral-input-status--loading"
+          *ngIf="referralValidationState() === 'validating'"
+          aria-hidden="true"></span>
+        <span
+          class="referral-input-status referral-input-status--valid"
+          *ngIf="referralValidationState() === 'valid'"
+          aria-label="Valid referral code">✓</span>
+        <span
+          class="referral-input-status referral-input-status--invalid"
+          *ngIf="referralValidationState() === 'invalid'"
+          aria-label="Invalid referral code">✕</span>
+      </div>
+
+      <p class="referral-modal-employee" *ngIf="referralValidationState() === 'valid' && referredByName()">
+        Referred by: <strong>{{ referredByName() }}</strong>
+      </p>
+      <p class="referral-modal-error" *ngIf="referralValidationState() === 'invalid'">
+        {{ referralInvalidMessage }}
+      </p>
+
+      <div class="referral-modal-actions">
+        <button
+          type="button"
+          class="btn-outline referral-btn-apply"
+          *ngIf="referralValidationState() !== 'valid'"
+          (click)="applyReferral()"
+          [disabled]="referralValidationState() === 'validating' || !referralCodeInput().trim()">
+          {{ referralValidationState() === 'validating' ? 'Checking…' : 'Apply Referral' }}
+        </button>
+        <button
+          type="button"
+          class="btn-primary referral-btn-continue"
+          *ngIf="referralValidationState() === 'valid'"
+          (click)="continueFromReferral()">
+          Continue
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="referral-skip-link"
+        (click)="skipReferral()"
+        [disabled]="referralValidationState() === 'validating'">
+        Skip Referral
+      </button>
+    </div>
+  </div>
 </div><!-- /membership -->

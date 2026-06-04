@@ -356,3 +356,65 @@
   .profile-card--support-mobile{ display: block; width: 100%; }
 }
 
+.invoice-table{
+  margin-top: .85rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.invoice-row{
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 0.9fr 1.3fr auto;
+  gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid #f3f4f6;
+  align-items: center;
+  font-size: .88rem;
+}
+
+.invoice-row--head{
+  background: #f9fafb;
+  font-weight: 800;
+  border-top: none;
+}
+
+.invoice-num{
+  font-size: .78rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.btn-sm{
+  padding: 6px 10px;
+  font-size: .82rem;
+}
+
+@media (max-width: 720px){
+  .invoice-row{
+    grid-template-columns: 1fr;
+  }
+}
+
+.report-row{
+  grid-template-columns: 1.4fr 1fr 1fr 0.8fr auto;
+}
+
+.profile-card--shortcut{
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.profile-card--shortcut:hover{
+  border-color: var(--red);
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}
+
+.shortcut-value{
+  margin-top: .85rem;
+  font-weight: 950;
+  color: var(--navy);
+  font-size: 1.15rem;
+}

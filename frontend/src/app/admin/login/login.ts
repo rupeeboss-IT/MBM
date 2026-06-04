@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
+import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 
 @Component({
   selector: 'app-login',
@@ -50,13 +51,8 @@ export class Login {
       this.session.setSession(res.userId, res.token, res.role ?? 'admin');
       this.toast.success('Admin login successful.');
       this.router.navigateByUrl('/admin-dashboard');
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Admin login failed.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, 'Unable to sign in. Please verify your credentials.'));
     } finally {
       this.submitting.set(false);
     }

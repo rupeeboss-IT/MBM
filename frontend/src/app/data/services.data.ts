@@ -28,15 +28,15 @@ export interface ServiceModel {
 export const SERVICES_DATA: Record<ServiceSlug, ServiceModel> = {
   'msme-loans-finance': {
     title: 'MSME Loans & Finance',
-    subtitle: 'Business loans from ₹1 Lakh to ₹1000 Crore via 100+ Banks & NBFCs',
-    emoji: '💰',
+    subtitle: 'Business loans from ₹10 Lakh to ₹10 Crore via 100+ Banks & NBFCs',
+    emoji: '🪙',
     cat: 'Finance',
     benefits: [
-      'Business Loan up to ₹500 Crore',
+      'Business Loan up to ₹10 Crore',
       'Working Capital Loan',
       'Machinery & Equipment Finance',
       'Unsecured Business Loans',
-      'NPA Revival & Credit Rectification',
+      'Credit Rectification',
       'Project Finance up to ₹1000 Crore',
       'Letter of Credit & Bank Guarantee',
       'Overdraft Facility'
@@ -45,7 +45,7 @@ export const SERVICES_DATA: Record<ServiceSlug, ServiceModel> = {
       '🏭 Manufacturers',
       '🛒 Traders',
       '💼 Service Providers',
-      '👩‍💼 Women MSMEs',
+      '👩‍💼 Professionals',
       '🌾 Agri-based MSMEs',
       '🏗️ Real Estate MSMEs'
     ],
@@ -168,7 +168,7 @@ export const SERVICES_DATA: Record<ServiceSlug, ServiceModel> = {
       'Succession Planning',
       'Board Advisory Services'
     ],
-    targets: ['👔 MSME Owners', '👩‍💼 Women Entrepreneurs', '🆕 First-Time Founders', '📈 Scaling Businesses'],
+    targets: ['👔 MSME Owners', '👩‍💼 Professionals', '🆕 First-Time Founders', '📈 Scaling Businesses'],
     process:
       'Our expert coaches and consultants work closely with MSME owners and teams through structured programs, workshops and one-on-one sessions tailored to your specific business challenges and growth objectives.',
     related: ['ipo-investment-banking', 'technology-solutions', 'hr-recruitment']

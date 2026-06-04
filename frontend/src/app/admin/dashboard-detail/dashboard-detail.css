@@ -1,0 +1,39 @@
+@import '../admin-shared.css';
+
+.detail-search {
+  margin-bottom: 16px;
+}
+
+.row-users,
+.row-members {
+  grid-template-columns: 1.2fr 1.4fr 0.9fr 0.8fr 0.7fr 1fr;
+}
+
+.row-plans {
+  grid-template-columns: 0.8fr 1.4fr 1fr 0.8fr 0.7fr;
+}
+
+.row-orders,
+.row-payments {
+  grid-template-columns: 1.1fr 1.3fr 1.2fr 0.9fr 0.8fr 1.1fr;
+}
+
+.row-subs {
+  grid-template-columns: 1.1fr 1.2fr 0.9fr 1.1fr 0.9fr 0.9fr 0.8fr 0.7fr;
+}
+
+.row-content {
+  grid-template-columns: 1.2fr 1.4fr 0.7fr 0.9fr 0.9fr auto;
+}
+
+@media (max-width: 900px) {
+  .row-users,
+  .row-members,
+  .row-plans,
+  .row-orders,
+  .row-payments,
+  .row-subs,
+  .row-content {
+    grid-template-columns: 1fr;
+  }
+}

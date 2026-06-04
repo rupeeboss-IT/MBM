@@ -1,20 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
+import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
+import { getHttpErrorMessage } from '../../core/utils/http-error-message';
+import { CONTENT_COUNTS } from '../../data/content-counts';
 
 type DashboardCounts = {
   success: boolean;
   message?: string;
   users: number;
+  members: number;
   plans: number;
   paymentOrders: number;
   payments: number;
   userPlans: number;
+  activeSubscriptions: number;
+  expiringSoon: number;
+  expiredSubscriptions: number;
   blogs: number;
   events: number;
   schemes: number;
@@ -55,7 +62,7 @@ type MembersRes = {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css'],
 })
@@ -107,8 +114,13 @@ export class AdminDashboard {
   async refresh() {
     try {
       this.loading.set(true);
-      const counts = (await firstValueFrom(this.auth.adminDashboardCounts())) as any;
-      this.counts.set(counts as DashboardCounts);
+      const counts = (await firstValueFrom(this.auth.adminDashboardCounts())) as DashboardCounts;
+      this.counts.set({
+        ...counts,
+        blogs: CONTENT_COUNTS.blogs,
+        events: CONTENT_COUNTS.events,
+        schemes: CONTENT_COUNTS.schemes,
+      });
 
       if (this.session.isSuperAdmin()) {
         const users = (await firstValueFrom(this.auth.adminListUsers('admin'))) as any;
@@ -119,16 +131,16 @@ export class AdminDashboard {
 
       const members = (await firstValueFrom(this.auth.adminListMembers())) as any;
       this.members.set(((members as MembersRes).users ?? []) as any);
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Failed to load dashboard.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.dashboard));
     } finally {
       this.loading.set(false);
     }
+  }
+
+  openDetail(category: string, query?: Record<string, string>) {
+    const extras = query ? { queryParams: query } : undefined;
+    void this.router.navigate(['/admin-dashboard/detail', category], extras);
   }
 
   logout() {
@@ -160,13 +172,8 @@ export class AdminDashboard {
       this.toast.success('Admin user created.');
       this.createForm.reset();
       await this.refresh();
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Could not create admin user.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.save));
     } finally {
       this.loading.set(false);
     }
@@ -183,13 +190,8 @@ export class AdminDashboard {
       }
       this.toast.success('User deleted.');
       await this.refresh();
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Could not delete user.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.delete));
     } finally {
       this.loading.set(false);
     }
@@ -206,13 +208,8 @@ export class AdminDashboard {
       }
       this.toast.success(!u.isActive ? 'Admin activated.' : 'Admin deactivated.');
       await this.refresh();
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Could not update status.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.save));
     } finally {
       this.loading.set(false);
     }
@@ -238,13 +235,8 @@ export class AdminDashboard {
       }
       this.toast.success(!u.isActive ? 'Member activated.' : 'Member deactivated.');
       await this.refresh();
-    } catch (e: any) {
-      const msg =
-        (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
-        e?.message ||
-        'Could not update member status.';
-      this.toast.error(msg);
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.save));
     } finally {
       this.loading.set(false);
     }

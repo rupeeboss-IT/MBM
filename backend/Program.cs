@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RB_Website_API.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,12 +14,55 @@ builder.Services.AddControllers().AddJsonOptions(o =>
     o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var bad = new BadRequestObjectResult(new
+        {
+            success = false,
+            message = "Please check your input and try again.",
+        });
+        return bad;
+    };
+});
+
+builder.Services.AddExceptionHandler<GlobalApiExceptionHandler>();
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = ctx =>
+    {
+        if (!ctx.HttpContext.Request.Path.StartsWithSegments("/api")) return;
+        ctx.ProblemDetails.Title = null;
+        ctx.ProblemDetails.Detail = null;
+        ctx.ProblemDetails.Extensions.Clear();
+        ctx.ProblemDetails.Type = null;
+        ctx.ProblemDetails.Instance = null;
+    };
+});
+
+builder.Services.AddSingleton<RB_Website_API.Services.IApiExceptionLogService, RB_Website_API.Services.ApiExceptionLogService>();
+
 builder.Services.AddDbContext<RB_Website_API.Data.AppDbContext>(options =>
 {
     var cs = builder.Configuration.GetConnectionString("ConnectionString")
              ?? builder.Configuration["ConnectionStrings:ConnectionString"];
     if (string.IsNullOrWhiteSpace(cs))
         throw new InvalidOperationException("Missing ConnectionStrings:ConnectionString in configuration.");
+    options.UseSqlServer(cs);
+});
+
+builder.Services.AddDbContext<RB_Website_API.Data.ReferralDbContext>(options =>
+{
+    // Prefer ConnectionStrings:ReferralDb, fallback to ConnectionStrings:rbConnectionString if present.
+    var cs = builder.Configuration.GetConnectionString("ReferralDb")
+             ?? builder.Configuration["ConnectionStrings:ReferralDb"]
+             ?? builder.Configuration.GetConnectionString("rbConnectionString")
+             ?? builder.Configuration["ConnectionStrings:rbConnectionString"];
+
+    if (string.IsNullOrWhiteSpace(cs))
+        throw new InvalidOperationException("Missing ConnectionStrings:ReferralDb in configuration.");
+
     options.UseSqlServer(cs);
 });
 
@@ -56,8 +101,27 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminAccess", policy => policy.RequireRole("admin", "superadmin"));
     options.AddPolicy("SuperAdminOnly", policy => policy.RequireRole("superadmin"));
+    options.AddPolicy("MemberAccess", policy => policy.RequireRole("member", "partner"));
 });
 
+builder.Services.AddScoped<RB_Website_API.Services.PaymentActivationService>();
+builder.Services.AddScoped<RB_Website_API.Services.MembershipEmailService>();
+builder.Services.AddScoped<RB_Website_API.Services.InvoicePdfService>();
+builder.Services.Configure<RB_Website_API.Auth.InvoiceSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.InvoiceSettings.SectionName));
+builder.Services.Configure<RB_Website_API.Auth.CustomerReportSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.CustomerReportSettings.SectionName));
+builder.Services.Configure<RB_Website_API.Auth.ContactSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.ContactSettings.SectionName));
+builder.Services.AddHostedService<RB_Website_API.Auth.UserPlanSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.ReferralSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.CustomerReportSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.ApiExceptionLogSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.MemberIdSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.LoanApplicationSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.ContactSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionExpiryHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionReminderHostedService>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendDev", policy =>
@@ -78,6 +142,8 @@ builder.Services.Configure<RB_Website_API.Auth.SmsSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.SmsSettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.RazorpaySettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.RazorpaySettings.SectionName));
+builder.Services.Configure<RB_Website_API.Auth.ReferralSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.ReferralSettings.SectionName));
 builder.Services.AddHttpClient(
     RB_Website_API.Auth.HttpSmsSender.HttpClientName,
     client => client.Timeout = TimeSpan.FromSeconds(30));
@@ -90,6 +156,20 @@ builder.Services.AddSingleton<RB_Website_API.Auth.IOtpService, RB_Website_API.Au
 builder.Services.AddSingleton<RB_Website_API.Auth.IPasswordResetService, RB_Website_API.Auth.InMemoryPasswordResetService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IEmailSender, RB_Website_API.Auth.SmtpEmailSender>();
 builder.Services.AddSingleton<RB_Website_API.Auth.ISmsSender, RB_Website_API.Auth.HttpSmsSender>();
+
+builder.Services.AddScoped<RB_Website_API.Referrals.Services.IEmployeeValidationService, RB_Website_API.Referrals.Services.EmployeeValidationService>();
+builder.Services.AddScoped<RB_Website_API.Services.IReferralService, RB_Website_API.Services.ReferralService>();
+builder.Services.AddScoped<RB_Website_API.Services.ILeadPushService, RB_Website_API.Services.LeadPushService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.ICustomerReportRepository, RB_Website_API.Services.Repository.CustomerReportRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IReportAuditRepository, RB_Website_API.Services.Repository.ReportAuditRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.ICustomerReportService, RB_Website_API.Services.CustomerReportService>();
+builder.Services.AddScoped<RB_Website_API.Services.IReportAuditService, RB_Website_API.Services.ReportAuditService>();
+builder.Services.AddScoped<RB_Website_API.Services.IReportEmailService, RB_Website_API.Services.ReportEmailService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IMemberIdSequenceRepository, RB_Website_API.Services.Repository.MemberIdSequenceRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IMemberIdGeneratorService, RB_Website_API.Services.MemberIdGeneratorService>();
+builder.Services.AddScoped<RB_Website_API.Services.ILoanApplicationService, RB_Website_API.Services.LoanApplicationService>();
+builder.Services.AddScoped<RB_Website_API.Services.IContactEmailService, RB_Website_API.Services.ContactEmailService>();
+builder.Services.AddScoped<RB_Website_API.Services.IContactService, RB_Website_API.Services.ContactService>();
 
 var app = builder.Build();
 
@@ -106,6 +186,8 @@ app.UseCors("FrontendDev");
 // port and can break POST bodies / proxy handling for /api calls.
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();

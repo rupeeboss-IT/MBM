@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RB_Website_API.Auth;
+using RB_Website_API.Services;
 
 namespace RB_Website_API.Controllers;
 
@@ -27,12 +28,14 @@ public sealed class AuthController : ControllerBase
         }
         catch (OtpRateLimitExceededException ex)
         {
-            return StatusCode(StatusCodes.Status429TooManyRequests, new ApiOk(false, ex.Message));
+            _log.LogWarning(ex, "Email OTP rate limit for {Email}", req.Email);
+            return StatusCode(StatusCodes.Status429TooManyRequests,
+                new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "send_email_otp")));
         }
         catch (Exception ex)
         {
             _log.LogError(ex, "Send email OTP failed for {Email}", req.Email);
-            return BadRequest(new ApiOk(false, $"Could not send email: {ex.Message}"));
+            return BadRequest(new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "send_email_otp")));
         }
     }
 
@@ -46,9 +49,10 @@ public sealed class AuthController : ControllerBase
             await _otp.VerifyEmailOtpAsync(req.Email.Trim(), req.Code.Trim(), ct);
             return Ok(new ApiOk(true, "Email verified."));
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
-            return BadRequest(new ApiOk(false, ex.Message));
+            _log.LogWarning(ex, "Verify email OTP failed for {Email}", req.Email);
+            return BadRequest(new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "verify_email_otp")));
         }
     }
 
@@ -63,12 +67,14 @@ public sealed class AuthController : ControllerBase
         }
         catch (OtpRateLimitExceededException ex)
         {
-            return StatusCode(StatusCodes.Status429TooManyRequests, new ApiOk(false, ex.Message));
+            _log.LogWarning(ex, "SMS OTP rate limit for {Phone}", req.Phone);
+            return StatusCode(StatusCodes.Status429TooManyRequests,
+                new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "send_sms_otp")));
         }
         catch (Exception ex)
         {
             _log.LogError(ex, "Send SMS OTP failed for {Phone}", req.Phone);
-            return BadRequest(new ApiOk(false, $"Could not send SMS: {ex.Message}"));
+            return BadRequest(new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "send_sms_otp")));
         }
     }
 
@@ -82,10 +88,10 @@ public sealed class AuthController : ControllerBase
             await _otp.VerifySmsOtpAsync(req.Phone.Trim(), req.Code.Trim(), ct);
             return Ok(new ApiOk(true, "Mobile verified."));
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
-            return BadRequest(new ApiOk(false, ex.Message));
+            _log.LogWarning(ex, "Verify SMS OTP failed for {Phone}", req.Phone);
+            return BadRequest(new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "verify_sms_otp")));
         }
     }
 }
-

@@ -3,7 +3,11 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom, timeout } from 'rxjs';
 import { AuthSessionService } from '../../core/services/auth-session.service';
-import { PaymentService, type ActivePlan } from '../../core/services/payment.service';
+import {
+  PaymentService,
+  type ActivePlan,
+  type PaymentHistoryItem,
+} from '../../core/services/payment.service';
 import { ToastService } from '../../core/services/toast.service';
 
 type Benefit = { title: string; desc: string };
@@ -30,21 +34,26 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
   premium: [
     { title: 'Infomerics verified report', desc: 'Verified business verification / trust score report.' },
     { title: 'Scheme discovery report', desc: 'Personalized government scheme discovery.' },
-    { title: 'WhatsApp Business platform', desc: 'Advanced WhatsApp platform benefits.' },
     { title: 'Bank statement analyzer', desc: 'Analyzer for financial insights.' },
+    { title: 'Free credit report', desc: 'Credit visibility to support growth planning.' },
     { title: 'Website development', desc: 'Website support included.' },
+    { title: 'WhatsApp Business platform', desc: 'Advanced WhatsApp platform benefits.' },
     { title: 'Relationship manager', desc: 'Dedicated support (as per plan offering).' },
-    { title: 'Loan / insurance audit', desc: 'Audit support to optimize outcomes.' },
+    { title: 'Loan audit', desc: 'Audit support to optimize loan outcomes.' },
+    { title: 'Insurance audit', desc: 'Audit support to optimize insurance outcomes.' },
     { title: 'Events access', desc: 'MSME events access included.' },
   ],
   pro: [
     { title: 'Business assessment report', desc: 'Infomerics business assessment report.' },
-    { title: 'GeM portal registration', desc: 'Registration & support for GeM portal.' },
     { title: 'Scheme discovery report', desc: 'Personalized government scheme discovery.' },
-    { title: 'WhatsApp Business platform', desc: 'Advanced WhatsApp platform benefits.' },
+    { title: 'GeM portal registration', desc: 'Registration & support for GeM portal.' },
     { title: 'Bank statement analyzer', desc: 'Analyzer for financial insights.' },
+    { title: 'Free credit report', desc: 'Credit visibility to support growth planning.' },
+    { title: 'Website development', desc: 'Website support included.' },
+    { title: 'WhatsApp Business platform', desc: 'Advanced WhatsApp platform benefits.' },
     { title: 'Relationship manager', desc: 'Dedicated support (as per plan offering).' },
-    { title: 'Loan / insurance audit', desc: 'Audit support to optimize outcomes.' },
+    { title: 'Loan audit', desc: 'Audit support to optimize loan outcomes.' },
+    { title: 'Insurance audit', desc: 'Audit support to optimize insurance outcomes.' },
     { title: 'Events access', desc: 'More events access included.' },
   ],
 };
@@ -61,11 +70,11 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
             <div>
               <div class="plan-hero__badge">Membership</div>
               <h1 class="plan-hero__title">My Plan Details</h1>
-              <p class="plan-hero__sub">See your active plan and what you can avail.</p>
+              <p class="plan-hero__sub">See your active plan, renewal date, and payment history.</p>
             </div>
             <div class="plan-hero__actions">
               <a class="btn-outline" routerLink="/profile">Back to Profile</a>
-              <a class="btn-primary" routerLink="/membership">Upgrade / Change Plan</a>
+              <a class="btn-primary" routerLink="/membership">Upgrade / Renew</a>
             </div>
           </div>
         </div>
@@ -81,14 +90,41 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
             <ng-container *ngIf="plan() as p; else noPlan">
               <div class="pill">{{ p.planName }}</div>
               <div class="meta">
-                <div><span class="k">Status</span> <span class="v">{{ p.status }}</span></div>
-                <div><span class="k">Active from</span> <span class="v">{{ p.activeFrom | date:'dd MMM yyyy' }}</span></div>
-                <div *ngIf="p.activeTo"><span class="k">Active to</span> <span class="v">{{ p.activeTo | date:'dd MMM yyyy' }}</span></div>
+                <div class="d-flex" style="justify-content: space-between;">
+                  <span class="k">Status</span>
+                  <span class="v">{{ p.status }}</span>
+                </div><hr/>
+                <div class="d-flex" style="justify-content: space-between;">
+                  <span class="k">Active from</span>
+                  <span class="v">{{ p.activeFrom | date:'dd MMM yyyy' }}</span>
+                </div><hr/>
+                <div class="d-flex" style="justify-content: space-between;" *ngIf="p.activeTo">
+                  <span class="k">Active to</span>
+                  <span class="v">{{ p.activeTo | date:'dd MMM yyyy' }}</span>
+                </div><hr/>
+                <div class="d-flex" style="justify-content: space-between;" *ngIf="p.daysRemaining != null">
+                  <span class="k">Days remaining</span>
+                  <span class="v" [class.warn]="p.daysRemaining <= 30">{{ p.daysRemaining }} day(s)</span>
+                </div><hr/>
+              </div>
+
+              <div class="banner warn" *ngIf="p.daysRemaining != null && p.daysRemaining <= 30 && !p.cancelAtPeriodEnd">
+                Your plan expires soon. <a routerLink="/membership">Renew now</a> to avoid interruption.
+              </div>
+
+              <div class="banner muted" *ngIf="p.cancelAtPeriodEnd">
+                Renewal cancelled — you keep access until {{ p.activeTo | date:'dd MMM yyyy' }}. No refund for the remaining term.
+              </div>
+
+              <div class="actions" *ngIf="!p.cancelAtPeriodEnd">
+                <button class="btn-outline" type="button" (click)="cancelRenewal()" [disabled]="cancelling()">
+                  {{ cancelling() ? 'Cancelling…' : 'Cancel renewal' }}
+                </button>
               </div>
             </ng-container>
 
             <ng-template #noPlan>
-              <div class="muted">You don’t have an active plan right now.</div>
+              <div class="muted">You don't have an active plan right now.</div>
               <div style="margin-top:.85rem">
                 <a class="btn-primary" routerLink="/membership">Choose a plan</a>
               </div>
@@ -99,16 +135,45 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         <div class="card plan-card" *ngIf="!loading() && plan()">
           <div class="card__title">Benefits included</div>
           <div class="muted" style="margin-bottom:.8rem">Based on your current plan.</div>
-
           <div class="benefits">
             <div class="benefit" *ngFor="let b of benefits">
               <div class="benefit__title">{{ b.title }}</div>
               <div class="benefit__desc">{{ b.desc }}</div>
             </div>
           </div>
+        </div>
 
-          <div class="note">
-            For full offering details, visit <a routerLink="/membership">Pricing / Plans</a> and click “Learn more” links.
+        <div class="card plan-card policy-card">
+          <div class="card__title">How upgrades &amp; renewals work</div>
+          <ul class="policy-list">
+            <li><strong>Renewal (same plan):</strong> Your expiry date is extended by 12 months from the current end date.</li>
+            <li><strong>Upgrade (higher plan):</strong> Your old plan ends immediately; the new plan starts today for a fresh 12-month term. Full new plan price is charged — unused time on the old plan is not refunded.</li>
+            <li>After every payment you receive an email with your invoice and benefit list.</li>
+          </ul>
+        </div>
+
+        <div class="card plan-card policy-card">
+          <div class="card__title">Billing policy</div>
+          <ul class="policy-list">
+            <li>One payment = 12 months of membership (GST-inclusive amount at checkout).</li>
+            <li>Renewal is manual — you are not auto-charged unless we enable that in future.</li>
+            <li>Cancel renewal keeps access until your period end date; no mid-term refund.</li>
+            <li>Upgrades take effect immediately; your previous plan ends when the new one starts.</li>
+          </ul>
+        </div>
+
+        <div class="card plan-card policy-card" *ngIf="history().length > 0">
+          <div class="card__title">Payment history</div>
+          <div class="history-table">
+            <div class="history-row header">
+              <div>Plan</div><div>Amount</div><div>Status</div><div>Date</div>
+            </div>
+            <div class="history-row" *ngFor="let h of history()">
+              <div>{{ h.planName }}</div>
+              <div>{{ inr(h.amountPaise) }}</div>
+              <div>{{ h.paymentStatus || h.orderStatus }}</div>
+              <div>{{ (h.paidAt || h.createdAt) | date:'dd MMM yyyy' }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -122,53 +187,21 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
           radial-gradient(circle at 90% 20%, rgba(15,52,96,.06) 0%, transparent 45%),
           #fff;
       }
-
       .plan-hero{
         background: linear-gradient(135deg, var(--navy), var(--navy2));
         color:#fff;
         padding: 2.2rem 0 1.6rem;
       }
-
-      .plan-hero__row{
-        display:flex;
-        justify-content:space-between;
-        align-items:flex-end;
-        gap:1rem;
-      }
-
+      .plan-hero__row{ display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
       .plan-hero__badge{
-        display:inline-flex;
-        align-items:center;
-        background: rgba(255,255,255,.14);
-        border: 1px solid rgba(255,255,255,.22);
-        padding:.35rem .75rem;
-        border-radius:999px;
-        font-size:.72rem;
-        font-weight:900;
-        letter-spacing:.08em;
-        text-transform:uppercase;
-        margin-bottom:.8rem;
+        display:inline-flex; background: rgba(255,255,255,.14);
+        border: 1px solid rgba(255,255,255,.22); padding:.35rem .75rem;
+        border-radius:999px; font-size:.72rem; font-weight:900;
+        letter-spacing:.08em; text-transform:uppercase; margin-bottom:.8rem;
       }
-
-      .plan-hero__title{
-        font-size: 2.05rem;
-        line-height:1.1;
-        font-weight: 950;
-        margin-bottom: .55rem;
-      }
-
-      .plan-hero__sub{
-        color: rgba(255,255,255,.78);
-        max-width: 54ch;
-        font-size: 1rem;
-      }
-
-      .plan-hero__actions{
-        display:flex;
-        gap:.6rem;
-        flex-wrap:wrap;
-      }
-
+      .plan-hero__title{ font-size: 2.05rem; font-weight: 950; margin-bottom: .55rem; }
+      .plan-hero__sub{ color: rgba(255,255,255,.78); max-width: 54ch; }
+      .plan-hero__actions{ display:flex; gap:.6rem; flex-wrap:wrap; }
       .plan-shell{
         padding: 1.2rem 0 3rem;
         display:grid;
@@ -176,76 +209,49 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         gap: 1rem;
         align-items:start;
       }
-
       .plan-card{
-        background:#fff;
-        border:1px solid var(--border);
-        border-radius: 16px;
-        box-shadow: var(--shadow);
-        padding: 1.05rem 1.15rem;
+        background:#fff; border:1px solid var(--border); border-radius: 16px;
+        box-shadow: var(--shadow); padding: 1.05rem 1.15rem;
       }
-
+      .policy-card{ grid-column: 1 / -1; }
       .pill{
-        display:inline-block;
-        padding:.35rem .75rem;
-        border-radius:999px;
-        background: var(--green-light);
-        color: var(--green);
-        font-weight: 950;
+        display:inline-block; padding:.35rem .75rem; border-radius:999px;
+        background: var(--green-light); color: var(--green); font-weight: 950;
         margin:.2rem 0 .8rem 0;
       }
-
-      .meta{
-        display:grid;
-        gap:.35rem;
-      }
+      .meta{ display:grid; gap:.35rem; }
       .meta .k{ color: var(--muted); font-weight: 900; }
       .meta .v{ color: var(--navy); font-weight: 900; }
-
-      .benefits{
-        display:grid;
-        grid-template-columns: repeat(2, minmax(0,1fr));
-        gap: .8rem;
+      .meta .v.warn{ color: #b45309; }
+      .banner{
+        margin-top: .85rem; padding: .75rem .9rem; border-radius: 12px;
+        font-size: .9rem; font-weight: 600;
       }
-
+      .banner.warn{ background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; }
+      .banner.muted{ background: #f3f4f6; border: 1px solid #e5e7eb; color: #4b5563; }
+      .banner a{ color: var(--red); font-weight: 900; }
+      .actions{ margin-top: .85rem; }
+      .benefits{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .8rem; }
       .benefit{
-        border: 1px solid rgba(0,0,0,.10);
-        border-radius: 14px;
-        padding: .85rem .85rem;
-        background:#fff;
+        border: 1px solid rgba(0,0,0,.10); border-radius: 14px;
+        padding: .85rem; background:#fff;
       }
-
-      .benefit__title{
-        font-weight: 950;
-        color: var(--navy);
-        margin-bottom: .25rem;
+      .benefit__title{ font-weight: 950; color: var(--navy); margin-bottom: .25rem; }
+      .benefit__desc{ color: var(--muted); font-weight: 600; font-size: .92rem; }
+      .policy-list{ margin: 0; padding-left: 1.2rem; color: #555; font-weight: 600; font-size: .92rem; }
+      .policy-list li{ margin-bottom: .4rem; }
+      .history-table{ margin-top: .6rem; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+      .history-row{
+        display: grid; grid-template-columns: 1.2fr .8fr .8fr .9fr;
+        gap: 10px; padding: 10px 12px; border-top: 1px solid #f3f4f6; font-size: .9rem;
       }
-      .benefit__desc{
-        color: var(--muted);
-        font-weight: 600;
-        font-size: .92rem;
-      }
-
-      .note{
-        margin-top: 1rem;
-        padding: .85rem 1rem;
-        border-radius: 14px;
-        background: #f8f9fa;
-        border: 1px solid rgba(0,0,0,.06);
-        color: #555;
-        font-weight: 600;
-      }
-      .note a{ color: var(--red); font-weight: 900; }
-
+      .history-row.header{ background: #f9fafb; font-weight: 800; border-top: none; }
       @media (max-width: 980px){
         .plan-shell{ grid-template-columns: 1fr; }
-        .plan-hero__row{ align-items:flex-start; flex-direction:column; }
+        .plan-hero__row{ flex-direction: column; align-items:flex-start; }
       }
-
       @media (max-width: 720px){
-        .benefits{ grid-template-columns: 1fr; }
-        .plan-hero__title{ font-size: 1.7rem; }
-        .plan-hero{ padding: 1.75rem 0 1.35rem; }
+        .benefits, .history-row{ grid-template-columns: 1fr; }
       }
     `,
   ],
@@ -255,15 +261,15 @@ export class MyPlan {
   private readonly payments = inject(PaymentService);
   private readonly toast = inject(ToastService);
 
-  readonly userId = this.session.userId;
   readonly loading = signal(false);
+  readonly cancelling = signal(false);
   readonly plan = signal<ActivePlan | null>(null);
+  readonly history = signal<PaymentHistoryItem[]>([]);
 
   constructor() {
     effect(() => {
-      const id = this.userId();
-      if (!id) return;
-      void this.load(id);
+      if (!this.session.isLoggedIn()) return;
+      void this.load();
     });
   }
 
@@ -272,16 +278,48 @@ export class MyPlan {
     return PLAN_BENEFITS[code] ?? [];
   }
 
-  private async load(userId: string) {
+  inr(paise: number): string {
+    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(
+      (paise ?? 0) / 100
+    );
+  }
+
+  async cancelRenewal() {
+    if (!confirm('Cancel renewal? You will keep access until your plan end date. No refund is issued.')) return;
     try {
-      this.loading.set(true);
-      const res = await firstValueFrom(this.payments.myPlan(userId).pipe(timeout(15000)));
-      this.plan.set(res?.plan ?? null);
+      this.cancelling.set(true);
+      const res = await firstValueFrom(this.payments.cancelSubscription().pipe(timeout(15000)));
+      if (res?.success) {
+        this.toast.success(res.message || 'Renewal cancelled.');
+        await this.load();
+      } else {
+        this.toast.error(res?.message || 'Could not cancel renewal.');
+      }
     } catch (e: any) {
-      this.plan.set(null);
       const msg =
         (e?.error?.message as string | undefined) ||
-        (typeof e?.error === 'string' ? e.error : undefined) ||
+        e?.message ||
+        'Could not cancel renewal.';
+      this.toast.error(msg);
+    } finally {
+      this.cancelling.set(false);
+    }
+  }
+
+  private async load() {
+    try {
+      this.loading.set(true);
+      const [planRes, histRes] = await Promise.all([
+        firstValueFrom(this.payments.myPlan().pipe(timeout(15000))),
+        firstValueFrom(this.payments.paymentHistory().pipe(timeout(15000))),
+      ]);
+      this.plan.set(planRes?.plan ?? null);
+      this.history.set(histRes?.items ?? []);
+    } catch (e: any) {
+      this.plan.set(null);
+      this.history.set([]);
+      const msg =
+        (e?.error?.message as string | undefined) ||
         e?.message ||
         'Failed to load plan details.';
       this.toast.error(msg);
@@ -290,4 +328,3 @@ export class MyPlan {
     }
   }
 }
-
