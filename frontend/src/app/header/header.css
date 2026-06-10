@@ -1,0 +1,125 @@
+/* Header host: sticky bar stays at top while page scrolls */
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+/* Mobile navigation — component-scoped enhancements */
+
+button.dropdown-trigger {
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+  min-height: 10px;
+}
+
+.search-close-btn {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  color: #888;
+  min-height: var(--touch-min, 44px);
+  min-width: var(--touch-min, 44px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.nav-backdrop.is-visible {
+  display: block;
+  opacity: 1;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  background: #fff;
+}
+
+.menu-toggle {
+  display: none;
+  z-index: 1002;
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 1024px) {
+  .menu-toggle {
+    display: flex;
+  }
+}
+
+.menu-toggle[aria-expanded='true'] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded='true'] span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle[aria-expanded='true'] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.menu-toggle span {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+@media (max-width: 1024px) {
+  .nav-links {
+    max-height: calc(100dvh - 68px - var(--safe-top, 0px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .nav-links.open {
+    animation: navSlideIn 0.22s ease;
+  }
+
+  .dropdown-menu {
+    border-radius: 10px;
+  }
+
+  .dd-logout {
+    width: 100%;
+    min-height: var(--touch-min, 44px);
+  }
+}
+
+@keyframes navSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-links.open {
+    animation: none;
+  }
+}

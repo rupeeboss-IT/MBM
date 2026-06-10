@@ -1,0 +1,32 @@
+.article-detail-container {
+  max-width: 900px;
+}
+
+.article-hero-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius, 12px);
+  margin-bottom: 2rem;
+  object-fit: inherit;
+  aspect-ratio: 16 / 9;
+}
+
+.article-content ul {
+  margin: 0 0 1rem 1.25rem;
+  padding: 0;
+  list-style: disc;
+}
+
+.article-content li {
+  margin-bottom: 0.45rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+  .article-hero-img {
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+  }
+}

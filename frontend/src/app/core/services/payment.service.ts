@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { apiUrl } from '../utils/api-url';
 
 export interface CreateOrderReq {
   planCode: string;
@@ -99,38 +100,37 @@ export interface InvoiceListRes {
 @Injectable({ providedIn: 'root' })
 export class PaymentService {
   private readonly http = inject(HttpClient);
-  private readonly base = '/api/payment';
 
   createOrder(req: CreateOrderReq): Observable<CreateOrderRes> {
-    return this.http.post<CreateOrderRes>(`${this.base}/razorpay/order`, req);
+    return this.http.post<CreateOrderRes>(apiUrl('/api/payment/razorpay/order'), req);
   }
 
   verify(req: VerifyReq): Observable<VerifyRes> {
-    return this.http.post<VerifyRes>(`${this.base}/razorpay/verify`, req);
+    return this.http.post<VerifyRes>(apiUrl('/api/payment/razorpay/verify'), req);
   }
 
   cancelCheckout(paymentOrderId: string): Observable<unknown> {
-    return this.http.post(`${this.base}/razorpay/cancel/${paymentOrderId}`, null);
+    return this.http.post(apiUrl(`/api/payment/razorpay/cancel/${paymentOrderId}`), null);
   }
 
   myPlan(): Observable<MyPlanRes> {
-    return this.http.get<MyPlanRes>(`${this.base}/my-plan`);
+    return this.http.get<MyPlanRes>(apiUrl('/api/payment/my-plan'));
   }
 
   cancelSubscription(): Observable<CancelSubscriptionRes> {
-    return this.http.post<CancelSubscriptionRes>(`${this.base}/subscription/cancel`, null);
+    return this.http.post<CancelSubscriptionRes>(apiUrl('/api/payment/subscription/cancel'), null);
   }
 
   paymentHistory(): Observable<PaymentHistoryRes> {
-    return this.http.get<PaymentHistoryRes>(`${this.base}/subscription/history`);
+    return this.http.get<PaymentHistoryRes>(apiUrl('/api/payment/subscription/history'));
   }
 
   listInvoices(): Observable<InvoiceListRes> {
-    return this.http.get<InvoiceListRes>(`${this.base}/invoices`);
+    return this.http.get<InvoiceListRes>(apiUrl('/api/payment/invoices'));
   }
 
   downloadInvoice(paymentId: string): Observable<Blob> {
-    return this.http.get(`${this.base}/invoices/${encodeURIComponent(paymentId)}/download`, {
+    return this.http.get(apiUrl(`/api/payment/invoices/${encodeURIComponent(paymentId)}/download`), {
       responseType: 'blob',
     });
   }

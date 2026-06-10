@@ -56,6 +56,31 @@ export const routes: Routes = [
         }
     },
     {
+        path: 'about-us',
+        redirectTo: 'about',
+        pathMatch: 'full'
+    },
+    {
+        path: 'the-board',
+        redirectTo: 'about',
+        pathMatch: 'full'
+    },
+    {
+        path: 'our-team',
+        redirectTo: 'about',
+        pathMatch: 'full'
+    },
+    {
+        path: 'our-partners',
+        redirectTo: 'about',
+        pathMatch: 'full'
+    },
+    {
+        path: 'our-mission',
+        redirectTo: 'about',
+        pathMatch: 'full'
+    },
+    {
         path: 'about',
         component: About,
         pathMatch: 'full',
@@ -65,6 +90,11 @@ export const routes: Routes = [
         }
     },
     {
+        path: 'services',
+        redirectTo: 'our-services',
+        pathMatch: 'full'
+    },
+    {
         path: 'our-services',
         component: OurServices,
         pathMatch: 'full',
@@ -72,6 +102,16 @@ export const routes: Routes = [
             title: 'Our Services | MSME Bharat Manch',
             description: 'Explore our comprehensive range of 360° services designed to empower your MSME business'
         }
+    },
+    {
+        path: 'service/human-resources',
+        redirectTo: 'service/hr-recruitment',
+        pathMatch: 'full'
+    },
+    {
+        path: 'service/accounting-virtual-cfo',
+        redirectTo: 'service/accounting-cfo',
+        pathMatch: 'full'
     },
     {
         path: 'service/:slug',
@@ -101,15 +141,25 @@ export const routes: Routes = [
         component: EventDetail
     },
     {
+        path: 'finance',
+        redirectTo: 'loans',
+        pathMatch: 'full'
+    },
+    {
         path: 'loans',
         component: Loans,
         pathMatch: 'full'
     },
-    // {
-    //     path: 'partners',
-    //     component: Partners,
-    //     pathMatch: 'full'
-    // },
+    {
+        path: 'partners',
+        redirectTo: 'about',
+        pathMatch: 'full'
+    },
+    {
+        path: 'contact-us',
+        redirectTo: 'contact',
+        pathMatch: 'full'
+    },
     {
         path: 'contact',
         component: Contact,
@@ -135,6 +185,16 @@ export const routes: Routes = [
         component: OfferingDetails
     },
     {
+        path: 'blog',
+        redirectTo: 'news',
+        pathMatch: 'full'
+    },
+    {
+        path: 'news-blog',
+        redirectTo: 'news',
+        pathMatch: 'full'
+    },
+    {
         path: 'news',
         component: NewsBlog,
         pathMatch: 'full'
@@ -154,6 +214,11 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
+        path: 'privacy',
+        redirectTo: 'privacy-policy',
+        pathMatch: 'full'
+    },
+    {
         path: 'privacy-policy',
         component: Privacy,
         pathMatch: 'full'
@@ -166,6 +231,11 @@ export const routes: Routes = [
     {
         path: 'disclaimer',
         component: Disclaimer,
+        pathMatch: 'full'
+    },
+    {
+        path: 'member/login',
+        redirectTo: '/login',
         pathMatch: 'full'
     },
     {

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { apiUrl } from '../utils/api-url';
 
 export interface SubmitLoanApplicationRequest {
   fullName: string;
@@ -22,9 +23,8 @@ export interface SubmitLoanApplicationResponse {
 @Injectable({ providedIn: 'root' })
 export class LoansService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/loans';
 
   submitApplication(req: SubmitLoanApplicationRequest): Observable<SubmitLoanApplicationResponse> {
-    return this.http.post<SubmitLoanApplicationResponse>(`${this.baseUrl}/apply`, req);
+    return this.http.post<SubmitLoanApplicationResponse>(apiUrl('/api/loans/apply'), req);
   }
 }

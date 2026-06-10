@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, debounceTime, distinctUntilChanged, firstValueFrom, map, of, switchMap, tap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -32,6 +32,14 @@ export class Register {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly session = inject(AuthSessionService);
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  readonly roleOpen = signal(false);
+
+  readonly roleOptions: ReadonlyArray<{ value: 'member' | 'partner'; label: string }> = [
+    { value: 'member', label: 'MSME Member / Business Owner' },
+    { value: 'partner', label: 'Growth Partner / Consultant' },
+  ];
 
   /**
    * Normalized emails that completed OTP verify this session.
@@ -107,7 +115,7 @@ export class Register {
       company: this.fb.nonNullable.control('', {
         validators: [Validators.maxLength(120)]
       }),
-      consent: this.fb.nonNullable.control(true, { validators: [Validators.requiredTrue] })
+      consent: this.fb.nonNullable.control(false, { validators: [Validators.requiredTrue] })
     },
     {
       validators: [
@@ -187,13 +195,34 @@ export class Register {
     window.setTimeout(tick, 1000);
   }
 
-  onConsentToggle(ev: Event) {
-    const input = ev.target as HTMLInputElement;
-    if (!input.checked) {
-      this.form.controls.consent.setValue(true);
-      this.form.controls.consent.markAsTouched();
-      this.toast.warning('Consent is mandatory to continue. You cannot uncheck it.', 4000);
+  roleDisplayLabel(): string {
+    const selected = this.roleOptions.find(o => o.value === this.form.controls.role.value);
+    return selected?.label ?? 'Select role';
+  }
+
+  toggleRoleOpen(event: Event): void {
+    event.stopPropagation();
+    this.roleOpen.update(open => !open);
+  }
+
+  selectRole(value: 'member' | 'partner'): void {
+    this.form.controls.role.setValue(value);
+    this.form.controls.role.markAsDirty();
+    this.roleOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.roleOpen()) return;
+    const root = this.host.nativeElement.querySelector('.reg-role-ddl');
+    if (root && !root.contains(event.target as Node)) {
+      this.roleOpen.set(false);
     }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    this.roleOpen.set(false);
   }
 
   sanitizePhoneInput(ev: Event) {
@@ -381,6 +410,11 @@ export class Register {
     }
     if (!phoneNorm || !this.verifiedPhonesThisSession().has(phoneNorm)) {
       this.toast.warning('Please verify your current mobile number with OTP before continuing.');
+      return;
+    }
+    if (!this.form.controls.consent.value) {
+      this.form.controls.consent.markAsTouched();
+      this.toast.warning('Please accept the consent to continue.');
       return;
     }
     if (this.form.invalid) {

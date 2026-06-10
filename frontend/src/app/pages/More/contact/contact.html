@@ -11,78 +11,101 @@
       <div class="contact-layout">
         <div class="contact-form-box">
           <h2>Send Us a Message</h2>
-          <p class="form-sub" style="margin-bottom:1rem;color:#64748b;font-size:.95rem">All fields marked * are required</p>
-          <div class="muted" *ngIf="submitError()" style="color:#b91c1c;margin-bottom:.75rem">{{ submitError() }}</div>
+          <p class="form-sub">All fields marked * are required</p>
+          <div class="error-msg contact-submit-error" *ngIf="submitError()" role="alert">{{ submitError() }}</div>
           <form id="contactForm" (ngSubmit)="onSubmit()">
             <div class="form-row">
-              <div class="form-group">
-                <label>Your Name *</label>
+              <div class="form-group" [class.form-group--invalid]="showError('fullName')">
+                <label for="cName">Your Name *</label>
                 <input type="text" id="cName" name="fullName" [(ngModel)]="form.fullName"
                   (input)="onNameInput($any($event.target).value)" (blur)="markTouched('fullName')"
-                  autocomplete="name" placeholder="Full name" required>
-                <div class="muted" *ngIf="showError('fullName')" style="color:#b91c1c;margin-top:.35rem">{{
-                  errors()['fullName'] }}</div>
+                  autocomplete="name" placeholder="Full name" required
+                  [attr.aria-invalid]="showError('fullName')">
+                <span class="field-error" *ngIf="showError('fullName')" role="alert">{{ errors()['fullName'] }}</span>
               </div>
-              <div class="form-group">
-                <label>Mobile Number *</label>
+              <div class="form-group" [class.form-group--invalid]="showError('mobile')">
+                <label for="cPhone">Mobile Number *</label>
                 <input type="tel" id="cPhone" name="mobile" [(ngModel)]="form.mobile"
                   (input)="onDigitsInput($event)" (blur)="markTouched('mobile')" inputmode="numeric"
-                  pattern="[0-9]*" maxlength="10" autocomplete="tel" placeholder="10-digit mobile" required>
-                <div class="muted" *ngIf="showError('mobile')" style="color:#b91c1c;margin-top:.35rem">{{
-                  errors()['mobile'] }}</div>
+                  pattern="[0-9]*" maxlength="10" autocomplete="tel" placeholder="10-digit mobile" required
+                  [attr.aria-invalid]="showError('mobile')">
+                <span class="field-error" *ngIf="showError('mobile')" role="alert">{{ errors()['mobile'] }}</span>
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group">
-                <label>Email Address *</label>
+              <div class="form-group" [class.form-group--invalid]="showError('email')">
+                <label for="cEmail">Email Address *</label>
                 <input type="email" id="cEmail" name="email" [(ngModel)]="form.email" (input)="revalidate()"
-                  (blur)="markTouched('email')" autocomplete="email" placeholder="your@email.com" required>
-                <div class="muted" *ngIf="showError('email')" style="color:#b91c1c;margin-top:.35rem">{{
-                  errors()['email'] }}</div>
+                  (blur)="markTouched('email')" autocomplete="email" placeholder="your@email.com" required
+                  [attr.aria-invalid]="showError('email')">
+                <span class="field-error" *ngIf="showError('email')" role="alert">{{ errors()['email'] }}</span>
               </div>
-              <div class="form-group">
-                <label>Subject *</label>
-                <select id="cSubject" name="subjectId" [(ngModel)]="form.subjectId" (ngModelChange)="revalidate()"
-                  (blur)="markTouched('subjectId')" required>
-                  <option value="">Select subject</option>
-                  <option value="1">Payment</option>
-                  <option value="2">Loan Enquiry</option>
-                  <option value="3">Government Scheme</option>
-                  <option value="4">Company Formation</option>
-                  <option value="5">Technology Services</option>
-                  <option value="6">Digital Marketing</option>
-                  <option value="7">Membership</option>
-                  <option value="8">Partnership</option>
-                  <option value="9">General Enquiry</option>
-                  <option value="10">Other</option>
-                </select>
-                <div class="muted" *ngIf="showError('subjectId')" style="color:#b91c1c;margin-top:.35rem">{{
-                  errors()['subjectId'] }}</div>
+              <div class="form-group" [class.form-group--invalid]="showError('subjectId')">
+                <label id="cSubjectLabel" for="cSubjectTrigger">Subject *</label>
+                <div
+                  class="loan-type-ddl"
+                  [class.loan-type-ddl--open]="subjectOpen()"
+                  [class.loan-type-ddl--invalid]="showError('subjectId')">
+                  <button
+                    type="button"
+                    class="loan-type-ddl__trigger"
+                    id="cSubjectTrigger"
+                    name="subjectId"
+                    (click)="toggleSubjectOpen($event)"
+                    (blur)="markTouched('subjectId')"
+                    [attr.aria-expanded]="subjectOpen()"
+                    aria-haspopup="listbox"
+                    aria-controls="cSubjectListbox"
+                    [attr.aria-invalid]="showError('subjectId')">
+                    <span
+                      class="loan-type-ddl__value"
+                      [class.is-placeholder]="!form.subjectId">{{ subjectDisplayLabel() }}</span>
+                    <span class="loan-type-ddl__chev" aria-hidden="true"></span>
+                  </button>
+                  <ul
+                    class="loan-type-ddl__panel"
+                    *ngIf="subjectOpen()"
+                    id="cSubjectListbox"
+                    role="listbox"
+                    aria-labelledby="cSubjectLabel">
+                    <li *ngFor="let opt of subjectOptions" role="presentation">
+                      <button
+                        type="button"
+                        class="loan-type-ddl__option"
+                        role="option"
+                        [attr.aria-selected]="form.subjectId === opt.value"
+                        [class.is-selected]="form.subjectId === opt.value"
+                        (mousedown)="$event.preventDefault()"
+                        (click)="selectSubject(opt.value)">
+                        {{ opt.label }}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <span class="field-error" *ngIf="showError('subjectId')" role="alert">{{ errors()['subjectId'] }}</span>
               </div>
             </div>
-            <div class="form-group">
-              <label>Message *</label>
+            <div class="form-group form-group--message" [class.form-group--invalid]="showError('message')">
+              <label for="cMessage">Message *</label>
               <textarea id="cMessage" name="message" rows="5" [(ngModel)]="form.message" (input)="revalidate()"
                 (blur)="markTouched('message')" maxlength="4000"
-                placeholder="Tell us how we can help you..." required></textarea>
-              <div class="muted" *ngIf="showError('message')" style="color:#b91c1c;margin-top:.35rem">{{
-                errors()['message'] }}</div>
+                placeholder="Tell us how we can help you..." required
+                [attr.aria-invalid]="showError('message')"></textarea>
+              <span class="field-error" *ngIf="showError('message')" role="alert">{{ errors()['message'] }}</span>
             </div>
 
-            <div class="form-group full">
-              <label style="display:flex;gap:.6rem;align-items:flex-start">
+            <div class="form-group form-group--consent" [class.form-group--invalid]="showError('consent')">
+              <label class="consent-label" for="cConsent">
                 <input type="checkbox" id="cConsent" name="consent" [(ngModel)]="form.consent"
-                  (ngModelChange)="revalidate()" (blur)="markTouched('consent')" required style="margin-top:.2rem">
+                  (ngModelChange)="revalidate()" (blur)="markTouched('consent')" required
+                  [attr.aria-invalid]="showError('consent')">
                 <span>
                   By submitting this form, I consent to being contacted by <strong>MSME Bharat Manch</strong> via call,
                   SMS, WhatsApp, and email regarding my enquiry, in accordance with the
-                  <a [routerLink]="['/privacy-policy']" style="color:var(--red);font-weight:600;cursor:pointer">
-                    Privacy Policy
-                  </a>.
+                  <a routerLink="/privacy-policy">Privacy Policy</a>.
                 </span>
               </label>
-              <div class="muted" *ngIf="showError('consent')" style="color:#b91c1c;margin-top:.35rem">{{
-                errors()['consent'] }}</div>
+              <span class="field-error" *ngIf="showError('consent')" role="alert">{{ errors()['consent'] }}</span>
             </div>
 
             <button type="submit" class="btn-submit" id="contactSubmitBtn"
@@ -91,7 +114,7 @@
             </button>
           </form>
         </div>
-        <div>
+        <div class="contact-info-col">
           <div class="contact-info-item">
             <div class="ci-icon">📍</div>
             <div class="ci-text"><strong>Head Office</strong><span>301, The Summit Business Bay,<br>Near WEH Metro,
@@ -103,17 +126,21 @@
           </div>
           <div class="contact-info-item">
             <div class="ci-icon">✉️</div>
-            <div class="ci-text"><strong>Email</strong><a
-                href="mailto:info@msmebharatmanch.com">info@msmebharatmanch.com</a><br><a
-                href="mailto:support@msmebharatmanch.com">support@msmebharatmanch.com</a></div>
+            <div class="ci-text ci-text--email">
+              <strong>Email</strong>
+              <div class="ci-email-list">
+                <a href="mailto:info@msmebharatmanch.com">info@msmebharatmanch.com</a>
+                <a href="mailto:support@msmebharatmanch.com">support@msmebharatmanch.com</a>
+              </div>
+            </div>
           </div>
           <div class="contact-info-item">
             <div class="ci-icon">🕐</div>
             <div class="ci-text"><strong>Business Hours</strong><span>Mon–Sat: 9:00 AM – 7:00 PM<br>Sunday: 10:00 AM –
                 4:00 PM</span></div>
           </div>
-          <div style="margin-top:2rem"><strong
-              style="display:block;color:var(--navy);font-weight:700;margin-bottom:1rem">Zonal Offices</strong>
+          <div class="contact-zonal">
+            <strong class="contact-zonal-title">Zonal Offices</strong>
             <div class="offices-grid">
               <div class="office-card">
                 <h4>Mumbai</h4>

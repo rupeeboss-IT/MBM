@@ -33,13 +33,13 @@ public sealed class InMemoryPasswordResetService : IPasswordResetService
         await _email.SendAsync(norm, "MBM Password Reset OTP", $"Your password reset OTP is {otp}. It expires in 10 minutes.", ct);
 
         _rate.RecordSuccessfulEmailOtpSend(norm);
-        _store[norm] = new ResetRecord(Hash(otp), DateTimeOffset.UtcNow.AddMinutes(10), AttemptsLeft: 5);
+        _store[norm] = new ResetRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), AttemptsLeft: 5);
     }
 
     public Task ResetAsync(string email, string code, string newPassword, CancellationToken ct)
     {
         var norm = NormalizeEmail(email);
-        if (!_store.TryGetValue(norm, out var rec) || rec.ExpiresAt < DateTimeOffset.UtcNow)
+        if (!_store.TryGetValue(norm, out var rec) || rec.ExpiresAt < DateTimeOffset.Now    )
             throw new InvalidOperationException("OTP expired. Please request a new OTP.");
 
         if (rec.AttemptsLeft <= 0)

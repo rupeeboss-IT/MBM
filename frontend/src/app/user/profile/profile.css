@@ -110,8 +110,7 @@
   display: flex;
   gap: .6rem;
   flex-wrap: wrap;
-  /* margin-top: .85rem; */
-  margin-top: 4rem;
+  margin-top: .85rem;
 }
 
 .profile-card__actions .btn-outline{
@@ -207,8 +206,9 @@
   border-radius:999px;
   background:var(--red-light);
   color:var(--red);
-  font-weight:900;
-  margin:.1rem 0 .5rem 0;
+  font-weight:600;
+  margin:.7rem 0 .7rem 0;
+  font-size:.78rem;
 }
 
 .plan-pill--active{
@@ -223,7 +223,7 @@
 
 .kpi-row{
   display:grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(2,1fr);
   gap:.8rem;
   margin-top: .95rem;
 }
@@ -233,14 +233,19 @@
   background: #fff;
   border-radius: 14px;
   padding: .85rem .85rem;
+  /* display: flex;
+  flex-wrap: wrap;
+  align-content: space-between; */
   display: flex;
   flex-wrap: wrap;
   align-content: space-between;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .kpi__label{
   color: var(--muted);
-  font-weight: 900;
+  /* font-weight: 900; */
   text-transform: uppercase;
   letter-spacing: .08em;
   font-size: .7rem;
@@ -250,7 +255,8 @@
 .kpi__value{
   font-weight: 950;
   color: var(--navy);
-  font-size: 1.05rem;
+  /* font-size: 1.05rem; */
+  font-size: 0.79rem;
 }
 
 .kpi__value.ok{ color: var(--green); }
@@ -270,8 +276,8 @@
   word-break: break-word;
 }
 .details .row:last-child{border-bottom:none}
-.label{color:var(--muted);font-weight:900}
-.value{color:var(--navy);font-weight:900}
+.label{color:var(--muted);}
+.value{color:var(--navy);}
 
 .skeleton{
   margin-top:.8rem;
@@ -306,7 +312,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1.2rem 20px 3rem;
+    padding: 1.2rem var(--page-gutter, 1rem) 3rem;
   }
 
   /* Reset desktop grid placement */
@@ -319,7 +325,7 @@
   }
 
   .profile-hero__row{ align-items:flex-start; flex-direction:column; }
-  .profile-hero__right{ width:100%; justify-content:space-between; }
+  .profile-hero__right{ width:auto; justify-content:flex-start; align-self:flex-start; }
 }
 
 @media (max-width: 720px){
@@ -327,7 +333,7 @@
   .kpi-row{ grid-template-columns: 1fr; }
   .profile-hero__title{ font-size: 1.75rem; }
   .profile-hero{
-    padding: 1.75rem 0 1.5rem;
+    padding: 1.75rem 20px 1.5rem;
   }
   /* Long user id / email: readable on small screens */
   .profile-hero__metaValue{
@@ -337,15 +343,24 @@
   }
 }
 
-@media (max-width: 480px){
+@media (max-width: 768px){
   .details .row{
-    flex-direction: column;
-    align-items: stretch;
-    gap: .25rem;
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 38%) 1fr;
+    gap: .35rem .75rem;
+    align-items: start;
+    padding: .75rem 0;
+  }
+  .details .label{
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin: 0;
   }
   .details .value{
     text-align: left;
     font-size: .95rem;
+    word-break: break-word;
   }
 }
 
@@ -356,48 +371,38 @@
   .profile-card--support-mobile{ display: block; width: 100%; }
 }
 
-.invoice-table{
-  margin-top: .85rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.invoice-row{
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 0.9fr 1.3fr auto;
-  gap: 10px;
-  padding: 10px 12px;
-  border-top: 1px solid #f3f4f6;
-  align-items: center;
-  font-size: .88rem;
-}
-
-.invoice-row--head{
-  background: #f9fafb;
-  font-weight: 800;
-  border-top: none;
-}
-
 .invoice-num{
-  font-size: .78rem;
+  font-size: .82rem;
   color: var(--muted);
   word-break: break-all;
 }
 
 .btn-sm{
-  padding: 6px 10px;
-  font-size: .82rem;
+  padding: 8px 12px;
+  font-size: .88rem;
+  min-height: var(--touch-min, 44px);
 }
 
-@media (max-width: 720px){
-  .invoice-row{
-    grid-template-columns: 1fr;
+.profile-card--reports .muted,
+.profile-card--invoices .muted{
+  margin-top: .25rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px){
+  .profile-shell{
+    padding-left: var(--page-gutter);
+    padding-right: var(--page-gutter);
   }
-}
 
-.report-row{
-  grid-template-columns: 1.4fr 1fr 1fr 0.8fr auto;
+  .card,
+  .profile-aside__card{
+    padding: var(--space-5, 1.25rem);
+  }
+
+  .profile-card__actions .btn-outline{
+    flex: 1 1 100%;
+  }
 }
 
 .profile-card--shortcut{
@@ -417,4 +422,105 @@
   font-weight: 950;
   color: var(--navy);
   font-size: 1.15rem;
+}
+
+/* Desktop record tables (Reports & Invoices) */
+.profile-card--reports .record-list,
+.profile-card--invoices .record-list{
+  margin-top: .75rem;
+}
+
+.profile-card--reports .record-table,
+.profile-card--invoices .record-table{
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.profile-card--reports .record-table__head.record-table__row--reports,
+.profile-card--reports .record-table__row.record-table__row--reports,
+.profile-card--invoices .record-table__head.record-table__row--invoices,
+.profile-card--invoices .record-table__row.record-table__row--invoices{
+  display:grid;
+  align-items:center;
+  gap:.75rem;
+}
+
+.profile-card--reports .record-table__head.record-table__row--reports,
+.profile-card--reports .record-table__row.record-table__row--reports{
+  grid-template-columns: 1.35fr 1.05fr .95fr .8fr .85fr;
+}
+
+.profile-card--invoices .record-table__head.record-table__row--invoices,
+.profile-card--invoices .record-table__row.record-table__row--invoices{
+  grid-template-columns: 1.05fr .95fr .9fr .95fr .85fr;
+}
+
+.profile-card--reports .record-table__head.record-table__row--reports,
+.profile-card--invoices .record-table__head.record-table__row--invoices{
+  background:#f8fafc;
+  padding:.65rem .75rem;
+  border-bottom:1px solid rgba(0,0,0,.06);
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  font-size:.82rem;
+  font-weight:950;
+}
+
+.profile-card--reports .record-table__row.record-table__row--reports,
+.profile-card--invoices .record-table__row.record-table__row--invoices{
+  padding:.85rem .75rem;
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+
+.profile-card--reports .record-table__row.record-table__row--reports:last-child,
+.profile-card--invoices .record-table__row.record-table__row--invoices:last-child{
+  border-bottom:none;
+}
+
+.profile-card--reports .record-table__head.record-table__row--reports [role="columnheader"],
+.profile-card--invoices .record-table__head.record-table__row--invoices [role="columnheader"]{
+  color:inherit;
+  font-weight:inherit;
+}
+
+.profile-card--reports .record-table__row.record-table__row--reports [role="cell"],
+.profile-card--invoices .record-table__row.record-table__row--invoices [role="cell"]{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  color:var(--navy);
+  /* font-weight:900; */
+}
+
+.profile-card--reports .record-card,.profile-card--invoices .record-card{display:none}
+
+@media (max-width:1024px){
+  .profile-card--reports .record-table,.profile-card--invoices .record-table{display:none}
+  .profile-card--reports .record-card,.profile-card--invoices .record-card{
+    display:block;border:1px solid var(--border);border-radius:14px;background:#fff;padding:1rem
+  }
+  .profile-card--reports .record-list,.profile-card--invoices .record-list{
+    display:flex;flex-direction:column;gap:.85rem
+  }
+  .profile-card--reports .record-card__title,.profile-card--invoices .record-card__title{
+    margin:0 0 .6rem;font-size:1rem;font-weight:950;color:var(--navy);overflow-wrap:anywhere;word-break:break-word
+  }
+  .profile-card--reports .record-card__fields,.profile-card--invoices .record-card__fields{
+    display:flex;flex-direction:column;gap:.6rem
+  }
+  .profile-card--reports .record-card__field,.profile-card--invoices .record-card__field{
+    display:grid;grid-template-columns:1fr 1.1fr;gap:.8rem;align-items:start
+  }
+  .profile-card--reports .record-card__field dt,.profile-card--invoices .record-card__field dt{
+    margin:0;font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em
+  }
+  .profile-card--reports .record-card__field dd,.profile-card--invoices .record-card__field dd{
+    margin:0;font-size:.92rem;color:var(--navy);overflow-wrap:anywhere;word-break:break-word
+  }
+  .profile-card--reports .record-card__actions,.profile-card--invoices .record-card__actions{margin-top:.85rem}
+  .profile-card--reports .record-card__actions .btn-outline,.profile-card--invoices .record-card__actions .btn-outline{width:100%;text-align:center}
 }

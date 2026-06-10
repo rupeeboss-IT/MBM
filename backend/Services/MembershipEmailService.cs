@@ -13,6 +13,7 @@ public sealed class MembershipEmailService
     private readonly IEmailSender _email;
     private readonly InvoicePdfService _invoices;
     private readonly InvoiceSettings _settings;
+    private readonly ApplicationUrlsSettings _urls;
     private readonly ILogger<MembershipEmailService> _logger;
 
     public MembershipEmailService(
@@ -20,12 +21,14 @@ public sealed class MembershipEmailService
         IEmailSender email,
         InvoicePdfService invoices,
         IOptions<InvoiceSettings> settings,
+        IOptions<ApplicationUrlsSettings> urls,
         ILogger<MembershipEmailService> logger)
     {
         _db = db;
         _email = email;
         _invoices = invoices;
         _settings = settings.Value;
+        _urls = urls.Value;
         _logger = logger;
     }
 
@@ -106,7 +109,7 @@ public sealed class MembershipEmailService
             sb.Append("</ul>");
         }
 
-        var myPlanUrl = $"{_settings.SiteUrl.TrimEnd('/')}/my-plan";
+        var myPlanUrl = _urls.MyPlanUrl;
         sb.Append($"<p>View your plan anytime: <a href=\"{myPlanUrl}\">{myPlanUrl}</a></p>");
         sb.Append("<p>Your invoice is attached to this email. You can also download it from your profile.</p>");
         sb.Append("<p>— MSME Bharat Manch</p></body></html>");

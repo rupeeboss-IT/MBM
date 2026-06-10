@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { apiUrl } from '../utils/api-url';
 
 export interface ValidateReferralReq {
   referralCode: string;
@@ -17,9 +18,8 @@ export interface ValidateReferralRes {
 @Injectable({ providedIn: 'root' })
 export class ReferralService {
   private readonly http = inject(HttpClient);
-  private readonly base = '/api/referral';
 
   validate(req: ValidateReferralReq): Observable<ValidateReferralRes> {
-    return this.http.post<ValidateReferralRes>(`${this.base}/validate`, req);
+    return this.http.post<ValidateReferralRes>(apiUrl('/api/referral/validate'), req);
   }
 }

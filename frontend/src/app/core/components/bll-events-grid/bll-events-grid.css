@@ -1,0 +1,150 @@
+.bll-events-grid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.bll-events-grid--page {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.bll-events-grid--home {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.bll-event-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, 12px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.25s, transform 0.25s;
+}
+
+.bll-event-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+.bll-event-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: var(--navy);
+  cursor: zoom-in;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.bll-event-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.bll-event-thumb-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  background: rgba(8, 15, 35, 0.45);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.bll-event-thumb:hover img {
+  transform: scale(1.04);
+}
+
+.bll-event-thumb:hover .bll-event-thumb-overlay {
+  opacity: 1;
+}
+
+.bll-event-thumb-icon {
+  font-size: 1.5rem;
+}
+
+.bll-event-content {
+  padding: 1.35rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.bll-event-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
+}
+
+.bll-event-subtitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+
+.bll-event-desc {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bll-event-content .event-date {
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+}
+
+.bll-event-details-btn {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+
+.bll-events-status {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.bll-events-error {
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .bll-events-grid--page,
+  .bll-events-grid--home {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .bll-event-content {
+    padding: 1.15rem;
+  }
+}
+
+.bll-events-grid--home .bll-event-desc {
+  -webkit-line-clamp: 2;
+}

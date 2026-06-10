@@ -1,18 +1,34 @@
 <!-- ===== NAVBAR ===== -->
-<nav class="navbar" id="navbar">
+<button
+  type="button"
+  class="nav-backdrop"
+  [class.is-visible]="mobileMenuOpen()"
+  (click)="closeMobileMenu()"
+  aria-label="Close menu"
+  tabindex="-1"
+></button>
+<nav class="navbar" id="navbar" aria-label="Main navigation">
   <div class="nav-container">
     <a class="brand" routerLink="/home">
       <img class="brand-logo brand-logo--nav" [src]="logoSrc" [alt]="logoAlt" width="64" height="64" />
       <!-- <span>MSME <span class="accent">Bharat Manch</span></span> -->
     </a>
-    <button class="menu-toggle" type="button" id="menuBtn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+    <button
+      class="menu-toggle"
+      type="button"
+      id="menuBtn"
+      (click)="toggleMobileMenu(); $event.stopPropagation()"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      aria-controls="navLinks"
+      aria-label="Toggle navigation menu"
+    >
       <span></span><span></span><span></span>
     </button>
     <div class="nav-links" id="navLinks" [class.open]="mobileMenuOpen()">
       <a routerLink="/home" (click)="closeMobileMenu()">Home</a>
       <a routerLink="/about" (click)="closeMobileMenu()">About</a>
       <div class="dropdown" [class.open]="servicesMenuOpen()">
-        <a type="button" class="dropdown-trigger" (click)="toggleServicesMenu()">Services ▾</a>
+        <button type="button" class="dropdown-trigger" (click)="toggleServicesMenu(); $event.stopPropagation()" [attr.aria-expanded]="servicesMenuOpen()">Services ▾</button>
         <div class="dropdown-menu" *ngIf="servicesMenuOpen()">
           <a routerLink="/our-services" (click)="closeMobileMenu()">All 360° Services</a>
           <div class="dd-sep"></div>
@@ -26,8 +42,8 @@
           <a routerLink="/service/legal-compliance" (click)="closeMobileMenu()">Legal & Compliance</a>
           <a routerLink="/service/research-development" (click)="closeMobileMenu()">R &amp; D &amp; Innovation</a>
           <a routerLink="/service/export-import" (click)="closeMobileMenu()">Export/Import</a>
-          <a routerLink="/service/human-resources" (click)="closeMobileMenu()">HR & Recruitment</a>
-          <a routerLink="/service/accounting-virtual-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
+          <a routerLink="/service/hr-recruitment" (click)="closeMobileMenu()">HR & Recruitment</a>
+          <a routerLink="/service/accounting-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
         </div>
       </div>
       <a class="nav-loans" routerLink="/loans" (click)="closeMobileMenu()">Loans</a>
@@ -35,7 +51,7 @@
       <!-- <a routerLink="/partners" (click)="closeMobileMenu()">Partners</a> -->
       <!-- <a routerLink="/connect" (click)="closeMobileMenu()">MSME Connect</a> -->
       <div class="dropdown" [class.open]="moreMenuOpen()">
-        <a type="button" class="dropdown-trigger" (click)="toggleMoreMenu()">More ▾</a>
+        <button type="button" class="dropdown-trigger" (click)="toggleMoreMenu(); $event.stopPropagation()" [attr.aria-expanded]="moreMenuOpen()">More ▾</button>
         <div class="dropdown-menu" *ngIf="moreMenuOpen()">
           <a routerLink="/news" (click)="closeMobileMenu()">News & Blog</a>
           <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
@@ -52,11 +68,12 @@
         <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Now</a>
       </div>
       <div id="nav-auth-user" *ngIf="isLoggedIn()">
-        <div class="dropdown">
+        <div class="dropdown" [class.open]="userMenuOpen()">
           <button
             type="button"
             class="dropdown-trigger"
-            (click)="toggleUserMenu()"
+            (click)="toggleUserMenu(); $event.stopPropagation()"
+            [attr.aria-expanded]="userMenuOpen()"
             style="display:flex;align-items:center;gap:.5rem;cursor:pointer;background:none;border:none"
             aria-label="Open user menu"
           >
@@ -66,8 +83,8 @@
             <span style="font-weight:700;color:#444">My Account</span> ▾
           </button>
           <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
-            <a routerLink="/profile" (click)="closeUserMenu()">👤 My Profile</a>
-            <a routerLink="/my-plan" (click)="closeUserMenu()">💎 My Plan Details</a>
+            <a routerLink="/profile" (click)="closeUserMenu(); closeMobileMenu()">👤 My Profile</a>
+            <a routerLink="/my-plan" (click)="closeUserMenu(); closeMobileMenu()">💎 My Plan Details</a>
             <div class="dd-sep"></div>
             <div class="d-flex justify-content-center align-items-center">
               <button type="button" class="dd-logout btn btn-primary" (click)="logout()">Logout</button>
@@ -89,7 +106,8 @@
       <button type="submit" class="btn-search">Search</button>
       <button
         type="button"
-        style="background:none;border:1px solid #ddd;border-radius:6px;padding:.6rem .8rem;cursor:pointer;color:#888"
+        class="search-close-btn"
+        aria-label="Close search"
         (click)="toggleSearch()"
       >
         ✕

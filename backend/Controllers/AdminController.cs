@@ -209,7 +209,7 @@ public sealed class AdminController : ControllerBase
         if (phoneExists) return Conflict(new CreateAdminUserResponse(false, "Phone already exists."));
 
         var (hash, salt) = PasswordHasher.Hash(req.Password.Trim());
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var user = new User
         {
@@ -276,7 +276,7 @@ public sealed class AdminController : ControllerBase
             return BadRequest(new SetAdminActiveResponse(false, "Only admin users can be activated/deactivated."));
 
         user.IsActive = req.IsActive;
-        user.UpdatedAt = DateTime.UtcNow;
+        user.UpdatedAt = DateTime.Now;
         await _db.SaveChangesAsync(ct);
 
         return Ok(new SetAdminActiveResponse(true, req.IsActive ? "Admin activated." : "Admin deactivated."));
@@ -303,7 +303,7 @@ public sealed class AdminController : ControllerBase
     [HttpGet("dashboard/counts")]
     public async Task<ActionResult<DashboardCountsResponse>> DashboardCounts(CancellationToken ct)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var expiringCutoff = now.AddDays(30);
 
         var users = await _db.Users.AsNoTracking().CountAsync(ct);
@@ -359,7 +359,7 @@ public sealed class AdminController : ControllerBase
         CancellationToken ct = default)
     {
         var key = (category ?? "").Trim().ToLowerInvariant();
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         days = Math.Clamp(days, 1, 365);
         var expiringCutoff = now.AddDays(days);
 
@@ -541,7 +541,7 @@ public sealed class AdminController : ControllerBase
             return BadRequest(new SetMemberActiveResponse(false, "Reason is required to deactivate a member."));
 
         user.IsActive = req.IsActive;
-        user.UpdatedAt = DateTime.UtcNow;
+        user.UpdatedAt = DateTime.Now;
 
         _db.UserStatusAudit.Add(new UserStatusAudit
         {
@@ -550,7 +550,7 @@ public sealed class AdminController : ControllerBase
             ActorUserId = actorId,
             NewIsActive = req.IsActive,
             Reason = (req.Reason ?? "").Trim(),
-            CreatedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.Now,
         });
 
         await _db.SaveChangesAsync(ct);

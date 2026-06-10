@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RB_Website_API.Auth;
 using RB_Website_API.Data;
 
@@ -43,9 +44,10 @@ public sealed class SubscriptionReminderHostedService : BackgroundService
         using var scope = _services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var email = scope.ServiceProvider.GetService<IEmailSender>();
+        var urls = scope.ServiceProvider.GetRequiredService<IOptions<ApplicationUrlsSettings>>().Value;
         if (email is null) return;
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var windowEnd = now.AddDays(30);
 
         var due = await (
@@ -70,7 +72,7 @@ public sealed class SubscriptionReminderHostedService : BackgroundService
             var body = $"""
                 <p>Hello {row.FullName},</p>
                 <p>Your <strong>{row.Name}</strong> membership expires on <strong>{row.ActiveTo:dd MMM yyyy}</strong>.</p>
-                <p>Renew at <a href="https://msmebharatmanch.com/membership">msmebharatmanch.com/membership</a> to keep your benefits.</p>
+                <p>Renew at <a href="{urls.MembershipUrl}">{urls.MembershipUrl}</a> to keep your benefits.</p>
                 <p>— MSME Bharat Manch</p>
                 """;
 

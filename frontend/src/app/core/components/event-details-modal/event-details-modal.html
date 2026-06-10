@@ -1,0 +1,82 @@
+@if (isOpen() && event(); as ev) {
+  <div
+    class="details-overlay"
+    data-modal-backdrop="true"
+    (click)="onBackdropClick($event)"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="ev.title"
+  >
+    <div class="details-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="details-close" (click)="close()" aria-label="Close">&times;</button>
+
+      <div class="details-banner">
+        <img [src]="ev.imageUrl" [alt]="ev.title" />
+      </div>
+
+      <div class="details-body">
+        <div class="details-meta">
+          <span class="badge badge-red">BLL</span>
+          @if (ev.subtitle) {
+            <span class="badge badge-blue">{{ ev.subtitle }}</span>
+          }
+        </div>
+
+        <h2 class="details-title">{{ ev.title }}</h2>
+
+        @if (ev.tagline) {
+          <p class="details-tagline">{{ ev.tagline }}</p>
+        }
+
+        <div class="details-info-grid">
+          <div class="details-info-item">
+            <span class="details-info-label">Date</span>
+            <span>{{ ev.date }}@if (ev.time) { · {{ ev.time }} }</span>
+          </div>
+          <div class="details-info-item">
+            <span class="details-info-label">Venue</span>
+            <span>{{ ev.venue }}</span>
+          </div>
+          <div class="details-info-item">
+            <span class="details-info-label">Organizer</span>
+            <span>{{ ev.organizer }}</span>
+          </div>
+          @if (ev.price) {
+            <div class="details-info-item">
+              <span class="details-info-label">Tickets</span>
+              <span>{{ ev.price }}</span>
+            </div>
+          }
+        </div>
+
+        @if (ev.association) {
+          <p class="details-association">{{ ev.association }}</p>
+        }
+
+        <div class="details-section">
+          <h3>About the Event</h3>
+          <p>{{ ev.description }}</p>
+        </div>
+
+        <div class="details-section">
+          <h3>Event Highlights</h3>
+          <ul class="details-highlights">
+            @for (item of ev.highlights; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </div>
+
+        <div class="details-section details-registration">
+          <h3>Registration</h3>
+          <p>{{ ev.registrationInfo }}</p>
+        </div>
+
+        <div class="details-actions">
+          <button type="button" class="btn-outline" (click)="openPoster()">View Full Poster</button>
+          <button type="button" class="btn-primary" (click)="close()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

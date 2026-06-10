@@ -46,16 +46,16 @@
         <div>Actions</div>
       </div>
       <div class="row row-customers" *ngFor="let c of results()">
-        <div class="text-truncate" [title]="c.fullName">{{ c.fullName }}</div>
-        <div class="mono text-truncate" [title]="c.memberId">{{ c.memberId }}</div>
-        <div class="text-truncate" [title]="c.email">{{ c.email }}</div>
-        <div>{{ c.phone }}</div>
-        <div>
+        <div class="text-truncate" data-label="Name" [title]="c.fullName">{{ c.fullName }}</div>
+        <div class="mono text-truncate" data-label="Member ID" [title]="c.memberId">{{ c.memberId }}</div>
+        <div class="text-truncate" data-label="Email" [title]="c.email">{{ c.email }}</div>
+        <div data-label="Phone">{{ c.phone }}</div>
+        <div data-label="Subscription">
           <span class="badge" [class.badge-ok]="c.hasActiveSubscription" [class.badge-danger]="!c.hasActiveSubscription">
             {{ c.hasActiveSubscription ? (c.planName || 'Active') : 'Inactive' }}
           </span>
         </div>
-        <div>
+        <div data-label="Actions">
           <button
             type="button"
             class="btn btn-primary"

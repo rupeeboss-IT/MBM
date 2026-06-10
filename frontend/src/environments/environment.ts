@@ -1,4 +1,7 @@
+/** Default local environment (overridden by angular.json fileReplacements per build config). */
 export const environment = {
-  production: true,
-  apiBaseUrl: 'https://api.msmebharatmanch.com/api',
+  production: false,
+  name: 'local' as const,
+  apiBaseUrl: '/api',
+  frontendBaseUrl: 'http://localhost:4200',
 };

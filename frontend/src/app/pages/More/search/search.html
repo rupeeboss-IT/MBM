@@ -1,48 +1,56 @@
 <!-- ===== SEARCH PAGE ===== -->
 <div class="page active" id="page-search">
-<div class="page-header"><div class="container"><h1>Search</h1><p>Find services, schemes, events and articles</p></div></div>
-<section class="section"><div class="container">
-  <form (ngSubmit)="submitSearch()" style="display:flex;gap:.8rem;margin-bottom:2rem;max-width:600px">
-    <input
-      type="search"
-      name="q"
-      [(ngModel)]="query"
-      placeholder="Search MSME services, schemes, events..."
-      style="flex:1;padding:.85rem 1.2rem;border:1.5px solid var(--border);border-radius:10px;font-size:1rem;outline:none"
-    >
-    <button type="submit" class="btn-primary" style="padding:.85rem 1.5rem">Search</button>
-  </form>
-  <div id="searchResultsArea">
-    <ng-container *ngIf="query.trim().length > 0; else emptyState">
-      <div style="margin-bottom:1rem;color:var(--muted)">
-        Showing results for <strong style="color:var(--navy)">{{ query }}</strong>
-      </div>
-
-      <div *ngIf="serviceResults.length > 0; else noResults">
-        <div style="font-weight:700;color:var(--navy);margin-bottom:.7rem">Services</div>
-        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem">
-          <a
-            *ngFor="let item of serviceResults"
-            [attr.href]="'/service/' + item.slug"
-            (click)="goToService($event, item.slug)"
-            style="display:flex;gap:.8rem;align-items:flex-start;text-decoration:none;background:#fff;border:1px solid var(--border);border-radius:12px;padding:1rem"
-          >
-            <div style="font-size:1.4rem;line-height:1">{{ item.emoji }}</div>
-            <div>
-              <div style="font-weight:800;color:var(--navy)">{{ item.title }}</div>
-              <div style="color:var(--muted);font-size:.92rem;line-height:1.5">{{ item.subtitle }}</div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-template #emptyState>
-      <p style="color:var(--muted)">Enter a search term to find services, schemes, events and articles.</p>
-    </ng-template>
-    <ng-template #noResults>
-      <p style="color:var(--muted)">No results found. Try a different keyword.</p>
-    </ng-template>
+  <div class="page-header">
+    <div class="container">
+      <h1>Search</h1>
+      <p>Find services, schemes, events and articles</p>
+    </div>
   </div>
-</div></section>
+  <section class="section">
+    <div class="container">
+      <form class="search-form-bar" (ngSubmit)="submitSearch()">
+        <input
+          type="search"
+          class="search-form-input"
+          name="q"
+          [(ngModel)]="query"
+          placeholder="Search MSME services, schemes, events..."
+          autocomplete="off"
+          aria-label="Search">
+        <button type="submit" class="btn-primary search-form-submit">Search</button>
+      </form>
+
+      <div class="search-results-area" id="searchResultsArea">
+        <ng-container *ngIf="query.trim().length > 0; else emptyState">
+          <p class="search-results-meta">
+            Showing results for <strong>{{ query }}</strong>
+          </p>
+
+          <div *ngIf="serviceResults.length > 0; else noResults" class="search-results-section">
+            <h2 class="search-results-heading">Services</h2>
+            <div class="search-results-grid">
+              <a
+                *ngFor="let item of serviceResults"
+                class="search-result-card"
+                [attr.href]="'/service/' + item.slug"
+                (click)="goToService($event, item.slug)">
+                <span class="search-result-card__icon" aria-hidden="true">{{ item.emoji }}</span>
+                <span class="search-result-card__body">
+                  <span class="search-result-card__title">{{ item.title }}</span>
+                  <span class="search-result-card__subtitle">{{ item.subtitle }}</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyState>
+          <p class="search-state-msg">Enter a search term to find services, schemes, events and articles.</p>
+        </ng-template>
+        <ng-template #noResults>
+          <p class="search-state-msg">No results found. Try a different keyword.</p>
+        </ng-template>
+      </div>
+    </div>
+  </section>
 </div><!-- /search -->

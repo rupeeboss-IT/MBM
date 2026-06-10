@@ -44,12 +44,12 @@
         <div>File</div>
       </div>
       <div class="row row-history" *ngFor="let r of items()">
-        <div class="text-truncate" [title]="r.customerName">{{ r.customerName }}</div>
-        <div class="mono text-truncate" [title]="r.memberId">{{ r.memberId }}</div>
-        <div>{{ r.uploadDate | date:'dd-MMM-yyyy HH:mm' }}</div>
-        <div>{{ r.downloadCount }}</div>
-        <div>{{ r.lastDownloadDate ? (r.lastDownloadDate | date:'dd-MMM-yyyy HH:mm') : '—' }}</div>
-        <div class="file-meta">
+        <div class="text-truncate" data-label="Customer" [title]="r.customerName">{{ r.customerName }}</div>
+        <div class="mono text-truncate" data-label="Member ID" [title]="r.memberId">{{ r.memberId }}</div>
+        <div data-label="Upload date">{{ r.uploadDate | date:'dd-MMM-yyyy HH:mm' }}</div>
+        <div data-label="Downloads">{{ r.downloadCount }}</div>
+        <div data-label="Last download">{{ r.lastDownloadDate ? (r.lastDownloadDate | date:'dd-MMM-yyyy HH:mm') : '—' }}</div>
+        <div class="file-meta" data-label="File">
           <div class="text-truncate" [title]="r.originalFileName">{{ r.originalFileName }}</div>
           <div class="muted">{{ formatSize(r.fileSize) }} · {{ r.planName || '—' }}</div>
         </div>

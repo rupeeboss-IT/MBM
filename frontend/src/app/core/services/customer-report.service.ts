@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { apiUrl } from '../utils/api-url';
 
 export type CustomerReportListItem = {
   id: string;
@@ -65,15 +66,13 @@ export type ReportHistoryRes = {
 @Injectable({ providedIn: 'root' })
 export class CustomerReportService {
   private readonly http = inject(HttpClient);
-  private readonly memberBase = '/api/customer/reports';
-  private readonly adminBase = '/api/admin/reports';
 
   listMyReports(): Observable<ListReportsRes> {
-    return this.http.get<ListReportsRes>(this.memberBase);
+    return this.http.get<ListReportsRes>(apiUrl('/api/customer/reports'));
   }
 
   downloadReport(reportId: string): Observable<Blob> {
-    return this.http.get(`${this.memberBase}/${encodeURIComponent(reportId)}/download`, {
+    return this.http.get(apiUrl(`/api/customer/reports/${encodeURIComponent(reportId)}/download`), {
       responseType: 'blob',
     });
   }
@@ -89,14 +88,14 @@ export class CustomerReportService {
     if (opts.mobile?.trim()) params['mobile'] = opts.mobile.trim();
     if (opts.email?.trim()) params['email'] = opts.email.trim();
     if (opts.customerName?.trim()) params['customerName'] = opts.customerName.trim();
-    return this.http.get<SearchCustomersRes>(`${this.adminBase}/customers/search`, { params });
+    return this.http.get<SearchCustomersRes>(apiUrl('/api/admin/reports/customers/search'), { params });
   }
 
   adminUpload(customerId: string, file: File): Observable<UploadReportRes> {
     const form = new FormData();
     form.append('customerId', customerId);
     form.append('file', file, file.name);
-    return this.http.post<UploadReportRes>(`${this.adminBase}/upload`, form);
+    return this.http.post<UploadReportRes>(apiUrl('/api/admin/reports/upload'), form);
   }
 
   adminHistory(search: string, page: number, pageSize: number): Observable<ReportHistoryRes> {
@@ -105,6 +104,6 @@ export class CustomerReportService {
       pageSize: String(pageSize),
     };
     if (search.trim()) params['search'] = search.trim();
-    return this.http.get<ReportHistoryRes>(`${this.adminBase}/history`, { params });
+    return this.http.get<ReportHistoryRes>(apiUrl('/api/admin/reports/history'), { params });
   }
 }

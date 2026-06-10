@@ -37,7 +37,7 @@ public sealed class JwtTokenService : IJwtTokenService
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expires = DateTime.UtcNow.AddMinutes(Math.Max(5, _settings.ExpMinutes));
+        var expires = DateTime.Now.AddMinutes(Math.Max(5, _settings.ExpMinutes));
 
         var token = new JwtSecurityToken(
             issuer: string.IsNullOrWhiteSpace(_settings.Issuer) ? null : _settings.Issuer,

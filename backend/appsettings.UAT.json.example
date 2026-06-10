@@ -1,0 +1,8 @@
+{
+  "AllowedHosts": "uat.rupeeboss.com;www.uat.rupeeboss.com;localhost;127.0.0.1",
+  "ApplicationUrls": {
+    "Frontend": "https://uat.rupeeboss.com",
+    "Api": "https://uat.rupeeboss.com",
+    "CorsOrigins": []
+  }
+}

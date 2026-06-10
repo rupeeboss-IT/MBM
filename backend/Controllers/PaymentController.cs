@@ -144,7 +144,7 @@ public sealed class PaymentController : ControllerBase
         var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.Code == planCode && p.IsActive, ct);
         if (plan is null) return NotFound(new CreateOrderResponse(false, "Plan not found."));
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var existingActive = await _db.UserPlans.AsNoTracking()
             .FirstOrDefaultAsync(up =>
                 up.UserId == userId
@@ -223,7 +223,7 @@ public sealed class PaymentController : ControllerBase
                 _logger.LogError("Razorpay order create failed: {Status} {Body}", res.StatusCode, body);
                 po.Status = "Failed";
                 po.FailureReason = $"Razorpay {(int)res.StatusCode}: {Truncate(body, 480)}";
-                po.UpdatedAt = DateTime.UtcNow;
+                po.UpdatedAt = DateTime.Now;
                 await _db.SaveChangesAsync(ct);
                 var friendly = TryExtractRazorpayError(body) ?? "Could not initiate payment. Please try again.";
                 return StatusCode(502, new CreateOrderResponse(false, friendly));
@@ -235,13 +235,13 @@ public sealed class PaymentController : ControllerBase
             {
                 po.Status = "Failed";
                 po.FailureReason = "Razorpay returned no order id.";
-                po.UpdatedAt = DateTime.UtcNow;
+                po.UpdatedAt = DateTime.Now;
                 await _db.SaveChangesAsync(ct);
                 return StatusCode(502, new CreateOrderResponse(false, "Could not initiate payment. Please try again."));
             }
 
             po.RazorpayOrderId = rzpOrderId;
-            po.UpdatedAt = DateTime.UtcNow;
+            po.UpdatedAt = DateTime.Now;
             await _db.SaveChangesAsync(ct);
 
             return Ok(new CreateOrderResponse(
@@ -264,7 +264,7 @@ public sealed class PaymentController : ControllerBase
             _logger.LogError(ex, "Error while creating Razorpay order.");
             po.Status = "Failed";
             po.FailureReason = Truncate(ex.Message, 480);
-            po.UpdatedAt = DateTime.UtcNow;
+            po.UpdatedAt = DateTime.Now;
             await _db.SaveChangesAsync(ct);
             return StatusCode(500, new CreateOrderResponse(false, "Could not initiate payment. Please try again."));
         }
@@ -293,7 +293,7 @@ public sealed class PaymentController : ControllerBase
         {
             po.Status = "Failed";
             po.FailureReason = "Signature mismatch.";
-            po.UpdatedAt = DateTime.UtcNow;
+            po.UpdatedAt = DateTime.Now;
             await _db.SaveChangesAsync(ct);
             return BadRequest(new VerifyResponse(false, "Payment verification failed."));
         }
@@ -344,7 +344,7 @@ public sealed class PaymentController : ControllerBase
     public async Task<ActionResult<CancelSubscriptionResponse>> CancelSubscription(CancellationToken ct)
     {
         var userId = CurrentUser.RequireUserId(User);
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var up = await _db.UserPlans.FirstOrDefaultAsync(p =>
             p.UserId == userId
@@ -476,7 +476,7 @@ public sealed class PaymentController : ControllerBase
         if (po.Status == "Created")
         {
             po.Status = "Cancelled";
-            po.UpdatedAt = DateTime.UtcNow;
+            po.UpdatedAt = DateTime.Now;
             await _db.SaveChangesAsync(ct);
         }
         return Ok();
@@ -562,7 +562,7 @@ public sealed class PaymentController : ControllerBase
     {
         int? days = null;
         if (row.ActiveTo is not null)
-            days = (int)Math.Ceiling((row.ActiveTo.Value - DateTime.UtcNow).TotalDays);
+            days = (int)Math.Ceiling((row.ActiveTo.Value - DateTime.Now).TotalDays);
 
         return new ActivePlanDto(
             row.PlanCode,

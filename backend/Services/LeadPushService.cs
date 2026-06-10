@@ -92,7 +92,7 @@ public sealed class LeadPushService : ILeadPushService
             _referralDb.LeadData.Add(lead);
             await _referralDb.SaveChangesAsync(ct);
 
-            var nowUtc = DateTime.UtcNow;
+            var nowUtc = DateTime.Now;
             if (referralRow is null)
             {
                 _db.PaymentOrderReferrals.Add(new Models.PaymentOrderReferral

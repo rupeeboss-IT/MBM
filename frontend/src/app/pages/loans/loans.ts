@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -18,6 +18,24 @@ import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 export class Loans {
   private readonly loansApi = inject(LoansService);
   private readonly toast = inject(ToastService);
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  readonly loanTypeOpen = signal(false);
+
+  readonly loanTypeOptions: ReadonlyArray<{ value: string; label: string }> = [
+    { value: '1008', label: 'Balance Transfer' },
+    { value: '8', label: 'Car Refinance Loan' },
+    { value: '1008', label: 'CGTMSE Loan' },
+    { value: '1003', label: 'Commercial Property Purchase Loan' },
+    { value: '10', label: 'Credit Cards' },
+    { value: '1014', label: 'Education Loan' },
+    { value: '12', label: 'Home Loan' },
+    { value: '7', label: 'Loan Against Property' },
+    { value: '1024', label: 'Loan for Professional' },
+    { value: '9', label: 'Personal Loan' },
+    { value: '13', label: 'Unsecured Business Loan' },
+    { value: '11', label: 'Working Capital Loan' },
+  ];
 
   readonly submitting = signal(false);
   readonly submitAttempted = signal(false);
@@ -53,6 +71,37 @@ export class Loans {
 
   readonly errors = signal<Record<string, string>>({});
   readonly isFormValid = computed(() => Object.keys(this.errors()).length === 0);
+
+  loanTypeDisplayLabel(): string {
+    const selected = this.loanTypeOptions.find(o => o.value === this.form.loanType);
+    return selected?.label ?? 'Select Loan Type';
+  }
+
+  toggleLoanTypeOpen(event: Event): void {
+    event.stopPropagation();
+    this.loanTypeOpen.update(open => !open);
+  }
+
+  selectLoanType(value: string): void {
+    this.form.loanType = value;
+    this.loanTypeOpen.set(false);
+    this.markTouched('loanType');
+    this.revalidate();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.loanTypeOpen()) return;
+    const root = this.host.nativeElement.querySelector('.loan-type-ddl');
+    if (root && !root.contains(event.target as Node)) {
+      this.loanTypeOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    this.loanTypeOpen.set(false);
+  }
 
   markTouched(field: string) {
     this.touched.update(v => ({ ...v, [field]: true }));
@@ -221,6 +270,7 @@ export class Loans {
     this.form.email = '';
     this.form.pincode = '';
     this.form.loanType = '';
+    this.loanTypeOpen.set(false);
     this.form.loanAmount = '';
     this.form.consent = false;
     this.errors.set({});

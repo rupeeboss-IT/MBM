@@ -9,7 +9,4 @@ public sealed class CustomerReportSettings
 
     /// <summary>Relative path under wwwroot for stored report ZIP files.</summary>
     public string UploadRoot { get; set; } = "uploads/reports";
-
-    /// <summary>Frontend profile URL used in notification emails.</summary>
-    public string ProfileReportsUrl { get; set; } = "http://localhost:4200/profile#reports";
 }

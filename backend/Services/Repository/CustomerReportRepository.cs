@@ -69,7 +69,7 @@ public sealed class CustomerReportRepository : ICustomerReportRepository
     public async Task IncrementDownloadAsync(CustomerReport report, CancellationToken ct)
     {
         report.DownloadCount++;
-        report.LastDownloadDate = DateTime.UtcNow;
+        report.LastDownloadDate = DateTime.Now;
         await _db.SaveChangesAsync(ct);
     }
 }

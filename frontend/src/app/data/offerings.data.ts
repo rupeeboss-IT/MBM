@@ -188,7 +188,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       <h2 style="color:var(--red)">Why Your Credit Score Matters for MSMEs</h2>
       <div class="offering-benefit-grid">
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff5f5">✅</div><div class="ob-text"><strong>Loan Approvals</strong><span>Higher score = higher chances of getting business loans approved</span></div></div>
-        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">💰</div><div class="ob-text"><strong>Lower Interest Rates</strong><span>Better scores unlock significantly lower interest rates — saving lakhs</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">🪙</div><div class="ob-text"><strong>Lower Interest Rates</strong><span>Better scores unlock significantly lower interest rates — saving lakhs</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">💳</div><div class="ob-text"><strong>Credit Card Eligibility</strong><span>Access to premium business credit cards with higher limits</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">⚡</div><div class="ob-text"><strong>Faster Processing</strong><span>Reduced documentation requirements and quicker loan disbursals</span></div></div>
       </div>
@@ -220,7 +220,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     tagline: 'Transform raw bank statements into powerful financial insights for faster loan approvals',
     tags: ['Financial Analysis', 'Loan Readiness', 'Cash Flow Insights', 'Smart Analytics'],
     plans: ['MSME Premium', 'MSME Pro'],
-    highlights: ['⚡ Automated analysis', '💰 Faster loan processing', '📈 Cash flow visibility', '🎯 Loan readiness score'],
+    highlights: ['⚡ Automated analysis', '🪙 Faster loan processing', '📈 Cash flow visibility', '🎯 Loan readiness score'],
     ctaTitle: 'Analyze Your Statements',
     ctaDesc: 'Available in MSME Premium & Pro plans',
     content: `
@@ -301,7 +301,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     tagline: 'Discover hidden savings in your existing loans — reduce EMIs, lower interest, improve cash flow',
     tags: ['Loan Optimization', 'EMI Reduction', 'Balance Transfer', 'By Rupeeboss'],
     plans: ['MSME Premium', 'MSME Pro'],
-    highlights: ['💰 Identify interest savings', '📉 Reduce EMI burden', '🔄 Balance transfer support', '📋 Free detailed audit report'],
+    highlights: ['🪙 Identify interest savings', '📉 Reduce EMI burden', '🔄 Balance transfer support', '📋 Free detailed audit report'],
     ctaTitle: 'Start Your Loan Audit',
     ctaDesc: 'Free with MSME Premium & Pro plans',
     content: `
@@ -318,7 +318,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       </ul>
       <h2 style="color:#e65100">What Rupeeboss Does for You</h2>
       <div class="offering-benefit-grid">
-        <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">💰</div><div class="ob-text"><strong>Reduce Interest Costs</strong><span>Identify refinancing and balance transfer opportunities to lower total interest paid</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">🪙</div><div class="ob-text"><strong>Reduce Interest Costs</strong><span>Identify refinancing and balance transfer opportunities to lower total interest paid</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">📉</div><div class="ob-text"><strong>Improve Cash Flow</strong><span>Restructure loans to reduce EMI amounts and free up working capital</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">📋</div><div class="ob-text"><strong>Loan Consolidation</strong><span>Combine multiple loans into a single EMI — simpler management, better terms</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff5f5">📊</div><div class="ob-text"><strong>Financial Optimization</strong><span>Align your borrowing strategy with your business growth plans</span></div></div>
@@ -405,7 +405,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       <h2 style="color:#2d6a4f">What Your Scheme Report Shows</h2>
       <div class="offering-benefit-grid">
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">📋</div><div class="ob-text"><strong>Applicable Schemes List</strong><span>All central and state schemes relevant to your specific MSME profile</span></div></div>
-        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">💰</div><div class="ob-text"><strong>Benefits & Incentives</strong><span>Detailed breakdown of subsidies, grants, tax benefits, and financial support available</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">🪙</div><div class="ob-text"><strong>Benefits & Incentives</strong><span>Detailed breakdown of subsidies, grants, tax benefits, and financial support available</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">✅</div><div class="ob-text"><strong>Eligibility Criteria</strong><span>Clear eligibility requirements for each scheme so you know exactly what you qualify for</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff5f5">📞</div><div class="ob-text"><strong>Application Guidance</strong><span>Step-by-step process to apply for each scheme with document checklist</span></div></div>
       </div>
@@ -524,7 +524,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       <div class="offering-benefit-grid">
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff5f5">🛒</div><div class="ob-text"><strong>New Customers</strong><span>Meet potential customers who are actively looking for MSME suppliers and service providers</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">🤝</div><div class="ob-text"><strong>Strategic Partners</strong><span>Connect with manufacturing partners, technology providers, export partners, and distributors</span></div></div>
-        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">💰</div><div class="ob-text"><strong>Investors & Funding</strong><span>Meet funding institutions, investors, and government scheme representatives</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">🪙</div><div class="ob-text"><strong>Investors & Funding</strong><span>Meet funding institutions, investors, and government scheme representatives</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">🎓</div><div class="ob-text"><strong>Expert Knowledge</strong><span>Learn from industry leaders through seminars, workshops, and panel discussions</span></div></div>
       </div>
       <h2 style="color:var(--red)">Types of Events You Can Attend</h2>

@@ -122,11 +122,11 @@
         <div>Created</div>
         <div>Actions</div>
       </div>
-      <div class="row" *ngFor="let u of filteredAdminUsers()">
-        <div class="text-truncate" title="{{ u.fullName }}">{{ u.fullName }}</div>
-        <div class="text-truncate" title="{{ u.email }}">{{ u.email }}</div>
-        <div class="text-truncate" title="{{ u.phone }}">{{ u.phone }}</div>
-        <div>
+      <div class="row row-admin-dash" *ngFor="let u of filteredAdminUsers()">
+        <div class="text-truncate" data-label="Name" title="{{ u.fullName }}">{{ u.fullName }}</div>
+        <div class="text-truncate" data-label="Email" title="{{ u.email }}">{{ u.email }}</div>
+        <div class="text-truncate" data-label="Phone" title="{{ u.phone }}">{{ u.phone }}</div>
+        <div data-label="Status">
           <button
             class="btn"
             type="button"
@@ -136,8 +136,8 @@
             {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
           </button>
         </div>
-        <div>{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
-        <div>
+        <div data-label="Created">{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
+        <div data-label="Actions">
           <button
             class="btn btn-danger"
             type="button"
@@ -179,11 +179,11 @@
         <div>Created</div>
         <div>Role</div>
       </div>
-      <div class="row" *ngFor="let u of filteredMembers()">
-        <div class="text-truncate" title="{{ u.fullName }}">{{ u.fullName }}</div>
-        <div class="text-truncate" title="{{ u.email }}">{{ u.email }}</div>
-        <div class="text-truncate" title="{{ u.phone }}">{{ u.phone }}</div>
-        <div>
+      <div class="row row-member-dash" *ngFor="let u of filteredMembers()">
+        <div class="text-truncate" data-label="Name" title="{{ u.fullName }}">{{ u.fullName }}</div>
+        <div class="text-truncate" data-label="Email" title="{{ u.email }}">{{ u.email }}</div>
+        <div class="text-truncate" data-label="Phone" title="{{ u.phone }}">{{ u.phone }}</div>
+        <div data-label="Status">
           <button
             class="btn"
             type="button"
@@ -193,8 +193,8 @@
             {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
           </button>
         </div>
-        <div>{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
-        <div class="muted text-truncate" title="{{ u.role }}">{{ u.role }}</div>
+        <div data-label="Created">{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
+        <div class="muted text-truncate" data-label="Role" title="{{ u.role }}">{{ u.role }}</div>
       </div>
     </div>
     <div class="muted" *ngIf="(members()?.length ?? 0) > 0 && filteredMembers().length === 0">

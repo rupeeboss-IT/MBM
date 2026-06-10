@@ -6,7 +6,7 @@
 4. Copy the **Webhook Secret** into configuration:
    - Environment variable: `RazorpaySettings__WebhookSecret`
    - Or `appsettings.Production.json` (do not commit secrets)
-5. Set `RazorpaySettings:WebhookUrl` to the same public URL for your records.
+5. Register the webhook URL from `ApplicationUrls:Api` + `/api/payment/razorpay/webhook` (see `ApplicationUrlsSettings.PaymentWebhookUrl` in config).
 6. Use **live** API keys (`rzp_live_*`) in production.
 
 The API verifies `X-Razorpay-Signature` and activates membership if the user closes the browser before `/razorpay/verify` runs.

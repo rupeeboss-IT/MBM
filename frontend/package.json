@@ -3,8 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "node scripts/generate-event-manifest.mjs",
     "start": "ng serve",
+    "prebuild": "node scripts/generate-event-manifest.mjs",
     "build": "ng build",
+    "prebuild:local": "node scripts/generate-event-manifest.mjs",
+    "build:local": "ng build --configuration development",
+    "prebuild:uat": "node scripts/generate-event-manifest.mjs",
+    "build:uat": "ng build --configuration uat",
+    "prebuild:prod": "node scripts/generate-event-manifest.mjs",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:MBM-App": "node dist/MBM-App/server/server.mjs"

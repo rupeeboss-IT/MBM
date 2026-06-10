@@ -1,12 +1,12 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { getHttpErrorMessage } from '../utils/http-error-message';
-
+import { isApiRequest } from '../utils/api-url';
 /**
  * Ensures all /api/* failures expose only user-friendly `error.error.message` values.
  */
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
-  if (!req.url.includes('/api/')) {
+  if (!isApiRequest(req.url)) {
     return next(req);
   }
 

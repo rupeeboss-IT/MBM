@@ -1,2 +1,464 @@
-.mb-4{margin-bottom:1.5rem}
-.mt-4{margin-top:1.5rem}
+/* ===== Loans page (/loans) — responsive + form error alignment ===== */
+
+#page-loans .container {
+  padding-left: max(var(--page-gutter, 1rem), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--page-gutter, 1rem), env(safe-area-inset-right, 0px));
+}
+
+#page-loans .page-header .container {
+  text-align: center;
+}
+
+#page-loans .page-header h1 {
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+}
+
+#page-loans .page-header p {
+  margin: 0 auto;
+  max-width: 46ch;
+  line-height: 1.65;
+}
+
+#page-loans .section-header {
+  text-align: center;
+}
+
+#page-loans .section-header p {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 40ch;
+  line-height: 1.6;
+}
+
+/* Layout */
+#page-loans .loan-layout {
+  align-items: start;
+}
+
+#page-loans .loan-form-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+#page-loans .loan-form-box {
+  min-width: 0;
+  overflow: visible;
+}
+
+#page-loans .loan-form-box h2 {
+  line-height: 1.25;
+}
+
+#page-loans .form-sub {
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+/* Form grid — reserve space so rows align when one field has an error */
+#page-loans .form-row {
+  align-items: start;
+  margin-bottom: 0.25rem;
+}
+
+#page-loans .form-group {
+  margin-bottom: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+#page-loans .form-group label {
+  display: block;
+  line-height: 1.4;
+  margin-bottom: 0.45rem;
+}
+
+#page-loans .form-group input,
+#page-loans .form-group select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: var(--touch-min, 44px);
+}
+
+#page-loans .form-group--invalid input,
+#page-loans .form-group--invalid select,
+#page-loans .form-group--invalid .loan-type-ddl__trigger {
+  border-color: #dc2626;
+  background-color: #fffbfb;
+}
+
+#page-loans .form-group--invalid input:focus,
+#page-loans .form-group--invalid select:focus,
+#page-loans .form-group--invalid .loan-type-ddl__trigger:focus {
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+/* Custom loan type dropdown — contained in form, scroll + wrap */
+#page-loans .loan-type-ddl {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+#page-loans .loan-type-ddl--open {
+  z-index: 40;
+}
+
+#page-loans .loan-type-ddl__trigger {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+  width: 100%;
+  max-width: 100%;
+  min-height: var(--touch-min, 44px);
+  padding: 0.7rem 2.25rem 0.7rem 1rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text, #333);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#page-loans .loan-type-ddl__trigger:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+#page-loans .loan-type-ddl--open .loan-type-ddl__trigger {
+  border-color: var(--red);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#page-loans .loan-type-ddl__value {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+}
+
+#page-loans .loan-type-ddl__value.is-placeholder {
+  color: #888;
+}
+
+#page-loans .loan-type-ddl__chev {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: -0.35rem;
+  border-right: 2px solid #666;
+  border-bottom: 2px solid #666;
+  transform: rotate(45deg);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+#page-loans .loan-type-ddl--open .loan-type-ddl__chev {
+  margin-top: -0.15rem;
+  transform: rotate(-135deg);
+}
+
+#page-loans .loan-type-ddl__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: min(14rem, 40vh);
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  background: #fff;
+  border: 1.5px solid var(--red);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+}
+
+#page-loans .loan-type-ddl__option {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 0.65rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text, #333);
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  hyphens: auto;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+#page-loans .loan-type-ddl__option:hover,
+#page-loans .loan-type-ddl__option:focus {
+  background: #fff5f5;
+  outline: none;
+}
+
+#page-loans .loan-type-ddl__option.is-selected {
+  background: #ffe8ea;
+  color: var(--navy, #1a2b4a);
+  font-weight: 600;
+}
+
+#page-loans .field-error {
+  display: block;
+  width: 100%;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #b91c1c;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+#page-loans .field-error:empty {
+  display: none;
+}
+
+/* Keep row height even when sibling field has no error (desktop two-column) */
+#page-loans .field-error-spacer {
+  display: block;
+  min-height: 0;
+}
+
+#page-loans .loan-submit-error {
+  margin-bottom: 1rem;
+  text-align: left;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Consent */
+#page-loans .form-group--consent {
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+#page-loans .consent-label {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  cursor: pointer;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--text);
+}
+
+#page-loans .consent-label input[type='checkbox'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  min-height: 1.125rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+  accent-color: var(--red);
+}
+
+#page-loans .consent-label span {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+
+#page-loans .consent-label a {
+  color: var(--red);
+  font-weight: 600;
+}
+
+#page-loans .btn-submit {
+  margin-top: 1rem;
+  min-height: var(--touch-min, 48px);
+}
+
+/* Contact card under form */
+#page-loans .loan-contact-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+#page-loans .contact-nums a {
+  display: block;
+  padding: 0.35rem 0;
+  word-break: break-word;
+}
+
+/* Sidebar */
+#page-loans .loan-sidebar {
+  min-width: 0;
+}
+
+#page-loans .loan-sidebar .sidebar-card {
+  min-width: 0;
+}
+
+#page-loans .loan-product {
+  align-items: flex-start;
+  min-width: 0;
+}
+
+#page-loans .loan-product > div {
+  min-width: 0;
+  flex: 1;
+}
+
+#page-loans .loan-product strong,
+#page-loans .loan-product span {
+  word-wrap: break-word;
+}
+
+/* Eligibility */
+#page-loans .eligibility-grid {
+  align-items: stretch;
+}
+
+#page-loans .elig-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+#page-loans .elig-card p {
+  flex: 1;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* Desktop — preserve existing layout */
+@media (min-width: 1025px) {
+  #page-loans .loan-layout {
+    grid-template-columns: 2fr 1fr;
+    gap: 2.5rem;
+  }
+
+  #page-loans .form-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  #page-loans .eligibility-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  #page-loans .loan-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  #page-loans .loan-sidebar {
+    order: 2;
+  }
+
+  #page-loans .eligibility-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #page-loans .section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  #page-loans .page-header {
+    padding: 2.25rem var(--page-gutter, 1rem);
+  }
+
+  #page-loans .page-header h1 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  #page-loans .loan-form-box {
+    padding: 1.5rem 1.2rem;
+    border-radius: 14px;
+  }
+
+  #page-loans .loan-form-box h2 {
+    font-size: 1.25rem;
+  }
+
+  #page-loans .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0;
+  }
+
+  #page-loans .form-row .form-group {
+    margin-bottom: 1.1rem;
+  }
+
+  #page-loans .form-group label {
+    font-size: 0.875rem;
+  }
+
+  #page-loans .field-error {
+    font-size: 0.8rem;
+    margin-top: 0.35rem;
+  }
+
+  #page-loans .loan-type-ddl__panel {
+    max-height: min(12rem, 36vh);
+  }
+
+  #page-loans .loan-type-ddl__option {
+    font-size: 0.875rem;
+    padding: 0.6rem 0.85rem;
+  }
+
+  #page-loans .loan-sidebar .sidebar-card {
+    padding: 1.25rem 1.1rem;
+  }
+
+  #page-loans .elig-card {
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+
+  #page-loans .elig-card span {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  #page-loans .eligibility-grid {
+    grid-template-columns: 1fr;
+  }
+}

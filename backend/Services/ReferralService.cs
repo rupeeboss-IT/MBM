@@ -16,7 +16,7 @@ public sealed class ReferralService : IReferralService
     public async Task SaveReferralForOrderAsync(Guid paymentOrderId, string? referralCode, CancellationToken ct)
     {
         var code = string.IsNullOrWhiteSpace(referralCode) ? null : referralCode.Trim();
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var existing = await _db.PaymentOrderReferrals
             .FirstOrDefaultAsync(r => r.PaymentOrderId == paymentOrderId, ct);

@@ -1,20 +1,10 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { getApiPath } from '../utils/api-url';
 import { AuthSessionService } from '../services/auth-session.service';
 
-function apiPath(url: string): string {
-  if (url.includes('://')) {
-    try {
-      return new URL(url).pathname;
-    } catch {
-      return url;
-    }
-  }
-  return url.split('?')[0] ?? url;
-}
-
 function isMemberApiUrl(url: string): boolean {
-  const path = apiPath(url);
+  const path = getApiPath(url);
   return (
     path.startsWith('/api/payment') ||
     path.startsWith('/api/user/me') ||

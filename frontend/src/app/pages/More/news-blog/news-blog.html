@@ -4,9 +4,9 @@
 <section class="section"><div class="container">
   <div class="zone-filter">
     <button class="filter-btn" [class.active]="active()==='all'" (click)="setFilter('all')">All</button>
-    <button class="filter-btn" [class.active]="active()==='news'" (click)="setFilter('news')">News</button>
+    <!-- <button class="filter-btn" [class.active]="active()==='news'" (click)="setFilter('news')">News</button> -->
     <button class="filter-btn" [class.active]="active()==='blog'" (click)="setFilter('blog')">Blog</button>
-    <button class="filter-btn" [class.active]="active()==='success'" (click)="setFilter('success')">Success Stories</button>
+    <!-- <button class="filter-btn" [class.active]="active()==='success'" (click)="setFilter('success')">Success Stories</button> -->
   </div>
   <div class="news-grid" id="newsGrid">
     <div
@@ -15,7 +15,12 @@
       [attr.data-cat]="a.data.category"
       [routerLink]="['/article', a.slug]"
     >
-      <div [class]="a.data.cardClass">{{ a.data.cardIcon }}</div>
+      <div *ngIf="a.data.imageUrl; else cardIcon" class="news-img news-img--photo">
+        <img [src]="a.data.imageUrl" [alt]="a.data.title" loading="lazy" width="400" height="160" />
+      </div>
+      <ng-template #cardIcon>
+        <div [class]="a.data.cardClass">{{ a.data.cardIcon }}</div>
+      </ng-template>
       <div class="news-body">
         <span [class]="a.data.badgeClass">{{ a.data.badgeText }}</span>
         <h3>{{ a.data.title }}</h3>

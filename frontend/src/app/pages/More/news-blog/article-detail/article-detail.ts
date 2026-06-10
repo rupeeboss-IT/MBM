@@ -8,7 +8,8 @@ import type { ArticleModel, ArticleSlug } from '../../../../data/articles.data';
 @Component({
   selector: 'app-article-detail',
   imports: [CommonModule, RouterLink],
-  templateUrl: './article-detail.html'
+  templateUrl: './article-detail.html',
+  styleUrl: './article-detail.css',
 })
 export class ArticleDetail {
   private readonly route = inject(ActivatedRoute);
@@ -44,13 +45,17 @@ export class ArticleDetail {
   }
 
   private setSeo(slug: ArticleSlug, art: ArticleModel) {
-    const pageTitle = `${art.title} | MSME Bharat Manch`;
+    const pageTitle = art.seoTitle ?? `${art.title} | MSME Bharat Manch`;
+    const description = art.metaDescription ?? art.meta;
     this.title.setTitle(pageTitle);
-    this.meta.updateTag({ name: 'description', content: art.meta });
+    this.meta.updateTag({ name: 'description', content: description });
     this.meta.updateTag({ property: 'og:type', content: 'article' });
     this.meta.updateTag({ property: 'og:title', content: pageTitle });
-    this.meta.updateTag({ property: 'og:description', content: art.meta });
+    this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:url', content: `/article/${slug}` });
+    if (art.imageUrl) {
+      this.meta.updateTag({ property: 'og:image', content: art.imageUrl });
+    }
   }
 }
 

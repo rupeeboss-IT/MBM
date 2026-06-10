@@ -43,7 +43,7 @@ public sealed class PaymentActivationService
         }
 
         var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.PlanId == po.PlanId, ct);
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         Guid paymentId;
 
         if (!alreadyPaid)
@@ -163,7 +163,7 @@ public sealed class PaymentActivationService
 
     public async Task<ActivePlanRow?> GetActivePlanRowAsync(Guid userId, CancellationToken ct)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         return await (
             from up in _db.UserPlans.AsNoTracking()
             join p in _db.Plans.AsNoTracking() on up.PlanId equals p.PlanId

@@ -17,9 +17,9 @@
 
 .toast {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.65rem;
-  padding: 0.85rem 1rem;
+  padding: 0.05rem 1rem;
   border-radius: var(--radius, 12px);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
   font-size: 0.9rem;

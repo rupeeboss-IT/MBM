@@ -82,13 +82,13 @@ public sealed class OtpRateLimiter : IOtpRateLimiter
         lock (list)
         {
             Prune(list);
-            list.Add(DateTimeOffset.UtcNow);
+            list.Add(DateTimeOffset.Now);
         }
     }
 
     private static void Prune(List<DateTimeOffset> list)
     {
-        var cutoff = DateTimeOffset.UtcNow - Window;
+        var cutoff = DateTimeOffset.Now - Window;
         list.RemoveAll(t => t < cutoff);
     }
 }

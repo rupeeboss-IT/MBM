@@ -20,11 +20,43 @@
         <h2>Create Your Account</h2><p>Step 1 of 4 — Basic details</p>
       </div>
       <form id="registerForm" [formGroup]="form" (ngSubmit)="continueToPlan()">
-        <div class="form-group"><label>I am a</label>
-          <select id="regRole" formControlName="role">
-            <option value="member">MSME Member / Business Owner</option>
-            <option value="partner">Growth Partner / Consultant</option>
-          </select>
+        <div class="form-group reg-role-group">
+          <label id="regRoleLabel" for="regRoleTrigger">I am a</label>
+          <div
+            class="loan-type-ddl reg-role-ddl"
+            [class.loan-type-ddl--open]="roleOpen()">
+            <button
+              type="button"
+              class="loan-type-ddl__trigger"
+              id="regRoleTrigger"
+              (click)="toggleRoleOpen($event)"
+              [attr.aria-expanded]="roleOpen()"
+              aria-haspopup="listbox"
+              aria-controls="regRoleListbox"
+              aria-labelledby="regRoleLabel">
+              <span class="loan-type-ddl__value">{{ roleDisplayLabel() }}</span>
+              <span class="loan-type-ddl__chev" aria-hidden="true"></span>
+            </button>
+            <ul
+              class="loan-type-ddl__panel"
+              *ngIf="roleOpen()"
+              id="regRoleListbox"
+              role="listbox"
+              aria-labelledby="regRoleLabel">
+              <li *ngFor="let opt of roleOptions" role="presentation">
+                <button
+                  type="button"
+                  class="loan-type-ddl__option"
+                  role="option"
+                  [attr.aria-selected]="form.controls.role.value === opt.value"
+                  [class.is-selected]="form.controls.role.value === opt.value"
+                  (mousedown)="$event.preventDefault()"
+                  (click)="selectRole(opt.value)">
+                  {{ opt.label }}
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="form-group">
           <label>Full Name *</label>
@@ -181,18 +213,27 @@
             Suggestions powered by Clearbit.
           </div>
         </div>
-        <div style="background:#f8f9fa;border:1.5px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1rem">
-          <label style="display:flex;align-items:flex-start;gap:.75rem;cursor:pointer;font-size:.85rem;color:#444;line-height:1.6;font-weight:400">
-            <input type="checkbox" id="regConsent" formControlName="consent" required checked (change)="onConsentToggle($event)" style="margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--red);cursor:pointer">
+        <div
+          class="reg-consent-box"
+          [class.reg-consent-box--invalid]="form.controls.consent.touched && form.controls.consent.invalid">
+          <label class="reg-consent-label" for="regConsent">
+            <input
+              type="checkbox"
+              id="regConsent"
+              formControlName="consent"
+              [attr.aria-invalid]="form.controls.consent.touched && form.controls.consent.invalid">
             <span>
               By registering with <strong>MSME Bharat Manch</strong>, you consent to receive calls, SMS, WhatsApp messages, and emails regarding your membership, reports, support services, and important account updates. Your personal information will be collected, processed, and handled in accordance with our
-              <a [routerLink]="['/privacy-policy']"
-                style="color:var(--red);font-weight:600;cursor:pointer">
-                Privacy Policy
-              </a>.
+              <a routerLink="/privacy-policy">Privacy Policy</a>.
             </span>
           </label>
-          <div id="consent-error" style="display:none;color:var(--red);font-size:.8rem;margin-top:.5rem;font-weight:600">⚠️ Please accept the consent to continue.</div>
+          <div
+            id="consent-error"
+            class="reg-consent-error"
+            *ngIf="form.controls.consent.touched && form.controls.consent.invalid"
+            role="alert">
+            ⚠️ Please accept the consent to continue.
+          </div>
         </div>
         <button type="submit" class="btn-submit" [disabled]="submitting()">Continue to Plan Selection →</button>
       </form>

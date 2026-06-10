@@ -1,0 +1,42 @@
+@if (isOpen()) {
+  <div
+    class="lightbox-overlay"
+    data-lightbox-backdrop="true"
+    (click)="onBackdropClick($event)"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="alt() || 'Event image viewer'"
+  >
+    <button type="button" class="lightbox-close" (click)="close()" aria-label="Close">&times;</button>
+
+    <div class="lightbox-toolbar">
+      <button type="button" class="lightbox-tool-btn" (click)="zoomOut()" aria-label="Zoom out">−</button>
+      <span class="lightbox-zoom-label">{{ (scale() * 100) | number:'1.0-0' }}%</span>
+      <button type="button" class="lightbox-tool-btn" (click)="zoomIn()" aria-label="Zoom in">+</button>
+      <button type="button" class="lightbox-tool-btn lightbox-reset" (click)="resetTransform()" aria-label="Reset zoom">Reset</button>
+    </div>
+
+    <div
+      #viewport
+      class="lightbox-viewport"
+      (wheel)="onWheel($event)"
+      (touchstart)="onTouchStart($event)"
+      (touchmove)="onTouchMove($event)"
+      (touchend)="onTouchEnd()"
+    >
+      <img
+        #imgEl
+        class="lightbox-image"
+        [src]="imageSrc()"
+        [alt]="alt()"
+        [ngStyle]="transformStyle()"
+        (dblclick)="onDoubleClick()"
+        (pointerdown)="onPointerDown($event)"
+        (pointermove)="onPointerMove($event)"
+        (pointerup)="onPointerUp($event)"
+        (pointercancel)="onPointerUp($event)"
+        draggable="false"
+      />
+    </div>
+  </div>
+}

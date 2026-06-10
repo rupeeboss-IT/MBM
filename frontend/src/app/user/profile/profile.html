@@ -35,7 +35,7 @@
 
       <ng-template #planLoaded>
         <ng-container *ngIf="activePlan() as plan; else noPlan">
-          <div class="plan-pill plan-pill--active">{{ plan.planName }} · Active</div>
+          <div><span class="plan-pill plan-pill--active">{{ plan.planName }}</span></div>
           <div class="muted d-flex" *ngIf="plan.activeFrom"  style="justify-content: space-between;">
             <span class="k">Active since</span>
             <span class="v">{{ plan.activeFrom | date:'dd MMM yyyy' }}</span>
@@ -79,60 +79,96 @@
         <div class="details" *ngIf="!loading()">
           <div class="row" *ngIf="profile()?.memberId">
             <div class="label">Member ID</div>
-            <div class="value">{{ profile()?.memberId }}</div>
+            <div class="value" style="font-weight:900; color:var(--red) !important;">
+              {{ profile()?.memberId }}
+            </div>
           </div>
           <div class="row">
             <div class="label">Full name</div>
-            <div class="">{{ profile()?.fullName || '—' }}</div>
+            <div class="value">{{ profile()?.fullName || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">Email</div>
-            <div class="">{{ profile()?.email || '—' }}</div>
+            <div class="value">{{ profile()?.email || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">Mobile</div>
-            <div class="">{{ profile()?.phone || '—' }}</div>
+            <div class="value">{{ profile()?.phone || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">Company</div>
-            <div class="">{{ profile()?.companyName || '—' }}</div>
+            <div class="value">{{ profile()?.companyName || '—' }}</div>
           </div>
           <div class="row">
             <div class="label">User Since</div>
-            <div class="">{{ profile()?.createdAt ? (profile()?.createdAt | date:'dd MMM yyyy') : '—' }}</div>
+            <div class="value">{{ profile()?.createdAt ? (profile()?.createdAt | date:'dd MMM yyyy') : '—' }}</div>
           </div>
         </div>
       </section>
 
       <section id="reports" class="card profile-card profile-card--reports">
-        <div class="card__title">My Reports</div>
+        <div class="card__header">
+          <div class="card__title">My Reports</div>
+          <!-- <div class="shortcut-value">{{ reports().length }} available</div> -->
+        </div>
         <div class="muted">Download your credit and other reports uploaded by our team.</div>
 
         <div *ngIf="reportsLoading()" class="muted" style="margin-top:.75rem">Loading reports…</div>
 
-        <div class="invoice-table report-table" *ngIf="!reportsLoading() && reports().length > 0">
-          <div class="invoice-row invoice-row--head report-row">
-            <div>Report name</div>
-            <div>Upload date</div>
-            <div>Plan</div>
-            <div>Size</div>
-            <div>Action</div>
+        <div class="record-list" *ngIf="!reportsLoading() && reports().length > 0">
+          <div class="record-table" role="table" aria-label="My reports">
+            <div class="record-table__head record-table__row--reports" role="row">
+              <div role="columnheader">Report name</div>
+              <div role="columnheader">Upload date</div>
+              <div role="columnheader">Plan</div>
+              <div role="columnheader">Size</div>
+              <div role="columnheader">Action</div>
+            </div>
+            <div class="record-table__row record-table__row--reports" role="row" *ngFor="let r of reports()">
+              <div role="cell">{{ r.reportName }}</div>
+              <div role="cell">{{ r.uploadDate | date:'dd MMM yyyy' }}</div>
+              <div role="cell">{{ r.planName }}</div>
+              <div role="cell">{{ formatFileSize(r.fileSize) }}</div>
+              <div role="cell">
+                <button
+                  type="button"
+                  class="btn-outline btn-sm"
+                  (click)="downloadReport(r)"
+                  [disabled]="reportDownloading() === r.id">
+                  {{ reportDownloading() === r.id ? '…' : 'Download' }}
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="invoice-row report-row" *ngFor="let r of reports()">
-            <div>{{ r.reportName }}</div>
-            <div>{{ r.uploadDate | date:'dd MMM yyyy' }}</div>
-            <div>{{ r.planName }}</div>
-            <div>{{ formatFileSize(r.fileSize) }}</div>
-            <div>
+          <article class="record-card" *ngFor="let r of reports()">
+            <dl class="record-card__fields">
+              <div class="record-card__field">
+                <dt>Report Name</dt>
+                <dd>{{ r.reportName }}</dd>
+              </div>
+              <div class="record-card__field">
+                <dt>Upload date</dt>
+                <dd>{{ r.uploadDate | date:'dd MMM yyyy' }}</dd>
+              </div>
+              <div class="record-card__field">
+                <dt>Plan</dt>
+                <dd>{{ r.planName }}</dd>
+              </div>
+              <div class="record-card__field">
+                <dt>Size</dt>
+                <dd>{{ formatFileSize(r.fileSize) }}</dd>
+              </div>
+            </dl>
+            <div class="record-card__actions">
               <button
                 type="button"
                 class="btn-outline btn-sm"
                 (click)="downloadReport(r)"
                 [disabled]="reportDownloading() === r.id">
-                {{ reportDownloading() === r.id ? '…' : 'Download' }}
+                {{ reportDownloading() === r.id ? 'Downloading…' : 'Download report' }}
               </button>
             </div>
-          </div>
+          </article>
         </div>
 
         <div class="muted" *ngIf="!reportsLoading() && reports().length === 0" style="margin-top:.75rem">
@@ -146,29 +182,60 @@
 
         <div *ngIf="invoicesLoading()" class="muted" style="margin-top:.75rem">Loading invoices…</div>
 
-        <div class="invoice-table" *ngIf="!invoicesLoading() && invoices().length > 0">
-          <div class="invoice-row invoice-row--head">
-            <div>Date</div>
-            <div>Plan</div>
-            <div>Amount</div>
-            <div>Invoice #</div>
-            <div>Action</div>
+        <div class="record-list" *ngIf="!invoicesLoading() && invoices().length > 0">
+          <div class="record-table" role="table" aria-label="Invoices">
+            <div class="record-table__head record-table__row--invoices" role="row">
+              <div role="columnheader">Date</div>
+              <div role="columnheader">Plan</div>
+              <div role="columnheader">Amount</div>
+              <div role="columnheader">Invoice #</div>
+              <div role="columnheader">Action</div>
+            </div>
+            <div class="record-table__row record-table__row--invoices" role="row" *ngFor="let inv of invoices()">
+              <div role="cell">{{ inv.paidAt | date:'dd MMM yyyy' }}</div>
+              <div role="cell">{{ inv.planName }}</div>
+              <div role="cell">{{ inr(inv.amountPaise) }}</div>
+              <div role="cell" class="invoice-num">{{ inv.invoiceNumber }}</div>
+              <div role="cell">
+                <button
+                  type="button"
+                  class="btn-outline btn-sm"
+                  (click)="downloadInvoice(inv)"
+                  [disabled]="invoiceDownloading() === inv.paymentId">
+                  {{ invoiceDownloading() === inv.paymentId ? '…' : 'Download' }}
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="invoice-row" *ngFor="let inv of invoices()">
-            <div>{{ inv.paidAt | date:'dd MMM yyyy' }}</div>
-            <div>{{ inv.planName }}</div>
-            <div>{{ inr(inv.amountPaise) }}</div>
-            <div class="invoice-num">{{ inv.invoiceNumber }}</div>
-            <div>
+          <article class="record-card" *ngFor="let inv of invoices()">
+            <dl class="record-card__fields">
+              <div class="record-card__field">
+                <dt>Invoice No</dt>
+                <dd>{{ inv.invoiceNumber }}</dd>
+              </div>
+              <div class="record-card__field">
+                <dt>Date</dt>
+                <dd>{{ inv.paidAt | date:'dd MMM yyyy' }}</dd>
+              </div>
+              <div class="record-card__field">
+                <dt>Plan</dt>
+                <dd>{{ inv.planName }}</dd>
+              </div>
+              <div class="record-card__field">
+                <dt>Amount</dt>
+                <dd>{{ inr(inv.amountPaise) }}</dd>
+              </div>
+            </dl>
+            <div class="record-card__actions">
               <button
                 type="button"
                 class="btn-outline btn-sm"
                 (click)="downloadInvoice(inv)"
                 [disabled]="invoiceDownloading() === inv.paymentId">
-                {{ invoiceDownloading() === inv.paymentId ? '…' : 'Download' }}
+                {{ invoiceDownloading() === inv.paymentId ? 'Downloading…' : 'Download invoice' }}
               </button>
             </div>
-          </div>
+          </article>
         </div>
 
         <div class="muted" *ngIf="!invoicesLoading() && invoices().length === 0" style="margin-top:.75rem">
@@ -177,11 +244,11 @@
       </section>
 
       <section class="profile-grid">
-        <a class="card profile-card profile-card--shortcut" routerLink="." fragment="reports">
+        <!-- <a class="card profile-card profile-card--shortcut" routerLink="." fragment="reports">
           <div class="card__title">Reports</div>
           <div class="muted">Credit &amp; financial reports</div>
           <div class="shortcut-value">{{ reports().length }} available</div>
-        </a>
+        </a> -->
 
         <div class="card profile-card profile-card--dashboard">
           <div class="card__title">Dashboard</div>
@@ -200,10 +267,10 @@
                 {{ profile()?.phoneVerifiedAt ? 'Yes' : 'No' }}
               </div>
             </div>
-            <div class="kpi">
+            <!-- <div class="kpi">
               <div class="kpi__label">Role</div>
               <div class="kpi__value">{{ profile()?.role || '—' }}</div>
-            </div>
+            </div> -->
           </div>
         </div>
 

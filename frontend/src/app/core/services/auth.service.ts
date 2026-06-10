@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { apiUrl } from '../utils/api-url';
 
 type ApiOk = { success: true; message?: string };
 type RegisterReq = {
@@ -39,88 +40,84 @@ export type MeRes = {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/api/auth';
-  private readonly userBaseUrl = '/api/user';
-  private readonly adminBaseUrl = '/api/admin';
 
   sendEmailOtp(email: string): Observable<ApiOk> {
-    return this.http.post<ApiOk>(`${this.baseUrl}/otp/email/send`, { email });
+    return this.http.post<ApiOk>(apiUrl('/api/auth/otp/email/send'), { email });
   }
 
   verifyEmailOtp(email: string, code: string): Observable<ApiOk> {
-    return this.http.post<ApiOk>(`${this.baseUrl}/otp/email/verify`, { email, code });
+    return this.http.post<ApiOk>(apiUrl('/api/auth/otp/email/verify'), { email, code });
   }
 
   sendSmsOtp(phone: string): Observable<ApiOk> {
-    return this.http.post<ApiOk>(`${this.baseUrl}/otp/sms/send`, { phone });
+    return this.http.post<ApiOk>(apiUrl('/api/auth/otp/sms/send'), { phone });
   }
 
   verifySmsOtp(phone: string, code: string): Observable<ApiOk> {
-    return this.http.post<ApiOk>(`${this.baseUrl}/otp/sms/verify`, { phone, code });
+    return this.http.post<ApiOk>(apiUrl('/api/auth/otp/sms/verify'), { phone, code });
   }
 
   register(req: RegisterReq): Observable<RegisterRes> {
-    return this.http.post<RegisterRes>(`${this.userBaseUrl}/register`, req);
+    return this.http.post<RegisterRes>(apiUrl('/api/user/register'), req);
   }
 
   login(req: LoginReq): Observable<LoginRes> {
-    return this.http.post<LoginRes>(`${this.userBaseUrl}/login`, req);
+    return this.http.post<LoginRes>(apiUrl('/api/user/login'), req);
   }
 
   adminLogin(req: AdminLoginReq): Observable<AdminLoginRes> {
-    return this.http.post<AdminLoginRes>(`${this.adminBaseUrl}/login`, req);
+    return this.http.post<AdminLoginRes>(apiUrl('/api/admin/login'), req);
   }
 
   adminDashboardCounts(): Observable<any> {
-    return this.http.get(`${this.adminBaseUrl}/dashboard/counts`);
+    return this.http.get(apiUrl('/api/admin/dashboard/counts'));
   }
 
   adminDashboardDetail(category: string, opts?: { days?: number }): Observable<any> {
     const params: Record<string, string> = {};
     if (opts?.days != null) params['days'] = String(opts.days);
-    return this.http.get(`${this.adminBaseUrl}/dashboard/details/${encodeURIComponent(category)}`, { params });
+    return this.http.get(apiUrl(`/api/admin/dashboard/details/${encodeURIComponent(category)}`), { params });
   }
 
   adminListUsers(role?: string): Observable<any> {
     const params: any = {};
     if (role) params.role = role;
-    return this.http.get(`${this.adminBaseUrl}/users`, { params });
+    return this.http.get(apiUrl('/api/admin/users'), { params });
   }
 
   adminSetUserActive(userId: string, isActive: boolean): Observable<any> {
-    return this.http.patch(`${this.adminBaseUrl}/users/${encodeURIComponent(userId)}/active`, { isActive });
+    return this.http.patch(apiUrl(`/api/admin/users/${encodeURIComponent(userId)}/active`), { isActive });
   }
 
   adminListMembers(role?: string): Observable<any> {
     const params: any = {};
     if (role) params.role = role;
-    return this.http.get(`${this.adminBaseUrl}/members`, { params });
+    return this.http.get(apiUrl('/api/admin/members'), { params });
   }
 
   adminSetMemberActive(userId: string, isActive: boolean, reason?: string): Observable<any> {
-    return this.http.patch(`${this.adminBaseUrl}/members/${encodeURIComponent(userId)}/active`, { isActive, reason });
+    return this.http.patch(apiUrl(`/api/admin/members/${encodeURIComponent(userId)}/active`), { isActive, reason });
   }
 
   adminCreateUser(req: { fullName: string; email: string; phone: string; password: string }): Observable<any> {
-    return this.http.post(`${this.adminBaseUrl}/users`, req);
+    return this.http.post(apiUrl('/api/admin/users'), req);
   }
 
   adminDeleteUser(userId: string): Observable<any> {
-    return this.http.delete(`${this.adminBaseUrl}/users/${encodeURIComponent(userId)}`);
+    return this.http.delete(apiUrl(`/api/admin/users/${encodeURIComponent(userId)}`));
   }
 
   forgotPassword(email: string): Observable<ForgotPasswordRes> {
     const req: ForgotPasswordReq = { email };
-    return this.http.post<ForgotPasswordRes>(`${this.userBaseUrl}/password/forgot`, req);
+    return this.http.post<ForgotPasswordRes>(apiUrl('/api/user/password/forgot'), req);
   }
 
   resetPassword(email: string, code: string, newPassword: string): Observable<ResetPasswordRes> {
     const req: ResetPasswordReq = { email, code, newPassword };
-    return this.http.post<ResetPasswordRes>(`${this.userBaseUrl}/password/reset`, req);
+    return this.http.post<ResetPasswordRes>(apiUrl('/api/user/password/reset'), req);
   }
 
   me(): Observable<MeRes> {
-    return this.http.get<MeRes>(`${this.userBaseUrl}/me`);
+    return this.http.get<MeRes>(apiUrl('/api/user/me'));
   }
 }
-

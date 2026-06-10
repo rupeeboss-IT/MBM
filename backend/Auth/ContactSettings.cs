@@ -14,7 +14,6 @@ public sealed class ContactSettings
     public string SupportNotifyEmail { get; set; } = "support@msmebharatmanch.com";
 
     public string FromDisplayName { get; set; } = "MSME Bharat Manch Support";
-    public string SiteUrl { get; set; } = "http://localhost:4200";
     public string SupportPhone { get; set; } = "+91 90059 00921";
 
     /// <summary>Optional SMTP host for contact mail only. Empty = use EmailSettings:Host.</summary>

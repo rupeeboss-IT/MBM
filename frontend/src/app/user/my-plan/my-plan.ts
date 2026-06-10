@@ -92,7 +92,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
               <div class="meta">
                 <div class="d-flex" style="justify-content: space-between;">
                   <span class="k">Status</span>
-                  <span class="v">{{ p.status }}</span>
+                  <span class="v" style="font-weight: 700;">{{ p.status }}</span>
                 </div><hr/>
                 <div class="d-flex" style="justify-content: space-between;">
                   <span class="k">Active from</span>
@@ -164,16 +164,38 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
 
         <div class="card plan-card policy-card" *ngIf="history().length > 0">
           <div class="card__title">Payment history</div>
-          <div class="history-table">
-            <div class="history-row header">
-              <div>Plan</div><div>Amount</div><div>Status</div><div>Date</div>
+          <div class="record-list">
+            <div class="record-table" role="table" aria-label="Payment history">
+              <div class="record-table__head record-table__row--history" role="row">
+                <div role="columnheader">Plan</div>
+                <div role="columnheader">Amount</div>
+                <div role="columnheader">Status</div>
+                <div role="columnheader">Date</div>
+              </div>
+              <div class="record-table__row record-table__row--history" role="row" *ngFor="let h of history()">
+                <div role="cell">{{ h.planName }}</div>
+                <div role="cell">{{ inr(h.amountPaise) }}</div>
+                <div role="cell">{{ h.paymentStatus || h.orderStatus }}</div>
+                <div role="cell">{{ (h.paidAt || h.createdAt) | date:'dd MMM yyyy' }}</div>
+              </div>
             </div>
-            <div class="history-row" *ngFor="let h of history()">
-              <div>{{ h.planName }}</div>
-              <div>{{ inr(h.amountPaise) }}</div>
-              <div>{{ h.paymentStatus || h.orderStatus }}</div>
-              <div>{{ (h.paidAt || h.createdAt) | date:'dd MMM yyyy' }}</div>
-            </div>
+            <article class="record-card" *ngFor="let h of history()">
+              <h3 class="record-card__title">{{ h.planName }}</h3>
+              <dl class="record-card__fields">
+                <div class="record-card__field">
+                  <dt>Amount</dt>
+                  <dd>{{ inr(h.amountPaise) }}</dd>
+                </div>
+                <div class="record-card__field">
+                  <dt>Status</dt>
+                  <dd>{{ h.paymentStatus || h.orderStatus }}</dd>
+                </div>
+                <div class="record-card__field">
+                  <dt>Date</dt>
+                  <dd>{{ (h.paidAt || h.createdAt) | date:'dd MMM yyyy' }}</dd>
+                </div>
+              </dl>
+            </article>
           </div>
         </div>
       </div>
@@ -190,7 +212,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
       .plan-hero{
         background: linear-gradient(135deg, var(--navy), var(--navy2));
         color:#fff;
-        padding: 2.2rem 0 1.6rem;
+        padding: 2.2rem 20px 1.6rem;
       }
       .plan-hero__row{ display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; }
       .plan-hero__badge{
@@ -216,12 +238,12 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
       .policy-card{ grid-column: 1 / -1; }
       .pill{
         display:inline-block; padding:.35rem .75rem; border-radius:999px;
-        background: var(--green-light); color: var(--green); font-weight: 950;
-        margin:.2rem 0 .8rem 0;
+        background: var(--green-light); color: var(--green); font-weight: 600;
+        margin:.8rem 0 .8rem 0;
       }
       .meta{ display:grid; gap:.35rem; }
-      .meta .k{ color: var(--muted); font-weight: 900; }
-      .meta .v{ color: var(--navy); font-weight: 900; }
+      .meta .k{ color: var(--muted);}
+      .meta .v{ color: var(--navy);}
       .meta .v.warn{ color: #b45309; }
       .banner{
         margin-top: .85rem; padding: .75rem .9rem; border-radius: 12px;
@@ -236,22 +258,123 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         border: 1px solid rgba(0,0,0,.10); border-radius: 14px;
         padding: .85rem; background:#fff;
       }
-      .benefit__title{ font-weight: 950; color: var(--navy); margin-bottom: .25rem; }
+      .benefit__title{ font-weight: 550; color: var(--navy); margin-bottom: .25rem; }
       .benefit__desc{ color: var(--muted); font-weight: 600; font-size: .92rem; }
       .policy-list{ margin: 0; padding-left: 1.2rem; color: #555; font-weight: 600; font-size: .92rem; }
       .policy-list li{ margin-bottom: .4rem; }
-      .history-table{ margin-top: .6rem; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
-      .history-row{
-        display: grid; grid-template-columns: 1.2fr .8fr .8fr .9fr;
-        gap: 10px; padding: 10px 12px; border-top: 1px solid #f3f4f6; font-size: .9rem;
+      .record-list{
+        display:flex;
+        flex-direction:column;
+        gap:.65rem;
       }
-      .history-row.header{ background: #f9fafb; font-weight: 800; border-top: none; }
+
+      /* Desktop: payment history as table */
+      .record-table{
+        width:100%;
+        border:1px solid var(--border);
+        border-radius:14px;
+        overflow:hidden;
+        background:#fff;
+      }
+      .record-table__head.record-table__row--history,
+      .record-table__row.record-table__row--history{
+        display:grid;
+        align-items:center;
+        gap:.75rem;
+        grid-template-columns: 1.2fr .8fr .8fr .9fr;
+      }
+      .record-table__head.record-table__row--history{
+        background:#f8fafc;
+        padding:.65rem .75rem;
+        border-bottom:1px solid rgba(0,0,0,.06);
+        color:var(--muted);
+        text-transform:uppercase;
+        letter-spacing:.04em;
+        font-size:.82rem;
+        font-weight:950;
+      }
+      .record-table__row.record-table__row--history{
+        padding:.8rem .75rem;
+        border-bottom:1px solid rgba(0,0,0,.06);
+      }
+      .record-table__row.record-table__row--history:last-child{ border-bottom:none; }
+      .record-table__head.record-table__row--history [role="columnheader"]{
+        color:inherit;
+        font-weight:inherit;
+      }
+      .record-table__row.record-table__row--history [role="cell"]{
+        display:flex;
+        align-items:center;
+        color:var(--navy);
+        font-weight:450;
+        min-width:0;
+      }
+
+      /* Mobile: payment history as cards */
+      .record-card{ display:none; }
+      .record-card__title{
+        margin:0 0 .6rem;
+        font-size:1rem;
+        font-weight:950;
+        color:var(--navy);
+        overflow-wrap:anywhere;
+        word-break:break-word;
+      }
+      .record-card__fields{
+        display:flex;
+        flex-direction:column;
+        gap:.6rem;
+      }
+      .record-card__field{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:.8rem;
+        align-items:start;
+      }
+      .record-card__field dt{
+        margin:0;
+        font-size:.78rem;
+        font-weight:900;
+        color:var(--muted);
+        text-transform:uppercase;
+        letter-spacing:.04em;
+      }
+      .record-card__field dd{
+        margin:0;
+        font-size:.95rem;
+        font-weight:900;
+        color:var(--navy);
+        overflow-wrap:anywhere;
+        word-break:break-word;
+      }
+
+      @media (max-width: 1024px){
+        .record-table{ display:none; }
+        .record-card{
+          display:block;
+          border:1px solid var(--border);
+          border-radius:14px;
+          background:#fff;
+          padding:1rem;
+        }
+      }
       @media (max-width: 980px){
-        .plan-shell{ grid-template-columns: 1fr; }
+        .plan-shell{ grid-template-columns: 1fr; padding-left: var(--page-gutter); padding-right: var(--page-gutter); }
         .plan-hero__row{ flex-direction: column; align-items:flex-start; }
       }
       @media (max-width: 720px){
-        .benefits, .history-row{ grid-template-columns: 1fr; }
+        .benefits{ grid-template-columns: 1fr; }
+        .plan-card{ padding: 1.25rem; }
+        .plan-hero__actions .btn-outline,
+        .plan-hero__actions .btn-primary{
+          width:100%;
+          text-align:center;
+          display:block;
+        }
+        .actions .btn-outline{
+          width:100%;
+          text-align:center;
+        }
       }
     `,
   ],

@@ -14,6 +14,7 @@ public sealed class ContactEmailService : IContactEmailService
 
     private readonly IEmailSender _email;
     private readonly ContactSettings _contact;
+    private readonly ApplicationUrlsSettings _urls;
     private readonly EmailSettings _emailSettings;
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<ContactEmailService> _logger;
@@ -21,12 +22,14 @@ public sealed class ContactEmailService : IContactEmailService
     public ContactEmailService(
         IEmailSender email,
         IOptions<ContactSettings> contact,
+        IOptions<ApplicationUrlsSettings> urls,
         IOptions<EmailSettings> emailSettings,
         IWebHostEnvironment env,
         ILogger<ContactEmailService> logger)
     {
         _email = email;
         _contact = contact.Value;
+        _urls = urls.Value;
         _emailSettings = emailSettings.Value;
         _env = env;
         _logger = logger;
@@ -79,7 +82,7 @@ public sealed class ContactEmailService : IContactEmailService
             to,
             subjectLabel,
             submission.CreatedAt,
-            _contact.SiteUrl,
+            _urls.FrontendBase,
             _contact.FromEmail,
             _contact.SupportPhone);
 
@@ -194,7 +197,7 @@ public sealed class ContactEmailService : IContactEmailService
             .Replace("{{SiteUrl}}", Encode(siteUrl))
             .Replace("{{SupportEmail}}", Encode(supportEmail))
             .Replace("{{SupportPhone}}", Encode(supportPhone))
-            .Replace("{{Year}}", DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture));
+            .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
     }
 
     private string BuildSupportBody(ContactSubmission submission, string subjectLabel)
@@ -211,7 +214,7 @@ public sealed class ContactEmailService : IContactEmailService
             .Replace("{{SubjectLabel}}", Encode(subjectLabel))
             .Replace("{{Message}}", EncodeMultiline(submission.Message))
             .Replace("{{SubmittedAt}}", Encode(dateText))
-            .Replace("{{Year}}", DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture));
+            .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
     }
 
     private string LoadTemplate(string fileName)

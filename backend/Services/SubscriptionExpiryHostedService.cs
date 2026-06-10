@@ -41,7 +41,7 @@ public sealed class SubscriptionExpiryHostedService : BackgroundService
     {
         using var scope = _services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var expired = await db.UserPlans
             .Where(up => up.Status == "Active" && up.ActiveTo != null && up.ActiveTo <= now)

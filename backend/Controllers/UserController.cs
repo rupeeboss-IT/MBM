@@ -182,7 +182,7 @@ public sealed class UserController : ControllerBase
             return BadRequest(new RegisterResponse(false, "Invalid role for registration."));
 
         var (hash, salt) = PasswordHasher.Hash(req.Password);
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         await using var tx = await _db.Database.BeginTransactionAsync(ct);
         try
@@ -286,7 +286,7 @@ public sealed class UserController : ControllerBase
         var (hash, salt) = PasswordHasher.Hash(req.NewPassword);
         user.PasswordHash = hash;
         user.PasswordSalt = salt;
-        user.UpdatedAt = DateTime.UtcNow;
+        user.UpdatedAt = DateTime.Now;
 
         await _db.SaveChangesAsync(ct);
         return Ok(new ResetPasswordResponse(true, "Password updated."));

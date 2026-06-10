@@ -92,7 +92,7 @@ public sealed class CustomerReportService : ICustomerReportService
         var users = await q.OrderBy(u => u.FullName).Take(25).ToListAsync(ct);
         if (users.Count == 0) return Array.Empty<CustomerSearchResultDto>();
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var userIds = users.Select(u => u.UserId).ToList();
         var activePlans = await (
             from up in _db.UserPlans.AsNoTracking()
@@ -126,7 +126,7 @@ public sealed class CustomerReportService : ICustomerReportService
         Guid customerId,
         CancellationToken ct)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var up = await _db.UserPlans.AsNoTracking()
             .Where(p => p.UserId == customerId
                         && p.Status == "Active"
@@ -173,7 +173,7 @@ public sealed class CustomerReportService : ICustomerReportService
         if (!subOk)
             return (false, subErr, null);
 
-        var dateFolder = DateTime.UtcNow.ToString("yyyyMMdd");
+        var dateFolder = DateTime.Now.ToString("yyyyMMdd");
         var uniqueName = $"{Guid.NewGuid():N}.zip";
         var relativeDir = Path.Combine(_settings.UploadRoot, customerId.ToString(), dateFolder);
         var wwwroot = Path.Combine(_env.ContentRootPath, "wwwroot");
@@ -197,7 +197,7 @@ public sealed class CustomerReportService : ICustomerReportService
             OriginalFileName = Path.GetFileName(file.FileName),
             FilePath = relativePath,
             FileSize = file.Length,
-            UploadDate = DateTime.UtcNow,
+            UploadDate = DateTime.Now,
             UploadedBy = adminUserId,
             SubscriptionId = subscriptionId!.Value,
             IsActive = true,

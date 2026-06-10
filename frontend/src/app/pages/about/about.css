@@ -1,0 +1,250 @@
+/* ===== About page — responsive layout (desktop layout unchanged at 1025px+) ===== */
+
+#page-about .container {
+  padding-left: max(var(--page-gutter, 1rem), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--page-gutter, 1rem), env(safe-area-inset-right, 0px));
+}
+
+#page-about .page-header .container {
+  text-align: center;
+}
+
+#page-about .page-header h1 {
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+}
+
+#page-about .page-header p {
+  margin: 0 auto;
+  max-width: 42ch;
+  line-height: 1.65;
+}
+
+#page-about .section-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+#page-about .section-header h2 {
+  line-height: 1.25;
+}
+
+#page-about .section-header--solutions {
+  margin-bottom: 1.25rem;
+}
+
+/* Mission & Vision */
+#page-about .mv-grid {
+  align-items: stretch;
+}
+
+#page-about .mv-card {
+  display: flex;
+  flex-direction: column;
+}
+
+#page-about .mv-card p {
+  flex: 1;
+  margin: 0;
+}
+
+/* 360° Solutions — desktop: 4 columns (global default) */
+#page-about .solutions-grid {
+  align-items: stretch;
+}
+
+#page-about .solution-item {
+  min-width: 0;
+  height: 100%;
+  line-height: 1.45;
+}
+
+#page-about .solution-item .solution-label {
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Numbers */
+#page-about .numbers-grid {
+  align-items: start;
+}
+
+#page-about .number-card {
+  padding: 0.5rem 0.25rem;
+}
+
+/* Team */
+#page-about .team-card p {
+  text-align: center;
+  line-height: 1.65;
+  margin: 0;
+}
+
+#page-about .cta-section .container {
+  text-align: center;
+}
+
+#page-about .cta-section p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#page-about .cta-actions {
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tablet & mobile */
+@media (max-width: 1024px) {
+  #page-about .solutions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #page-about .section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  #page-about .page-header {
+    padding: 2.25rem var(--page-gutter, 1rem);
+  }
+
+  #page-about .page-header h1 {
+    font-size: clamp(1.45rem, 6.5vw, 1.85rem);
+  }
+
+  #page-about .section-header {
+    margin-bottom: 1.35rem;
+  }
+
+  #page-about .section-header h2 {
+    font-size: clamp(1.2rem, 5vw, 1.5rem);
+  }
+
+  #page-about .mv-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  #page-about .mv-card {
+    padding: 1.35rem 1.15rem;
+  }
+
+  #page-about .mv-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.65rem;
+  }
+
+  #page-about .mv-card p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  #page-about .solutions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 2rem !important;
+  }
+
+  #page-about .solution-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: 0.85rem 0.7rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  #page-about .sol-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  #page-about .numbers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  #page-about .number-card .number-value {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  #page-about .number-card .number-label {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  #page-about .team-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  #page-about .team-card {
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+
+  #page-about .team-card p {
+    font-size: 0.9rem;
+    max-width: 36ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #page-about .cta-section {
+    padding: 2.5rem var(--page-gutter, 1rem);
+  }
+
+  #page-about .cta-actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    gap: 0.75rem;
+  }
+
+  #page-about .cta-actions .btn-outline-lg,
+  #page-about .cta-actions app-join-today-button,
+  #page-about .cta-actions a,
+  #page-about .cta-actions button {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  #page-about .numbers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Last odd stat centered when 5 items in 2-col grid */
+  #page-about .numbers-grid .number-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 12rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Desktop: preserve 4-column solutions grid */
+@media (min-width: 1025px) {
+  #page-about .solutions-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  #page-about .solution-item {
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem 1.2rem;
+    font-size: 0.92rem;
+  }
+}

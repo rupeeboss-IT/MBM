@@ -148,7 +148,7 @@ export const SERVICES_DATA: Record<ServiceSlug, ServiceModel> = {
       'Investment Due Diligence',
       'Investor Relations Management'
     ],
-    targets: ['📈 High-Growth MSMEs', '💰 Seeking Major Funding', '🏢 Established Companies', '🌐 Export-Ready Businesses'],
+    targets: ['📈 High-Growth MSMEs', '🪙 Seeking Major Funding', '🏢 Established Companies', '🌐 Export-Ready Businesses'],
     process:
       'We assess your IPO readiness, help you prepare required documentation, connect you with merchant bankers and investors, guide you through SEBI compliance and support post-IPO investor relations.',
     related: ['coaching-consulting', 'accounting-cfo', 'legal-compliance']
@@ -268,7 +268,7 @@ export const SERVICES_DATA: Record<ServiceSlug, ServiceModel> = {
       'Cash Flow Management',
       'Virtual CFO Services'
     ],
-    targets: ['🆕 New Businesses', '📈 Growing MSMEs', '💰 Loan-seeking Businesses', '🌐 Export MSMEs'],
+    targets: ['🆕 New Businesses', '📈 Growing MSMEs', '🪙 Loan-seeking Businesses', '🌐 Export MSMEs'],
     process:
       'Our accounting team provides regular bookkeeping, timely financial statements and strategic financial advice. Virtual CFO service gives you access to senior financial expertise at a fraction of the cost of a full-time CFO.',
     related: ['legal-compliance', 'company-formation', 'coaching-consulting']

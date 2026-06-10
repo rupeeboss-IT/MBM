@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -18,6 +18,22 @@ import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
 export class Contact {
   private readonly contactApi = inject(ContactService);
   private readonly toast = inject(ToastService);
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  readonly subjectOpen = signal(false);
+
+  readonly subjectOptions: ReadonlyArray<{ value: string; label: string }> = [
+    { value: '1', label: 'Payment' },
+    { value: '2', label: 'Loan Enquiry' },
+    { value: '3', label: 'Government Scheme' },
+    { value: '4', label: 'Company Formation' },
+    { value: '5', label: 'Technology Services' },
+    { value: '6', label: 'Digital Marketing' },
+    { value: '7', label: 'Membership' },
+    { value: '8', label: 'Partnership' },
+    { value: '9', label: 'General Enquiry' },
+    { value: '10', label: 'Other' },
+  ];
 
   readonly submitting = signal(false);
   readonly submitAttempted = signal(false);
@@ -39,6 +55,37 @@ export class Contact {
 
   readonly errors = signal<Record<string, string>>({});
   readonly isFormValid = computed(() => Object.keys(this.errors()).length === 0);
+
+  subjectDisplayLabel(): string {
+    const selected = this.subjectOptions.find(o => o.value === this.form.subjectId);
+    return selected?.label ?? 'Select subject';
+  }
+
+  toggleSubjectOpen(event: Event): void {
+    event.stopPropagation();
+    this.subjectOpen.update(open => !open);
+  }
+
+  selectSubject(value: string): void {
+    this.form.subjectId = value;
+    this.subjectOpen.set(false);
+    this.markTouched('subjectId');
+    this.revalidate();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.subjectOpen()) return;
+    const root = this.host.nativeElement.querySelector('.loan-type-ddl');
+    if (root && !root.contains(event.target as Node)) {
+      this.subjectOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    this.subjectOpen.set(false);
+  }
 
   markTouched(field: string) {
     this.touched.update(v => ({ ...v, [field]: true }));
@@ -172,6 +219,7 @@ export class Contact {
     this.form.mobile = '';
     this.form.email = '';
     this.form.subjectId = '';
+    this.subjectOpen.set(false);
     this.form.message = '';
     this.form.consent = false;
     this.errors.set({});

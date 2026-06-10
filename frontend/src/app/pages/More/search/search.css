@@ -1,0 +1,208 @@
+/* ===== Search page (/search) — responsive layout ===== */
+
+#page-search .container {
+  padding-left: max(var(--page-gutter, 1rem), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--page-gutter, 1rem), env(safe-area-inset-right, 0px));
+}
+
+#page-search .page-header .container {
+  text-align: center;
+}
+
+#page-search .page-header h1 {
+  line-height: 1.15;
+  margin-bottom: 0.65rem;
+}
+
+#page-search .page-header p {
+  margin: 0 auto;
+  max-width: 42ch;
+  line-height: 1.65;
+}
+
+/* Search bar */
+#page-search .search-form-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  width: 100%;
+  min-width: 0;
+}
+
+#page-search .search-form-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.4;
+  outline: none;
+  box-sizing: border-box;
+  min-height: var(--touch-min, 44px);
+}
+
+#page-search .search-form-input:focus {
+  border-color: var(--red);
+}
+
+#page-search .search-form-submit {
+  flex-shrink: 0;
+  padding: 0.85rem 1.5rem;
+  min-height: var(--touch-min, 44px);
+  white-space: nowrap;
+}
+
+/* Results */
+#page-search .search-results-area {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#page-search .search-results-meta {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+#page-search .search-results-meta strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+#page-search .search-results-section {
+  min-width: 0;
+}
+
+#page-search .search-results-heading {
+  margin: 0 0 0.7rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+}
+
+#page-search .search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#page-search .search-result-card {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#page-search .search-result-card:hover {
+  border-color: var(--red);
+  box-shadow: var(--shadow, 0 4px 14px rgba(0, 0, 0, 0.08));
+}
+
+#page-search .search-result-card__icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+#page-search .search-result-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+#page-search .search-result-card__title {
+  display: block;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+}
+
+#page-search .search-result-card__subtitle {
+  display: block;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+}
+
+#page-search .search-state-msg {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 50ch;
+}
+
+/* Desktop — keep 2-column results grid */
+@media (min-width: 769px) {
+  #page-search .search-results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  #page-search .section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  #page-search .page-header {
+    padding: 2.25rem var(--page-gutter, 1rem);
+  }
+
+  #page-search .page-header h1 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  #page-search .search-form-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    max-width: none;
+    margin-bottom: 1.5rem;
+  }
+
+  #page-search .search-form-submit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Mobile: one result card per row */
+  #page-search .search-results-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  #page-search .search-result-card {
+    padding: 1rem 0.9rem;
+  }
+
+  #page-search .search-state-msg {
+    max-width: none;
+  }
+}

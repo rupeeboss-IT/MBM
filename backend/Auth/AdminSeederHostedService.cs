@@ -52,7 +52,7 @@ public sealed class AdminSeederHostedService : IHostedService
             }
 
             var (hash, salt) = PasswordHasher.Hash(password);
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
 
             db.Users.Add(new User
             {

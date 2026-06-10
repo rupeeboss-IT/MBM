@@ -10,20 +10,20 @@ public sealed class ReportEmailService : IReportEmailService
 {
     private const string TemplateFileName = "ReportReadyEmail.html";
     private readonly IEmailSender _email;
-    private readonly CustomerReportSettings _reportSettings;
+    private readonly ApplicationUrlsSettings _urls;
     private readonly InvoiceSettings _invoiceSettings;
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<ReportEmailService> _logger;
 
     public ReportEmailService(
         IEmailSender email,
-        IOptions<CustomerReportSettings> reportSettings,
+        IOptions<ApplicationUrlsSettings> urls,
         IOptions<InvoiceSettings> invoiceSettings,
         IWebHostEnvironment env,
         ILogger<ReportEmailService> logger)
     {
         _email = email;
-        _reportSettings = reportSettings.Value;
+        _urls = urls.Value;
         _invoiceSettings = invoiceSettings.Value;
         _env = env;
         _logger = logger;
@@ -42,7 +42,7 @@ public sealed class ReportEmailService : IReportEmailService
             customer.FullName,
             report.MemberId,
             report.UploadDate,
-            _reportSettings.ProfileReportsUrl,
+            _urls.ProfileReportsUrl,
             _invoiceSettings.SupportEmail);
 
         await _email.SendAsync(customer.Email, subject, body, isHtml: true, attachments: null, ct);
@@ -68,7 +68,7 @@ public sealed class ReportEmailService : IReportEmailService
             .Replace("{{ReportGeneratedDate}}", Encode(dateText))
             .Replace("{{ReportUrl}}", Encode(reportUrl))
             .Replace("{{SupportEmail}}", Encode(support))
-            .Replace("{{Year}}", DateTime.UtcNow.Year.ToString(CultureInfo.InvariantCulture));
+            .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
     }
 
     private string LoadTemplate()

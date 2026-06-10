@@ -11,5 +11,4 @@ public sealed class InvoiceSettings
     public string SacCode { get; set; } = "998314";
     public string SupportEmail { get; set; } = "sales@rupeeboss.com";
     public string? SupportPhone { get; set; }
-    public string SiteUrl { get; set; } = "https://msmebharatmanch.com";
 }

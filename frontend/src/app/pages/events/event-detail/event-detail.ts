@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { JoinCtaService } from '../../../core/services/join-cta.service';
 import { EventsService } from '../../../core/services/events.service';
 import type { EventModel, EventSlug } from '../../../data/events.data';
 
@@ -14,6 +15,7 @@ export class EventDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly events = inject(EventsService);
+  readonly joinCta = inject(JoinCtaService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);

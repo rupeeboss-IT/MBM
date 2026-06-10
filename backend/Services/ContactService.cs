@@ -59,7 +59,7 @@ public sealed class ContactService : IContactService
             return (false, "Unable to send your message right now. Please try again.", null);
         }
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var entity = new ContactSubmission
         {
             FullName = fullName.Trim(),
@@ -86,7 +86,7 @@ public sealed class ContactService : IContactService
         var emailResult = await _email.TrySendEmailsAsync(entity, ct);
         if (emailResult.CustomerNotified)
         {
-            entity.ConfirmationEmailSentAt = DateTime.UtcNow;
+            entity.ConfirmationEmailSentAt = DateTime.Now;
             await _db.SaveChangesAsync(ct);
         }
 

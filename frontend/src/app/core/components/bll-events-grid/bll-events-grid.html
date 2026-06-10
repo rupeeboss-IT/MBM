@@ -1,0 +1,64 @@
+@if (loading()) {
+  <div class="bll-events-status">Loading BLL events…</div>
+} @else if (error()) {
+  <div class="bll-events-status bll-events-error">{{ error() }}</div>
+} @else if (events().length === 0) {
+  <div class="bll-events-status">No BLL events available at the moment.</div>
+} @else {
+  <div [class]="variant() === 'home' ? 'bll-events-grid bll-events-grid--home' : 'bll-events-grid bll-events-grid--page'">
+    @for (ev of events(); track ev.id) {
+      <article class="bll-event-card">
+        <button
+          type="button"
+          class="bll-event-thumb"
+          (click)="openLightbox(ev, $event)"
+          [attr.aria-label]="'View poster for ' + ev.title"
+        >
+          <img [src]="ev.imageUrl" [alt]="ev.title" loading="lazy" />
+          <span class="bll-event-thumb-overlay">
+            <span class="bll-event-thumb-icon">🔍</span>
+            <span>View Poster</span>
+          </span>
+        </button>
+
+        <div class="bll-event-content">
+          <div class="event-meta">
+            <span class="badge badge-red">BLL</span>
+            @if (ev.price) {
+              <span class="badge badge-orange">{{ ev.price }}</span>
+            }
+          </div>
+
+          <h3 class="bll-event-title">{{ ev.title }}</h3>
+
+          @if (ev.subtitle) {
+            <p class="bll-event-subtitle">{{ ev.subtitle }}</p>
+          }
+
+          <p class="bll-event-desc">{{ ev.shortDescription }}</p>
+
+          <div class="event-date">📅 {{ ev.date }}@if (ev.time) { · {{ ev.time }} }</div>
+          <div class="event-date">📍 {{ ev.venue }}</div>
+
+          <button type="button" class="btn-primary bll-event-details-btn" (click)="openDetails(ev, $event)">
+            View Details
+          </button>
+        </div>
+      </article>
+    }
+  </div>
+}
+
+<app-image-lightbox
+  [isOpen]="lightboxOpen()"
+  [imageSrc]="lightboxSrc()"
+  [alt]="lightboxAlt()"
+  (closed)="closeLightbox()"
+/>
+
+<app-event-details-modal
+  [isOpen]="detailsOpen()"
+  [event]="selectedEvent()"
+  (closed)="closeDetails()"
+  (viewPoster)="viewPosterFromDetails($event)"
+/>

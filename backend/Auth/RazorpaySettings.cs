@@ -8,8 +8,5 @@ public sealed class RazorpaySettings
     public string KeySecret { get; set; } = "";
     public string? WebhookSecret { get; set; }
 
-    /// <summary>Public URL registered in Razorpay Dashboard (e.g. https://your-domain.com/api/payment/razorpay/webhook).</summary>
-    public string? WebhookUrl { get; set; }
-
     public string BaseUrl { get; set; } = "https://api.razorpay.com/v1";
 }

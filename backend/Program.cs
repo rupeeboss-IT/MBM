@@ -66,6 +66,8 @@ builder.Services.AddDbContext<RB_Website_API.Data.ReferralDbContext>(options =>
     options.UseSqlServer(cs);
 });
 
+builder.Services.Configure<RB_Website_API.Auth.ApplicationUrlsSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.ApplicationUrlsSettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.JwtSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.JwtSettings.SectionName));
 builder.Services.AddSingleton<RB_Website_API.Auth.IJwtTokenService, RB_Website_API.Auth.JwtTokenService>();
@@ -122,16 +124,22 @@ builder.Services.AddHostedService<RB_Website_API.Auth.LoanApplicationSchemaHoste
 builder.Services.AddHostedService<RB_Website_API.Auth.ContactSchemaHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionExpiryHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionReminderHostedService>();
-builder.Services.AddCors(options =>
+
+var corsOrigins = builder.Configuration
+    .GetSection(RB_Website_API.Auth.ApplicationUrlsSettings.SectionName)
+    .Get<RB_Website_API.Auth.ApplicationUrlsSettings>()?
+    .CorsOrigins?
+    .Where(o => !string.IsNullOrWhiteSpace(o))
+    .ToArray() ?? [];
+
+if (corsOrigins.Length > 0)
 {
-    options.AddPolicy("FrontendDev", policy =>
+    builder.Services.AddCors(options =>
     {
-        policy
-            .WithOrigins("http://localhost:4200")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        options.AddPolicy("Frontend", policy =>
+            policy.WithOrigins(corsOrigins).AllowAnyHeader().AllowAnyMethod());
     });
-});
+}
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -180,18 +188,34 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("FrontendDev");
+if (app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+
+if (corsOrigins.Length > 0)
+    app.UseCors("Frontend");
 
 // In Development, the Angular proxy uses http://localhost:5228. HTTPS redirection would 307 to another
 // port and can break POST bodies / proxy handling for /api calls.
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 
+app.UseLegacyUrlRedirects();
+
 app.UseExceptionHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
+
+// Angular SPA (published under wwwroot): /login, /profile, etc.
+app.MapFallbackToFile("index.html");
 
 app.Run();

@@ -28,7 +28,7 @@ public sealed class ReportAuditService : IReportAuditService
             Action = action,
             ReportId = reportId,
             CustomerId = customerId,
-            CreatedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.Now,
             IpAddress = string.IsNullOrWhiteSpace(ipAddress) ? null : ipAddress.Trim(),
         };
         return _audit.AddAsync(entry, ct);

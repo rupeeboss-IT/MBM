@@ -24,13 +24,13 @@ public sealed class InMemoryOtpService : IOtpService
         var otp = NewOtp();
         await _email.SendAsync(email, "Your MBM OTP", $"Your OTP is {otp}. It expires in 10 minutes.", ct);
         _rate.RecordSuccessfulEmailOtpSend(email);
-        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.UtcNow.AddMinutes(10), Verified: false);
+        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false);
     }
 
     public Task VerifyEmailOtpAsync(string email, string code, CancellationToken ct)
     {
         var key = Key("email", email);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.UtcNow)
+        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
             throw new InvalidOperationException("OTP expired. Please resend OTP.");
 
         if (!SlowEquals(rec.CodeHash, Hash(code)))
@@ -43,7 +43,7 @@ public sealed class InMemoryOtpService : IOtpService
     public Task EnsureEmailVerifiedAsync(string email, CancellationToken ct)
     {
         var key = Key("email", email);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.UtcNow)
+        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
             throw new InvalidOperationException("Email OTP expired. Please verify again.");
         if (!rec.Verified)
             throw new InvalidOperationException("Email not verified. Please verify via OTP.");
@@ -59,13 +59,13 @@ public sealed class InMemoryOtpService : IOtpService
             $"Dear Customer,\nYour mobile verification code is {otp}\nPlease use this code to verify your account. Regard Team RupeeBoss.";
         await _sms.SendAsync(phone, smsBody, ct);
         _rate.RecordSuccessfulSmsOtpSend(phone);
-        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.UtcNow.AddMinutes(10), Verified: false);
+        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false);
     }
 
     public Task VerifySmsOtpAsync(string phone, string code, CancellationToken ct)
     {
         var key = Key("sms", phone);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.UtcNow)
+        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
             throw new InvalidOperationException("OTP expired. Please resend OTP.");
 
         if (!SlowEquals(rec.CodeHash, Hash(code)))
@@ -78,7 +78,7 @@ public sealed class InMemoryOtpService : IOtpService
     public Task EnsureSmsVerifiedAsync(string phone, CancellationToken ct)
     {
         var key = Key("sms", phone);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.UtcNow)
+        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
             throw new InvalidOperationException("Mobile OTP expired. Please verify again.");
         if (!rec.Verified)
             throw new InvalidOperationException("Mobile not verified. Please verify via OTP.");

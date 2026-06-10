@@ -1,7 +1,18 @@
 <!-- ===== SERVICE DETAIL PAGE ===== -->
 <div class="page active" id="page-service-detail" *ngIf="svc() as service">
-<div class="page-header" id="svcDetailHeader"><div class="container"><div class="breadcrumb"><a routerLink="/home">Home</a><span class="sep">›</span><a routerLink="/our-services">Services</a><span class="sep">›</span><span id="svcDetailCrumb">{{ service.title }}</span></div><h1 id="svcDetailTitle">{{ service.emoji }} {{ service.title }}</h1><p id="svcDetailSubtitle">{{ service.subtitle }}</p></div></div>
-<section class="section"><div class="container">
+  <div class="page-header" id="svcDetailHeader">
+    <div class="container">
+      <div class="breadcrumb">
+        <a routerLink="/home">Home</a><span class="sep">›</span>
+        <a routerLink="/our-services">Services</a><span class="sep">›</span>
+        <span id="svcDetailCrumb">{{ service.title }}</span>
+      </div>
+      <h1 id="svcDetailTitle">{{ service.emoji }} {{ service.title }}</h1>
+      <p id="svcDetailSubtitle">{{ service.subtitle }}</p>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
   <div class="detail-layout">
     <div class="detail-main" id="svcDetailMain">
       <h2>Overview</h2>
@@ -23,28 +34,29 @@
       </div>
     </div>
     <div class="detail-sidebar">
-      <div class="sidebar-card">
+      <div class="sidebar-card sidebar-card--cta">
         <h3>Quick Apply</h3>
         <ng-container *ngIf="slug() === 'msme-loans-finance'">
-          <p style="color:var(--text);font-size:.88rem;line-height:1.55;margin-bottom:1rem">
-            Need funds to grow? <br/>
+          <p class="sidebar-cta-text">
+            Need funds to grow?<br />
             Apply online for MSME business loans — working capital, machinery, and more from <strong>100+ banks &amp; NBFCs</strong>.
           </p>
-          <a class="btn-primary" style="width:100%;text-align:center;display:block;margin-bottom:.75rem" routerLink="/loans">
-            Apply for Loan →
-          </a>
-          <hr/>
+          <a class="btn-primary sidebar-btn" routerLink="/loans">Apply for Loan →</a>
+          <hr class="sidebar-divider" />
         </ng-container>
-        <p style="color:var(--text);font-size:.88rem;margin-bottom:0.5rem; margin-top:0.5rem">
+        <p class="sidebar-cta-note">
           {{ slug() === 'msme-loans-finance' ? 'Prefer to speak with an expert first?' : 'Get expert help with this service today' }}
         </p>
-        <div style="margin-bottom:1rem;text-align:center"><a href="tel:+919005900921" style="color:var(--red);font-weight:700;font-size:.95rem">📞 +91 90059 00921</a></div>
+        <div class="sidebar-phone">
+          <a href="tel:+919005900921">📞 +91 90059 00921</a>
+        </div>
         <a
-          [class]="slug() === 'msme-loans-finance' ? 'btn-outline' : 'btn-primary'"
-          style="width:100%;text-align:center;display:block"
           routerLink="/contact"
+          class="sidebar-btn"
+          [class.btn-outline]="slug() === 'msme-loans-finance'"
+          [class.btn-primary]="slug() !== 'msme-loans-finance'"
+          [class.sidebar-btn--outline]="slug() === 'msme-loans-finance'"
         >Request Callback</a>
-        
       </div>
       <div class="sidebar-card">
         <h3>Why Choose Us</h3>
@@ -62,5 +74,6 @@
       </div>
     </div>
   </div>
-</div></section>
+    </div>
+  </section>
 </div><!-- /service detail -->

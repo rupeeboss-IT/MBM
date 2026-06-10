@@ -27,7 +27,7 @@ public sealed class ApiExceptionLogService : IApiExceptionLogService
         var path = $"{context.Request.Path}{context.Request.QueryString}";
         var userId = CurrentUser.GetUserId(context.User);
         var ip = context.Connection.RemoteIpAddress?.ToString();
-        var createdAt = DateTime.UtcNow;
+        var createdAt = DateTime.Now;
 
         _logger.LogError(
             exception,

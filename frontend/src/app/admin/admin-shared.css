@@ -1,7 +1,9 @@
 /* Shared admin layout — dashboard, detail, reports */
 .admin-wrap {
-  margin: 24px 24px;
-  padding: 0 16px;
+  margin: 24px 0;
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .admin-topbar {
@@ -267,12 +269,6 @@
 @media (max-width: 900px) {
   .form,
   .form-reports-search {
-    grid-template-columns: 1fr;
-  }
-
-  .row,
-  .row-customers,
-  .row-history {
     grid-template-columns: 1fr;
   }
 
