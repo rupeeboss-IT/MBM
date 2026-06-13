@@ -387,7 +387,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     tags: ['Government Schemes', 'Udyam Aadhaar', 'Personalized Report', 'MSME Benefits'],
     plans: ['MSME Premium', 'MSME Pro'],
     highlights: ['📋 Personalized scheme list', '🏛️ Central + State schemes', '✅ Eligibility pre-checked', '📞 Application guidance'],
-    ctaTitle: 'Discover Your Schemes',
+    ctaTitle: 'Get Your Report',
     ctaDesc: 'Personalized report with Premium & Pro plans',
     content: `
       <h2 style="color:#2d6a4f">What is the Government Schemes Discovery Report?</h2>

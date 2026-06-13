@@ -36,4 +36,11 @@ public sealed class CustomerReport
     public int DownloadCount { get; set; }
 
     public DateTime? LastDownloadDate { get; set; }
+
+    [MaxLength(40)]
+    public string ReportType { get; set; } = "General";
+
+    public Guid? SchemeDiscoveryRequestId { get; set; }
+
+    public DateTime? ExpiryDate { get; set; }
 }

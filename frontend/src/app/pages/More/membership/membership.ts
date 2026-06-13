@@ -1,15 +1,32 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthSessionService } from '../../../core/services/auth-session.service';
 import { PaymentService, type CreateOrderRes } from '../../../core/services/payment.service';
-import { ReferralService } from '../../../core/services/referral.service';
+import { ReferralService, referrerDisplayName } from '../../../core/services/referral.service';
 import { RazorpayLoaderService } from '../../../core/services/razorpay-loader.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { JoinCtaService } from '../../../core/services/join-cta.service';
+import { SchemeDiscoveryFlowService } from '../../../core/services/scheme-discovery-flow.service';
+import { hasSchemeDiscoveryIntent } from '../../../core/utils/scheme-discovery-intent';
+import {
+  shouldResumeSchemeDiscoveryAfterMembership,
+} from '../../../core/utils/scheme-discovery-journey.util';
+import {
+  consumeStashedMembershipSource,
+  getMembershipSourceGuidance,
+  getPlanConfirmContinueLabel,
+  getPlanConfirmMessage,
+  isRecommendedPlan,
+  parseMembershipSource,
+  shouldConfirmPlanChoice,
+  stashMembershipSource,
+  type MembershipSource,
+} from '../../../core/utils/membership-source.util';
 import { OFFERING_EXPLORER_CARDS } from '../../../data/offering-explorer-cards.data';
+import { isApiLocalDateOnOrBeforeNow } from '../../../core/utils/parse-api-local-date';
 
 const PENDING_PLAN_KEY = 'mbm_pending_plan';
 const REFERRAL_DEBOUNCE_MS = 500;
@@ -41,8 +58,10 @@ export class Membership implements OnInit, OnDestroy {
   private readonly razorpayLoader = inject(RazorpayLoaderService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly joinCta = inject(JoinCtaService);
+  private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
 
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
   private validationSeq = 0;
@@ -58,11 +77,20 @@ export class Membership implements OnInit, OnDestroy {
   readonly referredByName = signal<string | null>(null);
   readonly referralValidationState = signal<ReferralValidationState>('idle');
 
+  readonly membershipSource = signal<MembershipSource | null>(null);
+  readonly sourceGuidance = computed(() => getMembershipSourceGuidance(this.membershipSource()));
+  readonly highlightRecommended = signal(false);
+  readonly basicConfirmOpen = signal(false);
+  readonly pendingBasicPlan = signal<PlanCode | null>(null);
+
+  readonly isRecommendedPlan = isRecommendedPlan;
+
   toggleFaq(index: number) {
     this.openFaqIndex = this.openFaqIndex === index ? null : index;
   }
 
   ngOnInit(): void {
+    this.resolveMembershipSource();
     if (typeof window === 'undefined') return;
     const pending = window.localStorage.getItem(PENDING_PLAN_KEY);
     if (pending && this.session.isLoggedIn()) {
@@ -71,17 +99,74 @@ export class Membership implements OnInit, OnDestroy {
     }
   }
 
+  private resolveMembershipSource(): void {
+    const fromQuery = parseMembershipSource(this.route.snapshot.queryParamMap.get('source'));
+    const fromStash = consumeStashedMembershipSource();
+    const source = fromQuery ?? fromStash;
+    this.membershipSource.set(source);
+  }
+
+  planBadge(code: PlanCode): string | null {
+    const guidance = this.sourceGuidance();
+    if (!guidance || !isRecommendedPlan(code, guidance.source)) return null;
+    if (code === 'premium') return guidance.premiumBadge;
+    if (code === 'pro') return guidance.proBadge;
+    return null;
+  }
+
+  scrollToRecommendedPlans(): void {
+    this.basicConfirmOpen.set(false);
+    this.pendingBasicPlan.set(null);
+    this.highlightRecommended.set(true);
+    const el = document.getElementById('plan-premium');
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  dismissBasicConfirm(): void {
+    this.basicConfirmOpen.set(false);
+    this.pendingBasicPlan.set(null);
+  }
+
+  async confirmBasicPlan(): Promise<void> {
+    const code = this.pendingBasicPlan();
+    this.dismissBasicConfirm();
+    if (code) await this.continueChoosePlan(code);
+  }
+
+  confirmPlanMessage(): string {
+    const guidance = this.sourceGuidance();
+    const code = this.pendingBasicPlan();
+    if (!guidance || (code !== 'basic' && code !== 'standard')) return '';
+    return getPlanConfirmMessage(guidance, code);
+  }
+
+  confirmPlanContinueLabel(): string {
+    const code = this.pendingBasicPlan();
+    if (code !== 'basic' && code !== 'standard') return 'Continue';
+    return getPlanConfirmContinueLabel(code);
+  }
+
   ngOnDestroy(): void {
     if (this.debounceTimer) clearTimeout(this.debounceTimer);
   }
 
   async choosePlan(code: PlanCode) {
+    if (this.sourceGuidance() && shouldConfirmPlanChoice(code, this.membershipSource())) {
+      this.pendingBasicPlan.set(code);
+      this.basicConfirmOpen.set(true);
+      return;
+    }
+    await this.continueChoosePlan(code);
+  }
+
+  private async continueChoosePlan(code: PlanCode) {
     if (!this.session.isLoggedIn()) {
       try {
         window.localStorage.setItem(PENDING_PLAN_KEY, code);
       } catch {
         // ignore
       }
+      stashMembershipSource(this.membershipSource());
       this.toast.info('Please login or register to continue with your selected plan.');
       this.router.navigateByUrl('/login');
       return;
@@ -117,10 +202,7 @@ export class Membership implements OnInit, OnDestroy {
       const plan = res?.plan;
       if (!plan || plan.status !== 'Active') return 'ok';
       if (plan.planCode.toLowerCase() !== code.toLowerCase()) return 'ok';
-      if (plan.activeTo) {
-        const end = new Date(plan.activeTo);
-        if (!Number.isNaN(end.getTime()) && end <= new Date()) return 'ok';
-      }
+      if (plan.activeTo && isApiLocalDateOnOrBeforeNow(plan.activeTo)) return 'ok';
       return 'already_active';
     } catch (e: any) {
       if (e?.status === 401) {
@@ -200,8 +282,9 @@ export class Membership implements OnInit, OnDestroy {
       const res = await firstValueFrom(this.referrals.validate({ referralCode: code }));
       if (seq !== this.validationSeq) return false;
 
-      if (res?.success && res.employeeName) {
-        this.referredByName.set(res.employeeName);
+      const name = referrerDisplayName(res);
+      if (res?.success && name) {
+        this.referredByName.set(name);
         this.referralValidationState.set('valid');
         return true;
       }
@@ -349,23 +432,34 @@ export class Membership implements OnInit, OnDestroy {
                 razorpaySignature: resp.razorpay_signature,
               }),
             );
-            if (verify?.success) {
+              if (verify?.success) {
               void this.joinCta.refresh();
-              const kind = (verify.activationKind ?? '').toLowerCase();
-              if (kind === 'upgrade') {
-                this.toast.success(
-                  `Upgraded to ${order.planName || 'your new plan'}. Check your email for the invoice and details.`,
-                );
-              } else if (kind === 'renewal') {
-                this.toast.success(
-                  `${order.planName || 'Plan'} renewed. Check your email for the invoice and new expiry date.`,
-                );
-              } else {
-                this.toast.success(
-                  `Payment successful. ${order.planName || 'Plan'} activated. Check your email for the invoice.`,
-                );
+              const resumeSchemeDiscovery = shouldResumeSchemeDiscoveryAfterMembership(
+                order.planCode,
+                hasSchemeDiscoveryIntent(),
+                this.membershipSource(),
+              );
+              if (!resumeSchemeDiscovery) {
+                const kind = (verify.activationKind ?? '').toLowerCase();
+                if (kind === 'upgrade') {
+                  this.toast.success(
+                    `Upgraded to ${order.planName || 'your new plan'}. Check your email for the invoice and details.`,
+                  );
+                } else if (kind === 'renewal') {
+                  this.toast.success(
+                    `${order.planName || 'Plan'} renewed. Check your email for the invoice and new expiry date.`,
+                  );
+                } else {
+                  this.toast.success(
+                    `Payment successful. ${order.planName || 'Plan'} activated. Check your email for the invoice.`,
+                  );
+                }
               }
-              this.router.navigateByUrl('/my-plan');
+              if (resumeSchemeDiscovery) {
+                await this.schemeDiscovery.completeMembershipPurchaseAndResume(order.planCode ?? '');
+              } else {
+                this.router.navigateByUrl('/my-plan');
+              }
             } else {
               this.toast.warning(verify?.message || 'Payment received. Activation pending. Please refresh shortly.');
               this.router.navigateByUrl('/my-plan');

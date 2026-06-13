@@ -9,6 +9,8 @@ import {
   type PaymentHistoryItem,
 } from '../../core/services/payment.service';
 import { ToastService } from '../../core/services/toast.service';
+import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
+import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
 
 type Benefit = { title: string; desc: string };
 
@@ -61,7 +63,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
 @Component({
   selector: 'app-my-plan',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess],
   template: `
     <div class="page active plan-page">
       <div class="plan-hero">
@@ -96,11 +98,11 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
                 </div><hr/>
                 <div class="d-flex" style="justify-content: space-between;">
                   <span class="k">Active from</span>
-                  <span class="v">{{ p.activeFrom | date:'dd MMM yyyy' }}</span>
+                  <span class="v">{{ p.activeFrom | localDate:'dd MMM yyyy' }}</span>
                 </div><hr/>
                 <div class="d-flex" style="justify-content: space-between;" *ngIf="p.activeTo">
                   <span class="k">Active to</span>
-                  <span class="v">{{ p.activeTo | date:'dd MMM yyyy' }}</span>
+                  <span class="v">{{ p.activeTo | localDate:'dd MMM yyyy' }}</span>
                 </div><hr/>
                 <div class="d-flex" style="justify-content: space-between;" *ngIf="p.daysRemaining != null">
                   <span class="k">Days remaining</span>
@@ -113,7 +115,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
               </div>
 
               <div class="banner muted" *ngIf="p.cancelAtPeriodEnd">
-                Renewal cancelled — you keep access until {{ p.activeTo | date:'dd MMM yyyy' }}. No refund for the remaining term.
+                Renewal cancelled — you keep access until {{ p.activeTo | localDate:'dd MMM yyyy' }}. No refund for the remaining term.
               </div>
 
               <div class="actions" *ngIf="!p.cancelAtPeriodEnd">
@@ -135,6 +137,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         <div class="card plan-card" *ngIf="!loading() && plan()">
           <div class="card__title">Benefits included</div>
           <div class="muted" style="margin-bottom:.8rem">Based on your current plan.</div>
+          <app-scheme-discovery-report-access variant="plan-benefit" [plan]="plan()" />
           <div class="benefits">
             <div class="benefit" *ngFor="let b of benefits">
               <div class="benefit__title">{{ b.title }}</div>
@@ -176,7 +179,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
                 <div role="cell">{{ h.planName }}</div>
                 <div role="cell">{{ inr(h.amountPaise) }}</div>
                 <div role="cell">{{ h.paymentStatus || h.orderStatus }}</div>
-                <div role="cell">{{ (h.paidAt || h.createdAt) | date:'dd MMM yyyy' }}</div>
+                <div role="cell">{{ (h.paidAt || h.createdAt) | localDate:'dd MMM yyyy' }}</div>
               </div>
             </div>
             <article class="record-card" *ngFor="let h of history()">
@@ -192,7 +195,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
                 </div>
                 <div class="record-card__field">
                   <dt>Date</dt>
-                  <dd>{{ (h.paidAt || h.createdAt) | date:'dd MMM yyyy' }}</dd>
+                  <dd>{{ (h.paidAt || h.createdAt) | localDate:'dd MMM yyyy' }}</dd>
                 </div>
               </dl>
             </article>

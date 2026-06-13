@@ -26,6 +26,11 @@ public interface ICustomerReportService
         string? search,
         int page,
         int pageSize,
+        string? dateFrom,
+        string? dateTo,
+        string? sortBy,
+        string? sortDir,
+        bool export,
         CancellationToken ct);
 
     Task<(bool Allowed, string? Error, string? PhysicalPath, string? DownloadName)> GetDownloadForCustomerAsync(

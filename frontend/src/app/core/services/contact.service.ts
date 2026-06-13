@@ -12,6 +12,14 @@ export interface SubmitContactRequest {
   consentAccepted: boolean;
 }
 
+export interface SubmitCallbackRequest {
+  fullName: string;
+  mobile: string;
+  subjectId: number;
+  message: string;
+  consentAccepted: boolean;
+}
+
 export interface SubmitContactResponse {
   success: boolean;
   message?: string | null;
@@ -24,5 +32,9 @@ export class ContactService {
 
   submit(req: SubmitContactRequest): Observable<SubmitContactResponse> {
     return this.http.post<SubmitContactResponse>(apiUrl('/api/contact/submit'), req);
+  }
+
+  submitCallback(req: SubmitCallbackRequest): Observable<SubmitContactResponse> {
+    return this.http.post<SubmitContactResponse>(apiUrl('/api/contact/callback'), req);
   }
 }

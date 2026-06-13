@@ -93,7 +93,7 @@
             <div class="reg-otp-row" *ngIf="showEmailOtpInputs() && !emailVerified()">
               <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter Email OTP" formControlName="emailOtp" [disabled]="!showEmailOtpInputs()">
               <button type="button" class="btn-primary" (click)="verifyEmailOtp()" [disabled]="submitting() || emailOtpVerifying()">
-                {{ emailOtpVerifying() ? 'Verifying…' : 'Submit' }}
+                {{ emailOtpVerifying() ? 'Verifying…' : 'Verify OTP' }}
               </button>
             </div>
           </div>
@@ -119,7 +119,7 @@
             <div class="reg-otp-row" *ngIf="showSmsOtpInputs() && !smsVerified()">
               <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter Mobile OTP" formControlName="smsOtp" [disabled]="!showSmsOtpInputs()">
               <button type="button" class="btn-primary" (click)="verifySmsOtp()" [disabled]="submitting() || smsOtpVerifying()">
-                {{ smsOtpVerifying() ? 'Verifying…' : 'Submit' }}
+                {{ smsOtpVerifying() ? 'Verifying…' : 'Verify OTP' }}
               </button>
             </div>
           </div>
@@ -235,7 +235,9 @@
             ⚠️ Please accept the consent to continue.
           </div>
         </div>
-        <button type="submit" class="btn-submit" [disabled]="submitting()">Continue to Plan Selection →</button>
+        <button type="submit" class="btn-submit" [disabled]="submitting()">
+          {{ submitting() ? 'Creating account…' : 'Continue to Plan Selection →' }}
+        </button>
       </form>
       <div class="auth-footer">Already have an account? <a [routerLink]="['/login']">Login here</a></div>
     </div>

@@ -12,6 +12,7 @@ public sealed class ReferralDbContext : DbContext
     public ReferralDbContext(DbContextOptions<ReferralDbContext> options) : base(options) { }
 
     public DbSet<EmployeeMaster> EmployeeMaster => Set<EmployeeMaster>();
+    public DbSet<BrokerMaster> BrokerMaster => Set<BrokerMaster>();
     public DbSet<LeadData> LeadData => Set<LeadData>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -19,6 +20,7 @@ public sealed class ReferralDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<EmployeeMaster>().ToTable("employee_master");
+        modelBuilder.Entity<BrokerMaster>().ToTable("broker_master");
 
         // lead_data has triggers; EF must not use OUTPUT on INSERT (SQL Server restriction).
         modelBuilder.Entity<LeadData>(entity =>

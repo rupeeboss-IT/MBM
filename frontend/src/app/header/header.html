@@ -7,11 +7,10 @@
   aria-label="Close menu"
   tabindex="-1"
 ></button>
-<nav class="navbar" id="navbar" aria-label="Main navigation">
+<nav class="navbar" id="navbar" [attr.aria-label]="showAdminNav() ? 'Admin navigation' : 'Main navigation'">
   <div class="nav-container">
-    <a class="brand" routerLink="/home">
+    <a class="brand" [routerLink]="showAdminNav() ? '/admin-dashboard' : '/home'">
       <img class="brand-logo brand-logo--nav" [src]="logoSrc" [alt]="logoAlt" width="64" height="64" />
-      <!-- <span>MSME <span class="accent">Bharat Manch</span></span> -->
     </a>
     <button
       class="menu-toggle"
@@ -24,94 +23,207 @@
     >
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-links" id="navLinks" [class.open]="mobileMenuOpen()">
-      <a routerLink="/home" (click)="closeMobileMenu()">Home</a>
-      <a routerLink="/about" (click)="closeMobileMenu()">About</a>
-      <div class="dropdown" [class.open]="servicesMenuOpen()">
-        <button type="button" class="dropdown-trigger" (click)="toggleServicesMenu(); $event.stopPropagation()" [attr.aria-expanded]="servicesMenuOpen()">Services ▾</button>
-        <div class="dropdown-menu" *ngIf="servicesMenuOpen()">
-          <a routerLink="/our-services" (click)="closeMobileMenu()">All 360° Services</a>
-          <div class="dd-sep"></div>
-          <a routerLink="/service/msme-loans-finance" (click)="closeMobileMenu()">MSME Loans</a>
-          <a routerLink="/service/company-formation" (click)="closeMobileMenu()">Company Formation</a>
-          <a routerLink="/service/government-subsidies" (click)="closeMobileMenu()">Govt. Subsidies</a>
-          <a routerLink="/service/technology-solutions" (click)="closeMobileMenu()">Technology</a>
-          <a routerLink="/service/sales-digital-marketing" (click)="closeMobileMenu()">Digital Marketing</a>
-          <a routerLink="/service/ipo-investment-banking" (click)="closeMobileMenu()">IPO & Investment</a>
-          <a routerLink="/service/coaching-consulting" (click)="closeMobileMenu()">Coaching</a>
-          <a routerLink="/service/legal-compliance" (click)="closeMobileMenu()">Legal & Compliance</a>
-          <a routerLink="/service/research-development" (click)="closeMobileMenu()">R &amp; D &amp; Innovation</a>
-          <a routerLink="/service/export-import" (click)="closeMobileMenu()">Export/Import</a>
-          <a routerLink="/service/hr-recruitment" (click)="closeMobileMenu()">HR & Recruitment</a>
-          <a routerLink="/service/accounting-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
-        </div>
-      </div>
-      <a class="nav-loans" routerLink="/loans" (click)="closeMobileMenu()">Loans</a>
-      <a class="nav-loans" routerLink="/membership" (click)="closeMobileMenu()">Pricing</a>
-      <!-- <a routerLink="/partners" (click)="closeMobileMenu()">Partners</a> -->
-      <!-- <a routerLink="/connect" (click)="closeMobileMenu()">MSME Connect</a> -->
-      <div class="dropdown" [class.open]="moreMenuOpen()">
-        <button type="button" class="dropdown-trigger" (click)="toggleMoreMenu(); $event.stopPropagation()" [attr.aria-expanded]="moreMenuOpen()">More ▾</button>
-        <div class="dropdown-menu" *ngIf="moreMenuOpen()">
-          <a routerLink="/news" (click)="closeMobileMenu()">News & Blog</a>
-          <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
-          <a routerLink="/search" (click)="closeMobileMenu()">Search</a>
-          <a routerLink="/careers" (click)="closeMobileMenu()">Careers</a>
-          <!-- <a routerLink="/media" (click)="closeMobileMenu()">Media Kit</a> -->
-          <a routerLink="/schemes" (click)="closeMobileMenu()">Schemes</a>
-          <a routerLink="/events" (click)="closeMobileMenu()">Events</a>
-        </div>
-      </div>
-      <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
-      <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
-        <a class="btn-outline" routerLink="/login">Login</a>
-        <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Now</a>
-      </div>
-      <div id="nav-auth-user" *ngIf="isLoggedIn()">
-        <div class="dropdown" [class.open]="userMenuOpen()">
+    <div class="nav-links nav-links--admin" id="navLinks" [class.open]="mobileMenuOpen()">
+      @if (showAdminNav()) {
+        <a
+          routerLink="/admin-dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()"
+        >Dashboard</a>
+
+        <div
+          class="dropdown"
+          [class.open]="adminUserMgmtOpen()"
+          [class.active-section]="isUserManagementActive()"
+        >
           <button
             type="button"
             class="dropdown-trigger"
-            (click)="toggleUserMenu(); $event.stopPropagation()"
-            [attr.aria-expanded]="userMenuOpen()"
-            style="display:flex;align-items:center;gap:.5rem;cursor:pointer;background:none;border:none"
-            aria-label="Open user menu"
-          >
-            <span style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem">
-              👤
-            </span>
-            <span style="font-weight:700;color:#444">My Account</span> ▾
-          </button>
-          <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
-            <a routerLink="/profile" (click)="closeUserMenu(); closeMobileMenu()">👤 My Profile</a>
-            <a routerLink="/my-plan" (click)="closeUserMenu(); closeMobileMenu()">💎 My Plan Details</a>
+            (click)="toggleAdminDropdown('usermgmt'); $event.stopPropagation()"
+            [attr.aria-expanded]="adminUserMgmtOpen()"
+          >User Management ▾</button>
+          @if (adminUserMgmtOpen()) {
+            <div class="dropdown-menu">
+              @if (isSuperAdmin()) {
+                <a routerLink="/admin/user-management/admins" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('usermgmt')">Admin Management</a>
+                <div class="dd-sep"></div>
+              }
+              <a routerLink="/admin/user-management/partners" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('usermgmt')">Partner Management</a>
+              <a routerLink="/admin/user-management/members" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('usermgmt')">Member Management</a>
+            </div>
+          }
+        </div>
+
+        <div
+          class="dropdown"
+          [class.open]="adminManagementOpen()"
+          [class.active-section]="isManagementActive()"
+        >
+          <button
+            type="button"
+            class="dropdown-trigger"
+            (click)="toggleAdminDropdown('management'); $event.stopPropagation()"
+            [attr.aria-expanded]="adminManagementOpen()"
+          >Management ▾</button>
+          @if (adminManagementOpen()) {
+            <div class="dropdown-menu">
+              <a routerLink="/admin-dashboard/detail/members" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('management')">Members</a>
+              <a routerLink="/admin-dashboard/detail/subscriptions" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('management')">Subscriptions</a>
+              <a routerLink="/admin-dashboard/detail/plans" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('management')">Membership Plans</a>
+              <a routerLink="/admin-dashboard/detail/expiring" [queryParams]="{ days: 30 }" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('management')">Expiring Soon</a>
+            </div>
+          }
+        </div>
+
+        <div
+          class="dropdown"
+          [class.open]="adminContentOpen()"
+          [class.active-section]="isContentActive()"
+        >
+          <button
+            type="button"
+            class="dropdown-trigger"
+            (click)="toggleAdminDropdown('content'); $event.stopPropagation()"
+            [attr.aria-expanded]="adminContentOpen()"
+          >Content ▾</button>
+          @if (adminContentOpen()) {
+            <div class="dropdown-menu">
+              <a routerLink="/admin-dashboard/detail/blogs" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('content')">Blogs &amp; News</a>
+              <a routerLink="/admin-dashboard/detail/events" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('content')">Events</a>
+              <a routerLink="/admin-dashboard/detail/schemes" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('content')">Schemes</a>
+            </div>
+          }
+        </div>
+
+        <div
+          class="dropdown"
+          [class.open]="adminReportsOpen()"
+          [class.active-section]="isReportsActive()"
+        >
+          <button
+            type="button"
+            class="dropdown-trigger"
+            (click)="toggleAdminDropdown('reports'); $event.stopPropagation()"
+            [attr.aria-expanded]="adminReportsOpen()"
+          >Reports ▾</button>
+          @if (adminReportsOpen()) {
+            <div class="dropdown-menu">
+              <a routerLink="/admin-dashboard/detail/payments" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('reports')">Payments</a>
+              <a routerLink="/admin-dashboard/detail/payment-orders" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('reports')">Payment Orders</a>
+              <div class="dd-sep"></div>
+              <a routerLink="/admin-reports/upload" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset' }" (click)="closeMobileMenu(); closeAdminDropdown('reports')">Upload Reports</a>
+              <a routerLink="/admin-reports/history" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('reports')">Report History</a>
+            </div>
+          }
+        </div>
+
+        <div
+          class="dropdown"
+          [class.open]="adminProfileOpen()"
+          [class.active-section]="isProfileActive()"
+        >
+          <button
+            type="button"
+            class="dropdown-trigger"
+            (click)="toggleAdminDropdown('profile'); $event.stopPropagation()"
+            [attr.aria-expanded]="adminProfileOpen()"
+          >Profile ▾</button>
+          @if (adminProfileOpen()) {
+            <div class="dropdown-menu dm-right">
+              <a routerLink="/home" (click)="closeMobileMenu(); closeAdminDropdown('profile')">Public Website</a>
+              <a routerLink="/admin-forgot-password" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('profile')">Change Password</a>
+              <div class="dd-sep"></div>
+              <a type="button" class="text-center" (click)="adminLogout()">Logout</a>
+            </div>
+          }
+        </div>
+      } @else {
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
+        <a routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">About</a>
+        <div class="dropdown" [class.open]="servicesMenuOpen()">
+          <button type="button" class="dropdown-trigger" (click)="toggleServicesMenu(); $event.stopPropagation()" [attr.aria-expanded]="servicesMenuOpen()">Services ▾</button>
+          <div class="dropdown-menu" *ngIf="servicesMenuOpen()">
+            <a routerLink="/our-services" (click)="closeMobileMenu()">All 360° Services</a>
             <div class="dd-sep"></div>
-            <div class="d-flex justify-content-center align-items-center">
-              <button type="button" class="dd-logout btn btn-primary" (click)="logout()">Logout</button>
+            <a routerLink="/service/msme-loans-finance" (click)="closeMobileMenu()">MSME Loans</a>
+            <a routerLink="/service/company-formation" (click)="closeMobileMenu()">Company Formation</a>
+            <a routerLink="/service/government-subsidies" (click)="closeMobileMenu()">Govt. Subsidies</a>
+            <a routerLink="/service/technology-solutions" (click)="closeMobileMenu()">Technology</a>
+            <a routerLink="/service/sales-digital-marketing" (click)="closeMobileMenu()">Digital Marketing</a>
+            <a routerLink="/service/ipo-investment-banking" (click)="closeMobileMenu()">IPO & Investment</a>
+            <a routerLink="/service/coaching-consulting" (click)="closeMobileMenu()">Coaching</a>
+            <a routerLink="/service/legal-compliance" (click)="closeMobileMenu()">Legal & Compliance</a>
+            <a routerLink="/service/research-development" (click)="closeMobileMenu()">R &amp; D &amp; Innovation</a>
+            <a routerLink="/service/export-import" (click)="closeMobileMenu()">Export/Import</a>
+            <a routerLink="/service/hr-recruitment" (click)="closeMobileMenu()">HR & Recruitment</a>
+            <a routerLink="/service/accounting-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
+          </div>
+        </div>
+        <a class="nav-loans" routerLink="/loans" routerLinkActive="active" (click)="closeMobileMenu()">Loans</a>
+        <a class="nav-loans" routerLink="/membership" routerLinkActive="active" (click)="closeMobileMenu()">Pricing</a>
+        <div class="dropdown" [class.open]="moreMenuOpen()">
+          <button type="button" class="dropdown-trigger" (click)="toggleMoreMenu(); $event.stopPropagation()" [attr.aria-expanded]="moreMenuOpen()">More ▾</button>
+          <div class="dropdown-menu" *ngIf="moreMenuOpen()">
+            <a routerLink="/news" (click)="closeMobileMenu()">News & Blog</a>
+            <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
+            <a routerLink="/search" (click)="closeMobileMenu()">Search</a>
+            <a routerLink="/careers" (click)="closeMobileMenu()">Careers</a>
+            <a routerLink="/schemes" (click)="closeMobileMenu()">Schemes</a>
+            <a routerLink="/events" (click)="closeMobileMenu()">Events</a>
+          </div>
+        </div>
+        <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
+        <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
+          <a class="btn-outline" routerLink="/login">Login</a>
+          <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Now</a>
+        </div>
+        <div id="nav-auth-user" *ngIf="isLoggedIn()">
+          <div class="dropdown" [class.open]="userMenuOpen()">
+            <button
+              type="button"
+              class="dropdown-trigger nav-user-trigger"
+              (click)="toggleUserMenu(); $event.stopPropagation()"
+              [attr.aria-expanded]="userMenuOpen()"
+              [attr.aria-label]="'Open account menu for ' + userFirstName()"
+            >
+              <span class="nav-user-avatar" aria-hidden="true">👤</span>
+              <span class="nav-user-name" [title]="userFirstName()">{{ userFirstName() }}</span>
+              <span class="nav-user-caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
+              <a routerLink="/profile" (click)="closeUserMenu(); closeMobileMenu()">👤 My Profile</a>
+              <a routerLink="/my-plan" (click)="closeUserMenu(); closeMobileMenu()">💎 My Plan Details</a>
+              <div class="dd-sep"></div>
+              <div class="text-center">
+                <a type="button" (click)="logout()">Logout</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   </div>
-  <div class="search-drawer" id="searchDrawer" [class.open]="searchOpen">
-    <form class="search-form" (ngSubmit)="submitSearch()">
-      <input
-        #searchInput
-        type="search"
-        name="searchQuery"
-        [(ngModel)]="searchQuery"
-        placeholder="Search services, schemes, events, news..."
-      >
-      <button type="submit" class="btn-search">Search</button>
-      <button
-        type="button"
-        class="search-close-btn"
-        aria-label="Close search"
-        (click)="toggleSearch()"
-      >
-        ✕
-      </button>
-    </form>
-  </div>
+  @if (!showAdminNav()) {
+    <div class="search-drawer" id="searchDrawer" [class.open]="searchOpen">
+      <form class="search-form" (ngSubmit)="submitSearch()">
+        <input
+          #searchInput
+          type="search"
+          name="searchQuery"
+          [(ngModel)]="searchQuery"
+          placeholder="Search services, schemes, events, news..."
+        >
+        <button type="submit" class="btn-search">Search</button>
+        <button
+          type="button"
+          class="search-close-btn"
+          aria-label="Close search"
+          (click)="toggleSearch()"
+        >
+          ✕
+        </button>
+      </form>
+    </div>
+  }
 </nav>

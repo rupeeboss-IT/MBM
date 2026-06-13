@@ -136,6 +136,7 @@ public static partial class UserFriendlyErrorMapper
         "invoice_list" => "Unable to load invoices. Please try again.",
         "invoice_download" => "Unable to download the invoice. Please try again.",
         "profile" => "Unable to load your profile. Please try again.",
+        "scheme_discovery" => "Unable to load scheme discovery status. Please try again later.",
         "my_plan" => "Unable to load your plan details. Please try again.",
         "dashboard" => "Unable to load dashboard data. Please try again.",
         "save" => "Unable to save changes. Please try again.",

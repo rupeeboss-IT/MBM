@@ -11,6 +11,8 @@ namespace RB_Website_API.Data
         public DbSet<Models.User> Users => Set<Models.User>();
         public DbSet<Models.MemberIdSequence> MemberIdSequences => Set<Models.MemberIdSequence>();
         public DbSet<Models.UserStatusAudit> UserStatusAudit => Set<Models.UserStatusAudit>();
+        public DbSet<Models.UserStatusHistory> UserStatusHistory => Set<Models.UserStatusHistory>();
+        public DbSet<Models.UserAuditLog> UserAuditLog => Set<Models.UserAuditLog>();
         public DbSet<Models.Plan> Plans => Set<Models.Plan>();
         public DbSet<Models.PaymentOrder> PaymentOrders => Set<Models.PaymentOrder>();
         public DbSet<Models.Payment> Payments => Set<Models.Payment>();
@@ -19,9 +21,11 @@ namespace RB_Website_API.Data
         public DbSet<Models.ReferralLeadOutbox> ReferralLeadOutbox => Set<Models.ReferralLeadOutbox>();
         public DbSet<Models.CustomerReport> CustomerReports => Set<Models.CustomerReport>();
         public DbSet<Models.ReportAuditLog> ReportAuditLogs => Set<Models.ReportAuditLog>();
+        public DbSet<Models.ReportChangeRequest> ReportChangeRequests => Set<Models.ReportChangeRequest>();
         public DbSet<Models.ApiExceptionLog> ApiExceptionLogs => Set<Models.ApiExceptionLog>();
         public DbSet<Models.LoanApplication> LoanApplications => Set<Models.LoanApplication>();
         public DbSet<Models.ContactSubmission> ContactSubmissions => Set<Models.ContactSubmission>();
+        public DbSet<Models.SchemeDiscoveryRequest> SchemeDiscoveryRequests => Set<Models.SchemeDiscoveryRequest>();
 
         public new DbSet<T> Set<T>() where T : class
         {

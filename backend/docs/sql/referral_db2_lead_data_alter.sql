@@ -21,3 +21,16 @@
 --
 -- No ALTER required if table matches production. Verify column names are case-compatible
 -- (SQL Server is usually case-insensitive for identifiers).
+--
+-- RBA referral (PAN-based) additionally uses existing columns (no schema change):
+--   lead_type   = 'RBA'
+--   broker_id   = broker_master.Broker_id (active broker matched by PAN_No)
+--   emp_code    = broker_master.Emp_Code
+--
+-- Employee referral continues to use lead_type from ReferralSettings (default 'Telecalling')
+-- and emp_code from Employee_Master.Emp_Code. Broker_Id is left NULL.
+--
+-- Broker lookup (RBMAIN.broker_master — existing table):
+--   SELECT Broker_id, Emp_Code, Broker_Name, PAN_No, Is_Active
+--   FROM broker_master
+--   WHERE UPPER(PAN_No) = UPPER(@ReferralCode) AND Is_Active = 1

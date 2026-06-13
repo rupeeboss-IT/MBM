@@ -1,0 +1,19 @@
+@if (total() > 0) {
+  <div class="pager">
+    <span class="muted">{{ rangeLabel() }}</span>
+    <div class="pager__actions">
+      <button class="btn btn-outline" type="button" [disabled]="disabled() || page() <= 1" (click)="goPrev()">
+        Previous
+      </button>
+      <span class="muted">Page {{ page() }} / {{ totalPages() }}</span>
+      <button
+        class="btn btn-outline"
+        type="button"
+        [disabled]="disabled() || page() >= totalPages()"
+        (click)="goNext()"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+}

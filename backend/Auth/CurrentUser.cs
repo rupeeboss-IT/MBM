@@ -18,4 +18,10 @@ public static class CurrentUser
         if (id is null) throw new UnauthorizedAccessException("Invalid session.");
         return id.Value;
     }
+
+    public static string? GetRole(ClaimsPrincipal? user) =>
+        user?.FindFirstValue(ClaimTypes.Role)?.Trim().ToLowerInvariant();
+
+    public static bool IsSuperAdmin(ClaimsPrincipal user) =>
+        string.Equals(GetRole(user), "superadmin", StringComparison.OrdinalIgnoreCase);
 }

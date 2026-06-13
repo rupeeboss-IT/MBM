@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
 import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OfferingCtaActions } from '../../core/components/offering-cta-actions/offering-cta-actions';
@@ -13,10 +14,11 @@ import type { OfferingModel, OfferingSlug } from '../../data/offerings.data';
   templateUrl: './offering-details.html',
   styleUrl: './offering-details.css'
 })
-export class OfferingDetails {
+export class OfferingDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly offerings = inject(OfferingsService);
+  private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
@@ -57,6 +59,10 @@ export class OfferingDetails {
       icon: planIcons[p] ?? '✓'
     }));
   });
+
+  ngOnInit(): void {
+    void this.schemeDiscovery.tryResumeOnPageLoad();
+  }
 
   constructor() {
     this.route.paramMap.subscribe((p) => {

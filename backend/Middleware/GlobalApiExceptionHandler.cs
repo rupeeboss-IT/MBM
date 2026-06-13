@@ -58,6 +58,7 @@ public sealed class GlobalApiExceptionHandler : IExceptionHandler
         if (path.Contains("/admin/reports") && path.Contains("/customers/search")) return "report_search";
         if (path.Contains("/customer/reports") && path.Contains("/download")) return "report_download";
         if (path.Contains("/customer/reports")) return "report_history";
+        if (path.Contains("/scheme-discovery")) return "scheme_discovery";
         if (path.Contains("/payment") && path.Contains("/verify")) return "payment_verify";
         if (path.Contains("/payment") && path.Contains("/download")) return "invoice_download";
         if (path.Contains("/payment") && path.Contains("/invoices")) return "invoice_list";

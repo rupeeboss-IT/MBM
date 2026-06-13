@@ -6,5 +6,8 @@ public sealed record ContactEmailResult(bool CustomerNotified, bool SupportNotif
 
 public interface IContactEmailService
 {
-    Task<ContactEmailResult> TrySendEmailsAsync(ContactSubmission submission, CancellationToken ct);
+    Task<ContactEmailResult> TrySendEmailsAsync(
+        ContactSubmission submission,
+        CancellationToken ct,
+        bool notifyCustomer = true);
 }

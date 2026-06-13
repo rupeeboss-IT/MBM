@@ -35,6 +35,8 @@ import { AdminDashboard } from './admin/dashboard/dashboard';
 import { AdminDashboardDetail } from './admin/dashboard-detail/dashboard-detail';
 import { AdminUploadReports } from './admin/reports/upload-reports/upload-reports';
 import { AdminViewReports } from './admin/reports/view-reports/view-reports';
+import { UserManagementList } from './admin/user-management/user-management-list';
+import { UserManagementDetail } from './admin/user-management/user-management-detail';
 
 export const routes: Routes = [
     {
@@ -268,6 +270,30 @@ export const routes: Routes = [
         path: 'admin-dashboard/detail/:category',
         component: AdminDashboardDetail,
         canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/members',
+        redirectTo: 'admin-dashboard/detail/members',
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/user-management/:role/:userId',
+        component: UserManagementDetail,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/user-management/:role',
+        component: UserManagementList,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/users',
+        redirectTo: 'admin/user-management/admins',
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/users/create',
+        redirectTo: 'admin/user-management/admins',
         pathMatch: 'full'
     },
     {

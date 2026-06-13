@@ -13,6 +13,19 @@ export interface ValidateReferralRes {
   employeeId?: number;
   employeeName?: string;
   referralCode?: string;
+  referralType?: 'Employee' | 'RBA';
+  displayName?: string;
+  brokerId?: number;
+}
+
+/** UI display: referrer name only, without role/type suffixes such as (RBA) or (Employee). */
+export function referrerDisplayName(
+  res: Pick<ValidateReferralRes, 'displayName' | 'employeeName'> | null | undefined,
+): string | null {
+  const raw = (res?.displayName ?? res?.employeeName ?? '').trim();
+  if (!raw) return null;
+  const name = raw.replace(/\s*\([^)]*\)\s*$/, '').trim();
+  return name || null;
 }
 
 @Injectable({ providedIn: 'root' })

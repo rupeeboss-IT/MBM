@@ -51,6 +51,27 @@ public sealed class CustomerReportSchemaHostedService : IHostedService
                 ON CustomerReports(CustomerId, UploadDate DESC);
             """,
             """
+            IF COL_LENGTH('CustomerReports', 'ReportType') IS NULL
+                ALTER TABLE CustomerReports ADD ReportType nvarchar(40) NOT NULL
+                    CONSTRAINT DF_CustomerReports_ReportType DEFAULT 'General';
+            """,
+            """
+            IF COL_LENGTH('CustomerReports', 'SchemeDiscoveryRequestId') IS NULL
+                ALTER TABLE CustomerReports ADD SchemeDiscoveryRequestId uniqueidentifier NULL;
+            """,
+            """
+            IF COL_LENGTH('CustomerReports', 'ExpiryDate') IS NULL
+                ALTER TABLE CustomerReports ADD ExpiryDate datetime2 NULL;
+            """,
+            """
+            IF NOT EXISTS (
+                SELECT 1 FROM sys.indexes
+                WHERE name = 'IX_CustomerReports_SdrLookup'
+                  AND object_id = OBJECT_ID('CustomerReports'))
+            CREATE INDEX IX_CustomerReports_SdrLookup
+                ON CustomerReports(CustomerId, ReportType, IsActive, ExpiryDate DESC);
+            """,
+            """
             IF OBJECT_ID('ReportAuditLogs', 'U') IS NULL
             CREATE TABLE ReportAuditLogs (
                 AuditId uniqueidentifier NOT NULL PRIMARY KEY,

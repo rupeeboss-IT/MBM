@@ -14,7 +14,13 @@ public interface ICustomerReportRepository
         string? search,
         int page,
         int pageSize,
+        DateTime? dateFrom,
+        DateTime? dateToExclusive,
+        string sortBy,
+        bool sortAsc,
         CancellationToken ct);
 
     Task IncrementDownloadAsync(CustomerReport report, CancellationToken ct);
+    Task SoftDeleteAsync(CustomerReport report, CancellationToken ct);
+    Task UpdateReportAsync(CustomerReport report, CancellationToken ct);
 }

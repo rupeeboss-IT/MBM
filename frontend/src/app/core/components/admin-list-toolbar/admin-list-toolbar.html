@@ -1,0 +1,61 @@
+<section class="admin-filter-panel admin-list-toolbar">
+  <div class="admin-filter-panel__header">
+    <div class="admin-filter-panel__title">{{ panelTitle() }}</div>
+    <div class="admin-filter-panel__actions">
+      <button class="btn btn-primary" type="button" [disabled]="disabled()" (click)="applyFilters.emit()">
+        Apply filters
+      </button>
+      @if (showExport()) {
+        <button class="btn btn-outline" type="button" [disabled]="disabled()" (click)="exportClick.emit()">
+          Export Excel
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="admin-filter-panel__body">
+    <ng-content select="[adminFilterExtra]" />
+
+    <div class="admin-filter-panel__grid admin-filter-panel__grid--filters">
+      <div class="admin-field">
+        <label for="admin-date-from">From date</label>
+        <input
+          id="admin-date-from"
+          class="admin-input admin-input--date"
+          type="date"
+          [ngModel]="dateFrom()"
+          (ngModelChange)="dateFromChange.emit($event)"
+          [disabled]="disabled()"
+        />
+      </div>
+      <div class="admin-field">
+        <label for="admin-date-to">To date</label>
+        <input
+          id="admin-date-to"
+          class="admin-input admin-input--date"
+          type="date"
+          [ngModel]="dateTo()"
+          (ngModelChange)="dateToChange.emit($event)"
+          [disabled]="disabled()"
+        />
+      </div>
+      @if (showSort()) {
+        <div class="admin-field">
+          <label for="admin-sort-preset">Sort by</label>
+          <select
+            id="admin-sort-preset"
+            class="admin-input admin-input--select"
+            [ngModel]="sortPreset()"
+            (ngModelChange)="onSortChange($event)"
+            [disabled]="disabled()"
+          >
+            <option value="latest">Latest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name_asc">Name A–Z</option>
+            <option value="name_desc">Name Z–A</option>
+          </select>
+        </div>
+      }
+    </div>
+  </div>
+</section>

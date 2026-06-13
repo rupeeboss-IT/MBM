@@ -1,0 +1,133 @@
+.um-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.um-search {
+  flex: 1 1 220px;
+  min-width: 180px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+}
+
+.um-status {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.row-um-users {
+  grid-template-columns: 1.4fr 1.4fr 0.9fr 1fr 0.7fr 0.9fr 1.2fr;
+}
+
+.row-um-users--no-company {
+  grid-template-columns: 1.4fr 1.5fr 1fr 0.8fr 1fr 1.3fr;
+}
+
+.row-um-users:not(.header) > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.um-link {
+  font-weight: 600;
+  color: var(--admin-navy);
+  text-decoration: none;
+}
+
+.um-link:hover {
+  text-decoration: underline;
+}
+
+.um-sub {
+  font-size: 0.78rem;
+  margin-top: 0.15rem;
+}
+
+.um-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.um-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 1200;
+}
+
+.um-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1201;
+  width: min(440px, calc(100vw - 2rem));
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.um-modal h3 {
+  margin: 0;
+}
+
+.um-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.um-modal input,
+.um-modal textarea {
+  font-weight: 400;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+}
+
+.um-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .row-um-users {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .row-um-users.header {
+    display: none;
+  }
+
+  .row-um-users:not(.header) > div::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--admin-text-secondary);
+    margin-bottom: 0.15rem;
+  }
+}

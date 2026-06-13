@@ -23,6 +23,7 @@ export const API_USER_MESSAGES = {
   search: 'Unable to retrieve results. Please try again.',
   loanApplication: 'Unable to submit your loan application. Please try again.',
   contact: 'Unable to send your message. Please try again.',
+  schemeDiscovery: 'Unable to load scheme discovery status. Please try again later.',
   unauthorized: 'Your session has expired. Please sign in again.',
   forbidden: 'You do not have permission to perform this action.',
   notFound: 'The requested information was not found.',
@@ -42,6 +43,7 @@ export function resolveApiFallback(url: string, method: string): string {
   if (path.includes('/payment') && m === 'POST') return API_USER_MESSAGES.payment;
   if (path.includes('/loans/apply')) return API_USER_MESSAGES.loanApplication;
   if (path.includes('/contact/submit')) return API_USER_MESSAGES.contact;
+  if (path.includes('/scheme-discovery')) return API_USER_MESSAGES.schemeDiscovery;
   if (path.includes('/user/login')) return API_USER_MESSAGES.login;
   if (path.includes('/user/register')) return API_USER_MESSAGES.register;
   if (path.includes('/password/forgot')) return API_USER_MESSAGES.forgotPassword;

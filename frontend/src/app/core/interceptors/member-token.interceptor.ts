@@ -8,7 +8,8 @@ function isMemberApiUrl(url: string): boolean {
   return (
     path.startsWith('/api/payment') ||
     path.startsWith('/api/user/me') ||
-    path.startsWith('/api/customer/reports')
+    path.startsWith('/api/customer/reports') ||
+    path.startsWith('/api/scheme-discovery')
   );
 }
 

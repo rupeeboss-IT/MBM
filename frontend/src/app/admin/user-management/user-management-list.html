@@ -1,0 +1,144 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">{{ config().eyebrow }}</span>
+      <h2>{{ config().title }}</h2>
+      <div class="muted">Search, filter, and manage {{ config().role }}.</div>
+    </div>
+    <div class="actions">
+      @if (config().canCreate) {
+        <button class="btn" type="button" (click)="openCreate()" [disabled]="loading()">{{ config().createLabel }}</button>
+      }
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <app-admin-list-toolbar
+    panelTitle="Filters"
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="sortPreset()"
+    [showSearch]="false"
+    [disabled]="loading()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (sortPresetChange)="sortPreset.set($event); applyFilters()"
+    (applyFilters)="applyFilters()"
+    (exportClick)="exportExcel()"
+  />
+
+  <div class="section">
+    <div class="um-filters">
+      <input
+        type="search"
+        class="um-search"
+        placeholder="Search name, email, phone…"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+      <select class="um-status" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); applyFilters()">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="btn btn-outline" type="button" (click)="applyFilters()" [disabled]="loading()">Apply</button>
+    </div>
+
+    @if (loading()) {
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading users…</span>
+      </div>
+    } @else if (users().length === 0) {
+      <div class="admin-empty">No users found.</div>
+    } @else {
+      <div class="admin-table-wrap">
+        <div class="table">
+          <div class="row header row-um-users" [class.row-um-users--no-company]="!config().showCompany">
+            <div (click)="onSortColumn('name')">Name {{ sortIndicator(sortBy(), sortDir(), 'name') }}</div>
+            <div>Email</div>
+            <div>Phone</div>
+            @if (config().showCompany) {
+              <div>Company</div>
+            }
+            <div>Status</div>
+            <div (click)="onSortColumn('created')">Joined {{ sortIndicator(sortBy(), sortDir(), 'created') }}</div>
+            <div>Actions</div>
+          </div>
+          @for (u of users(); track u.userId) {
+            <div class="row row-um-users" [class.row-um-users--no-company]="!config().showCompany">
+              <div>
+                <a [routerLink]="detailLink(u)" class="um-link">{{ u.fullName }}</a>
+                @if (u.memberId) {
+                  <div class="muted um-sub">{{ u.memberId }}</div>
+                }
+              </div>
+              <div>{{ u.email }}</div>
+              <div>{{ u.phone }}</div>
+              @if (config().showCompany) {
+                <div>{{ u.companyName || '—' }}</div>
+              }
+              <div>
+                @if (u.isActive) {
+                  <span class="badge badge-success">Active</span>
+                } @else {
+                  <span class="badge badge-danger">Inactive</span>
+                }
+              </div>
+              <div>{{ u.createdAt | localDate }}</div>
+              <div class="um-actions">
+                <a class="btn btn-outline btn-sm" [routerLink]="detailLink(u)">View</a>
+                @if (u.isActive) {
+                  <button class="btn btn-outline btn-sm" type="button" (click)="openDeactivate(u)" [disabled]="actionSubmitting()">Deactivate</button>
+                } @else {
+                  <button class="btn btn-outline btn-sm" type="button" (click)="confirmActivate(u)" [disabled]="actionSubmitting()">Activate</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <app-admin-pagination
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="total()"
+        [disabled]="loading()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  </div>
+</div>
+
+@if (createOpen()) {
+  <div class="um-modal-backdrop" (click)="closeCreate()"></div>
+  <div class="um-modal" role="dialog" aria-modal="true">
+    <h3>{{ config().createLabel }}</h3>
+    <label>Full name *<input type="text" [ngModel]="formFullName()" (ngModelChange)="formFullName.set($event)" /></label>
+    <label>Email *<input type="email" [ngModel]="formEmail()" (ngModelChange)="formEmail.set($event)" /></label>
+    <label>Phone *<input type="tel" [ngModel]="formPhone()" (ngModelChange)="formPhone.set($event)" /></label>
+    @if (config().showCompany) {
+      <label>Company<input type="text" [ngModel]="formCompany()" (ngModelChange)="formCompany.set($event)" /></label>
+    }
+    <label>Password *<input type="password" [ngModel]="formPassword()" (ngModelChange)="formPassword.set($event)" autocomplete="new-password" /></label>
+    <div class="um-modal-actions">
+      <button class="btn btn-outline" type="button" (click)="closeCreate()" [disabled]="createSubmitting()">Cancel</button>
+      <button class="btn" type="button" (click)="submitCreate()" [disabled]="createSubmitting()">Create</button>
+    </div>
+  </div>
+}
+
+@if (deactivateOpen()) {
+  <div class="um-modal-backdrop" (click)="closeDeactivate()"></div>
+  <div class="um-modal" role="dialog" aria-modal="true">
+    <h3>Deactivate user</h3>
+    <p class="muted">Remarks are required. Inactive users cannot log in or access protected features.</p>
+    <label>Remarks *
+      <textarea rows="3" [ngModel]="deactivateRemarks()" (ngModelChange)="deactivateRemarks.set($event)"></textarea>
+    </label>
+    <div class="um-modal-actions">
+      <button class="btn btn-outline" type="button" (click)="closeDeactivate()" [disabled]="actionSubmitting()">Cancel</button>
+      <button class="btn" type="button" (click)="confirmDeactivate()" [disabled]="actionSubmitting()">Deactivate</button>
+    </div>
+  </div>
+}

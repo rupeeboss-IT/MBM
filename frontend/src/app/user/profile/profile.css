@@ -1,3 +1,15 @@
+.report-type-pill {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #e8f5e9;
+  color: #1b5e20;
+  vertical-align: middle;
+}
+
 .profile-page{
   background:
     radial-gradient(circle at 10% 10%, rgba(230,57,70,.08) 0%, transparent 45%),

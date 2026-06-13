@@ -1,11 +1,12 @@
 <div class="admin-wrap">
   <div class="admin-topbar">
     <div>
+      <span class="admin-eyebrow">Document management</span>
       <h2>Reports Management</h2>
       <div class="muted">View upload history, download counts, and search by customer.</div>
     </div>
     <div class="actions">
-      <a class="btn btn-outline" href="/home">Go to Website</a>
+      <a class="btn btn-outline" href="/home">Website</a>
       <a class="btn btn-outline" routerLink="/admin-dashboard">← Dashboard</a>
       <button class="btn btn-outline" type="button" (click)="logout()">Logout</button>
     </div>
@@ -16,60 +17,419 @@
     <a routerLink="/admin-reports/history" routerLinkActive="active">View Uploaded Reports</a>
   </nav>
 
-  <div class="section">
-    <div class="section-head">
-      <h3>Report history</h3>
-      <div class="section-tools">
+  @if (isSuperAdmin()) {
+    <section class="section section--kpi report-pending-widget">
+      <div class="report-pending-widget__inner">
+        <div>
+          <p class="kpi-label">Pending correction requests</p>
+          <p class="kpi-value">{{ pendingCount() }}</p>
+        </div>
+        <div class="muted">Awaiting Super Admin approval</div>
+      </div>
+    </section>
+  }
+
+  <app-admin-list-toolbar
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="sortPreset()"
+    [showSearch]="false"
+    [disabled]="loading() || exporting()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (sortPresetChange)="onSortPresetChange($event)"
+    (applyFilters)="applyFilters()"
+    (exportClick)="exportExcel()"
+  >
+    <div adminFilterExtra class="admin-filter-panel__grid admin-filter-panel__grid--extra admin-filter-panel__grid--filters">
+      <div class="admin-field admin-field--span-4">
+        <label for="report-search">Search</label>
         <input
-          class="table-search"
+          id="report-search"
+          class="admin-input"
           type="search"
-          [value]="search()"
-          (input)="onSearchInput($event)"
-          (keyup.enter)="runSearch()"
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)"
+          (keyup.enter)="applyFilters()"
           placeholder="Customer name, Member ID, or email…"
         />
-        <button type="button" class="btn btn-primary" (click)="runSearch()" [disabled]="loading()">Search</button>
       </div>
     </div>
+  </app-admin-list-toolbar>
 
-    <div class="muted" *ngIf="loading()">Loading…</div>
-
-    <div class="table" *ngIf="!loading() && items().length > 0">
-      <div class="row header row-history">
-        <div>Customer</div>
-        <div>Member ID</div>
-        <div>Upload date</div>
-        <div>Downloads</div>
-        <div>Last download</div>
-        <div>File</div>
-      </div>
-      <div class="row row-history" *ngFor="let r of items()">
-        <div class="text-truncate" data-label="Customer" [title]="r.customerName">{{ r.customerName }}</div>
-        <div class="mono text-truncate" data-label="Member ID" [title]="r.memberId">{{ r.memberId }}</div>
-        <div data-label="Upload date">{{ r.uploadDate | date:'dd-MMM-yyyy HH:mm' }}</div>
-        <div data-label="Downloads">{{ r.downloadCount }}</div>
-        <div data-label="Last download">{{ r.lastDownloadDate ? (r.lastDownloadDate | date:'dd-MMM-yyyy HH:mm') : '—' }}</div>
-        <div class="file-meta" data-label="File">
-          <div class="text-truncate" [title]="r.originalFileName">{{ r.originalFileName }}</div>
-          <div class="muted">{{ formatSize(r.fileSize) }} · {{ r.planName || '—' }}</div>
+  @if (isSuperAdmin()) {
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h3 class="report-section-title">Approval queue</h3>
+          <p class="muted">Review pending delete, replace, and edit requests from admins.</p>
         </div>
       </div>
-    </div>
 
-    <div class="muted" *ngIf="!loading() && items().length === 0">No reports found.</div>
+      @if (queueLoading()) {
+        <div class="admin-loading">
+          <div class="admin-spinner" aria-hidden="true"></div>
+          <span>Loading approval queue…</span>
+        </div>
+      }
 
-    <div class="pager" *ngIf="totalCount() > pageSize">
-      <button type="button" class="btn btn-outline" (click)="prevPage()" [disabled]="page() <= 1 || loading()">
-        Previous
-      </button>
-      <span class="muted">Page {{ page() }} · {{ totalCount() }} total</span>
-      <button
-        type="button"
-        class="btn btn-outline"
-        (click)="nextPage()"
-        [disabled]="loading() || page() * pageSize >= totalCount()">
-        Next
-      </button>
+      @if (!queueLoading() && queueItems().length > 0) {
+        <div class="admin-table-wrap">
+          <div class="table">
+            <div class="row header row-queue">
+              <div>Type</div>
+              <div>Requested by</div>
+              <div>Requested on</div>
+              <div>Customer</div>
+              <div>Report</div>
+              <div>Reason</div>
+              <div>Actions</div>
+            </div>
+            @for (q of queueItems(); track q.id) {
+              <div class="row row-queue">
+                <div data-label="Type"><span class="badge badge-info">{{ q.requestType }}</span></div>
+                <div data-label="Requested by">{{ q.requestedByName }}</div>
+                <div data-label="Requested on">{{ q.requestedOn | localDate:'dd-MMM-yyyy HH:mm' }}</div>
+                <div data-label="Customer">{{ q.customerName || '—' }}</div>
+                <div data-label="Report">
+                  <div class="text-truncate" [title]="q.originalFileName || ''">{{ q.originalFileName || '—' }}</div>
+                  <div class="muted mono">{{ q.memberId || '—' }}</div>
+                </div>
+                <div data-label="Reason" class="text-truncate" [title]="q.reason">{{ q.reason }}</div>
+                <div data-label="Actions" class="report-actions">
+                  <button class="btn btn-sm btn-outline" type="button" (click)="openDetailModal(q.id)">Review</button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (!queueLoading() && queueItems().length === 0) {
+        <div class="admin-empty">
+          <p class="admin-empty__title">No pending requests</p>
+          <p class="admin-empty__text">New correction requests from admins will appear here.</p>
+        </div>
+      }
+
+      <app-admin-pagination
+        [page]="queuePage()"
+        [pageSize]="queuePageSize"
+        [total]="queueTotal()"
+        [disabled]="queueLoading()"
+        (pageChange)="onQueuePageChange($event)"
+      />
     </div>
+  }
+
+  @if (!isSuperAdmin() && (queueItems().length > 0 || queueLoading())) {
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h3 class="report-section-title">My requests</h3>
+          <p class="muted">Track your submitted correction and delete requests.</p>
+        </div>
+      </div>
+
+      @if (queueLoading()) {
+        <div class="admin-loading">
+          <div class="admin-spinner" aria-hidden="true"></div>
+          <span>Loading your requests…</span>
+        </div>
+      }
+
+      @if (!queueLoading() && queueItems().length > 0) {
+        <div class="admin-table-wrap">
+          <div class="table">
+            <div class="row header row-queue">
+              <div>Type</div>
+              <div>Requested on</div>
+              <div>Report</div>
+              <div>Status</div>
+              <div>Reason</div>
+              <div>Actions</div>
+            </div>
+            @for (q of queueItems(); track q.id) {
+              <div class="row row-queue">
+                <div data-label="Type"><span class="badge badge-info">{{ q.requestType }}</span></div>
+                <div data-label="Requested on">{{ q.requestedOn | localDate:'dd-MMM-yyyy HH:mm' }}</div>
+                <div data-label="Report">
+                  <div class="text-truncate" [title]="q.originalFileName || ''">{{ q.originalFileName || '—' }}</div>
+                </div>
+                <div data-label="Status">
+                  @if (q.status === 'Pending') { <span class="badge badge-warning">Pending</span> }
+                  @else if (q.status === 'Approved') { <span class="badge badge-success">Approved</span> }
+                  @else if (q.status === 'Rejected') { <span class="badge badge-danger">Rejected</span> }
+                  @else { <span class="badge badge-neutral">{{ q.status }}</span> }
+                </div>
+                <div data-label="Reason" class="text-truncate" [title]="q.reason">{{ q.reason }}</div>
+                <div data-label="Actions" class="report-actions">
+                  <button class="btn btn-sm btn-outline" type="button" (click)="openDetailModal(q.id)">Details</button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <app-admin-pagination
+        [page]="queuePage()"
+        [pageSize]="queuePageSize"
+        [total]="queueTotal()"
+        [disabled]="queueLoading()"
+        (pageChange)="onQueuePageChange($event)"
+      />
+    </div>
+  }
+
+  <div class="section">
+    @if (!loading()) {
+      <p class="list-summary">{{ totalCount() }} report(s) match current filters</p>
+    }
+
+    @if (loading()) {
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading report history…</span>
+      </div>
+    }
+
+    @if (!loading() && items().length > 0) {
+      <div class="admin-table-wrap">
+        <div class="table">
+          <div class="row header row-history-ext">
+            <div class="sortable" (click)="onColumnSort('name')">Customer{{ sortIndicator(sortBy(), sortDir(), 'name') }}</div>
+            <div class="sortable" (click)="onColumnSort('memberid')">Member ID{{ sortIndicator(sortBy(), sortDir(), 'memberid') }}</div>
+            <div class="sortable" (click)="onColumnSort('created')">Upload date{{ sortIndicator(sortBy(), sortDir(), 'created') }}</div>
+            <div class="sortable" (click)="onColumnSort('downloads')">Downloads{{ sortIndicator(sortBy(), sortDir(), 'downloads') }}</div>
+            <div class="sortable" (click)="onColumnSort('lastdownload')">Last download{{ sortIndicator(sortBy(), sortDir(), 'lastdownload') }}</div>
+            <div class="sortable" (click)="onColumnSort('file')">File{{ sortIndicator(sortBy(), sortDir(), 'file') }}</div>
+            <div>Status</div>
+            <div>Actions</div>
+          </div>
+          @for (r of items(); track r.id) {
+            <div class="row row-history-ext">
+              <div class="text-truncate" data-label="Customer" [title]="r.customerName">{{ r.customerName }}</div>
+              <div class="mono text-truncate" data-label="Member ID" [title]="r.memberId">{{ r.memberId }}</div>
+              <div data-label="Upload date">{{ r.uploadDate | localDate:'dd-MMM-yyyy HH:mm' }}</div>
+              <div data-label="Downloads"><span class="badge badge-neutral">{{ r.downloadCount }}</span></div>
+              <div data-label="Last download">{{ r.lastDownloadDate ? (r.lastDownloadDate | localDate:'dd-MMM-yyyy HH:mm') : '—' }}</div>
+              <div class="file-meta" data-label="File">
+                <div class="text-truncate" [title]="r.originalFileName">{{ r.originalFileName }}</div>
+                <div class="muted">{{ formatSize(r.fileSize) }} · {{ r.planName || '—' }}</div>
+              </div>
+              <div data-label="Status">
+                @if (requestStatusBadge(r); as badge) {
+                  <span class="badge" [class]="badge.class">{{ badge.label }}</span>
+                } @else {
+                  <span class="muted">—</span>
+                }
+              </div>
+              <div data-label="Actions" class="report-actions">
+                @if (isSuperAdmin()) {
+                  <button class="btn btn-sm btn-outline" type="button" (click)="openSuperModal('edit', r)">Edit</button>
+                  <button class="btn btn-sm btn-outline" type="button" (click)="openSuperModal('replace', r)">Replace</button>
+                  <button class="btn btn-sm btn-outline" type="button" (click)="openSuperModal('delete', r)">Delete</button>
+                  <button class="btn btn-sm btn-outline" type="button" (click)="openSuperModal('audit', r)">Audit</button>
+                } @else {
+                  <button
+                    class="btn btn-sm btn-outline"
+                    type="button"
+                    [disabled]="r.hasPendingRequest"
+                    (click)="openRequestModal('edit', r)"
+                  >Request Edit</button>
+                  <button
+                    class="btn btn-sm btn-outline"
+                    type="button"
+                    [disabled]="r.hasPendingRequest"
+                    (click)="openRequestModal('replace', r)"
+                  >Request Correction</button>
+                  <button
+                    class="btn btn-sm btn-outline"
+                    type="button"
+                    [disabled]="r.hasPendingRequest"
+                    (click)="openRequestModal('delete', r)"
+                  >Request Delete</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (!loading() && items().length === 0) {
+      <div class="admin-empty">
+        <svg class="admin-empty__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/>
+        </svg>
+        <p class="admin-empty__title">No reports found</p>
+        <p class="admin-empty__text">Try adjusting your date range or search terms.</p>
+      </div>
+    }
+
+    <app-admin-pagination
+      [page]="page()"
+      [pageSize]="pageSize"
+      [total]="totalCount()"
+      [disabled]="loading()"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
 </div>
+
+@if (requestModalOpen()) {
+  <div class="admin-modal-overlay" data-modal-backdrop="true" (click)="closeRequestModal()" role="dialog" aria-modal="true">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeRequestModal()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">
+        @switch (requestModalMode()) {
+          @case ('delete') { Request Delete }
+          @case ('replace') { Request Correction }
+          @case ('edit') { Request Edit }
+        }
+      </h3>
+      @if (requestTarget(); as target) {
+        <p class="muted admin-modal__sub">{{ target.customerName }} · {{ target.originalFileName }}</p>
+        @if (requestModalMode() === 'edit') {
+          <div class="admin-field">
+            <label for="req-new-name">New file name</label>
+            <input id="req-new-name" class="admin-input" type="text" [ngModel]="requestNewFileName()" (ngModelChange)="requestNewFileName.set($event)" />
+          </div>
+        }
+        @if (requestModalMode() === 'replace') {
+          <div class="admin-field">
+            <label for="req-file">Corrected report (ZIP)</label>
+            <input id="req-file" class="admin-input" type="file" accept=".zip" (change)="onRequestFileChange($event)" />
+          </div>
+        }
+        <div class="admin-field">
+          <label for="req-reason">Reason <span class="required">*</span></label>
+          <textarea id="req-reason" class="admin-input admin-textarea" rows="3" [ngModel]="requestReason()" (ngModelChange)="requestReason.set($event)"></textarea>
+        </div>
+        <div class="admin-modal__actions">
+          <button class="btn btn-outline" type="button" (click)="closeRequestModal()" [disabled]="requestSubmitting()">Cancel</button>
+          <button class="btn" type="button" (click)="submitRequest()" [disabled]="requestSubmitting()">
+            {{ requestSubmitting() ? 'Submitting…' : 'Submit request' }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+@if (detailModalOpen()) {
+  <div class="admin-modal-overlay" data-modal-backdrop="true" (click)="closeDetailModal()" role="dialog" aria-modal="true">
+    <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeDetailModal()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Request details</h3>
+      @if (detailLoading()) {
+        <div class="admin-loading"><div class="admin-spinner"></div><span>Loading…</span></div>
+      }
+      @if (!detailLoading() && detailItem(); as d) {
+        <div class="admin-detail-grid">
+          <div><span class="detail-label">Type</span><span class="badge badge-info">{{ d.requestType }}</span></div>
+          <div><span class="detail-label">Status</span><span class="badge badge-warning">{{ d.status }}</span></div>
+          <div><span class="detail-label">Requested by</span>{{ d.requestedByName }}</div>
+          <div><span class="detail-label">Requested on</span>{{ d.requestedOn | localDate:'dd-MMM-yyyy HH:mm' }}</div>
+          <div class="admin-detail-grid__span-2"><span class="detail-label">Reason</span>{{ d.reason }}</div>
+          @if (d.report; as rep) {
+            <div class="admin-detail-grid__span-2"><span class="detail-label">Report</span>{{ rep.customerName }} · {{ rep.originalFileName }} ({{ formatSize(rep.fileSize) }})</div>
+          }
+          @if (d.pendingOriginalFileName) {
+            <div class="admin-detail-grid__span-2"><span class="detail-label">Corrected report</span>{{ d.pendingOriginalFileName }}@if (d.pendingFileSize) { ({{ formatSize(d.pendingFileSize) }}) }</div>
+          }
+          @if (d.previousValues) {
+            <div class="admin-detail-grid__span-2"><span class="detail-label">Previous values</span><code class="detail-code">{{ d.previousValues }}</code></div>
+          }
+          @if (d.newValues) {
+            <div class="admin-detail-grid__span-2"><span class="detail-label">New values</span><code class="detail-code">{{ d.newValues }}</code></div>
+          }
+        </div>
+        @if (d.status === 'Pending' && isSuperAdmin()) {
+          <div class="admin-field">
+            <label for="review-remarks">Remarks (optional)</label>
+            <textarea id="review-remarks" class="admin-input admin-textarea" rows="2" [ngModel]="reviewRemarks()" (ngModelChange)="reviewRemarks.set($event)"></textarea>
+          </div>
+          <div class="admin-modal__actions">
+            <button class="btn btn-outline" type="button" (click)="rejectRequest()" [disabled]="reviewSubmitting()">Reject</button>
+            <button class="btn" type="button" (click)="approveRequest()" [disabled]="reviewSubmitting()">
+              {{ reviewSubmitting() ? 'Processing…' : 'Approve' }}
+            </button>
+          </div>
+        }
+      }
+    </div>
+  </div>
+}
+
+@if (superModalOpen()) {
+  <div class="admin-modal-overlay" data-modal-backdrop="true" (click)="closeSuperModal()" role="dialog" aria-modal="true">
+    <div class="admin-modal" [class.admin-modal--wide]="superModalMode() === 'audit'" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeSuperModal()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">
+        @switch (superModalMode()) {
+          @case ('edit') { Edit report }
+          @case ('replace') { Replace report }
+          @case ('delete') { Delete report }
+          @case ('audit') { Audit history }
+        }
+      </h3>
+      @if (superTarget(); as target) {
+        <p class="muted admin-modal__sub">{{ target.customerName }} · {{ target.originalFileName }}</p>
+      }
+      @if (superModalMode() === 'audit') {
+        @if (superSubmitting()) {
+          <div class="admin-loading"><div class="admin-spinner"></div><span>Loading audit log…</span></div>
+        } @else if (auditItems().length === 0) {
+          <p class="muted">No audit entries for this report.</p>
+        } @else {
+          <div class="admin-audit-list">
+            @for (a of auditItems(); track a.auditId) {
+              <div class="admin-audit-item">
+                <div class="admin-audit-item__head">
+                  <strong>{{ a.action }}</strong>
+                  <span class="muted">{{ a.createdAt | localDate:'dd-MMM-yyyy HH:mm' }}</span>
+                </div>
+                @if (a.actorName) { <div class="muted">By {{ a.actorName }}</div> }
+                @if (a.remarks) { <div>{{ a.remarks }}</div> }
+                @if (a.previousValues || a.newValues) {
+                  <div class="detail-code-wrap">
+                    @if (a.previousValues) { <code class="detail-code">Before: {{ a.previousValues }}</code> }
+                    @if (a.newValues) { <code class="detail-code">After: {{ a.newValues }}</code> }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+        <div class="admin-modal__actions">
+          <button class="btn btn-outline" type="button" (click)="closeSuperModal()">Close</button>
+        </div>
+      } @else {
+        @if (superModalMode() === 'edit') {
+          <div class="admin-field">
+            <label for="super-name">File name</label>
+            <input id="super-name" class="admin-input" type="text" [ngModel]="superFileName()" (ngModelChange)="superFileName.set($event)" />
+          </div>
+        }
+        @if (superModalMode() === 'replace') {
+          <div class="admin-field">
+            <label for="super-file">Replacement ZIP</label>
+            <input id="super-file" class="admin-input" type="file" accept=".zip" (change)="onSuperFileChange($event)" />
+          </div>
+        }
+        <div class="admin-field">
+          <label for="super-reason">Reason <span class="required">*</span></label>
+          <textarea id="super-reason" class="admin-input admin-textarea" rows="3" [ngModel]="superReason()" (ngModelChange)="superReason.set($event)"></textarea>
+        </div>
+        <div class="admin-modal__actions">
+          <button class="btn btn-outline" type="button" (click)="closeSuperModal()" [disabled]="superSubmitting()">Cancel</button>
+          <button class="btn" type="button" (click)="submitSuperAction()" [disabled]="superSubmitting()">
+            {{ superSubmitting() ? 'Saving…' : 'Confirm' }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}

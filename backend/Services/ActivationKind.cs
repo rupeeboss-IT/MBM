@@ -6,6 +6,7 @@ public enum ActivationKind
     FirstPurchase,
     Renewal,
     Upgrade,
+    OneTimeReport,
 }
 
 public sealed record ActivationResult(

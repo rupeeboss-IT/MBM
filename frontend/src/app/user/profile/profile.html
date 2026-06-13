@@ -38,11 +38,11 @@
           <div><span class="plan-pill plan-pill--active">{{ plan.planName }}</span></div>
           <div class="muted d-flex" *ngIf="plan.activeFrom"  style="justify-content: space-between;">
             <span class="k">Active since</span>
-            <span class="v">{{ plan.activeFrom | date:'dd MMM yyyy' }}</span>
+            <span class="v">{{ plan.activeFrom | localDate:'dd MMM yyyy' }}</span>
           </div><hr/>
           <div class="muted d-flex" *ngIf="plan.activeTo" style="justify-content: space-between;">
             <span class="k">Renews on</span>
-            <span class="v">{{ plan.activeTo | date:'dd MMM yyyy' }}</span>
+            <span class="v">{{ plan.activeTo | localDate:'dd MMM yyyy' }}</span>
           </div>
           <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:.5rem">
             <a class="btn-outline" [routerLink]="['/my-plan']"
@@ -101,10 +101,12 @@
           </div>
           <div class="row">
             <div class="label">User Since</div>
-            <div class="value">{{ profile()?.createdAt ? (profile()?.createdAt | date:'dd MMM yyyy') : '—' }}</div>
+            <div class="value">{{ profile()?.createdAt ? (profile()?.createdAt | localDate:'dd MMM yyyy') : '—' }}</div>
           </div>
         </div>
       </section>
+
+      <app-scheme-discovery-report-access variant="profile-card" [plan]="activePlan()" />
 
       <section id="reports" class="card profile-card profile-card--reports">
         <div class="card__header">
@@ -125,8 +127,11 @@
               <div role="columnheader">Action</div>
             </div>
             <div class="record-table__row record-table__row--reports" role="row" *ngFor="let r of reports()">
-              <div role="cell">{{ r.reportName }}</div>
-              <div role="cell">{{ r.uploadDate | date:'dd MMM yyyy' }}</div>
+              <div role="cell">
+                {{ r.reportName }}
+                <span class="report-type-pill" *ngIf="r.reportType && r.reportType !== 'Credit'">{{ reportTypeLabel(r.reportType) }}</span>
+              </div>
+              <div role="cell">{{ r.uploadDate | localDate:'dd MMM yyyy' }}</div>
               <div role="cell">{{ r.planName }}</div>
               <div role="cell">{{ formatFileSize(r.fileSize) }}</div>
               <div role="cell">
@@ -144,11 +149,14 @@
             <dl class="record-card__fields">
               <div class="record-card__field">
                 <dt>Report Name</dt>
-                <dd>{{ r.reportName }}</dd>
+                <dd>
+                  {{ r.reportName }}
+                  <span class="report-type-pill" *ngIf="r.reportType && r.reportType !== 'Credit'">{{ reportTypeLabel(r.reportType) }}</span>
+                </dd>
               </div>
               <div class="record-card__field">
                 <dt>Upload date</dt>
-                <dd>{{ r.uploadDate | date:'dd MMM yyyy' }}</dd>
+                <dd>{{ r.uploadDate | localDate:'dd MMM yyyy' }}</dd>
               </div>
               <div class="record-card__field">
                 <dt>Plan</dt>
@@ -192,7 +200,7 @@
               <div role="columnheader">Action</div>
             </div>
             <div class="record-table__row record-table__row--invoices" role="row" *ngFor="let inv of invoices()">
-              <div role="cell">{{ inv.paidAt | date:'dd MMM yyyy' }}</div>
+              <div role="cell">{{ inv.paidAt | localDate:'dd MMM yyyy' }}</div>
               <div role="cell">{{ inv.planName }}</div>
               <div role="cell">{{ inr(inv.amountPaise) }}</div>
               <div role="cell" class="invoice-num">{{ inv.invoiceNumber }}</div>
@@ -215,7 +223,7 @@
               </div>
               <div class="record-card__field">
                 <dt>Date</dt>
-                <dd>{{ inv.paidAt | date:'dd MMM yyyy' }}</dd>
+                <dd>{{ inv.paidAt | localDate:'dd MMM yyyy' }}</dd>
               </div>
               <div class="record-card__field">
                 <dt>Plan</dt>
@@ -272,6 +280,8 @@
               <div class="kpi__value">{{ profile()?.role || '—' }}</div>
             </div> -->
           </div>
+
+          <app-scheme-discovery-report-access variant="dashboard-action" [plan]="activePlan()" />
         </div>
 
         <!-- Desktop support card (keeps desktop layout perfect). Hidden on small screens. -->

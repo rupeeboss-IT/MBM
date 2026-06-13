@@ -4,7 +4,7 @@
 
 SET NOCOUNT ON;
 
-DECLARE @Year int = YEAR(GETUTCDATE()); -- calendar year for sequence row (use 2026 if you prefer fixed year)
+DECLARE @Year int = YEAR(GETDATE()); -- calendar year for sequence row (use 2026 if you prefer fixed year)
 -- DECLARE @Year int = 2026;
 
 IF COL_LENGTH('dbo.Users', 'MemberId') IS NULL
@@ -28,7 +28,7 @@ UPDATE u
 SET
     MemberId = 'MBM' + RIGHT('0' + CAST(@Year % 100 AS varchar(2)), 2)
              + RIGHT('0000' + CAST(t.Seq AS varchar(4)), 4),
-    UpdatedAt = GETUTCDATE()
+    UpdatedAt = GETDATE()
 FROM dbo.Users u
 INNER JOIN ToAssign t ON t.UserId = u.UserId;
 
@@ -60,10 +60,10 @@ COMMIT TRANSACTION;
 
 -- Optional: explicit IDs for known accounts (uncomment to force exact mapping)
 /*
-UPDATE dbo.Users SET MemberId = 'MBM260001', UpdatedAt = GETUTCDATE()
+UPDATE dbo.Users SET MemberId = 'MBM260001', UpdatedAt = GETDATE()
 WHERE UserId = 'BCF9CCAB-F300-4AD4-B75C-736299AA928A' AND LOWER(Role) = 'member';
 
-UPDATE dbo.Users SET MemberId = 'MBM260002', UpdatedAt = GETUTCDATE()
+UPDATE dbo.Users SET MemberId = 'MBM260002', UpdatedAt = GETDATE()
 WHERE UserId = 'E6534E2E-FA92-48E2-A030-F6E719E12F8C' AND LOWER(Role) = 'member';
 
 MERGE dbo.MemberIdSequences AS t

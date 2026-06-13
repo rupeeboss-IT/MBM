@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+:host .auth-wrap {
+  background:
+    radial-gradient(ellipse 72% 58% at 100% 0%, rgba(230, 57, 70, 0.08), transparent 56%),
+    radial-gradient(ellipse 58% 48% at 0% 100%, rgba(15, 52, 96, 0.07), transparent 52%),
+    linear-gradient(165deg, #fafbfc 0%, var(--light-gray) 48%, #e9ecef 100%);
+}
+
+:host .auth-box {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(26, 26, 46, 0.1);
+}
+
+:host .auth-logo h2 {
+  color: var(--navy);
+}
+
+:host .form-group input {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+:host .form-group input:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--admin-accent-ring, rgba(230, 57, 70, 0.14));
+  outline: none;
+}
+
+:host .btn-submit {
+  background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+  border: 1px solid var(--red-dark);
+  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.28);
+}
+
+:host .btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--red-dark) 0%, #9b0f1a 100%);
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.32);
+}

@@ -1,0 +1,53 @@
+.sd-udyam-input-wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sd-udyam-input-wrap:focus-within {
+  border-color: var(--green, #2d6a4f);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
+}
+
+.sd-udyam-input-wrap--invalid {
+  border-color: #c62828;
+}
+
+.sd-udyam-input__prefix {
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #444;
+  user-select: none;
+  letter-spacing: 0.01em;
+}
+
+.sd-udyam-input__field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: transparent;
+  text-transform: uppercase;
+}
+
+.sd-udyam-input__field::placeholder {
+  color: #aaa;
+  text-transform: none;
+  font-weight: 400;
+}
+
+.sd-udyam-input__field:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

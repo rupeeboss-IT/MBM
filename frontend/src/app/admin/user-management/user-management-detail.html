@@ -1,0 +1,165 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">User Management</span>
+      <h2>User Details</h2>
+      <a [routerLink]="listLink()" class="muted um-back">← Back to list</a>
+    </div>
+    @if (user(); as u) {
+      <div class="actions">
+        <button class="btn btn-outline" type="button" (click)="openEdit()" [disabled]="loading()">Edit</button>
+        @if (u.isActive) {
+          <button class="btn btn-outline" type="button" (click)="openDeactivate()" [disabled]="actionSubmitting()">Deactivate</button>
+        } @else {
+          <button class="btn btn-outline" type="button" (click)="activate()" [disabled]="actionSubmitting()">Activate</button>
+        }
+        @if (canDelete()) {
+          <button class="btn" type="button" (click)="openDelete()" [disabled]="actionSubmitting()">Delete</button>
+        }
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="section">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading user…</span>
+      </div>
+    </div>
+  } @else if (user(); as u) {
+    <div class="section um-detail-grid">
+      <div class="um-card">
+        <h3>Profile</h3>
+        <dl class="um-dl">
+          <dt>Name</dt><dd>{{ u.fullName }}</dd>
+          <dt>Role</dt><dd>{{ roleLabel(u.role) }}</dd>
+          <dt>Email</dt><dd>{{ u.email }}</dd>
+          <dt>Phone</dt><dd>{{ u.phone }}</dd>
+          @if (u.memberId) {
+            <dt>Member ID</dt><dd>{{ u.memberId }}</dd>
+          }
+          @if (u.companyName) {
+            <dt>Company</dt><dd>{{ u.companyName }}</dd>
+          }
+          @if (u.planName) {
+            <dt>Plan</dt><dd>{{ u.planName }} ({{ u.planCode }})</dd>
+          }
+          <dt>Status</dt>
+          <dd>
+            @if (u.isActive) {
+              <span class="badge badge-success">Active</span>
+            } @else {
+              <span class="badge badge-danger">Inactive</span>
+            }
+          </dd>
+          <dt>Created</dt><dd>{{ u.createdAt | localDate }}</dd>
+          <dt>Updated</dt><dd>{{ u.updatedAt | localDate }}</dd>
+          @if (u.createdByName) {
+            <dt>Created by</dt><dd>{{ u.createdByName }}</dd>
+          }
+        </dl>
+      </div>
+
+      <div class="um-card">
+        <div class="um-audit-tabs">
+          <button type="button" [class.active]="auditTab() === 'audit'" (click)="switchAuditTab('audit')">Audit History</button>
+          <button type="button" [class.active]="auditTab() === 'status'" (click)="switchAuditTab('status')">Status History</button>
+        </div>
+
+        @if (auditTab() === 'audit') {
+          @if (auditItems().length === 0) {
+            <div class="admin-empty">No audit entries yet.</div>
+          } @else {
+            <div class="um-audit-list">
+              @for (a of auditItems(); track a.id) {
+                <div class="um-audit-row">
+                  <div class="um-audit-head">
+                    <strong>{{ a.action }}</strong>
+                    <span class="muted">{{ a.performedOn | localDate }}</span>
+                  </div>
+                  <div class="muted">By {{ a.performedByName || a.performedByUserId }}</div>
+                  @if (a.remarks) {
+                    <div>{{ a.remarks }}</div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        } @else {
+          @if (statusItems().length === 0) {
+            <div class="admin-empty">No status changes yet.</div>
+          } @else {
+            <div class="um-audit-list">
+              @for (s of statusItems(); track s.id) {
+                <div class="um-audit-row">
+                  <div class="um-audit-head">
+                    <strong>{{ s.actionType }}</strong>
+                    <span class="muted">{{ s.performedOn | localDate }}</span>
+                  </div>
+                  <div>{{ s.oldStatus || '—' }} → {{ s.newStatus || '—' }}</div>
+                  @if (s.remarks) {
+                    <div class="muted">{{ s.remarks }}</div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        }
+
+        <app-admin-pagination
+          [page]="auditPage()"
+          [pageSize]="auditPageSize"
+          [total]="auditTotal()"
+          [disabled]="loading()"
+          (pageChange)="onAuditPageChange($event)"
+        />
+      </div>
+    </div>
+  }
+</div>
+
+@if (editOpen()) {
+  <div class="um-modal-backdrop" (click)="closeEdit()"></div>
+  <div class="um-modal" role="dialog" aria-modal="true">
+    <h3>Edit user</h3>
+    <label>Full name *<input type="text" [ngModel]="formFullName()" (ngModelChange)="formFullName.set($event)" /></label>
+    <label>Email *<input type="email" [ngModel]="formEmail()" (ngModelChange)="formEmail.set($event)" /></label>
+    <label>Phone *<input type="tel" [ngModel]="formPhone()" (ngModelChange)="formPhone.set($event)" /></label>
+    <label>Company<input type="text" [ngModel]="formCompany()" (ngModelChange)="formCompany.set($event)" /></label>
+    <label>New password (optional)<input type="password" [ngModel]="formPassword()" (ngModelChange)="formPassword.set($event)" autocomplete="new-password" /></label>
+    <div class="um-modal-actions">
+      <button class="btn btn-outline" type="button" (click)="closeEdit()" [disabled]="editSubmitting()">Cancel</button>
+      <button class="btn" type="button" (click)="submitEdit()" [disabled]="editSubmitting()">Save</button>
+    </div>
+  </div>
+}
+
+@if (deactivateOpen()) {
+  <div class="um-modal-backdrop" (click)="closeDeactivate()"></div>
+  <div class="um-modal" role="dialog" aria-modal="true">
+    <h3>Deactivate user</h3>
+    <label>Remarks *
+      <textarea rows="3" [ngModel]="deactivateRemarks()" (ngModelChange)="deactivateRemarks.set($event)"></textarea>
+    </label>
+    <div class="um-modal-actions">
+      <button class="btn btn-outline" type="button" (click)="closeDeactivate()" [disabled]="actionSubmitting()">Cancel</button>
+      <button class="btn" type="button" (click)="confirmDeactivate()" [disabled]="actionSubmitting()">Deactivate</button>
+    </div>
+  </div>
+}
+
+@if (deleteOpen()) {
+  <div class="um-modal-backdrop" (click)="closeDelete()"></div>
+  <div class="um-modal" role="dialog" aria-modal="true">
+    <h3>Soft delete user</h3>
+    <p class="muted">This marks the user as deleted. Audit logs are preserved.</p>
+    <label>Remarks (optional)
+      <textarea rows="3" [ngModel]="deleteRemarks()" (ngModelChange)="deleteRemarks.set($event)"></textarea>
+    </label>
+    <div class="um-modal-actions">
+      <button class="btn btn-outline" type="button" (click)="closeDelete()" [disabled]="actionSubmitting()">Cancel</button>
+      <button class="btn" type="button" (click)="confirmDelete()" [disabled]="actionSubmitting()">Delete</button>
+    </div>
+  </div>
+}

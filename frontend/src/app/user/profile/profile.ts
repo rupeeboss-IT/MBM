@@ -13,11 +13,13 @@ import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { scrollToRouteFragment } from '../../core/utils/scroll-to-fragment';
+import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
+import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -122,6 +124,12 @@ export class Profile {
     } finally {
       this.reportsLoading.set(false);
     }
+  }
+
+  reportTypeLabel(reportType?: string): string {
+    if (!reportType || reportType === 'Credit') return 'Credit Report';
+    if (reportType === 'SchemeDiscovery' || reportType === 'SDR') return 'Government Scheme Discovery';
+    return reportType;
   }
 
   formatFileSize(bytes: number): string {

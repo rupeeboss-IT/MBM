@@ -22,7 +22,10 @@ public sealed class ReferralController : ControllerBase
         string? Message = null,
         int? EmployeeId = null,
         string? EmployeeName = null,
-        string? ReferralCode = null);
+        string? ReferralCode = null,
+        string? ReferralType = null,
+        string? DisplayName = null,
+        int? BrokerId = null);
 
     // Keep it public: payment page needs it before login sometimes.
     [AllowAnonymous]
@@ -40,8 +43,10 @@ public sealed class ReferralController : ControllerBase
             true,
             "OK",
             result.EmployeeId,
-            result.EmployeeName,
-            result.ReferralCode));
+            result.DisplayName,
+            result.ReferralCode,
+            result.ReferralType?.ToString(),
+            result.DisplayName,
+            result.BrokerId));
     }
 }
-

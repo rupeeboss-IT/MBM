@@ -10,6 +10,7 @@ export type CustomerReportListItem = {
   planName: string;
   fileSize: number;
   memberId: string;
+  reportType?: string;
 };
 
 export type ListReportsRes = {
@@ -52,6 +53,10 @@ export type ReportHistoryItem = {
   originalFileName: string;
   fileSize: number;
   planName?: string | null;
+  hasPendingRequest?: boolean;
+  pendingRequestId?: string | null;
+  pendingRequestType?: string | null;
+  latestRequestStatus?: string | null;
 };
 
 export type ReportHistoryRes = {
@@ -62,6 +67,97 @@ export type ReportHistoryRes = {
   page: number;
   pageSize: number;
 };
+
+export type ReportChangeRequestItem = {
+  id: string;
+  reportId: string;
+  requestType: string;
+  status: string;
+  reason: string;
+  requestedOn: string;
+  requestedByName: string;
+  customerName?: string | null;
+  memberId?: string | null;
+  originalFileName?: string | null;
+  reportUploadDate?: string | null;
+};
+
+export type ReportChangeRequestListRes = {
+  success: boolean;
+  message?: string;
+  items?: ReportChangeRequestItem[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+};
+
+export type ReportSummary = {
+  id: string;
+  customerName: string;
+  memberId: string;
+  email: string;
+  originalFileName: string;
+  fileSize: number;
+  uploadDate: string;
+  downloadCount: number;
+  lastDownloadDate?: string | null;
+  planName?: string | null;
+  reportType: string;
+};
+
+export type ReportChangeRequestDetail = {
+  id: string;
+  reportId: string;
+  requestType: string;
+  status: string;
+  reason: string;
+  remarks?: string | null;
+  requestedOn: string;
+  requestedBy: string;
+  requestedByName: string;
+  approvedOn?: string | null;
+  approvedByName?: string | null;
+  rejectedOn?: string | null;
+  rejectedByName?: string | null;
+  previousReportPath?: string | null;
+  newReportPath?: string | null;
+  previousValues?: string | null;
+  newValues?: string | null;
+  pendingOriginalFileName?: string | null;
+  pendingFileSize?: number | null;
+  report?: ReportSummary | null;
+};
+
+export type ReportChangeRequestDetailRes = {
+  success: boolean;
+  message?: string;
+  request?: ReportChangeRequestDetail | null;
+};
+
+export type ReportAuditLogItem = {
+  auditId: string;
+  action: string;
+  createdAt: string;
+  actorName?: string | null;
+  requestId?: string | null;
+  remarks?: string | null;
+  previousReportPath?: string | null;
+  newReportPath?: string | null;
+  previousValues?: string | null;
+  newValues?: string | null;
+};
+
+export type ReportAuditHistoryRes = {
+  success: boolean;
+  message?: string;
+  items?: ReportAuditLogItem[];
+};
+
+export type ActionRes = { success: boolean; message?: string };
+
+export type PendingCountRes = { success: boolean; count: number };
+
+export type CreateChangeRequestRes = { success: boolean; message?: string; requestId?: string };
 
 @Injectable({ providedIn: 'root' })
 export class CustomerReportService {
@@ -98,12 +194,98 @@ export class CustomerReportService {
     return this.http.post<UploadReportRes>(apiUrl('/api/admin/reports/upload'), form);
   }
 
-  adminHistory(search: string, page: number, pageSize: number): Observable<ReportHistoryRes> {
+  adminHistory(
+    search: string,
+    page: number,
+    pageSize: number,
+    opts?: {
+      dateFrom?: string;
+      dateTo?: string;
+      sortBy?: string;
+      sortDir?: 'asc' | 'desc';
+      export?: boolean;
+    },
+  ): Observable<ReportHistoryRes> {
     const params: Record<string, string> = {
       page: String(page),
       pageSize: String(pageSize),
     };
     if (search.trim()) params['search'] = search.trim();
+    if (opts?.dateFrom) params['dateFrom'] = opts.dateFrom;
+    if (opts?.dateTo) params['dateTo'] = opts.dateTo;
+    if (opts?.sortBy) params['sortBy'] = opts.sortBy;
+    if (opts?.sortDir) params['sortDir'] = opts.sortDir;
+    if (opts?.export) params['export'] = 'true';
     return this.http.get<ReportHistoryRes>(apiUrl('/api/admin/reports/history'), { params });
+  }
+
+  adminPendingRequestCount(): Observable<PendingCountRes> {
+    return this.http.get<PendingCountRes>(apiUrl('/api/admin/reports/change-requests/pending-count'));
+  }
+
+  adminListChangeRequests(
+    page: number,
+    pageSize: number,
+    opts?: { status?: string },
+  ): Observable<ReportChangeRequestListRes> {
+    const params: Record<string, string> = {
+      page: String(page),
+      pageSize: String(pageSize),
+    };
+    if (opts?.status) params['status'] = opts.status;
+    return this.http.get<ReportChangeRequestListRes>(apiUrl('/api/admin/reports/change-requests'), { params });
+  }
+
+  adminGetChangeRequest(requestId: string): Observable<ReportChangeRequestDetailRes> {
+    return this.http.get<ReportChangeRequestDetailRes>(
+      apiUrl(`/api/admin/reports/change-requests/${encodeURIComponent(requestId)}`),
+    );
+  }
+
+  adminCreateChangeRequest(form: FormData): Observable<CreateChangeRequestRes> {
+    return this.http.post<CreateChangeRequestRes>(apiUrl('/api/admin/reports/change-requests'), form);
+  }
+
+  adminApproveChangeRequest(requestId: string, remarks?: string): Observable<ActionRes> {
+    return this.http.post<ActionRes>(
+      apiUrl(`/api/admin/reports/change-requests/${encodeURIComponent(requestId)}/approve`),
+      { remarks: remarks?.trim() || null },
+    );
+  }
+
+  adminRejectChangeRequest(requestId: string, remarks?: string): Observable<ActionRes> {
+    return this.http.post<ActionRes>(
+      apiUrl(`/api/admin/reports/change-requests/${encodeURIComponent(requestId)}/reject`),
+      { remarks: remarks?.trim() || null },
+    );
+  }
+
+  adminDirectDeleteReport(reportId: string, reason: string): Observable<ActionRes> {
+    return this.http.delete<ActionRes>(apiUrl(`/api/admin/reports/${encodeURIComponent(reportId)}`), {
+      body: { reason: reason.trim() },
+    });
+  }
+
+  adminDirectEditReport(reportId: string, originalFileName: string, reason: string): Observable<ActionRes> {
+    return this.http.put<ActionRes>(apiUrl(`/api/admin/reports/${encodeURIComponent(reportId)}`), {
+      originalFileName: originalFileName.trim(),
+      reason: reason.trim(),
+    });
+  }
+
+  adminDirectReplaceReport(reportId: string, file: File, reason: string): Observable<ActionRes> {
+    const form = new FormData();
+    form.append('reason', reason.trim());
+    form.append('file', file, file.name);
+    return this.http.post<ActionRes>(
+      apiUrl(`/api/admin/reports/${encodeURIComponent(reportId)}/replace`),
+      form,
+    );
+  }
+
+  adminReportAuditHistory(reportId: string): Observable<ReportAuditHistoryRes> {
+    return this.http.get<ReportAuditHistoryRes>(
+      apiUrl(`/api/admin/reports/${encodeURIComponent(reportId)}/audit`),
+    );
   }
 }

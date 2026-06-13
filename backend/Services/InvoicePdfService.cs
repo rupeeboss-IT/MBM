@@ -4,6 +4,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using RB_Website_API.Auth;
+using static RB_Website_API.Auth.AppDateTime;
 using RB_Website_API.Models;
 
 namespace RB_Website_API.Services;
@@ -29,7 +30,7 @@ public sealed class InvoicePdfService
         var invoiceNo = InvoiceNumber.ForPayment(payment.PaymentId, payment.PaidAt);
         var isTaxInvoice = !string.IsNullOrWhiteSpace(_settings.Gstin);
         var benefits = PlanBenefitsCatalog.GetBenefits(plan.Code);
-        var paidIst = ToIst(payment.PaidAt);
+        var paidAt = Normalize(payment.PaidAt);
 
         return Document.Create(container =>
         {
@@ -70,7 +71,7 @@ public sealed class InvoicePdfService
                         row.RelativeItem().Column(c =>
                         {
                             c.Item().Text($"Invoice #: {invoiceNo}");
-                            c.Item().Text($"Date: {paidIst:dd MMM yyyy}");
+                            c.Item().Text($"Date: {paidAt:dd MMM yyyy}");
                             c.Item().Text($"Payment ID: {payment.RazorpayPaymentId}");
                             if (isTaxInvoice && !string.IsNullOrWhiteSpace(_settings.SacCode))
                                 c.Item().Text($"SAC: {_settings.SacCode}");
@@ -111,7 +112,7 @@ public sealed class InvoicePdfService
                         }
                     });
 
-                    col.Item().Text($"Membership period: {ToIst(activeFrom):dd MMM yyyy} — {(activeTo.HasValue ? ToIst(activeTo.Value).ToString("dd MMM yyyy", CultureInfo.InvariantCulture) : "—")}");
+                    col.Item().Text($"Membership period: {FormatDate(activeFrom)} — {FormatDate(activeTo)}");
 
                     if (benefits.Count > 0)
                     {
@@ -134,17 +135,4 @@ public sealed class InvoicePdfService
     private static string FormatInr(long paise)
         => (paise / 100m).ToString("N2", CultureInfo.GetCultureInfo("en-IN"));
 
-    private static DateTime ToIst(DateTime utc)
-    {
-        try
-        {
-            var tz = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-            return TimeZoneInfo.ConvertTimeFromUtc(
-                utc.Kind == DateTimeKind.Utc ? utc : DateTime.SpecifyKind(utc, DateTimeKind.Utc), tz);
-        }
-        catch
-        {
-            return utc.AddHours(5.5);
-        }
-    }
 }

@@ -52,13 +52,21 @@ public sealed class AdminController : ControllerBase
         DateTime CreatedAt
     );
 
-    public sealed record AdminUsersResponse(bool Success, string? Message = null, List<AdminUserDto>? Users = null);
+    public sealed record AdminUsersResponse(
+        bool Success,
+        string? Message = null,
+        List<AdminUserDto>? Users = null,
+        int Total = 0,
+        int Page = 1,
+        int PageSize = 10);
 
     public sealed record DashboardCountsResponse(
         bool Success,
         string? Message = null,
         int Users = 0,
         int Members = 0,
+        int ActiveMembers = 0,
+        int InactiveMembers = 0,
         int Plans = 0,
         int PaymentOrders = 0,
         int Payments = 0,
@@ -66,13 +74,23 @@ public sealed class AdminController : ControllerBase
         int ActiveSubscriptions = 0,
         int ExpiringSoon = 0,
         int ExpiredSubscriptions = 0,
+        int ReportsGenerated = 0,
         int Blogs = 0,
         int Events = 0,
         int Schemes = 0,
         int SchemeNews = 0,
         int SuccessStories = 0,
         int Offers = 0,
-        int Pricing = 0
+        int Pricing = 0,
+        int TotalAdmins = 0,
+        int ActiveAdmins = 0,
+        int InactiveAdmins = 0,
+        int TotalPartners = 0,
+        int ActivePartners = 0,
+        int InactivePartners = 0,
+        int TotalMembersOnly = 0,
+        int ActiveMembersOnly = 0,
+        int InactiveMembersOnly = 0
     );
 
     public sealed record SubscriptionRowDto(
@@ -131,7 +149,10 @@ public sealed class AdminController : ControllerBase
         List<PlanRowDto>? Plans = null,
         List<PaymentOrderRowDto>? PaymentOrders = null,
         List<PaymentRowDto>? Payments = null,
-        List<SubscriptionRowDto>? Subscriptions = null
+        List<SubscriptionRowDto>? Subscriptions = null,
+        int Total = 0,
+        int Page = 1,
+        int PageSize = 10
     );
 
     public sealed record SetAdminActiveRequest(bool IsActive);
@@ -144,10 +165,18 @@ public sealed class AdminController : ControllerBase
         string Email,
         string Phone,
         bool IsActive,
-        DateTime CreatedAt
+        DateTime CreatedAt,
+        string? PlanCode = null,
+        string? PlanName = null
     );
 
-    public sealed record MembersResponse(bool Success, string? Message = null, List<MemberDto>? Users = null);
+    public sealed record MembersResponse(
+        bool Success,
+        string? Message = null,
+        List<MemberDto>? Users = null,
+        int Total = 0,
+        int Page = 1,
+        int PageSize = 10);
 
     public sealed record SetMemberActiveRequest(bool IsActive, string? Reason);
     public sealed record SetMemberActiveResponse(bool Success, string? Message = null);
@@ -171,6 +200,9 @@ public sealed class AdminController : ControllerBase
 
         if (user is null)
             return Unauthorized(new AdminLoginResponse(false, "Invalid email/phone or password."));
+
+        if (user.IsDeleted)
+            return Unauthorized(new AdminLoginResponse(false, "Account is not available."));
 
         var role = (user.Role ?? "").Trim().ToLowerInvariant();
         if (role != "admin" && role != "superadmin")
@@ -256,7 +288,11 @@ public sealed class AdminController : ControllerBase
         if (targetRole == "admin" && user.IsActive == true)
             return BadRequest(new DeleteUserResponse(false, "Deactivate admin before deleting."));
 
-        _db.Users.Remove(user);
+        user.IsDeleted = true;
+        user.DeletedAt = DateTime.Now;
+        user.DeletedByUserId = Guid.TryParse(myId, out var deleter) ? deleter : null;
+        user.IsActive = false;
+        user.UpdatedAt = DateTime.Now;
         await _db.SaveChangesAsync(ct);
         return Ok(new DeleteUserResponse(true, "User deleted."));
     }
@@ -284,34 +320,105 @@ public sealed class AdminController : ControllerBase
 
     [Authorize(Policy = "SuperAdminOnly")]
     [HttpGet("users")]
-    public async Task<ActionResult<AdminUsersResponse>> ListUsers([FromQuery] string? role, CancellationToken ct)
+    public async Task<ActionResult<AdminUsersResponse>> ListUsers(
+        [FromQuery] string? role,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = AdminListQuery.DefaultPageSize,
+        [FromQuery] string? search = null,
+        [FromQuery] string? dateFrom = null,
+        [FromQuery] string? dateTo = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDir = null,
+        [FromQuery] bool export = false,
+        CancellationToken ct = default)
     {
         var roleFilter = (role ?? "").Trim().ToLowerInvariant();
-        var q = _db.Users.AsNoTracking();
+        (page, pageSize) = AdminListQuery.Normalize(page, pageSize, export);
+        search = AdminListQuery.NormalizeSearch(search);
+        var from = AdminListQuery.ParseDateFrom(dateFrom);
+        var toEx = AdminListQuery.ParseDateToExclusive(dateTo);
+        var (sortField, sortAsc) = AdminListQuery.NormalizeSort(sortBy, sortDir);
+
+        var q = _db.Users.AsNoTracking().Where(u => !u.IsDeleted).AsQueryable();
         if (!string.IsNullOrWhiteSpace(roleFilter))
             q = q.Where(u => (u.Role ?? "").ToLower() == roleFilter);
 
-        var users = await q
-            .OrderByDescending(u => u.CreatedAt)
+        if (from.HasValue)
+            q = q.Where(u => u.CreatedAt >= from.Value);
+        if (toEx.HasValue)
+            q = q.Where(u => u.CreatedAt < toEx.Value);
+
+        if (search is not null)
+        {
+            var s = search.ToLowerInvariant();
+            q = q.Where(u =>
+                u.FullName.ToLower().Contains(s)
+                || u.Email.ToLower().Contains(s)
+                || u.Phone.Contains(s)
+                || (u.Role ?? "").ToLower().Contains(s));
+        }
+
+        var total = await q.CountAsync(ct);
+        var users = await AdminUserSort.Apply(q, sortField, sortAsc)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(u => new AdminUserDto(u.UserId, u.Role, u.FullName, u.Email, u.Phone, u.IsActive, u.CreatedAt))
             .ToListAsync(ct);
 
-        return Ok(new AdminUsersResponse(true, "OK", users));
+        return Ok(new AdminUsersResponse(true, "OK", users, total, page, pageSize));
     }
 
     [Authorize(Policy = "AdminAccess")]
     [HttpGet("dashboard/counts")]
-    public async Task<ActionResult<DashboardCountsResponse>> DashboardCounts(CancellationToken ct)
+    public async Task<ActionResult<DashboardCountsResponse>> DashboardCounts(
+        [FromQuery] string? dateFrom = null,
+        [FromQuery] string? dateTo = null,
+        CancellationToken ct = default)
     {
         var now = DateTime.Now;
         var expiringCutoff = now.AddDays(30);
+        var from = AdminListQuery.ParseDateFrom(dateFrom);
+        var toEx = AdminListQuery.ParseDateToExclusive(dateTo);
 
-        var users = await _db.Users.AsNoTracking().CountAsync(ct);
-        var members = await _db.Users.AsNoTracking()
-            .CountAsync(u => u.Role != "admin" && u.Role != "superadmin", ct);
-        var plans = await _db.Plans.AsNoTracking().CountAsync(ct);
-        var paymentOrders = await _db.PaymentOrders.AsNoTracking().CountAsync(ct);
-        var payments = await _db.Payments.AsNoTracking().CountAsync(ct);
+        var usersQ = _db.Users.AsNoTracking().Where(u => !u.IsDeleted).AsQueryable();
+        if (from.HasValue) usersQ = usersQ.Where(u => u.CreatedAt >= from.Value);
+        if (toEx.HasValue) usersQ = usersQ.Where(u => u.CreatedAt < toEx.Value);
+        var users = await usersQ.CountAsync(ct);
+
+        var membersQ = usersQ.Where(u => u.Role != "admin" && u.Role != "superadmin");
+        var members = await membersQ.CountAsync(ct);
+        var activeMembers = await membersQ.CountAsync(u => u.IsActive, ct);
+        var inactiveMembers = members - activeMembers;
+
+        var adminsQ = usersQ.Where(u => (u.Role ?? "").ToLower() == "admin");
+        var totalAdmins = await adminsQ.CountAsync(ct);
+        var activeAdmins = await adminsQ.CountAsync(u => u.IsActive, ct);
+
+        var partnersQ = usersQ.Where(u => (u.Role ?? "").ToLower() == "partner");
+        var totalPartners = await partnersQ.CountAsync(ct);
+        var activePartners = await partnersQ.CountAsync(u => u.IsActive, ct);
+
+        var membersOnlyQ = usersQ.Where(u => (u.Role ?? "").ToLower() == "member");
+        var totalMembersOnly = await membersOnlyQ.CountAsync(ct);
+        var activeMembersOnly = await membersOnlyQ.CountAsync(u => u.IsActive, ct);
+
+        var reportsQ = _db.CustomerReports.AsNoTracking().AsQueryable();
+        if (from.HasValue) reportsQ = reportsQ.Where(r => r.UploadDate >= from.Value);
+        if (toEx.HasValue) reportsQ = reportsQ.Where(r => r.UploadDate < toEx.Value);
+        var reportsGenerated = await reportsQ.CountAsync(ct);
+
+        var plans = await _db.Plans.AsNoTracking().CountAsync(p => p.IsActive, ct);
+
+        var ordersQ = _db.PaymentOrders.AsNoTracking().AsQueryable();
+        if (from.HasValue) ordersQ = ordersQ.Where(o => o.CreatedAt >= from.Value);
+        if (toEx.HasValue) ordersQ = ordersQ.Where(o => o.CreatedAt < toEx.Value);
+        var paymentOrders = await ordersQ.CountAsync(ct);
+
+        var paymentsQ = _db.Payments.AsNoTracking().AsQueryable();
+        if (from.HasValue) paymentsQ = paymentsQ.Where(p => p.PaidAt >= from.Value);
+        if (toEx.HasValue) paymentsQ = paymentsQ.Where(p => p.PaidAt < toEx.Value);
+        var payments = await paymentsQ.CountAsync(ct);
+
         var userPlans = await _db.UserPlans.AsNoTracking().CountAsync(ct);
 
         var activeSubscriptions = await _db.UserPlans.AsNoTracking()
@@ -334,6 +441,8 @@ public sealed class AdminController : ControllerBase
             "OK",
             Users: users,
             Members: members,
+            ActiveMembers: activeMembers,
+            InactiveMembers: inactiveMembers,
             Plans: plans,
             PaymentOrders: paymentOrders,
             Payments: payments,
@@ -341,13 +450,23 @@ public sealed class AdminController : ControllerBase
             ActiveSubscriptions: activeSubscriptions,
             ExpiringSoon: expiringSoon,
             ExpiredSubscriptions: expiredSubscriptions,
+            ReportsGenerated: reportsGenerated,
             Blogs: ContentCatalog.Blogs,
             Events: ContentCatalog.Events,
             Schemes: ContentCatalog.Schemes,
             SchemeNews: 0,
             SuccessStories: 0,
             Offers: 0,
-            Pricing: plans
+            Pricing: plans,
+            TotalAdmins: totalAdmins,
+            ActiveAdmins: activeAdmins,
+            InactiveAdmins: totalAdmins - activeAdmins,
+            TotalPartners: totalPartners,
+            ActivePartners: activePartners,
+            InactivePartners: totalPartners - activePartners,
+            TotalMembersOnly: totalMembersOnly,
+            ActiveMembersOnly: activeMembersOnly,
+            InactiveMembersOnly: totalMembersOnly - activeMembersOnly
         ));
     }
 
@@ -356,93 +475,207 @@ public sealed class AdminController : ControllerBase
     public async Task<ActionResult<DashboardDetailResponse>> DashboardDetails(
         string category,
         [FromQuery] int days = 30,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = AdminListQuery.DefaultPageSize,
+        [FromQuery] string? search = null,
+        [FromQuery] string? dateFrom = null,
+        [FromQuery] string? dateTo = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDir = null,
+        [FromQuery] string? status = null,
+        [FromQuery] bool export = false,
         CancellationToken ct = default)
     {
         var key = (category ?? "").Trim().ToLowerInvariant();
+        var statusFilter = (status ?? "").Trim();
         var now = DateTime.Now;
         days = Math.Clamp(days, 1, 365);
         var expiringCutoff = now.AddDays(days);
+        (page, pageSize) = AdminListQuery.Normalize(page, pageSize, export);
+        search = AdminListQuery.NormalizeSearch(search);
+        var from = AdminListQuery.ParseDateFrom(dateFrom);
+        var toEx = AdminListQuery.ParseDateToExclusive(dateTo);
+        var (sortField, sortAsc) = AdminListQuery.NormalizeSort(sortBy, sortDir);
 
         switch (key)
         {
             case "users":
             {
-                var users = await _db.Users.AsNoTracking()
-                    .OrderByDescending(u => u.CreatedAt)
+                var q = _db.Users.AsNoTracking().Where(u => !u.IsDeleted).AsQueryable();
+                if (from.HasValue) q = q.Where(u => u.CreatedAt >= from.Value);
+                if (toEx.HasValue) q = q.Where(u => u.CreatedAt < toEx.Value);
+                if (search is not null)
+                {
+                    var s = search.ToLowerInvariant();
+                    q = q.Where(u =>
+                        u.FullName.ToLower().Contains(s)
+                        || u.Email.ToLower().Contains(s)
+                        || u.Phone.Contains(s)
+                        || (u.Role ?? "").ToLower().Contains(s));
+                }
+
+                var total = await q.CountAsync(ct);
+                var users = await AdminUserSort.Apply(q, sortField, sortAsc)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .Select(u => new AdminUserDto(u.UserId, u.Role, u.FullName, u.Email, u.Phone, u.IsActive, u.CreatedAt))
                     .ToListAsync(ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "All Users", Users: users));
+                return Ok(new DashboardDetailResponse(true, "OK", key, "All Users", Users: users, Total: total, Page: page, PageSize: pageSize));
             }
             case "members":
             {
-                var members = await _db.Users.AsNoTracking()
-                    .Where(u => u.Role != "admin" && u.Role != "superadmin")
-                    .OrderByDescending(u => u.CreatedAt)
-                    .Select(u => new MemberDto(u.UserId, u.Role, u.FullName, u.Email, u.Phone, u.IsActive, u.CreatedAt))
-                    .ToListAsync(ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "Members", Members: members));
+                var (members, total) = await LoadMemberRowsPaged(
+                    _db.Users.AsNoTracking().Where(u => !u.IsDeleted && u.Role != "admin" && u.Role != "superadmin"),
+                    now,
+                    page,
+                    pageSize,
+                    search,
+                    status: null,
+                    planCode: null,
+                    from,
+                    toEx,
+                    sortField,
+                    sortAsc,
+                    ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Members", Members: members, Total: total, Page: page, PageSize: pageSize));
             }
             case "plans":
             case "pricing":
             {
-                var planRows = await _db.Plans.AsNoTracking()
-                    .OrderBy(p => p.TotalAmountPaise)
+                var q = _db.Plans.AsNoTracking().AsQueryable();
+                if (search is not null)
+                {
+                    var s = search.ToLowerInvariant();
+                    q = q.Where(p => p.Code.ToLower().Contains(s) || p.Name.ToLower().Contains(s));
+                }
+
+                var total = await q.CountAsync(ct);
+                var sortedPlans = ApplyPlanSort(q, sortField, sortAsc);
+                var planRows = await sortedPlans
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .Select(p => new PlanRowDto(p.PlanId, p.Code, p.Name, p.TotalAmountPaise, p.DurationDays, p.IsActive))
                     .ToListAsync(ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "Membership Plans", Plans: planRows));
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Membership Plans", Plans: planRows, Total: total, Page: page, PageSize: pageSize));
             }
             case "payment-orders":
             {
-                var orders = await (
+                var q =
                     from po in _db.PaymentOrders.AsNoTracking()
                     join u in _db.Users.AsNoTracking() on po.UserId equals u.UserId
                     join p in _db.Plans.AsNoTracking() on po.PlanId equals p.PlanId
-                    orderby po.CreatedAt descending
-                    select new PaymentOrderRowDto(
-                        po.PaymentOrderId,
-                        po.UserId,
-                        u.FullName,
-                        u.Email,
-                        po.PlanCode,
-                        p.Name,
-                        po.TotalAmountPaise,
-                        po.Status,
-                        po.CreatedAt)
-                ).ToListAsync(ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "Payment Orders", PaymentOrders: orders));
+                    select new { po, u, p };
+
+                if (from.HasValue) q = q.Where(x => x.po.CreatedAt >= from.Value);
+                if (toEx.HasValue) q = q.Where(x => x.po.CreatedAt < toEx.Value);
+                if (!string.IsNullOrWhiteSpace(statusFilter))
+                {
+                    var st = statusFilter.ToLowerInvariant();
+                    q = q.Where(x => x.po.Status.ToLower() == st);
+                }
+                if (search is not null)
+                {
+                    var s = search.ToLowerInvariant();
+                    q = q.Where(x =>
+                        x.u.FullName.ToLower().Contains(s)
+                        || x.u.Email.ToLower().Contains(s)
+                        || x.po.PlanCode.ToLower().Contains(s)
+                        || x.p.Name.ToLower().Contains(s)
+                        || x.po.Status.ToLower().Contains(s));
+                }
+
+                var total = await q.CountAsync(ct);
+                var sortedOrders = sortField switch
+                {
+                    "name" or "member" or "fullname" => sortAsc ? q.OrderBy(x => x.u.FullName) : q.OrderByDescending(x => x.u.FullName),
+                    "email" => sortAsc ? q.OrderBy(x => x.u.Email) : q.OrderByDescending(x => x.u.Email),
+                    "plan" => sortAsc ? q.OrderBy(x => x.p.Name) : q.OrderByDescending(x => x.p.Name),
+                    "amount" => sortAsc ? q.OrderBy(x => x.po.TotalAmountPaise) : q.OrderByDescending(x => x.po.TotalAmountPaise),
+                    "status" => sortAsc ? q.OrderBy(x => x.po.Status) : q.OrderByDescending(x => x.po.Status),
+                    _ => sortAsc ? q.OrderBy(x => x.po.CreatedAt) : q.OrderByDescending(x => x.po.CreatedAt),
+                };
+                var orders = await sortedOrders
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(x => new PaymentOrderRowDto(
+                        x.po.PaymentOrderId,
+                        x.po.UserId,
+                        x.u.FullName,
+                        x.u.Email,
+                        x.po.PlanCode,
+                        x.p.Name,
+                        x.po.TotalAmountPaise,
+                        x.po.Status,
+                        x.po.CreatedAt))
+                    .ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Payment Orders", PaymentOrders: orders, Total: total, Page: page, PageSize: pageSize));
             }
             case "payments":
             {
-                var rows = await (
+                var q =
                     from pay in _db.Payments.AsNoTracking()
                     join po in _db.PaymentOrders.AsNoTracking() on pay.PaymentOrderId equals po.PaymentOrderId
                     join u in _db.Users.AsNoTracking() on po.UserId equals u.UserId
-                    orderby pay.PaidAt descending
-                    select new PaymentRowDto(
-                        pay.PaymentId,
-                        pay.PaymentOrderId,
-                        u.FullName,
-                        u.Email,
-                        po.PlanCode,
-                        pay.AmountPaise,
-                        pay.Status,
-                        pay.PaidAt)
-                ).ToListAsync(ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "Payments", Payments: rows));
+                    select new { pay, po, u };
+
+                if (from.HasValue) q = q.Where(x => x.pay.PaidAt >= from.Value);
+                if (toEx.HasValue) q = q.Where(x => x.pay.PaidAt < toEx.Value);
+                if (search is not null)
+                {
+                    var s = search.ToLowerInvariant();
+                    q = q.Where(x =>
+                        x.u.FullName.ToLower().Contains(s)
+                        || x.u.Email.ToLower().Contains(s)
+                        || x.po.PlanCode.ToLower().Contains(s)
+                        || x.pay.Status.ToLower().Contains(s));
+                }
+
+                var total = await q.CountAsync(ct);
+                var sortedPayments = sortField switch
+                {
+                    "name" or "member" or "fullname" => sortAsc ? q.OrderBy(x => x.u.FullName) : q.OrderByDescending(x => x.u.FullName),
+                    "email" => sortAsc ? q.OrderBy(x => x.u.Email) : q.OrderByDescending(x => x.u.Email),
+                    "plan" or "plancode" => sortAsc ? q.OrderBy(x => x.po.PlanCode) : q.OrderByDescending(x => x.po.PlanCode),
+                    "amount" => sortAsc ? q.OrderBy(x => x.pay.AmountPaise) : q.OrderByDescending(x => x.pay.AmountPaise),
+                    "status" => sortAsc ? q.OrderBy(x => x.pay.Status) : q.OrderByDescending(x => x.pay.Status),
+                    "paid" or "paidat" or "date" => sortAsc ? q.OrderBy(x => x.pay.PaidAt) : q.OrderByDescending(x => x.pay.PaidAt),
+                    _ => sortAsc ? q.OrderBy(x => x.pay.PaidAt) : q.OrderByDescending(x => x.pay.PaidAt),
+                };
+                var rows = await sortedPayments
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(x => new PaymentRowDto(
+                        x.pay.PaymentId,
+                        x.pay.PaymentOrderId,
+                        x.u.FullName,
+                        x.u.Email,
+                        x.po.PlanCode,
+                        x.pay.AmountPaise,
+                        x.pay.Status,
+                        x.pay.PaidAt))
+                    .ToListAsync(ct);
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Payments", Payments: rows, Total: total, Page: page, PageSize: pageSize));
             }
             case "subscriptions":
             case "user-plans":
             {
-                var subs = await LoadSubscriptionRows(
+                var (subs, total) = await LoadSubscriptionRowsPaged(
                     _db.UserPlans.AsNoTracking()
                         .Where(up => up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now)),
                     now,
+                    page,
+                    pageSize,
+                    search,
+                    from,
+                    toEx,
+                    sortField,
+                    sortAsc,
                     ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "Active Subscriptions", Subscriptions: subs));
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Active Subscriptions", Subscriptions: subs, Total: total, Page: page, PageSize: pageSize));
             }
             case "expiring":
             {
-                var subs = await LoadSubscriptionRows(
+                var (subs, total) = await LoadSubscriptionRowsPaged(
                     _db.UserPlans.AsNoTracking()
                         .Where(up =>
                             up.Status == "Active"
@@ -450,73 +683,254 @@ public sealed class AdminController : ControllerBase
                             && up.ActiveTo > now
                             && up.ActiveTo <= expiringCutoff),
                     now,
+                    page,
+                    pageSize,
+                    search,
+                    from,
+                    toEx,
+                    sortField,
+                    sortAsc,
                     ct);
                 return Ok(new DashboardDetailResponse(
                     true,
                     "OK",
                     key,
                     $"Subscriptions Expiring (next {days} days)",
-                    Subscriptions: subs));
+                    Subscriptions: subs,
+                    Total: total,
+                    Page: page,
+                    PageSize: pageSize));
             }
             case "expired":
             {
-                var subs = await LoadSubscriptionRows(
+                var (subs, total) = await LoadSubscriptionRowsPaged(
                     _db.UserPlans.AsNoTracking()
                         .Where(up => up.Status != "Active" || (up.ActiveTo != null && up.ActiveTo <= now)),
                     now,
+                    page,
+                    pageSize,
+                    search,
+                    from,
+                    toEx,
+                    sortField,
+                    sortAsc,
                     ct);
-                return Ok(new DashboardDetailResponse(true, "OK", key, "Expired / Inactive Subscriptions", Subscriptions: subs));
+                return Ok(new DashboardDetailResponse(true, "OK", key, "Expired / Inactive Subscriptions", Subscriptions: subs, Total: total, Page: page, PageSize: pageSize));
             }
             default:
                 return NotFound(new DashboardDetailResponse(false, "Unknown category."));
         }
     }
 
-    private async Task<List<SubscriptionRowDto>> LoadSubscriptionRows(
-        IQueryable<UserPlan> query,
+    private async Task<(List<MemberDto> Rows, int Total)> LoadMemberRowsPaged(
+        IQueryable<User> query,
         DateTime now,
+        int page,
+        int pageSize,
+        string? search,
+        string? status,
+        string? planCode,
+        DateTime? dateFrom,
+        DateTime? dateToExclusive,
+        string sortField,
+        bool sortAsc,
         CancellationToken ct)
     {
-        return await (
-            from up in query
-            join u in _db.Users.AsNoTracking() on up.UserId equals u.UserId
-            join p in _db.Plans.AsNoTracking() on up.PlanId equals p.PlanId
-            orderby up.ActiveTo ?? DateTime.MaxValue
-            select new SubscriptionRowDto(
-                up.UserPlanId,
-                up.UserId,
+        var q = query;
+        var statusFilter = AdminListQuery.NormalizeStatus(status);
+        if (statusFilter == "active") q = q.Where(u => u.IsActive);
+        else if (statusFilter == "inactive") q = q.Where(u => !u.IsActive);
+
+        if (!string.IsNullOrWhiteSpace(planCode))
+        {
+            var pc = planCode.Trim();
+            q = q.Where(u => _db.UserPlans.Any(up =>
+                up.UserId == u.UserId
+                && up.PlanCode == pc
+                && up.Status == "Active"
+                && (up.ActiveTo == null || up.ActiveTo > now)));
+        }
+
+        if (dateFrom.HasValue) q = q.Where(u => u.CreatedAt >= dateFrom.Value);
+        if (dateToExclusive.HasValue) q = q.Where(u => u.CreatedAt < dateToExclusive.Value);
+
+        if (search is not null)
+        {
+            var s = search.ToLowerInvariant();
+            q = q.Where(u =>
+                u.FullName.ToLower().Contains(s)
+                || u.Email.ToLower().Contains(s)
+                || u.Phone.Contains(s)
+                || (u.Role ?? "").ToLower().Contains(s)
+                || _db.UserPlans.Any(up =>
+                    up.UserId == u.UserId
+                    && up.PlanCode.ToLower().Contains(s)));
+        }
+
+        var total = await q.CountAsync(ct);
+        var sorted = sortField is "plan" or "plancode"
+            ? (sortAsc
+                ? q.OrderBy(u => _db.UserPlans
+                    .Where(up => up.UserId == u.UserId && up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now))
+                    .OrderByDescending(up => up.ActiveFrom)
+                    .Select(up => up.PlanCode)
+                    .FirstOrDefault())
+                : q.OrderByDescending(u => _db.UserPlans
+                    .Where(up => up.UserId == u.UserId && up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now))
+                    .OrderByDescending(up => up.ActiveFrom)
+                    .Select(up => up.PlanCode)
+                    .FirstOrDefault()))
+            : AdminUserSort.Apply(q, sortField, sortAsc);
+
+        var rows = await sorted
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(u => new MemberDto(
+                u.UserId,
+                u.Role,
                 u.FullName,
                 u.Email,
                 u.Phone,
-                up.PlanCode,
-                p.Name,
-                up.ActiveFrom,
-                up.ActiveTo,
-                up.Status,
-                up.ActiveTo == null
-                    ? (int?)null
-                    : (int)Math.Ceiling((up.ActiveTo.Value - now).TotalDays))
-        ).ToListAsync(ct);
+                u.IsActive,
+                u.CreatedAt,
+                _db.UserPlans
+                    .Where(up => up.UserId == u.UserId && up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now))
+                    .OrderByDescending(up => up.ActiveFrom)
+                    .Select(up => up.PlanCode)
+                    .FirstOrDefault(),
+                (from up in _db.UserPlans
+                 join p in _db.Plans on up.PlanId equals p.PlanId
+                 where up.UserId == u.UserId && up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now)
+                 orderby up.ActiveFrom descending
+                 select p.Name).FirstOrDefault()))
+            .ToListAsync(ct);
+
+        return (rows, total);
     }
+
+    private async Task<(List<SubscriptionRowDto> Rows, int Total)> LoadSubscriptionRowsPaged(
+        IQueryable<UserPlan> query,
+        DateTime now,
+        int page,
+        int pageSize,
+        string? search,
+        DateTime? dateFrom,
+        DateTime? dateToExclusive,
+        string sortField,
+        bool sortAsc,
+        CancellationToken ct)
+    {
+        var joined =
+            from up in query
+            join u in _db.Users.AsNoTracking() on up.UserId equals u.UserId
+            join p in _db.Plans.AsNoTracking() on up.PlanId equals p.PlanId
+            select new { up, u, p };
+
+        if (dateFrom.HasValue) joined = joined.Where(x => x.up.ActiveFrom >= dateFrom.Value);
+        if (dateToExclusive.HasValue) joined = joined.Where(x => x.up.ActiveFrom < dateToExclusive.Value);
+
+        if (search is not null)
+        {
+            var s = search.ToLowerInvariant();
+            joined = joined.Where(x =>
+                x.u.FullName.ToLower().Contains(s)
+                || x.u.Email.ToLower().Contains(s)
+                || x.u.Phone.Contains(s)
+                || x.up.PlanCode.ToLower().Contains(s)
+                || x.p.Name.ToLower().Contains(s)
+                || x.up.Status.ToLower().Contains(s));
+        }
+
+        var total = await joined.CountAsync(ct);
+        var sortedSubs = sortField switch
+        {
+            "name" or "member" or "fullname" => sortAsc ? joined.OrderBy(x => x.u.FullName) : joined.OrderByDescending(x => x.u.FullName),
+            "email" => sortAsc ? joined.OrderBy(x => x.u.Email) : joined.OrderByDescending(x => x.u.Email),
+            "phone" => sortAsc ? joined.OrderBy(x => x.u.Phone) : joined.OrderByDescending(x => x.u.Phone),
+            "plan" => sortAsc ? joined.OrderBy(x => x.p.Name) : joined.OrderByDescending(x => x.p.Name),
+            "started" or "activefrom" => sortAsc ? joined.OrderBy(x => x.up.ActiveFrom) : joined.OrderByDescending(x => x.up.ActiveFrom),
+            "ends" or "activeto" => sortAsc ? joined.OrderBy(x => x.up.ActiveTo) : joined.OrderByDescending(x => x.up.ActiveTo),
+            "status" => sortAsc ? joined.OrderBy(x => x.up.Status) : joined.OrderByDescending(x => x.up.Status),
+            _ => sortAsc ? joined.OrderBy(x => x.up.ActiveTo ?? DateTime.MaxValue) : joined.OrderByDescending(x => x.up.ActiveTo ?? DateTime.MaxValue),
+        };
+        var rows = await sortedSubs
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new SubscriptionRowDto(
+                x.up.UserPlanId,
+                x.up.UserId,
+                x.u.FullName,
+                x.u.Email,
+                x.u.Phone,
+                x.up.PlanCode,
+                x.p.Name,
+                x.up.ActiveFrom,
+                x.up.ActiveTo,
+                x.up.Status,
+                x.up.ActiveTo == null
+                    ? (int?)null
+                    : (int)Math.Ceiling((x.up.ActiveTo.Value - now).TotalDays)))
+            .ToListAsync(ct);
+
+        return (rows, total);
+    }
+
+    private static IQueryable<Plan> ApplyPlanSort(IQueryable<Plan> q, string sortField, bool asc) =>
+        sortField switch
+        {
+            "code" => asc ? q.OrderBy(p => p.Code) : q.OrderByDescending(p => p.Code),
+            "name" => asc ? q.OrderBy(p => p.Name) : q.OrderByDescending(p => p.Name),
+            "amount" or "price" => asc ? q.OrderBy(p => p.TotalAmountPaise) : q.OrderByDescending(p => p.TotalAmountPaise),
+            "duration" => asc ? q.OrderBy(p => p.DurationDays) : q.OrderByDescending(p => p.DurationDays),
+            "status" or "isactive" => asc ? q.OrderBy(p => p.IsActive) : q.OrderByDescending(p => p.IsActive),
+            _ => asc ? q.OrderBy(p => p.TotalAmountPaise) : q.OrderByDescending(p => p.TotalAmountPaise),
+        };
 
     [Authorize(Policy = "AdminAccess")]
     [HttpGet("members")]
-    public async Task<ActionResult<MembersResponse>> ListMembers([FromQuery] string? role, CancellationToken ct)
+    public async Task<ActionResult<MembersResponse>> ListMembers(
+        [FromQuery] string? role,
+        [FromQuery] string? status,
+        [FromQuery] string? planCode,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = AdminListQuery.DefaultPageSize,
+        [FromQuery] string? search = null,
+        [FromQuery] string? dateFrom = null,
+        [FromQuery] string? dateTo = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDir = null,
+        [FromQuery] bool export = false,
+        CancellationToken ct = default)
     {
         var roleFilter = (role ?? "").Trim().ToLowerInvariant();
+        (page, pageSize) = AdminListQuery.Normalize(page, pageSize, export);
+        search = AdminListQuery.NormalizeSearch(search);
+        var from = AdminListQuery.ParseDateFrom(dateFrom);
+        var toEx = AdminListQuery.ParseDateToExclusive(dateTo);
+        var (sortField, sortAsc) = AdminListQuery.NormalizeSort(sortBy, sortDir);
+        var now = DateTime.Now;
 
         var q = _db.Users.AsNoTracking()
-            .Where(u => u.Role != "admin" && u.Role != "superadmin");
+            .Where(u => !u.IsDeleted && u.Role != "admin" && u.Role != "superadmin");
 
         if (!string.IsNullOrWhiteSpace(roleFilter))
             q = q.Where(u => (u.Role ?? "").ToLower() == roleFilter);
 
-        var users = await q
-            .OrderByDescending(u => u.CreatedAt)
-            .Select(u => new MemberDto(u.UserId, u.Role, u.FullName, u.Email, u.Phone, u.IsActive, u.CreatedAt))
-            .ToListAsync(ct);
+        var (users, total) = await LoadMemberRowsPaged(
+            q,
+            now,
+            page,
+            pageSize,
+            search,
+            status,
+            planCode,
+            from,
+            toEx,
+            sortField,
+            sortAsc,
+            ct);
 
-        return Ok(new MembersResponse(true, "OK", users));
+        return Ok(new MembersResponse(true, "OK", users, total, page, pageSize));
     }
 
     [Authorize(Policy = "AdminAccess")]

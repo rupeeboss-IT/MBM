@@ -8,6 +8,15 @@ public sealed class ReportAuditService : IReportAuditService
     public const string ActionUpload = "ReportUpload";
     public const string ActionDownload = "ReportDownload";
     public const string ActionEmailSent = "EmailSent";
+    public const string ActionRequestCreated = "RequestCreated";
+    public const string ActionRequestApproved = "RequestApproved";
+    public const string ActionRequestRejected = "RequestRejected";
+    public const string ActionDirectDelete = "DirectDelete";
+    public const string ActionDirectReplace = "DirectReplace";
+    public const string ActionDirectEdit = "DirectEdit";
+    public const string ActionSoftDelete = "ReportSoftDelete";
+    public const string ActionReplace = "ReportReplace";
+    public const string ActionEdit = "ReportEdit";
 
     private readonly IReportAuditRepository _audit;
 
@@ -21,7 +30,53 @@ public sealed class ReportAuditService : IReportAuditService
         string? ipAddress,
         CancellationToken ct)
     {
-        var entry = new ReportAuditLog
+        var entry = CreateEntry(action, actorUserId, reportId, customerId, null, null, null, null, null, null, ipAddress);
+        return _audit.AddAsync(entry, ct);
+    }
+
+    public Task StageChangeLogAsync(
+        string action,
+        Guid? actorUserId,
+        Guid? reportId,
+        Guid? customerId,
+        Guid? requestId,
+        string? remarks,
+        string? previousReportPath,
+        string? newReportPath,
+        string? previousValues,
+        string? newValues,
+        string? ipAddress,
+        CancellationToken ct)
+    {
+        var entry = CreateEntry(
+            action,
+            actorUserId,
+            reportId,
+            customerId,
+            requestId,
+            remarks,
+            previousReportPath,
+            newReportPath,
+            previousValues,
+            newValues,
+            ipAddress);
+        return _audit.StageAsync(entry, ct);
+    }
+
+    private static ReportAuditLog CreateEntry(
+        string action,
+        Guid? actorUserId,
+        Guid? reportId,
+        Guid? customerId,
+        Guid? requestId,
+        string? remarks,
+        string? previousReportPath,
+        string? newReportPath,
+        string? previousValues,
+        string? newValues,
+        string? ipAddress)
+    {
+        return new ReportAuditLog
         {
             AuditId = Guid.NewGuid(),
             UserId = actorUserId,
@@ -30,7 +85,12 @@ public sealed class ReportAuditService : IReportAuditService
             CustomerId = customerId,
             CreatedAt = DateTime.Now,
             IpAddress = string.IsNullOrWhiteSpace(ipAddress) ? null : ipAddress.Trim(),
+            RequestId = requestId,
+            Remarks = string.IsNullOrWhiteSpace(remarks) ? null : remarks.Trim(),
+            PreviousReportPath = previousReportPath,
+            NewReportPath = newReportPath,
+            PreviousValues = previousValues,
+            NewValues = newValues,
         };
-        return _audit.AddAsync(entry, ct);
     }
 }

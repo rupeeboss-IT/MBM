@@ -1,0 +1,333 @@
+<div
+  class="sd-modal-overlay"
+  [class.sd-modal-overlay--open]="flow.modal() !== 'none'"
+  (click)="flow.modal() === 'referral' ? flow.cancelReferralStep() : flow.closeAll()"
+  role="presentation">
+  <div
+    class="sd-modal"
+    [class.sd-modal--tone-success]="headerTone() === 'success'"
+    [class.sd-modal--tone-info]="headerTone() === 'info'"
+    [class.sd-modal--tone-pending]="headerTone() === 'pending'"
+    [class.sd-modal--tone-warn]="headerTone() === 'warn'"
+    (click)="$event.stopPropagation()"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-busy]="flow.modal() === 'loading' || flow.modal() === 'generating_report' || flow.submitting() || flow.paying() || flow.referralValidationState() === 'validating'"
+    aria-labelledby="scheme-discovery-modal-title">
+    <header class="sd-modal__header">
+      <button
+        type="button"
+        class="sd-modal__close"
+        (click)="flow.modal() === 'referral' ? flow.cancelReferralStep() : flow.closeAll()"
+        [disabled]="flow.modal() === 'loading' || flow.modal() === 'generating_report'"
+        aria-label="Close">&times;</button>
+      <div class="sd-modal__icon" aria-hidden="true">{{ icon() }}</div>
+      <h2 id="scheme-discovery-modal-title">{{ title() }}</h2>
+      <p class="sd-modal__sub" *ngIf="subtitle()">{{ subtitle() }}</p>
+    </header>
+
+    <div class="sd-modal__body" tabindex="-1">
+      <!-- Loading -->
+      <div *ngIf="flow.modal() === 'loading' || flow.modal() === 'generating_report'" class="sd-modal__loading" aria-live="polite">
+        <div class="sd-modal__spinner" aria-hidden="true"></div>
+        <p *ngIf="flow.modal() === 'loading'">Checking your membership and report status…</p>
+        <ng-container *ngIf="flow.modal() === 'generating_report'">
+          <p><strong>Generating Report…</strong></p>
+          <p class="sd-modal__loading-sub">
+            Please wait while we analyze your business information and prepare recommendations.
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- Auth -->
+      <div *ngIf="flow.modal() === 'auth'" class="sd-modal__choices">
+        <button
+          type="button"
+          class="sd-choice-card sd-choice-card--primary"
+          (click)="flow.goToLogin()"
+          [disabled]="flow.redirecting()">
+          <span class="sd-choice-card__icon" aria-hidden="true">👤</span>
+          <span class="sd-choice-card__text">
+            <strong>Existing User</strong>
+            <small>Login with your email or mobile</small>
+          </span>
+          <span class="sd-choice-card__arrow" aria-hidden="true">→</span>
+        </button>
+        <button
+          type="button"
+          class="sd-choice-card"
+          (click)="flow.goToRegister()"
+          [disabled]="flow.redirecting()">
+          <span class="sd-choice-card__icon" aria-hidden="true">✨</span>
+          <span class="sd-choice-card__text">
+            <strong>New User</strong>
+            <small>Create your MSME Bharat Manch account</small>
+          </span>
+          <span class="sd-choice-card__arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <!-- Membership / plan choice -->
+      <div
+        *ngIf="flow.modal() === 'no_membership' || flow.modal() === 'plan_choice'"
+        class="sd-modal__choices sd-modal__choices--stack">
+        <div class="sd-plan-card sd-plan-card--featured">
+          <div class="sd-plan-card__badge">Recommended</div>
+          <h3>{{ flow.modal() === 'no_membership' ? 'Premium or Pro Membership' : 'Upgrade Membership' }}</h3>
+          <p>Get scheme discovery reports included every membership cycle with Premium or Pro.</p>
+          <button
+            type="button"
+            class="sd-btn sd-btn--primary"
+            (click)="flow.goToMembership()"
+            [disabled]="flow.redirecting()">
+            {{ flow.modal() === 'no_membership' ? 'View Premium & Pro Plans' : 'Explore Upgrade Options' }}
+          </button>
+        </div>
+        <div class="sd-plan-card">
+          <h3>One-Time Report</h3>
+          <p class="sd-plan-card__price">₹1,180 <span>incl. GST</span></p>
+          <p class="sd-plan-card__note" *ngIf="flow.modal() === 'plan_choice' && flow.status()?.membership as m">
+            For your current <strong>{{ m.planName }}</strong> membership period.
+          </p>
+          <p class="sd-plan-card__note" *ngIf="flow.modal() === 'no_membership'">
+            Pay once for a personalized Government Scheme Discovery Report — no Premium or Pro upgrade required.
+          </p>
+          <button
+            type="button"
+            class="sd-btn sd-btn--outline"
+            (click)="flow.startOneTimePurchase()"
+            [disabled]="flow.paying() || flow.redirecting()">
+            Pay ₹1,180 for One-Time Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Referral (before one-time Razorpay) -->
+      <div *ngIf="flow.modal() === 'referral'" class="sd-modal__panel sd-referral">
+        <button
+          type="button"
+          class="sd-referral__back"
+          *ngIf="flow.udyamCheckoutMode()"
+          (click)="flow.backFromReferral()"
+          [disabled]="flow.paying() || flow.referralValidationState() === 'validating'">
+          ← Back to Udyam number
+        </button>
+        <p class="sd-referral__saved-udyam" *ngIf="flow.udyamCheckoutMode() && flow.udyam()">
+          Udyam: <strong>{{ flow.udyam() }}</strong>
+        </p>
+        <p class="sd-referral__lead">Optional — have a referral code? Enter it below or skip to continue to payment.</p>
+        <label class="sd-referral__label" for="scheme-discovery-referral-input">Referral code</label>
+        <div
+          class="sd-referral__input-wrap"
+          [class.sd-referral__input-wrap--valid]="flow.referralValidationState() === 'valid'"
+          [class.sd-referral__input-wrap--invalid]="flow.referralValidationState() === 'invalid'"
+          [class.sd-referral__input-wrap--validating]="flow.referralValidationState() === 'validating'">
+          <input
+            id="scheme-discovery-referral-input"
+            type="text"
+            class="sd-referral__input"
+            [ngModel]="flow.referralCodeInput()"
+            (ngModelChange)="flow.onReferralInputChange($event)"
+            placeholder="Enter referral code"
+            maxlength="50"
+            autocomplete="off" />
+          <span
+            class="sd-referral__status sd-referral__status--loading"
+            *ngIf="flow.referralValidationState() === 'validating'"
+            aria-hidden="true"></span>
+          <span
+            class="sd-referral__status sd-referral__status--valid"
+            *ngIf="flow.referralValidationState() === 'valid'"
+            aria-label="Valid referral code">✓</span>
+          <span
+            class="sd-referral__status sd-referral__status--invalid"
+            *ngIf="flow.referralValidationState() === 'invalid'"
+            aria-label="Invalid referral code">✕</span>
+        </div>
+        <p class="sd-referral__employee" *ngIf="flow.referralValidationState() === 'valid' && flow.referredByName()">
+          Referred by: <strong>{{ flow.referredByName() }}</strong>
+        </p>
+        <p class="sd-referral__error" *ngIf="flow.referralValidationState() === 'invalid'">
+          {{ flow.referralInvalidMessage }}
+        </p>
+        <div class="sd-referral__actions">
+          <button
+            type="button"
+            class="sd-btn sd-btn--outline"
+            *ngIf="flow.referralValidationState() !== 'valid'"
+            (click)="flow.applyReferral()"
+            [disabled]="flow.referralValidationState() === 'validating' || !flow.referralCodeInput().trim() || flow.paying()">
+            {{ flow.referralValidationState() === 'validating' ? 'Checking…' : 'Apply Referral' }}
+          </button>
+          <button
+            type="button"
+            class="sd-btn sd-btn--primary"
+            *ngIf="flow.referralValidationState() === 'valid'"
+            (click)="flow.continueReferralAndPay()"
+            [disabled]="flow.paying()">
+            {{ flow.paying() ? 'Opening payment…' : 'Continue to Payment' }}
+          </button>
+        </div>
+        <button
+          type="button"
+          class="sd-referral__skip"
+          (click)="flow.skipReferralAndPay()"
+          [disabled]="flow.referralValidationState() === 'validating' || flow.paying()">
+          Skip Referral
+        </button>
+      </div>
+
+      <!-- Report exists -->
+      <div *ngIf="flow.modal() === 'report_exists'" class="sd-modal__panel">
+        <div class="sd-report-card" *ngIf="flow.status()?.existingReport as report">
+          <div class="sd-report-card__icon" aria-hidden="true">📊</div>
+          <div>
+            <strong>{{ report.reportName || 'Government Scheme Discovery Report' }}</strong>
+            <p *ngIf="report.uploadDate">Uploaded {{ report.uploadDate | localDate:'dd MMM yyyy' }}</p>
+          </div>
+        </div>
+        <div class="sd-modal__actions">
+          <button type="button" class="sd-btn sd-btn--primary" (click)="flow.goToProfileReports()">
+            Go To My Reports
+          </button>
+          <button type="button" class="sd-btn sd-btn--outline" (click)="flow.downloadExistingReport()">
+            Download Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Report generated / duplicate / failed (one-time payment) -->
+      <div
+        *ngIf="flow.modal() === 'report_generated' || flow.modal() === 'report_duplicate' || flow.modal() === 'report_failed'"
+        class="sd-modal__panel">
+        <div
+          class="sd-info-banner"
+          [class.sd-info-banner--success]="flow.modal() === 'report_generated'"
+          [class.sd-info-banner--pending]="flow.modal() === 'report_failed'">
+          <p>{{ flow.finalizeMessage() }}</p>
+          <p *ngIf="flow.modal() === 'report_duplicate' && flow.finalizeExpiryDate()">
+            Valid until {{ flow.finalizeExpiryDate() | localDate:'dd MMM yyyy' }}
+          </p>
+        </div>
+        <div class="sd-modal__actions" *ngIf="flow.modal() !== 'report_failed'">
+          <button
+            type="button"
+            class="sd-btn sd-btn--primary"
+            (click)="flow.viewGeneratedReport()">
+            View Report
+          </button>
+          <button
+            type="button"
+            class="sd-btn sd-btn--outline"
+            (click)="flow.downloadGeneratedReport()"
+            [disabled]="flow.reportDownloading() || !flow.generatedReportId()">
+            {{ flow.reportDownloading() ? 'Downloading…' : 'Download PDF' }}
+          </button>
+          <button
+            type="button"
+            class="sd-btn sd-btn--outline"
+            (click)="flow.emailGeneratedReport()"
+            [disabled]="flow.reportEmailSending() || !flow.generatedReportId()">
+            {{ flow.reportEmailSending() ? 'Sending…' : 'Email Report' }}
+          </button>
+        </div>
+        <div class="sd-modal__actions" *ngIf="flow.modal() === 'report_failed'">
+          <button
+            type="button"
+            class="sd-btn sd-btn--primary"
+            (click)="flow.retryReportGeneration()"
+            [disabled]="flow.paying() || !flow.lastFinalizeRequestId()">
+            {{ flow.paying() ? 'Retrying…' : 'Retry' }}
+          </button>
+          <button
+            type="button"
+            class="sd-btn sd-btn--outline"
+            (click)="flow.goToProfileReports()">
+            Go To My Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Legacy pending / success (kept for backward compatibility) -->
+      <div *ngIf="flow.modal() === 'pending' || flow.modal() === 'success'" class="sd-modal__panel">
+        <div
+          class="sd-info-banner"
+          [class.sd-info-banner--success]="flow.modal() === 'success'"
+          [class.sd-info-banner--pending]="flow.modal() === 'pending'">
+          <p *ngIf="flow.modal() === 'success'">
+            {{ flow.finalizeMessage() || 'Report Generated Successfully' }}
+          </p>
+          <p *ngIf="flow.modal() === 'pending'">
+            Generating Report… Please wait while we analyze your business information and prepare recommendations.
+          </p>
+        </div>
+        <button type="button" class="sd-btn sd-btn--primary" (click)="flow.goToProfileReports()">
+          View My Profile
+        </button>
+      </div>
+
+      <!-- Udyam form -->
+      <form
+        *ngIf="flow.modal() === 'udyam'"
+        id="scheme-discovery-udyam-form"
+        class="sd-modal__form"
+        (ngSubmit)="flow.submitUdyam()">
+        <div class="sd-profile-card" *ngIf="flow.status()?.profile as p">
+          <div class="sd-profile-card__title">Member details</div>
+          <dl class="sd-profile-card__grid">
+            <div *ngIf="p.memberId">
+              <dt>Member ID</dt>
+              <dd class="sd-profile-card__highlight">{{ p.memberId }}</dd>
+            </div>
+            <div>
+              <dt>Name</dt>
+              <dd>{{ p.fullName }}</dd>
+            </div>
+            <div>
+              <dt>Mobile</dt>
+              <dd>{{ p.phone }}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd>{{ p.email }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <p class="sd-field-note">
+          Enter your Udyam number to generate your personalized Government Scheme Discovery Report instantly.
+        </p>
+
+        <div
+          class="sd-info-banner sd-info-banner--success"
+          *ngIf="flow.udyamBannerMessage()"
+          role="status">
+          <p>{{ flow.udyamBannerMessage() }}</p>
+        </div>
+
+        <div class="sd-field" [class.sd-field--invalid]="!!flow.udyamError()">
+          <label for="scheme-discovery-udyam">Udyam Registration Number *</label>
+          <app-udyam-registration-input
+            inputId="scheme-discovery-udyam"
+            name="udyam"
+            [ngModel]="flow.udyam()"
+            (ngModelChange)="flow.onUdyamInput($event)"
+            [invalid]="!!flow.udyamError()"
+            [required]="true" />
+          <span class="sd-field__hint">Format: UDYAM-XX-00-0000000</span>
+          <span class="sd-field__error" *ngIf="flow.udyamError()">{{ flow.udyamError() }}</span>
+        </div>
+      </form>
+    </div>
+
+    <footer class="sd-modal__footer" *ngIf="showFooter()">
+      <button
+        class="sd-btn sd-btn--primary sd-btn--block"
+        type="submit"
+        form="scheme-discovery-udyam-form"
+        [disabled]="flow.submitting()">
+        {{ udyamSubmitLabel() }}
+      </button>
+    </footer>
+  </div>
+</div>

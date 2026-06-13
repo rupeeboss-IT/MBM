@@ -17,19 +17,22 @@ public sealed class UserController : ControllerBase
     private readonly IPasswordResetService _pwReset;
     private readonly IJwtTokenService _jwt;
     private readonly IMemberIdGeneratorService _memberIds;
+    private readonly ILogger<UserController> _logger;
 
     public UserController(
         AppDbContext db,
         IOtpService otp,
         IPasswordResetService pwReset,
         IJwtTokenService jwt,
-        IMemberIdGeneratorService memberIds)
+        IMemberIdGeneratorService memberIds,
+        ILogger<UserController> logger)
     {
         _db = db;
         _otp = otp;
         _pwReset = pwReset;
         _jwt = jwt;
         _memberIds = memberIds;
+        _logger = logger;
     }
 
     public sealed record RegisterRequest(
@@ -79,7 +82,7 @@ public sealed class UserController : ControllerBase
 
         var dto = await _db.Users
             .AsNoTracking()
-            .Where(u => u.UserId == userId)
+            .Where(u => u.UserId == userId && !u.IsDeleted)
             .Select(u => new
             {
                 u.UserId,
@@ -91,11 +94,13 @@ public sealed class UserController : ControllerBase
                 u.EmailVerifiedAt,
                 u.PhoneVerifiedAt,
                 u.CreatedAt,
-                u.MemberId
+                u.MemberId,
+                u.IsActive,
             })
             .FirstOrDefaultAsync(ct);
 
         if (dto is null) return NotFound(new MeResponse(false, "User not found."));
+        if (!dto.IsActive) return Unauthorized(new MeResponse(false, "Account is inactive."));
 
         return Ok(new MeResponse(
             true,
@@ -137,6 +142,9 @@ public sealed class UserController : ControllerBase
         if (user is null)
             return Unauthorized(new LoginResponse(false, "Invalid email/phone or password."));
 
+        if (user.IsDeleted)
+            return Unauthorized(new LoginResponse(false, "Account is not available."));
+
         var role = (user.Role ?? "").Trim().ToLowerInvariant();
         if (role == "admin" || role == "superadmin")
             return Unauthorized(new LoginResponse(false, "Please use Admin Login."));
@@ -171,11 +179,35 @@ public sealed class UserController : ControllerBase
         await _otp.EnsureEmailVerifiedAsync(email, ct);
         await _otp.EnsureSmsVerifiedAsync(phoneDigits, ct);
 
-        var emailExists = await _db.Users.AnyAsync(u => u.Email == email, ct);
-        if (emailExists) return Conflict(new RegisterResponse(false, "Email already exists."));
+        var existingByEmail = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email, ct);
+        if (existingByEmail is not null)
+        {
+            if (TryIdempotentRegisterResponse(existingByEmail, phoneDigits, req.Password, out var idempotent))
+            {
+                _logger.LogInformation(
+                    "Registration idempotent retry for existing email {Email} (UserId={UserId})",
+                    email,
+                    existingByEmail.UserId);
+                return Ok(idempotent);
+            }
 
-        var phoneExists = await _db.Users.AnyAsync(u => u.Phone == phoneDigits, ct);
-        if (phoneExists) return Conflict(new RegisterResponse(false, "Phone already exists."));
+            return Conflict(new RegisterResponse(false, "Email already exists."));
+        }
+
+        var existingByPhone = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Phone == phoneDigits, ct);
+        if (existingByPhone is not null)
+        {
+            if (TryIdempotentRegisterResponse(existingByPhone, phoneDigits, req.Password, out var idempotent))
+            {
+                _logger.LogInformation(
+                    "Registration idempotent retry for existing phone {Phone} (UserId={UserId})",
+                    phoneDigits,
+                    existingByPhone.UserId);
+                return Ok(idempotent);
+            }
+
+            return Conflict(new RegisterResponse(false, "Phone already exists."));
+        }
 
         var memberRole = req.Role.Trim().ToLowerInvariant();
         if (memberRole is not ("member" or "partner"))
@@ -213,6 +245,7 @@ public sealed class UserController : ControllerBase
             await tx.CommitAsync(ct);
 
             var token = _jwt.CreateToken(user.UserId, memberRole, user.Email);
+            _logger.LogInformation("User registered successfully {UserId} ({Email})", user.UserId, email);
             return Ok(new RegisterResponse(
                 true,
                 "Account created.",
@@ -221,11 +254,41 @@ public sealed class UserController : ControllerBase
                 memberRole,
                 token));
         }
-        catch
+        catch (Exception ex)
         {
             await tx.RollbackAsync(ct);
+            _logger.LogError(ex, "Registration failed for email {Email}", email);
             throw;
         }
+    }
+
+    /// <summary>
+    /// Treats a duplicate registration attempt as success when credentials match an existing member account.
+    /// </summary>
+    private bool TryIdempotentRegisterResponse(
+        User user,
+        string phoneDigits,
+        string password,
+        out RegisterResponse response)
+    {
+        response = null!;
+        if (user.Phone != phoneDigits) return false;
+        if (user.IsActive != true) return false;
+
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+        if (role is not ("member" or "partner")) return false;
+
+        if (!PasswordHasher.Verify(password, user.PasswordSalt, user.PasswordHash)) return false;
+
+        var token = _jwt.CreateToken(user.UserId, role, user.Email);
+        response = new RegisterResponse(
+            true,
+            "You are already registered. Signed you in.",
+            user.UserId,
+            user.MemberId,
+            role,
+            token);
+        return true;
     }
 
     [HttpPost("password/forgot")]

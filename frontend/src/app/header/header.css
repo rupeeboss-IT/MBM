@@ -17,6 +17,42 @@ button.dropdown-trigger {
   min-height: 10px;
 }
 
+.nav-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  max-width: min(100%, 12rem);
+}
+
+.nav-user-avatar {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.nav-user-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 700;
+  color: #444;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-user-caret {
+  flex: 0 0 auto;
+}
+
 .search-close-btn {
   background: none;
   border: 1px solid #ddd;
@@ -105,6 +141,10 @@ button.dropdown-trigger {
     width: 100%;
     min-height: var(--touch-min, 44px);
   }
+
+  .nav-user-trigger {
+    max-width: 100%;
+  }
 }
 
 @keyframes navSlideIn {
@@ -121,5 +161,39 @@ button.dropdown-trigger {
 @media (prefers-reduced-motion: reduce) {
   .nav-links.open {
     animation: none;
+  }
+}
+
+.nav-links .dd-logout {
+  margin-left: 0.25rem;
+}
+
+.nav-links--admin {
+  flex-wrap: wrap;
+  row-gap: 0.35rem;
+}
+
+.dropdown.active-section > .dropdown-trigger {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.dropdown-menu a.active {
+  color: var(--red);
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .nav-links--admin .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    border-radius: 8px;
+    margin: 0.25rem 0 0.5rem;
+    padding: 0.25rem 0;
+    background: #f8f8f8;
+  }
+
+  .nav-links--admin .dropdown.open .dropdown-menu {
+    display: block;
   }
 }

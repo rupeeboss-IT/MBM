@@ -12,6 +12,7 @@ public sealed class CustomerReportService : ICustomerReportService
 {
     private readonly AppDbContext _db;
     private readonly ICustomerReportRepository _reports;
+    private readonly IReportChangeRequestRepository _changeRequests;
     private readonly IReportAuditService _audit;
     private readonly IReportEmailService _email;
     private readonly CustomerReportSettings _settings;
@@ -22,6 +23,7 @@ public sealed class CustomerReportService : ICustomerReportService
     public CustomerReportService(
         AppDbContext db,
         ICustomerReportRepository reports,
+        IReportChangeRequestRepository changeRequests,
         IReportAuditService audit,
         IReportEmailService email,
         IOptions<CustomerReportSettings> settings,
@@ -31,6 +33,7 @@ public sealed class CustomerReportService : ICustomerReportService
     {
         _db = db;
         _reports = reports;
+        _changeRequests = changeRequests;
         _audit = audit;
         _email = email;
         _settings = settings.Value;
@@ -47,7 +50,7 @@ public sealed class CustomerReportService : ICustomerReportService
         CancellationToken ct)
     {
         var q = _db.Users.AsNoTracking().Where(u =>
-            u.Role != "admin" && u.Role != "superadmin");
+            !u.IsDeleted && u.Role != "admin" && u.Role != "superadmin");
 
         if (!string.IsNullOrWhiteSpace(memberId))
         {
@@ -255,18 +258,36 @@ public sealed class CustomerReportService : ICustomerReportService
             r.UploadDate,
             plans.GetValueOrDefault(r.SubscriptionId, "—"),
             r.FileSize,
-            r.MemberId)).ToList();
+            r.MemberId,
+            r.ReportType)).ToList();
     }
 
     public async Task<PagedResultDto<AdminReportHistoryItemDto>> ListAdminHistoryAsync(
         string? search,
         int page,
         int pageSize,
+        string? dateFrom,
+        string? dateTo,
+        string? sortBy,
+        string? sortDir,
+        bool export,
         CancellationToken ct)
     {
-        var (items, total) = await _reports.ListHistoryAsync(search, page, pageSize, ct);
+        var from = AdminListQuery.ParseDateFrom(dateFrom);
+        var toEx = AdminListQuery.ParseDateToExclusive(dateTo);
+        var (sortField, sortAsc) = AdminListQuery.NormalizeSort(sortBy, sortDir);
+        var (pageNum, pageSizeNorm) = AdminListQuery.Normalize(page, pageSize, export);
+        var (items, total) = await _reports.ListHistoryAsync(
+            search,
+            pageNum,
+            pageSizeNorm,
+            from,
+            toEx,
+            sortField,
+            sortAsc,
+            ct);
         if (items.Count == 0)
-            return new PagedResultDto<AdminReportHistoryItemDto>(true, "OK", Array.Empty<AdminReportHistoryItemDto>(), total, page, pageSize);
+            return new PagedResultDto<AdminReportHistoryItemDto>(true, "OK", Array.Empty<AdminReportHistoryItemDto>(), total, pageNum, pageSizeNorm);
 
         var customerIds = items.Select(i => i.CustomerId).Distinct().ToList();
         var users = await _db.Users.AsNoTracking()
@@ -281,9 +302,15 @@ public sealed class CustomerReportService : ICustomerReportService
             select new { up.UserPlanId, p.Name }
         ).ToDictionaryAsync(x => x.UserPlanId, x => x.Name, ct);
 
+        var reportIds = items.Select(i => i.Id).ToList();
+        var pendingByReport = await _changeRequests.GetPendingByReportIdsAsync(reportIds, ct);
+        var latestByReport = await _changeRequests.GetLatestByReportIdsAsync(reportIds, ct);
+
         var dtos = items.Select(r =>
         {
             users.TryGetValue(r.CustomerId, out var u);
+            pendingByReport.TryGetValue(r.Id, out var pending);
+            latestByReport.TryGetValue(r.Id, out var latest);
             return new AdminReportHistoryItemDto(
                 r.Id,
                 u?.FullName ?? "—",
@@ -294,10 +321,14 @@ public sealed class CustomerReportService : ICustomerReportService
                 r.LastDownloadDate,
                 r.OriginalFileName,
                 r.FileSize,
-                planNames.GetValueOrDefault(r.SubscriptionId));
+                planNames.GetValueOrDefault(r.SubscriptionId),
+                pending is not null,
+                pending?.Id,
+                pending?.RequestType,
+                latest?.Status);
         }).ToList();
 
-        return new PagedResultDto<AdminReportHistoryItemDto>(true, "OK", dtos, total, page, pageSize);
+        return new PagedResultDto<AdminReportHistoryItemDto>(true, "OK", dtos, total, pageNum, pageSizeNorm);
     }
 
     public async Task<(bool Allowed, string? Error, string? PhysicalPath, string? DownloadName)> GetDownloadForCustomerAsync(
@@ -306,13 +337,22 @@ public sealed class CustomerReportService : ICustomerReportService
         string? ipAddress,
         CancellationToken ct)
     {
-        var (subOk, subErr, _) = await ValidateActiveSubscriptionAsync(customerId, ct);
-        if (!subOk)
-            return (false, "Access Denied.", null, null);
-
         var report = await _reports.GetByIdForCustomerAsync(reportId, customerId, ct);
         if (report is null)
             return (false, "Access Denied.", null, null);
+
+        var isSdr = string.Equals(report.ReportType, SdrReportCatalog.ReportType, StringComparison.OrdinalIgnoreCase);
+        if (isSdr)
+        {
+            if (report.ExpiryDate is not null && report.ExpiryDate.Value < DateTime.Now)
+                return (false, "This report has expired. Please contact support if you need assistance.", null, null);
+        }
+        else
+        {
+            var (subOk, _, _) = await ValidateActiveSubscriptionAsync(customerId, ct);
+            if (!subOk)
+                return (false, "Access Denied.", null, null);
+        }
 
         var wwwroot = Path.Combine(_env.ContentRootPath, "wwwroot");
         var physical = Path.Combine(wwwroot, report.FilePath.Replace('/', Path.DirectorySeparatorChar));
@@ -333,7 +373,7 @@ public sealed class CustomerReportService : ICustomerReportService
             ct);
 
         var downloadName = string.IsNullOrWhiteSpace(report.OriginalFileName)
-            ? "Report.zip"
+            ? (isSdr ? "Government-Scheme-Discovery-Report.pdf" : "Report.zip")
             : report.OriginalFileName;
 
         return (true, null, physical, downloadName);

@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
 
 namespace RB_Website_API.Auth;
 
@@ -9,22 +11,52 @@ public sealed class InMemoryOtpService : IOtpService
     private readonly IEmailSender _email;
     private readonly ISmsSender _sms;
     private readonly IOtpRateLimiter _rate;
+    private readonly ILogger<InMemoryOtpService> _logger;
 
-    public InMemoryOtpService(IEmailSender email, ISmsSender sms, IOtpRateLimiter rate)
+    public InMemoryOtpService(
+        IEmailSender email,
+        ISmsSender sms,
+        IOtpRateLimiter rate,
+        ILogger<InMemoryOtpService> logger)
     {
         _email = email;
         _sms = sms;
         _rate = rate;
+        _logger = logger;
     }
 
     public async Task SendEmailOtpAsync(string email, CancellationToken ct)
     {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+
         _rate.ThrowIfEmailRateLimited(email);
+
         var key = Key("email", email);
         var otp = NewOtp();
-        await _email.SendAsync(email, "Your MBM OTP", $"Your OTP is {otp}. It expires in 10 minutes.", ct);
+        _logger.LogInformation("OTP generated for {Email} Channel={Channel}", normalizedEmail, "email");
+
+        var sw = Stopwatch.StartNew();
+        try
+        {
+            await _email.SendAsync(email, "Your MBM OTP", $"Your OTP is {otp}. It expires in 10 minutes.", ct);
+            _logger.LogInformation(
+                "Email provider response success for {Email} ElapsedMs={ElapsedMs}",
+                normalizedEmail,
+                sw.ElapsedMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Email send failure for {Email} ElapsedMs={ElapsedMs}",
+                normalizedEmail,
+                sw.ElapsedMilliseconds);
+            throw;
+        }
+
         _rate.RecordSuccessfulEmailOtpSend(email);
         _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false);
+        _logger.LogInformation("OTP saved for {Email} Channel={Channel}", normalizedEmail, "email");
     }
 
     public Task VerifyEmailOtpAsync(string email, string code, CancellationToken ct)
@@ -114,4 +146,3 @@ public sealed class InMemoryOtpService : IOtpService
 
     private sealed record OtpRecord(byte[] CodeHash, DateTimeOffset ExpiresAt, bool Verified);
 }
-

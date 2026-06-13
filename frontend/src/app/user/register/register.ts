@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, DestroyRef, ElementRef, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, ElementRef, HostListener, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, debounceTime, distinctUntilChanged, firstValueFrom, map, of, switchMap, tap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
+import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
+import { hasSchemeDiscoveryIntent } from '../../core/utils/scheme-discovery-intent';
 import { getHttpErrorMessage, sanitizeUserMessage } from '../../core/utils/http-error-message';
 import { bannedWordsNameValidator, nameNoRepeatsValidator, strictFullNameValidator } from '../../core/validators/name.validators';
 import { passwordComplexityValidator } from '../../core/validators/password.validators';
@@ -17,6 +19,14 @@ import { indianMobileValidator } from '../../core/validators/phone.validators';
 
 type ClearbitCompany = { name: string; domain: string; logo: string | null };
 
+type RegisterRes = {
+  success: boolean;
+  message?: string;
+  userId?: string;
+  role?: string;
+  token?: string;
+};
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -24,7 +34,7 @@ type ClearbitCompany = { name: string; domain: string; logo: string | null };
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register {
+export class Register implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
@@ -32,6 +42,7 @@ export class Register {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly session = inject(AuthSessionService);
+  private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly host = inject(ElementRef<HTMLElement>);
 
   readonly roleOpen = signal(false);
@@ -172,6 +183,13 @@ export class Register {
       this.syncEmailVerificationUi();
       this.syncPhoneVerificationUi();
     });
+  }
+
+  ngOnInit(): void {
+    this.session.refreshFromStorage();
+    if (this.session.isLoggedIn()) {
+      void this.redirectIfAlreadyAuthenticated();
+    }
   }
 
   readonly canContinue = computed(() => {
@@ -401,6 +419,8 @@ export class Register {
   }
 
   async continueToPlan() {
+    if (this.submitting()) return;
+
     this.form.markAllAsTouched();
     const emailNorm = this.normalizeEmail(this.form.controls.email.value);
     const phoneNorm = this.normalizePhoneDigits(this.form.controls.phone.value);
@@ -436,24 +456,18 @@ export class Register {
         })
       );
       if (!res?.success) {
+        console.error('[Register] API returned success=false', res);
         this.toast.error(res?.message || 'Registration failed. Please try again.');
         return;
       }
-      if (typeof res.userId === 'string' && res.userId && res.token) {
-        this.createdUserId.set(res.userId);
-        this.session.setSession(res.userId, res.token, res.role);
-      }
-      // If the user came from /membership wanting to buy a plan, send them straight there so checkout opens.
-      const pendingPlan =
-        typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
-      if (pendingPlan) {
-        this.toast.success('Account created. Opening payment for your selected plan…');
-        this.router.navigateByUrl('/membership');
+      await this.handleRegistrationSuccess(res);
+    } catch (e) {
+      if (e instanceof HttpErrorResponse && e.status === 409 && this.session.isLoggedIn()) {
+        console.warn('[Register] Duplicate registration while authenticated; continuing post-registration flow');
+        await this.completePostRegistrationNavigation('You are already registered. Continuing…');
         return;
       }
-      this.toast.success('Account created. Continue to plan selection.');
-      this.step.set(2);
-    } catch (e) {
+      console.error('[Register] Registration request failed', e);
       this.toast.error(this.httpErr(e, API_USER_MESSAGES.register));
     } finally {
       this.submitting.set(false);
@@ -470,6 +484,69 @@ export class Register {
 
   skipPayment() {
     this.router.navigateByUrl('/profile');
+  }
+
+  private async handleRegistrationSuccess(res: RegisterRes): Promise<void> {
+    const userId = this.coerceUserId(res.userId);
+    const token = (res.token ?? '').trim();
+    if (!userId || !token) {
+      console.error('[Register] Success response missing userId or token', res);
+      this.toast.error('Registration completed but sign-in failed. Please log in.');
+      await this.router.navigateByUrl('/login');
+      return;
+    }
+
+    this.createdUserId.set(userId);
+    this.session.setSession(userId, token, res.role);
+    await this.completePostRegistrationNavigation(res.message || 'Account created.');
+  }
+
+  private async completePostRegistrationNavigation(successMessage: string): Promise<void> {
+    try {
+      if (await this.schemeDiscovery.resumeAfterAuth()) {
+        await this.router.navigateByUrl('/profile');
+        return;
+      }
+    } catch (e) {
+      console.error('[Register] Scheme discovery resume failed after registration', e);
+    }
+
+    const pendingPlan =
+      typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
+    if (pendingPlan) {
+      this.toast.success('Account created. Opening payment for your selected plan…');
+      await this.router.navigateByUrl('/membership');
+      return;
+    }
+
+    this.toast.success(
+      successMessage.includes('already registered')
+        ? successMessage
+        : 'Account created. Continue to plan selection.'
+    );
+    this.step.set(2);
+  }
+
+  private async redirectIfAlreadyAuthenticated(): Promise<void> {
+    if (hasSchemeDiscoveryIntent()) {
+      await this.schemeDiscovery.tryResumeOnPageLoad();
+      return;
+    }
+
+    const pendingPlan =
+      typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
+    if (pendingPlan) {
+      await this.router.navigateByUrl('/membership');
+      return;
+    }
+
+    await this.router.navigateByUrl('/profile');
+  }
+
+  private coerceUserId(value: unknown): string {
+    if (typeof value === 'string') return value.trim();
+    if (value != null) return String(value).trim();
+    return '';
   }
 
   private syncEmailVerificationUi() {

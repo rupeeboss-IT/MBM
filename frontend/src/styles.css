@@ -70,6 +70,23 @@ textarea {
   --red-mid: rgba(230, 57, 70, .35);
   --fb: 'Plus Jakarta Sans', sans-serif;
   --fd: 'Plus Jakarta Sans', sans-serif;
+  /* Admin dashboard — mapped to app brand */
+  --admin-bg: var(--light-gray);
+  --admin-surface: #fff;
+  --admin-border: var(--border);
+  --admin-border-strong: #d4d8dc;
+  --admin-text: var(--navy);
+  --admin-text-secondary: #3d3d56;
+  --admin-muted: var(--muted);
+  --admin-accent: var(--red);
+  --admin-accent-hover: var(--red-dark);
+  --admin-accent-soft: var(--red-light);
+  --admin-navy: var(--navy);
+  --admin-navy-mid: var(--navy2);
+  --admin-success: var(--green);
+  --admin-success-bg: var(--green-light);
+  --admin-accent-ring: rgba(230, 57, 70, 0.14);
+  --admin-navy-tint: rgba(26, 26, 46, 0.04);
 }
 
 /* ===== UTILITIES ===== */
@@ -566,7 +583,8 @@ textarea {
 }
 
 .hero-inner {
-  max-width: 1160px;
+  /* max-width: 1160px; */
+  max-width: 1280px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 500px;
@@ -3029,15 +3047,18 @@ select.status-select {
   flex-shrink: 0
 }
 
-@media(max-width:900px) {
+/* Plan grids — 4 desktop / 2 tablet / 1 mobile (Home + Membership) */
+@media (max-width: 991px) {
+  .plans-grid,
   .home-plans-grid {
-    grid-template-columns: repeat(2, 1fr)
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media(max-width:550px) {
+@media (max-width: 550px) {
+  .plans-grid,
   .home-plans-grid {
-    grid-template-columns: 1fr
+    grid-template-columns: 1fr;
   }
 }
 
@@ -3858,7 +3879,10 @@ select.status-select {
 /* ===== AUTH PAGES ===== */
 .auth-wrap {
   min-height: calc(100vh - 68px);
-  background: linear-gradient(135deg, #f8f9fa, #fff);
+  background:
+    radial-gradient(ellipse 70% 55% at 100% 0%, rgba(230, 57, 70, 0.06), transparent 55%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(15, 52, 96, 0.05), transparent 50%),
+    linear-gradient(165deg, #fafbfc 0%, var(--gray) 50%, #eef1f4 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3872,7 +3896,19 @@ select.status-select {
   padding: 2.5rem;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, .07)
+  box-shadow: 0 8px 40px rgba(26, 26, 46, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--navy2) 100%);
 }
 
 .auth-logo {
@@ -4101,10 +4137,6 @@ select.status-select {
     grid-template-columns: 1fr 1fr
   }
 
-  .plans-grid {
-    grid-template-columns: repeat(2, 1fr)
-  }
-
   .partners-grid {
     grid-template-columns: repeat(2, 1fr)
   }
@@ -4168,10 +4200,6 @@ select.status-select {
   }
 
   .form-row {
-    grid-template-columns: 1fr
-  }
-
-  .plans-grid {
     grid-template-columns: 1fr
   }
 

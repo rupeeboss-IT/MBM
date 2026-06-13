@@ -1,3 +1,23 @@
+/* Membership plans — GST line below price badge (home-style cards) */
+.hp-gst-note {
+  margin: -0.35rem 0 0.5rem;
+  font-size: 0.8rem;
+  color: var(--muted, #888);
+  text-align: right;
+}
+
+.home-plan-card .btn-outline,
+.home-plan-card .btn-primary,
+.home-plan-card .btn-navy {
+  margin-top: auto;
+}
+
+.home-plan-card button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Referral popup (uses global .modal-overlay / .modal-box from styles.css) */
 .referral-modal-overlay.open {
   display: flex;
@@ -139,6 +159,66 @@
 .referral-skip-link:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Premium feature source guidance (query param only — no payment changes) */
+.home-plan-card.membership-plan--recommended {
+  position: relative;
+  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.35);
+}
+
+.home-plan-card.membership-plan--highlight {
+  animation: membership-plan-pulse 1.4s ease-in-out 2;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.45), 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes membership-plan-pulse {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.membership-plan-rec-badge {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 2;
+  background: #e8f5e9;
+  color: #2d6a4f;
+  border: 1px solid rgba(45, 106, 79, 0.35);
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.home-plan-card.featured-plan .membership-plan-rec-badge {
+  top: 0.55rem;
+}
+
+.membership-basic-confirm__message {
+  white-space: pre-line;
+  color: #444;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+}
+
+.membership-basic-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.membership-basic-confirm-overlay.open {
+  display: flex;
+  z-index: 10050;
 }
 
 .offerings-explorer-grid {

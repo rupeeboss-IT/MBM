@@ -16,7 +16,8 @@ public sealed record CustomerReportListItemDto(
     DateTime UploadDate,
     string PlanName,
     long FileSize,
-    string MemberId);
+    string MemberId,
+    string ReportType);
 
 public sealed record AdminReportHistoryItemDto(
     Guid Id,
@@ -28,7 +29,11 @@ public sealed record AdminReportHistoryItemDto(
     DateTime? LastDownloadDate,
     string OriginalFileName,
     long FileSize,
-    string? PlanName);
+    string? PlanName,
+    bool HasPendingRequest = false,
+    Guid? PendingRequestId = null,
+    string? PendingRequestType = null,
+    string? LatestRequestStatus = null);
 
 public sealed record PagedResultDto<T>(
     bool Success,

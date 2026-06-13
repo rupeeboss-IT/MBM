@@ -1,0 +1,5 @@
+@import '../../../admin/admin-shared.css';
+
+:host {
+  display: block;
+}

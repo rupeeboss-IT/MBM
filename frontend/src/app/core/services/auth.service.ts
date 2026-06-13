@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiUrl } from '../utils/api-url';
+import { appendAdminListParams, type AdminListQueryOpts } from '../utils/admin-list-params';
 
 type ApiOk = { success: true; message?: string };
 type RegisterReq = {
@@ -69,19 +70,20 @@ export class AuthService {
     return this.http.post<AdminLoginRes>(apiUrl('/api/admin/login'), req);
   }
 
-  adminDashboardCounts(): Observable<any> {
-    return this.http.get(apiUrl('/api/admin/dashboard/counts'));
+  adminDashboardCounts(opts?: { dateFrom?: string; dateTo?: string }): Observable<any> {
+    const params: Record<string, string> = {};
+    if (opts?.dateFrom) params['dateFrom'] = opts.dateFrom;
+    if (opts?.dateTo) params['dateTo'] = opts.dateTo;
+    return this.http.get(apiUrl('/api/admin/dashboard/counts'), { params });
   }
 
-  adminDashboardDetail(category: string, opts?: { days?: number }): Observable<any> {
-    const params: Record<string, string> = {};
-    if (opts?.days != null) params['days'] = String(opts.days);
+  adminDashboardDetail(category: string, opts?: AdminListQueryOpts): Observable<any> {
+    const params = appendAdminListParams({}, opts);
     return this.http.get(apiUrl(`/api/admin/dashboard/details/${encodeURIComponent(category)}`), { params });
   }
 
-  adminListUsers(role?: string): Observable<any> {
-    const params: any = {};
-    if (role) params.role = role;
+  adminListUsers(opts?: AdminListQueryOpts): Observable<any> {
+    const params = appendAdminListParams({}, opts);
     return this.http.get(apiUrl('/api/admin/users'), { params });
   }
 
@@ -89,9 +91,8 @@ export class AuthService {
     return this.http.patch(apiUrl(`/api/admin/users/${encodeURIComponent(userId)}/active`), { isActive });
   }
 
-  adminListMembers(role?: string): Observable<any> {
-    const params: any = {};
-    if (role) params.role = role;
+  adminListMembers(opts?: AdminListQueryOpts): Observable<any> {
+    const params = appendAdminListParams({}, opts);
     return this.http.get(apiUrl('/api/admin/members'), { params });
   }
 

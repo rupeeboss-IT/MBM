@@ -27,7 +27,7 @@ public sealed class MemberIdGeneratorService : IMemberIdGeneratorService
 
     public async Task<string> AllocateNextMemberIdAsync(CancellationToken ct)
     {
-        var year = DateTime.UtcNow.Year;
+        var year = DateTime.Now.Year;
         var yy = year % 100;
 
         for (var attempt = 0; attempt < 3; attempt++)

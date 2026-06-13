@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -23,6 +25,9 @@ public interface IEmailSender
         int? smtpPort = null,
         string? smtpUsername = null,
         string? smtpPassword = null);
+
+    /// <summary>Pre-resolves DNS and opens a TCP connection to the default SMTP host (no message sent).</summary>
+    Task WarmupAsync(CancellationToken ct = default);
 }
 
 public interface ISmsSender
@@ -32,6 +37,8 @@ public interface ISmsSender
 
 public sealed class SmtpEmailSender : IEmailSender
 {
+    private const int SmtpSendTimeoutMs = 60_000;
+
     private readonly EmailSettings _settings;
     private readonly ILogger<SmtpEmailSender> _logger;
 
@@ -110,17 +117,85 @@ public sealed class SmtpEmailSender : IEmailSender
             UseDefaultCredentials = false,
             Credentials = new NetworkCredential(user, password),
             DeliveryMethod = SmtpDeliveryMethod.Network,
-            Timeout = 30000,
+            Timeout = SmtpSendTimeoutMs,
         };
+
+        // Do not pass the HTTP request token into SMTP: a slow first TLS handshake can outlast
+        // the browser/proxy, which aborts the request and cancels delivery mid-send.
+        ct.ThrowIfCancellationRequested();
+
+        _logger.LogInformation(
+            "Email send started To={To} Host={Host} Port={Port} Subject={Subject}",
+            toEmail,
+            host,
+            port,
+            subject);
+
+        var sw = Stopwatch.StartNew();
+        using var smtpCts = new CancellationTokenSource(SmtpSendTimeoutMs);
 
         try
         {
-            await client.SendMailAsync(message, ct);
+            await client.SendMailAsync(message, smtpCts.Token);
+            _logger.LogInformation(
+                "Email send success To={To} Host={Host} Port={Port} ElapsedMs={ElapsedMs}",
+                toEmail,
+                host,
+                port,
+                sw.ElapsedMilliseconds);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "SMTP send failed to {To} via {Host}:{Port}", toEmail, host, port);
+            var clientDisconnected = ct.IsCancellationRequested;
+            _logger.LogError(
+                ex,
+                "Email send failure To={To} Host={Host} Port={Port} ElapsedMs={ElapsedMs} ClientDisconnected={ClientDisconnected} SmtpTimedOut={SmtpTimedOut}",
+                toEmail,
+                host,
+                port,
+                sw.ElapsedMilliseconds,
+                clientDisconnected,
+                smtpCts.IsCancellationRequested);
             throw;
+        }
+    }
+
+    public async Task WarmupAsync(CancellationToken ct = default)
+    {
+        var host = _settings.Host?.Trim();
+        var port = _settings.Port;
+        if (string.IsNullOrWhiteSpace(host))
+        {
+            _logger.LogInformation("SMTP warmup skipped: EmailSettings:Host is not configured.");
+            return;
+        }
+
+        var sw = Stopwatch.StartNew();
+        try
+        {
+            var addresses = await Dns.GetHostAddressesAsync(host, ct);
+            _logger.LogInformation(
+                "SMTP warmup DNS resolved Host={Host} AddressCount={AddressCount} ElapsedMs={ElapsedMs}",
+                host,
+                addresses.Length,
+                sw.ElapsedMilliseconds);
+
+            using var tcp = new TcpClient();
+            await tcp.ConnectAsync(host, port, ct);
+            _logger.LogInformation(
+                "SMTP warmup TCP connected Host={Host} Port={Port} ElapsedMs={ElapsedMs}",
+                host,
+                port,
+                sw.ElapsedMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(
+                ex,
+                "SMTP warmup failed Host={Host} Port={Port} ElapsedMs={ElapsedMs}",
+                host,
+                port,
+                sw.ElapsedMilliseconds);
         }
     }
 }
@@ -149,6 +224,8 @@ public sealed class ConsoleEmailSender : IEmailSender
         Console.WriteLine($"[EMAIL] SMTP={smtpHost ?? "(default)"} From={fromEmail ?? "(default)"} ReplyTo={replyToEmail ?? "-"} To={toEmail} Subject={subject} Html={isHtml} Attachments={attCount}");
         return Task.CompletedTask;
     }
+
+    public Task WarmupAsync(CancellationToken ct = default) => Task.CompletedTask;
 }
 
 public sealed class ConsoleSmsSender : ISmsSender
@@ -159,4 +236,3 @@ public sealed class ConsoleSmsSender : ISmsSender
         return Task.CompletedTask;
     }
 }
-

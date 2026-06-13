@@ -13,12 +13,12 @@ BEGIN TRANSACTION;
 
 -- Members only
 UPDATE dbo.Users
-SET MemberId = 'MBM260001', UpdatedAt = GETUTCDATE()
+SET MemberId = 'MBM260001', UpdatedAt = GETDATE()
 WHERE UserId = 'BCF9CCAB-F300-4AD4-B75C-736299AA928A'
   AND LOWER(LTRIM(RTRIM(Role))) = 'member';
 
 UPDATE dbo.Users
-SET MemberId = 'MBM260002', UpdatedAt = GETUTCDATE()
+SET MemberId = 'MBM260002', UpdatedAt = GETDATE()
 WHERE UserId = 'E6534E2E-FA92-48E2-A030-F6E719E12F8C'
   AND LOWER(LTRIM(RTRIM(Role))) = 'member';
 

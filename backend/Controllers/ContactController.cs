@@ -48,4 +48,34 @@ public sealed class ContactController : ControllerBase
 
         return Ok(new SubmitContactResponse(true, message, submissionId));
     }
+
+    public sealed record SubmitCallbackRequest(
+        string FullName,
+        string Mobile,
+        int SubjectId,
+        string Message,
+        bool ConsentAccepted);
+
+    [AllowAnonymous]
+    [HttpPost("callback")]
+    public async Task<ActionResult<SubmitContactResponse>> SubmitCallback(
+        [FromBody] SubmitCallbackRequest? req,
+        CancellationToken ct)
+    {
+        if (req is null)
+            return BadRequest(new SubmitContactResponse(false, "Invalid request."));
+
+        var (success, message, submissionId) = await _contact.SubmitCallbackAsync(
+            req.FullName,
+            req.Mobile,
+            req.SubjectId,
+            req.Message,
+            req.ConsentAccepted,
+            ct);
+
+        if (!success)
+            return BadRequest(new SubmitContactResponse(false, message));
+
+        return Ok(new SubmitContactResponse(true, message, submissionId));
+    }
 }

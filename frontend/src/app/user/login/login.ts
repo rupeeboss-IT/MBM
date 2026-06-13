@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
+import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
@@ -22,6 +23,7 @@ export class Login {
   private readonly session = inject(AuthSessionService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
 
   readonly submitting = signal(false);
 
@@ -51,6 +53,10 @@ export class Login {
       }
       this.session.setSession(res.userId, res.token, res.role);
       this.toast.success('Login successful.');
+
+      if (await this.schemeDiscovery.resumeAfterAuth()) {
+        return;
+      }
 
       // If user came here from a plan selection on /membership, send them back so checkout opens.
       const pendingPlan = (typeof window !== 'undefined') ? window.localStorage.getItem('mbm_pending_plan') : null;

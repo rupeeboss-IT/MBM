@@ -145,13 +145,57 @@ public sealed class PaymentController : ControllerBase
         if (plan is null) return NotFound(new CreateOrderResponse(false, "Plan not found."));
 
         var now = DateTime.Now;
+        var isSchemeOneTime = string.Equals(plan.Code, RB_Website_API.Auth.SchemeDiscoveryCatalog.OneTimePlanCode, StringComparison.OrdinalIgnoreCase);
+
         var existingActive = await _db.UserPlans.AsNoTracking()
             .FirstOrDefaultAsync(up =>
                 up.UserId == userId
                 && up.Status == "Active"
                 && (up.ActiveTo == null || up.ActiveTo > now), ct);
-        if (existingActive is not null && string.Equals(existingActive.PlanCode, plan.Code, StringComparison.OrdinalIgnoreCase))
+
+        if (!isSchemeOneTime && existingActive is not null && string.Equals(existingActive.PlanCode, plan.Code, StringComparison.OrdinalIgnoreCase))
+        {
             return Conflict(new CreateOrderResponse(false, $"You already have {plan.Name} active."));
+        }
+
+        if (isSchemeOneTime)
+        {
+            // Standalone one-time report — no annual membership required.
+            var hasOpenCheckout = await _db.PaymentOrders.AsNoTracking()
+                .AnyAsync(po =>
+                    po.UserId == userId
+                    && po.PlanCode == plan.Code
+                    && po.Status == "Created"
+                    && po.CreatedAt > now.AddHours(-2), ct);
+            if (hasOpenCheckout)
+            {
+                return Conflict(new CreateOrderResponse(false, "A payment for this report is already in progress. Please complete or cancel it and try again."));
+            }
+
+            var paidOneTimeIds = await (
+                from pay in _db.Payments.AsNoTracking()
+                join paidOrder in _db.PaymentOrders.AsNoTracking() on pay.PaymentOrderId equals paidOrder.PaymentOrderId
+                where paidOrder.UserId == userId
+                      && paidOrder.PlanCode == plan.Code
+                      && paidOrder.Status == "Paid"
+                select pay.PaymentId
+            ).ToListAsync(ct);
+            if (paidOneTimeIds.Count > 0)
+            {
+                var usedIds = await _db.SchemeDiscoveryRequests.AsNoTracking()
+                    .Where(r => r.UserId == userId
+                                && r.PaymentId != null
+                                && paidOneTimeIds.Contains(r.PaymentId.Value))
+                    .Select(r => r.PaymentId!.Value)
+                    .ToListAsync(ct);
+                if (paidOneTimeIds.Any(id => !usedIds.Contains(id)))
+                {
+                    return Conflict(new CreateOrderResponse(
+                        false,
+                        "You already have a paid scheme report credit. Continue from Get Report to submit your Udyam number."));
+                }
+            }
+        }
 
         if (!string.IsNullOrWhiteSpace(req.ReferralCode))
         {

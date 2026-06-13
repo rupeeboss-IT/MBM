@@ -60,6 +60,9 @@ public sealed class LeadData
     [MaxLength(20)]
     public string? emp_code { get; set; }
 
+    [Column("broker_id")]
+    public int? broker_id { get; set; }
+
     [Column("Lead_Status_id")]
     public int Lead_Status_id { get; set; }
 

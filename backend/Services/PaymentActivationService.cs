@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RB_Website_API.Auth;
 using RB_Website_API.Data;
 using RB_Website_API.Models;
 
@@ -44,6 +45,12 @@ public sealed class PaymentActivationService
 
         var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.PlanId == po.PlanId, ct);
         var now = DateTime.Now;
+
+        if (string.Equals(plan?.Code, SchemeDiscoveryCatalog.OneTimePlanCode, StringComparison.OrdinalIgnoreCase))
+        {
+            return await ActivateOneTimeSchemeReportAsync(po, razorpayOrderId, razorpayPaymentId, razorpaySignature, rawWebhookPayload, alreadyPaid, ct);
+        }
+
         Guid paymentId;
 
         if (!alreadyPaid)
@@ -159,6 +166,96 @@ public sealed class PaymentActivationService
 
         await _email.SendActivationEmailAsync(result, ct);
         return result;
+    }
+
+    private async Task<ActivationResult> ActivateOneTimeSchemeReportAsync(
+        PaymentOrder po,
+        string razorpayOrderId,
+        string razorpayPaymentId,
+        string? razorpaySignature,
+        string? rawWebhookPayload,
+        bool alreadyPaid,
+        CancellationToken ct)
+    {
+        var now = DateTime.Now;
+        Guid paymentId;
+
+        if (!alreadyPaid)
+        {
+            paymentId = Guid.NewGuid();
+            _db.Payments.Add(new Payment
+            {
+                PaymentId         = paymentId,
+                PaymentOrderId    = po.PaymentOrderId,
+                RazorpayOrderId   = razorpayOrderId,
+                RazorpayPaymentId = razorpayPaymentId,
+                RazorpaySignature = razorpaySignature,
+                AmountPaise       = po.TotalAmountPaise,
+                Currency          = po.Currency,
+                Status            = "Captured",
+                RawPayload        = rawWebhookPayload,
+                PaidAt            = now,
+                CreatedAt         = now,
+            });
+        }
+        else
+        {
+            paymentId = await _db.Payments.AsNoTracking()
+                .Where(p => p.RazorpayPaymentId == razorpayPaymentId)
+                .Select(p => p.PaymentId)
+                .FirstAsync(ct);
+        }
+
+        po.Status = "Paid";
+        po.UpdatedAt = now;
+
+        var plan = await _db.Plans.AsNoTracking().FirstOrDefaultAsync(p => p.PlanId == po.PlanId, ct);
+        var durationDays = plan?.DurationDays > 0 ? plan.DurationDays : 365;
+        var activeFrom = now;
+        var activeTo = activeFrom.AddDays(durationDays);
+
+        // One-time scheme report is its own membership — no separate annual plan required.
+        var priorOneTime = await _db.UserPlans
+            .Where(up =>
+                up.UserId == po.UserId
+                && up.PlanCode == SchemeDiscoveryCatalog.OneTimePlanCode
+                && up.Status == "Active")
+            .ToListAsync(ct);
+        foreach (var up in priorOneTime)
+        {
+            up.Status = "Cancelled";
+            up.ActiveTo = now;
+            up.UpdatedAt = now;
+        }
+
+        _db.UserPlans.Add(new UserPlan
+        {
+            UserPlanId = Guid.NewGuid(),
+            UserId = po.UserId,
+            PlanId = po.PlanId,
+            PlanCode = po.PlanCode,
+            PaymentOrderId = po.PaymentOrderId,
+            ActiveFrom = activeFrom,
+            ActiveTo = activeTo,
+            Status = "Active",
+            CancelAtPeriodEnd = false,
+            AutoRenewEnabled = false,
+            CreatedAt = activeFrom,
+            UpdatedAt = activeFrom,
+        });
+
+        await _db.SaveChangesAsync(ct);
+
+        return new ActivationResult(
+            true,
+            ActivationKind.OneTimeReport,
+            paymentId,
+            po.PlanCode,
+            plan?.Name ?? po.PlanCode,
+            null,
+            null,
+            activeFrom,
+            activeTo);
     }
 
     public async Task<ActivePlanRow?> GetActivePlanRowAsync(Guid userId, CancellationToken ct)

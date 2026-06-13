@@ -34,7 +34,7 @@ public sealed class MembershipEmailService
 
     public async Task SendActivationEmailAsync(ActivationResult result, CancellationToken ct)
     {
-        if (!result.Activated || result.PaymentId is null || result.Kind == ActivationKind.None)
+        if (!result.Activated || result.PaymentId is null || result.Kind is ActivationKind.None or ActivationKind.OneTimeReport)
             return;
 
         try
@@ -116,19 +116,5 @@ public sealed class MembershipEmailService
         return sb.ToString();
     }
 
-    private static string FormatDate(DateTime? utc)
-    {
-        if (utc is null) return "—";
-        try
-        {
-            var tz = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-            var ist = TimeZoneInfo.ConvertTimeFromUtc(
-                utc.Value.Kind == DateTimeKind.Utc ? utc.Value : DateTime.SpecifyKind(utc.Value, DateTimeKind.Utc), tz);
-            return ist.ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
-        }
-        catch
-        {
-            return utc.Value.ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
-        }
-    }
+    private static string FormatDate(DateTime? value) => AppDateTime.FormatDate(value);
 }

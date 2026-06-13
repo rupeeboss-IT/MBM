@@ -44,6 +44,9 @@ public sealed class CustomerReportsController : ControllerBase
             return NotFound(new { success = false, message = error ?? "Access Denied." });
         }
 
-        return PhysicalFile(path!, "application/zip", downloadName);
+        var contentType = (downloadName ?? "").EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)
+            ? "application/pdf"
+            : "application/zip";
+        return PhysicalFile(path!, contentType, downloadName);
     }
 }

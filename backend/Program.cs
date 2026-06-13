@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
     o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    o.JsonSerializerOptions.Converters.Add(new RB_Website_API.Auth.LocalDateTimeJsonConverter());
+    o.JsonSerializerOptions.Converters.Add(new RB_Website_API.Auth.NullableLocalDateTimeJsonConverter());
 });
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -113,8 +115,11 @@ builder.Services.Configure<RB_Website_API.Auth.InvoiceSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.InvoiceSettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.CustomerReportSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.CustomerReportSettings.SectionName));
+builder.Services.Configure<RB_Website_API.Auth.SdrReportSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.SdrReportSettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.ContactSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.ContactSettings.SectionName));
+builder.Services.AddHostedService<RB_Website_API.Auth.DateTimeDefaultsSchemaHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Auth.UserPlanSchemaHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Auth.ReferralSchemaHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Auth.CustomerReportSchemaHostedService>();
@@ -122,6 +127,7 @@ builder.Services.AddHostedService<RB_Website_API.Auth.ApiExceptionLogSchemaHoste
 builder.Services.AddHostedService<RB_Website_API.Auth.MemberIdSchemaHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Auth.LoanApplicationSchemaHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Auth.ContactSchemaHostedService>();
+builder.Services.AddHostedService<RB_Website_API.Auth.SchemeDiscoveryBootstrapHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionExpiryHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionReminderHostedService>();
 
@@ -159,15 +165,26 @@ builder.Services.AddHttpClient("Razorpay", client =>
 {
     client.Timeout = TimeSpan.FromSeconds(30);
 });
+builder.Services.AddHttpClient("Saarthi", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(120);
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+    client.DefaultRequestHeaders.UserAgent.Add(
+        new System.Net.Http.Headers.ProductInfoHeaderValue("MSME-Bharat-Manch", "1.0"));
+});
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpRateLimiter, RB_Website_API.Auth.OtpRateLimiter>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpService, RB_Website_API.Auth.InMemoryOtpService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IPasswordResetService, RB_Website_API.Auth.InMemoryPasswordResetService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IEmailSender, RB_Website_API.Auth.SmtpEmailSender>();
 builder.Services.AddSingleton<RB_Website_API.Auth.ISmsSender, RB_Website_API.Auth.HttpSmsSender>();
+builder.Services.AddHostedService<RB_Website_API.Auth.SmtpWarmupHostedService>();
 
 builder.Services.AddScoped<RB_Website_API.Referrals.Services.IEmployeeValidationService, RB_Website_API.Referrals.Services.EmployeeValidationService>();
 builder.Services.AddScoped<RB_Website_API.Services.IReferralService, RB_Website_API.Services.ReferralService>();
 builder.Services.AddScoped<RB_Website_API.Services.ILeadPushService, RB_Website_API.Services.LeadPushService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IReportChangeRequestRepository, RB_Website_API.Services.Repository.ReportChangeRequestRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IReportChangeRequestService, RB_Website_API.Services.ReportChangeRequestService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.ICustomerReportRepository, RB_Website_API.Services.Repository.CustomerReportRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IReportAuditRepository, RB_Website_API.Services.Repository.ReportAuditRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.ICustomerReportService, RB_Website_API.Services.CustomerReportService>();
@@ -178,8 +195,19 @@ builder.Services.AddScoped<RB_Website_API.Services.IMemberIdGeneratorService, RB
 builder.Services.AddScoped<RB_Website_API.Services.ILoanApplicationService, RB_Website_API.Services.LoanApplicationService>();
 builder.Services.AddScoped<RB_Website_API.Services.IContactEmailService, RB_Website_API.Services.ContactEmailService>();
 builder.Services.AddScoped<RB_Website_API.Services.IContactService, RB_Website_API.Services.ContactService>();
+builder.Services.AddScoped<RB_Website_API.Services.ISchemeDiscoveryService, RB_Website_API.Services.SchemeDiscoveryService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.ISdrReportRepository, RB_Website_API.Services.Repository.SdrReportRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.ISaarthiApiClient, RB_Website_API.Services.SaarthiApiClient>();
+builder.Services.AddScoped<RB_Website_API.Services.ISdrReportService, RB_Website_API.Services.SdrReportService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IUserManagementRepository, RB_Website_API.Services.Repository.UserManagementRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IUserManagementService, RB_Website_API.Services.UserManagementService>();
 
 var app = builder.Build();
+
+app.Logger.LogInformation(
+    "MBM API started Environment={Environment} Urls={Urls}",
+    app.Environment.EnvironmentName,
+    string.Join(", ", app.Urls));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -1,61 +1,164 @@
 @import '../admin-shared.css';
 
-.cards {
+.section--kpi {
+  padding: 24px;
+}
+
+.section--kpi::before {
+  height: 4px;
+}
+
+.kpi-section-title {
+  margin: 20px 0 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--admin-muted);
+  padding-left: 10px;
+  border-left: 3px solid var(--admin-accent);
+}
+
+.section--kpi .kpi-section-title:first-child {
+  margin-top: 0;
+}
+
+.kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin: 18px 0 24px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 0 0 8px;
 }
 
-.card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px;
+.section--kpi .kpi-grid:last-child {
+  margin-bottom: 0;
+}
+
+.kpi-card {
+  position: relative;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius-xl);
+  padding: 20px;
   text-align: left;
+  overflow: hidden;
+  box-shadow: var(--admin-shadow);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.card-clickable {
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--admin-border), transparent);
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--admin-accent) 0%, var(--admin-navy-mid) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.kpi-card-clickable {
   cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   width: 100%;
   font: inherit;
+  color: inherit;
+  text-decoration: none;
 }
 
-.card-clickable:hover {
-  border-color: #dc2626;
-  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
-  transform: translateY(-1px);
+.kpi-card-clickable:hover {
+  border-color: var(--red-mid, rgba(230, 57, 70, 0.35));
+  box-shadow: var(--admin-shadow-md);
+  transform: translateY(-2px);
 }
 
-.card-clickable:focus-visible {
-  outline: 2px solid #dc2626;
+.kpi-card-clickable:hover::before {
+  opacity: 1;
+}
+
+.kpi-card-clickable:focus-visible {
+  outline: 2px solid var(--admin-accent);
   outline-offset: 2px;
 }
 
-.card-highlight {
-  border-color: #fecaca;
-  background: #fffbfb;
+.kpi-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.card-warn .value {
-  color: #b45309;
+.kpi-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--admin-accent-soft);
+  color: var(--admin-accent);
+  border: 1px solid var(--red-mid, rgba(230, 57, 70, 0.35));
+  flex-shrink: 0;
 }
 
-.card-hint {
-  margin-top: 8px;
-  font-size: 0.78rem;
-  color: #9ca3af;
+.kpi-card__icon svg {
+  width: 22px;
+  height: 22px;
 }
 
-.label {
-  color: #6b7280;
-  font-size: 0.85rem;
+.kpi-card__icon--blue {
+  background: var(--admin-info-bg);
+  color: var(--admin-info);
+  border-color: rgba(15, 52, 96, 0.2);
 }
 
-.value {
-  font-size: 1.6rem;
+.kpi-card__icon--green {
+  background: var(--admin-success-bg);
+  color: var(--admin-success);
+  border-color: rgba(45, 106, 79, 0.25);
+}
+
+.kpi-card__icon--amber {
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+  border-color: #fde68a;
+}
+
+.kpi-card__icon--slate {
+  background: var(--admin-bg);
+  color: var(--admin-navy-mid);
+  border-color: var(--admin-border);
+}
+
+.kpi-label {
+  color: var(--admin-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.kpi-value {
+  font-size: 1.75rem;
   font-weight: 800;
-  color: #111827;
-  margin-top: 6px;
+  letter-spacing: -0.03em;
+  color: var(--admin-navy);
+  margin: 4px 0 0;
+  line-height: 1.1;
+}
+
+.kpi-hint {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--admin-accent);
 }

@@ -22,4 +22,19 @@ public sealed class ReportAuditLog
 
     [MaxLength(64)]
     public string? IpAddress { get; set; }
+
+    public Guid? RequestId { get; set; }
+
+    [MaxLength(2000)]
+    public string? Remarks { get; set; }
+
+    [MaxLength(500)]
+    public string? PreviousReportPath { get; set; }
+
+    [MaxLength(500)]
+    public string? NewReportPath { get; set; }
+
+    public string? PreviousValues { get; set; }
+
+    public string? NewValues { get; set; }
 }

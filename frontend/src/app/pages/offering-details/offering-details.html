@@ -22,7 +22,10 @@
       <div class="offering-cta-card" style="background:linear-gradient(135deg,#fff5f5,#ffe0e3);border:1px solid #fcd0d4">
         <h3 id="offeringCtaTitle">{{ off.ctaTitle }}</h3>
         <p id="offeringCtaDesc">{{ off.ctaDesc }}</p>
-        <app-offering-cta-actions [ctaTitle]="off.ctaTitle" />
+        <app-offering-cta-actions
+          [ctaTitle]="off.ctaTitle"
+          [schemeDiscoveryMode]="slug() === 'scheme-discovery'"
+          [offeringSlug]="slug()" />
       </div>
       <div class="sidebar-card">
         <h3>Included In</h3>

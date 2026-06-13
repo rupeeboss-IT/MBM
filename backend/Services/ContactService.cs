@@ -102,6 +102,76 @@ public sealed class ContactService : IContactService
             entity.Id);
     }
 
+    public async Task<(bool Success, string? Message, int? SubmissionId)> SubmitCallbackAsync(
+        string fullName,
+        string mobile,
+        int subjectId,
+        string message,
+        bool consentAccepted,
+        CancellationToken ct)
+    {
+        var nameErr = ValidateName(fullName);
+        if (nameErr != null) return (false, nameErr, null);
+
+        var mobileErr = ValidateMobile(mobile);
+        if (mobileErr != null) return (false, mobileErr, null);
+
+        if (!ContactSubjectCatalog.IsValid(subjectId))
+            return (false, "Please select a valid subject.", null);
+
+        var messageErr = ValidateMessage(message);
+        if (messageErr != null) return (false, messageErr, null);
+
+        if (consentAccepted != true)
+            return (false, "Consent is required to request a callback.", null);
+
+        try
+        {
+            await ContactSchemaBootstrap.EnsureAsync(_db, _log, ct);
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "ContactSubmissions table is not available.");
+            return (false, "Unable to send your message right now. Please try again.", null);
+        }
+
+        var now = DateTime.Now;
+        var entity = new ContactSubmission
+        {
+            FullName = fullName.Trim(),
+            Phone = mobile.Trim(),
+            Email = "",
+            SubjectId = subjectId,
+            Message = message.Trim(),
+            ConsentAccepted = true,
+            ConsentAcceptedAt = now,
+            CreatedAt = now,
+        };
+
+        try
+        {
+            await _db.ContactSubmissions.AddAsync(entity, ct);
+            await _db.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            _log.LogError(ex, "Failed to save callback submission.");
+            return (false, "Unable to send your message right now. Please try again.", null);
+        }
+
+        var emailResult = await _email.TrySendEmailsAsync(entity, ct, notifyCustomer: false);
+
+        _log.LogInformation(
+            "Callback submission {Id} saved (support email: {Support}).",
+            entity.Id,
+            emailResult.SupportNotified);
+
+        return (
+            true,
+            "Thank you! Our scheme expert will call you within 24 hours.",
+            entity.Id);
+    }
+
     private static string? ValidateName(string nameRaw)
     {
         var name = (nameRaw ?? "").Trim();

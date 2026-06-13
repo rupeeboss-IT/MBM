@@ -52,12 +52,12 @@ public sealed class ReportEmailService : IReportEmailService
     public string BuildBody(
         string customerName,
         string memberId,
-        DateTime reportGeneratedUtc,
+        DateTime reportGeneratedAt,
         string reportUrl,
         string? supportEmail = null)
     {
         var template = LoadTemplate();
-        var dateText = reportGeneratedUtc.ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
+        var dateText = AppDateTime.FormatDate(reportGeneratedAt);
         var support = string.IsNullOrWhiteSpace(supportEmail)
             ? _invoiceSettings.SupportEmail
             : supportEmail.Trim();

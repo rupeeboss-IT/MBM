@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RB_Website_API.Auth;
 using RB_Website_API.Services;
@@ -20,21 +21,44 @@ public sealed class AuthController : ControllerBase
     [HttpPost("otp/email/send")]
     public async Task<ActionResult<ApiOk>> SendEmailOtp([FromBody] SendEmailOtpRequest? req, CancellationToken ct)
     {
-        if (string.IsNullOrWhiteSpace(req?.Email)) return BadRequest(new ApiOk(false, "Email is required."));
+        if (string.IsNullOrWhiteSpace(req?.Email))
+        {
+            _log.LogWarning("Registration OTP request rejected: email is required.");
+            return BadRequest(new ApiOk(false, "Email is required."));
+        }
+
+        var email = req.Email.Trim();
+        _log.LogInformation("Registration OTP request received for {Email}", email);
+        _log.LogInformation("Registration OTP email validation passed for {Email}", email);
+
+        var sw = Stopwatch.StartNew();
         try
         {
-            await _otp.SendEmailOtpAsync(req.Email.Trim(), ct);
+            await _otp.SendEmailOtpAsync(email, ct);
+            _log.LogInformation(
+                "Registration OTP send completed for {Email} ElapsedMs={ElapsedMs}",
+                email,
+                sw.ElapsedMilliseconds);
             return Ok(new ApiOk(true, "OTP sent to email."));
         }
         catch (OtpRateLimitExceededException ex)
         {
-            _log.LogWarning(ex, "Email OTP rate limit for {Email}", req.Email);
+            _log.LogWarning(
+                ex,
+                "Email OTP rate limit for {Email} ElapsedMs={ElapsedMs}",
+                email,
+                sw.ElapsedMilliseconds);
             return StatusCode(StatusCodes.Status429TooManyRequests,
                 new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "send_email_otp")));
         }
         catch (Exception ex)
         {
-            _log.LogError(ex, "Send email OTP failed for {Email}", req.Email);
+            _log.LogError(
+                ex,
+                "Send email OTP failed for {Email} ElapsedMs={ElapsedMs} ClientDisconnected={ClientDisconnected}",
+                email,
+                sw.ElapsedMilliseconds,
+                ct.IsCancellationRequested);
             return BadRequest(new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "send_email_otp")));
         }
     }

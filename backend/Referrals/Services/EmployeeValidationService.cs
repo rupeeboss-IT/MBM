@@ -1,12 +1,18 @@
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RB_Website_API.Auth;
 using RB_Website_API.Data;
+using RB_Website_API.Referrals.Models;
 
 namespace RB_Website_API.Referrals.Services;
 
 public sealed class EmployeeValidationService : IEmployeeValidationService
 {
+    private static readonly Regex PanRegex = new(
+        @"^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
     private readonly ReferralDbContext _db;
     private readonly ReferralSettings _settings;
     private readonly ILogger<EmployeeValidationService> _logger;
@@ -21,45 +27,81 @@ public sealed class EmployeeValidationService : IEmployeeValidationService
         _logger = logger;
     }
 
-    public async Task<EmployeeValidationResult> ValidateReferralCodeAsync(string referralCode, CancellationToken ct)
+    public async Task<ReferralValidationResult> ValidateReferralCodeAsync(string referralCode, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(referralCode))
-            return new EmployeeValidationResult(false, "Referral code is required.");
+            return new ReferralValidationResult(false, "Referral code is required.");
 
         var code = referralCode.Trim();
         try
         {
-            var emp = await _db.EmployeeMaster.AsNoTracking()
-                .Where(e => e.EmpId == Convert.ToInt64(code))
-                .Select(e => new { e.Emp_Code, e.Emp_Name, e.EmpId, e.Is_Active })
+            if (long.TryParse(code, out var empId))
+            {
+                var emp = await _db.EmployeeMaster.AsNoTracking()
+                    .Where(e => e.EmpId == empId)
+                    .Select(e => new { e.Emp_Code, e.Emp_Name, e.EmpId, e.Is_Active })
+                    .FirstOrDefaultAsync(ct);
+
+                if (emp is not null)
+                {
+                    if (!emp.Is_Active)
+                        return new ReferralValidationResult(false, "Referral code is inactive.");
+
+                    return new ReferralValidationResult(
+                        true,
+                        "Valid referral code.",
+                        ReferralType.Employee,
+                        emp.Emp_Name,
+                        emp.EmpId,
+                        BrokerId: null,
+                        emp.Emp_Code,
+                        emp.Emp_Code);
+                }
+            }
+
+            if (!PanRegex.IsMatch(code))
+                return new ReferralValidationResult(false, "Invalid referral code.");
+
+            var normalizedPan = code.ToUpperInvariant();
+            var broker = await _db.BrokerMaster.AsNoTracking()
+                .Where(b => b.PAN_No.ToUpper() == normalizedPan && b.Is_Active == 1)
+                .Select(b => new { b.Broker_id, b.Broker_Name, b.PAN_No, b.Emp_Code })
                 .FirstOrDefaultAsync(ct);
 
-            if (emp is null)
-                return new EmployeeValidationResult(false, "Invalid referral code.");
+            if (broker is null)
+                return new ReferralValidationResult(false, "Invalid referral code.");
 
-            if (!emp.Is_Active)
-                return new EmployeeValidationResult(false, "Referral code is inactive.");
-
-            return new EmployeeValidationResult(true, "Valid referral code.", emp.EmpId, emp.Emp_Name, emp.Emp_Code);
+            return new ReferralValidationResult(
+                true,
+                "Valid referral code.",
+                ReferralType.RBA,
+                broker.Broker_Name,
+                EmployeeId: null,
+                broker.Broker_id,
+                normalizedPan,
+                broker.Emp_Code);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error validating referral code.");
-            return new EmployeeValidationResult(false, "Could not validate referral code right now. Please try again.");
+            return new ReferralValidationResult(false, "Could not validate referral code right now. Please try again.");
         }
     }
 
-    public async Task<ResolvedEmployee?> ResolveEmployeeForLeadAsync(string? referralCode, CancellationToken ct)
+    public async Task<ResolvedReferral?> ResolveReferralForLeadAsync(string? referralCode, CancellationToken ct)
     {
         if (!string.IsNullOrWhiteSpace(referralCode))
         {
             var validated = await ValidateReferralCodeAsync(referralCode, ct);
-            if (validated.IsValid && validated.EmployeeId is not null)
+            if (validated.IsValid && validated.ReferralType is not null)
             {
-                return new ResolvedEmployee(
-                    validated.EmployeeId.Value,
-                    validated.EmployeeName ?? "",
+                return new ResolvedReferral(
+                    validated.ReferralType.Value,
+                    validated.DisplayName ?? "",
                     validated.ReferralCode ?? referralCode.Trim(),
+                    validated.EmpCode ?? "",
+                    validated.EmployeeId,
+                    validated.BrokerId,
                     UsedDefaultEmployee: false);
             }
         }
@@ -82,11 +124,13 @@ public sealed class EmployeeValidationService : IEmployeeValidationService
             return null;
         }
 
-        return new ResolvedEmployee(
-            defaultEmp.EmpId,
+        return new ResolvedReferral(
+            ReferralType.Employee,
             defaultEmp.Emp_Name,
             defaultEmp.Emp_Code,
+            defaultEmp.Emp_Code,
+            defaultEmp.EmpId,
+            BrokerId: null,
             UsedDefaultEmployee: true);
     }
 }
-

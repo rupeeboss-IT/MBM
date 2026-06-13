@@ -35,7 +35,10 @@ public sealed class ContactEmailService : IContactEmailService
         _logger = logger;
     }
 
-    public async Task<ContactEmailResult> TrySendEmailsAsync(ContactSubmission submission, CancellationToken ct)
+    public async Task<ContactEmailResult> TrySendEmailsAsync(
+        ContactSubmission submission,
+        CancellationToken ct,
+        bool notifyCustomer = true)
     {
         if (!IsSharedSmtpConfigured() && !IsContactSmtpConfigured())
         {
@@ -46,7 +49,7 @@ public sealed class ContactEmailService : IContactEmailService
         }
 
         // Customer first (external inbox) — uses EmailSettings SMTP for better deliverability.
-        var customerSent = await TrySendCustomerConfirmationAsync(submission, ct);
+        var customerSent = notifyCustomer && await TrySendCustomerConfirmationAsync(submission, ct);
         var supportSent = await TrySendSupportNotificationAsync(submission, ct);
         return new ContactEmailResult(customerSent, supportSent);
     }
@@ -132,12 +135,16 @@ public sealed class ContactEmailService : IContactEmailService
             var subject = $"New contact enquiry — {subjectLabel} (#{submission.Id})";
             var body = BuildSupportBody(submission, subjectLabel);
 
+            var replyTo = submission.Email?.Trim();
+            if (string.IsNullOrWhiteSpace(replyTo))
+                replyTo = null;
+
             await SendMailAsync(
                 supportTo,
                 subject,
                 body,
                 ct,
-                replyToEmail: submission.Email.Trim(),
+                replyToEmail: replyTo,
                 useContactSmtpCredentials: IsContactSmtpConfigured());
 
             return true;
@@ -181,13 +188,13 @@ public sealed class ContactEmailService : IContactEmailService
         string customerName,
         string customerEmail,
         string subjectLabel,
-        DateTime submittedUtc,
+        DateTime submittedAt,
         string siteUrl,
         string supportEmail,
         string supportPhone)
     {
         var template = LoadTemplate(CustomerTemplateFile);
-        var dateText = submittedUtc.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt", CultureInfo.InvariantCulture);
+        var dateText = AppDateTime.FormatDateTime(submittedAt);
 
         return template
             .Replace("{{CustomerName}}", Encode(customerName))
@@ -203,14 +210,17 @@ public sealed class ContactEmailService : IContactEmailService
     private string BuildSupportBody(ContactSubmission submission, string subjectLabel)
     {
         var template = LoadTemplate(SupportTemplateFile);
-        var dateText = submission.CreatedAt.ToLocalTime()
-            .ToString("dd MMM yyyy, hh:mm tt", CultureInfo.InvariantCulture);
+        var dateText = AppDateTime.FormatDateTime(submission.CreatedAt);
+
+        var emailDisplay = string.IsNullOrWhiteSpace(submission.Email)
+            ? "Not provided (phone callback)"
+            : submission.Email;
 
         return template
             .Replace("{{SubmissionId}}", submission.Id.ToString(CultureInfo.InvariantCulture))
             .Replace("{{FullName}}", Encode(submission.FullName))
             .Replace("{{Phone}}", Encode(submission.Phone))
-            .Replace("{{Email}}", Encode(submission.Email))
+            .Replace("{{Email}}", Encode(emailDisplay))
             .Replace("{{SubjectLabel}}", Encode(subjectLabel))
             .Replace("{{Message}}", EncodeMultiline(submission.Message))
             .Replace("{{SubmittedAt}}", Encode(dateText))

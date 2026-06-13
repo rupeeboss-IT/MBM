@@ -1,23 +1,30 @@
+using RB_Website_API.Referrals.Models;
+
 namespace RB_Website_API.Referrals.Services;
 
 public interface IEmployeeValidationService
 {
-    Task<EmployeeValidationResult> ValidateReferralCodeAsync(string referralCode, CancellationToken ct);
+    Task<ReferralValidationResult> ValidateReferralCodeAsync(string referralCode, CancellationToken ct);
 
     /// <summary>Uses referral code when valid; otherwise default employee from configuration.</summary>
-    Task<ResolvedEmployee?> ResolveEmployeeForLeadAsync(string? referralCode, CancellationToken ct);
+    Task<ResolvedReferral?> ResolveReferralForLeadAsync(string? referralCode, CancellationToken ct);
 }
 
-public sealed record ResolvedEmployee(
-    int EmployeeId,
-    string EmployeeName,
+public sealed record ResolvedReferral(
+    ReferralType ReferralType,
+    string DisplayName,
     string ReferralCode,
+    string EmpCode,
+    int? EmployeeId,
+    int? BrokerId,
     bool UsedDefaultEmployee);
 
-public sealed record EmployeeValidationResult(
+public sealed record ReferralValidationResult(
     bool IsValid,
     string? Message = null,
+    ReferralType? ReferralType = null,
+    string? DisplayName = null,
     int? EmployeeId = null,
-    string? EmployeeName = null,
-    string? ReferralCode = null);
-
+    int? BrokerId = null,
+    string? ReferralCode = null,
+    string? EmpCode = null);

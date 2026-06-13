@@ -62,9 +62,19 @@ public sealed class LeadPushService : ILeadPushService
         if (string.IsNullOrWhiteSpace(empCode))
             empCode = "RB600000251";
 
-        var employee = await _employees.ResolveEmployeeForLeadAsync(referralRow?.ReferralCode, ct);
-        if (employee is not null && !string.IsNullOrWhiteSpace(employee.ReferralCode))
-            empCode = employee.ReferralCode;
+        var leadType = _settings.LeadType;
+        int? brokerId = null;
+
+        var referral = await _employees.ResolveReferralForLeadAsync(referralRow?.ReferralCode, ct);
+        if (referral is not null && !string.IsNullOrWhiteSpace(referral.EmpCode))
+        {
+            empCode = referral.EmpCode;
+            if (referral.ReferralType == ReferralType.RBA)
+            {
+                leadType = "RBA";
+                brokerId = referral.BrokerId;
+            }
+        }
 
         var now = DateTime.Now;
 
@@ -78,9 +88,10 @@ public sealed class LeadPushService : ILeadPushService
             profession = _settings.DefaultProfession,
             source_id = _settings.SourceId,
             lead_source = Truncate(_settings.LeadSource, 500),
-            lead_type = Truncate(_settings.LeadType, 50),
+            lead_type = Truncate(leadType, 50),
             campaignName = Truncate(_settings.CampaignName, 200),
             emp_code = Truncate(empCode, 20),
+            broker_id = brokerId,
             Lead_Status_id = _settings.LeadStatusId,
             sysdate = now,
             lead_date = now,
@@ -92,22 +103,21 @@ public sealed class LeadPushService : ILeadPushService
             _referralDb.LeadData.Add(lead);
             await _referralDb.SaveChangesAsync(ct);
 
-            var nowUtc = DateTime.Now;
             if (referralRow is null)
             {
                 _db.PaymentOrderReferrals.Add(new Models.PaymentOrderReferral
                 {
                     PaymentOrderId = paymentOrderId,
                     ReferralCode = null,
-                    LeadPushedAt = nowUtc,
-                    CreatedAt = nowUtc,
-                    UpdatedAt = nowUtc,
+                    LeadPushedAt = now,
+                    CreatedAt = now,
+                    UpdatedAt = now,
                 });
             }
             else
             {
-                referralRow.LeadPushedAt = nowUtc;
-                referralRow.UpdatedAt = nowUtc;
+                referralRow.LeadPushedAt = now;
+                referralRow.UpdatedAt = now;
             }
 
             await _db.SaveChangesAsync(ct);

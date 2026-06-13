@@ -10,4 +10,12 @@ public interface IContactService
         string message,
         bool consentAccepted,
         CancellationToken ct);
+
+    Task<(bool Success, string? Message, int? SubmissionId)> SubmitCallbackAsync(
+        string fullName,
+        string mobile,
+        int subjectId,
+        string message,
+        bool consentAccepted,
+        CancellationToken ct);
 }

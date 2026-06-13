@@ -1,204 +1,161 @@
 <div class="admin-wrap">
   <div class="admin-topbar">
     <div>
+      <span class="admin-eyebrow">Executive overview</span>
       <h2>Admin Dashboard</h2>
-      <div class="muted">Click any number to view full details. Track subscriptions ending soon.</div>
+      <div class="muted">Key metrics for your platform. Open any card for the full listing.</div>
     </div>
     <div class="actions">
-      <a class="btn btn-outline" href="/home">Go to Website</a>
+      <a class="btn btn-outline" href="/home">Website</a>
       <button class="btn" type="button" (click)="refresh()" [disabled]="loading()">Refresh</button>
-      <button class="btn btn-outline" type="button" (click)="logout()" [disabled]="loading()">
-        Logout
+      <button class="btn btn-outline" type="button" (click)="logout()" [disabled]="loading()">Logout</button>
+    </div>
+  </div>
+
+  <app-admin-list-toolbar
+    panelTitle="Date range for KPIs"
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="'latest'"
+    [showSort]="false"
+    [showExport]="false"
+    [showSearch]="false"
+    [disabled]="loading()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (applyFilters)="applyDateFilter()"
+  />
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading dashboard metrics…</span>
+      </div>
+    </div>
+  }
+
+  @if (!loading() && userStats(); as s) {
+    <section class="section section--kpi">
+      <p class="kpi-section-title">User management</p>
+      <div class="kpi-grid">
+        @if (isSuperAdmin()) {
+          <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/admins" style="text-decoration:none;color:inherit">
+            <div class="kpi-label">Total Admins</div>
+            <p class="kpi-value">{{ s.totalAdmins }}</p>
+            <div class="kpi-hint">Active {{ s.activeAdmins }} · Inactive {{ s.inactiveAdmins }}</div>
+          </a>
+        }
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/partners" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Partners</div>
+          <p class="kpi-value">{{ s.totalPartners }}</p>
+          <div class="kpi-hint">Active {{ s.activePartners }} · Inactive {{ s.inactivePartners }}</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/members" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Members</div>
+          <p class="kpi-value">{{ s.totalMembers }}</p>
+          <div class="kpi-hint">Active {{ s.activeMembers }} · Inactive {{ s.inactiveMembers }}</div>
+        </a>
+      </div>
+    </section>
+  }
+
+  @if (!loading() && counts(); as c) {
+    <section class="section section--kpi">
+    <p class="kpi-section-title">Platform metrics</p>
+    <div class="kpi-grid">
+      <a class="kpi-card kpi-card-clickable" routerLink="/admin-dashboard/detail/members" style="text-decoration:none;color:inherit">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+        </div>
+        <div class="kpi-label">Total Members</div>
+        <p class="kpi-value">{{ c.members }}</p>
+        <div class="kpi-hint">Manage all members →</div>
+      </a>
+
+      <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('payments')">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon kpi-card__icon--green">₹
+          </div>
+        </div>
+        <div class="kpi-label">Total Payments</div>
+        <p class="kpi-value">{{ c.payments }}</p>
+        <div class="kpi-hint">Payment history →</div>
+      </button>
+
+      <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('plans')">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon kpi-card__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+        </div>
+        <div class="kpi-label">Active Plans</div>
+        <p class="kpi-value">{{ c.plans }}</p>
+        <div class="kpi-hint">Membership plans →</div>
+      </button>
+
+      <a class="kpi-card kpi-card-clickable" routerLink="/admin-reports/history" style="text-decoration:none;color:inherit">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon kpi-card__icon--amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+          </div>
+        </div>
+        <div class="kpi-label">Reports Generated</div>
+        <p class="kpi-value">{{ c.reportsGenerated }}</p>
+        <div class="kpi-hint">Report history →</div>
+      </a>
+
+      <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('payment-orders')">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon kpi-card__icon--slate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+          </div>
+        </div>
+        <div class="kpi-label">Payment Orders</div>
+        <p class="kpi-value">{{ c.paymentOrders }}</p>
+        <div class="kpi-hint">All orders →</div>
+      </button>
+
+      @if (isSuperAdmin()) {
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/admins" style="text-decoration:none;color:inherit">
+          <div class="kpi-card__top">
+            <div class="kpi-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-label">Admin Users</div>
+          <p class="kpi-value">↗</p>
+          <div class="kpi-hint">Manage admins →</div>
+        </a>
+      }
+    </div>
+
+    <p class="kpi-section-title">Content</p>
+    <div class="kpi-grid">
+      <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('blogs')">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon kpi-card__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          </div>
+        </div>
+        <div class="kpi-label">Blogs &amp; News</div>
+        <p class="kpi-value">{{ c.blogs }}</p>
+        <div class="kpi-hint">Content list →</div>
+      </button>
+
+      <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('events')">
+        <div class="kpi-card__top">
+          <div class="kpi-card__icon kpi-card__icon--green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/></svg>
+          </div>
+        </div>
+        <div class="kpi-label">Events</div>
+        <p class="kpi-value">{{ c.events }}</p>
+        <div class="kpi-hint">Events list →</div>
       </button>
     </div>
-  </div>
-
-  <div class="cards" *ngIf="counts() as c">
-    <button type="button" class="card card-clickable" (click)="openDetail('members')">
-      <div class="label">Members</div>
-      <div class="value">{{ c.members }}</div>
-      <div class="card-hint">View all members →</div>
-    </button>
-    <button type="button" class="card card-clickable card-highlight" (click)="openDetail('subscriptions')">
-      <div class="label">Active Subscriptions</div>
-      <div class="value">{{ c.activeSubscriptions }}</div>
-      <div class="card-hint">Who has an active plan →</div>
-    </button>
-    <button type="button" class="card card-clickable card-warn" (click)="openDetail('expiring', { days: '30' })">
-      <div class="label">Expiring Soon (30 days)</div>
-      <div class="value">{{ c.expiringSoon }}</div>
-      <div class="card-hint">Renewal due dates →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('expired')">
-      <div class="label">Expired / Inactive</div>
-      <div class="value">{{ c.expiredSubscriptions }}</div>
-      <div class="card-hint">Ended subscriptions →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('payment-orders')">
-      <div class="label">Payment Orders</div>
-      <div class="value">{{ c.paymentOrders }}</div>
-      <div class="card-hint">All checkout attempts →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('payments')">
-      <div class="label">Payments</div>
-      <div class="value">{{ c.payments }}</div>
-      <div class="card-hint">Successful payments →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('plans')">
-      <div class="label">Membership Plans</div>
-      <div class="value">{{ c.plans }}</div>
-      <div class="card-hint">Pricing catalogue →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('users')">
-      <div class="label">All Users</div>
-      <div class="value">{{ c.users }}</div>
-      <div class="card-hint">Including admins →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('blogs')">
-      <div class="label">Blogs &amp; News</div>
-      <div class="value">{{ c.blogs }}</div>
-      <div class="card-hint">Articles on site →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('events')">
-      <div class="label">Events</div>
-      <div class="value">{{ c.events }}</div>
-      <div class="card-hint">Workshops &amp; summits →</div>
-    </button>
-    <button type="button" class="card card-clickable" (click)="openDetail('schemes')">
-      <div class="label">Schemes</div>
-      <div class="value">{{ c.schemes }}</div>
-      <div class="card-hint">Government schemes →</div>
-    </button>
-    <a class="card card-clickable" routerLink="/admin-reports/upload" style="text-decoration:none;color:inherit">
-      <div class="label">Reports Management</div>
-      <div class="value">↗</div>
-      <div class="card-hint">Upload &amp; view customer reports →</div>
-    </a>
-  </div>
-
-  <ng-container *ngIf="counts() as c">
-    <div class="section" *ngIf="c.expiringSoon > 0">
-      <div class="section-head">
-        <h3>Subscriptions ending soon</h3>
-        <button type="button" class="btn btn-primary" (click)="openDetail('expiring', { days: '30' })">
-          View all {{ c.expiringSoon }}
-        </button>
-      </div>
-      <p class="muted">Members whose plan ends within the next 30 days. Click the card above or “View all” for names and end dates.</p>
-    </div>
-  </ng-container>
-
-  <div class="section" *ngIf="isSuperAdmin()">
-    <h3>Create Admin User</h3>
-    <form class="form" [formGroup]="createForm" (ngSubmit)="createAdmin()">
-      <input placeholder="Full name" formControlName="fullName">
-      <input placeholder="Email" formControlName="email">
-      <input placeholder="Phone (10-digit)" formControlName="phone">
-      <input placeholder="Password (min 8 chars)" type="password" formControlName="password">
-      <button class="btn btn-primary" type="submit" [disabled]="loading()">Create</button>
-    </form>
-  </div>
-
-  <div class="section" *ngIf="isSuperAdmin()">
-    <div class="section-head">
-      <h3>Admin Users</h3>
-      <div class="section-tools">
-        <input
-          class="table-search"
-          type="search"
-          [value]="adminSearch()"
-          (input)="adminSearch.set(($any($event.target).value || ''))"
-          placeholder="Search admins..."
-        >
-      </div>
-    </div>
-    <div class="muted" *ngIf="(adminUsers()?.length ?? 0) === 0">No admin users found.</div>
-    <div class="table" *ngIf="filteredAdminUsers().length > 0">
-      <div class="row header">
-        <div>Name</div>
-        <div>Email</div>
-        <div>Phone</div>
-        <div>Status</div>
-        <div>Created</div>
-        <div>Actions</div>
-      </div>
-      <div class="row row-admin-dash" *ngFor="let u of filteredAdminUsers()">
-        <div class="text-truncate" data-label="Name" title="{{ u.fullName }}">{{ u.fullName }}</div>
-        <div class="text-truncate" data-label="Email" title="{{ u.email }}">{{ u.email }}</div>
-        <div class="text-truncate" data-label="Phone" title="{{ u.phone }}">{{ u.phone }}</div>
-        <div data-label="Status">
-          <button
-            class="btn"
-            type="button"
-            (click)="toggleActive(u)"
-            [disabled]="loading()"
-          >
-            {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
-          </button>
-        </div>
-        <div data-label="Created">{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
-        <div data-label="Actions">
-          <button
-            class="btn btn-danger"
-            type="button"
-            (click)="deleteUser(u.userId)"
-            [disabled]="loading() || u.isActive"
-            [title]="u.isActive ? 'Deactivate admin before deleting' : 'Delete admin'"
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="muted" *ngIf="(adminUsers()?.length ?? 0) > 0 && filteredAdminUsers().length === 0">
-      No admins match your search.
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head">
-      <h3>Members</h3>
-      <div class="section-tools">
-        <button type="button" class="btn btn-outline" (click)="openDetail('members')">Full list</button>
-        <input
-          class="table-search"
-          type="search"
-          [value]="memberSearch()"
-          (input)="memberSearch.set(($any($event.target).value || ''))"
-          placeholder="Search members..."
-        >
-      </div>
-    </div>
-    <div class="muted" *ngIf="(members()?.length ?? 0) === 0">No members found.</div>
-    <div class="table" *ngIf="filteredMembers().length > 0">
-      <div class="row header">
-        <div>Name</div>
-        <div>Email</div>
-        <div>Phone</div>
-        <div>Status</div>
-        <div>Created</div>
-        <div>Role</div>
-      </div>
-      <div class="row row-member-dash" *ngFor="let u of filteredMembers()">
-        <div class="text-truncate" data-label="Name" title="{{ u.fullName }}">{{ u.fullName }}</div>
-        <div class="text-truncate" data-label="Email" title="{{ u.email }}">{{ u.email }}</div>
-        <div class="text-truncate" data-label="Phone" title="{{ u.phone }}">{{ u.phone }}</div>
-        <div data-label="Status">
-          <button
-            class="btn"
-            type="button"
-            (click)="toggleMemberActive(u)"
-            [disabled]="loading()"
-          >
-            {{ u.isActive ? 'Active (click to deactivate)' : 'Inactive (click to activate)' }}
-          </button>
-        </div>
-        <div data-label="Created">{{ u.createdAt | date:'dd-MMM-yyyy' }}</div>
-        <div class="muted text-truncate" data-label="Role" title="{{ u.role }}">{{ u.role }}</div>
-      </div>
-    </div>
-    <div class="muted" *ngIf="(members()?.length ?? 0) > 0 && filteredMembers().length === 0">
-      No members match your search.
-    </div>
-  </div>
+    </section>
+  }
 </div>

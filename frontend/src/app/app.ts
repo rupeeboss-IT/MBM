@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SchemeDiscoveryModals } from './core/components/scheme-discovery-modals/scheme-discovery-modals';
 import { ToastContainer } from './core/components/toast-container/toast-container';
 import { Header } from "./header/header";
 import { Footer } from "./footer/footer";
@@ -8,6 +9,6 @@ import { Footer } from "./footer/footer";
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [Header, Footer, RouterOutlet, ToastContainer]
+  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals]
 })
 export class App {}
