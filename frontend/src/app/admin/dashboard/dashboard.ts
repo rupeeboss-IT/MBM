@@ -5,6 +5,9 @@ import { firstValueFrom } from 'rxjs';
 import { AdminListToolbar } from '../../core/components/admin-list-toolbar/admin-list-toolbar';
 import { AuthService } from '../../core/services/auth.service';
 import { UserManagementService, type UserManagementStats } from '../../core/services/user-management.service';
+import { VendorManagementService, type VendorManagementStats } from '../../core/services/vendor-management.service';
+import { LeadAttributionService, type LeadAttributionStats } from '../../core/services/lead-attribution.service';
+import { EnquiryManagementService, type EnquiryManagementStats } from '../../core/services/enquiry-management.service';
 import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
@@ -41,6 +44,9 @@ type DashboardCounts = {
 export class AdminDashboard {
   private readonly auth = inject(AuthService);
   private readonly userMgmt = inject(UserManagementService);
+  private readonly vendorMgmt = inject(VendorManagementService);
+  private readonly leadMgmt = inject(LeadAttributionService);
+  private readonly enquiryMgmt = inject(EnquiryManagementService);
   private readonly session = inject(AdminSessionService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
@@ -48,6 +54,9 @@ export class AdminDashboard {
   readonly loading = signal(false);
   readonly counts = signal<DashboardCounts | null>(null);
   readonly userStats = signal<UserManagementStats | null>(null);
+  readonly vendorStats = signal<VendorManagementStats | null>(null);
+  readonly leadStats = signal<LeadAttributionStats | null>(null);
+  readonly enquiryStats = signal<EnquiryManagementStats | null>(null);
   readonly isSuperAdmin = this.session.isSuperAdmin;
   readonly dateFrom = signal('');
   readonly dateTo = signal('');
@@ -76,6 +85,29 @@ export class AdminDashboard {
         if (um?.success && um.stats) this.userStats.set(um.stats);
       } catch {
         this.userStats.set(null);
+      }
+      try {
+        const vm = await firstValueFrom(this.vendorMgmt.stats());
+        if (vm?.success && vm.stats) this.vendorStats.set(vm.stats);
+      } catch {
+        this.vendorStats.set(null);
+      }
+      try {
+        const la = await firstValueFrom(
+          this.leadMgmt.dashboard({
+            dateFrom: this.dateFrom() || undefined,
+            dateTo: this.dateTo() || undefined,
+          }),
+        );
+        if (la?.success && la.stats) this.leadStats.set(la.stats);
+      } catch {
+        this.leadStats.set(null);
+      }
+      try {
+        const em = await firstValueFrom(this.enquiryMgmt.stats());
+        if (em?.success && em.stats) this.enquiryStats.set(em.stats);
+      } catch {
+        this.enquiryStats.set(null);
       }
     } catch (e: unknown) {
       this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.dashboard));

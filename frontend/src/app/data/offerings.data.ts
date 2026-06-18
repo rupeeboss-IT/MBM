@@ -1,3 +1,5 @@
+import { INFOMERICS_RATINGS_LOGO_SRC } from '../core/brand';
+
 export type OfferingSlug =
   | 'whatsapp-platform'
   | 'basic-website'
@@ -16,6 +18,7 @@ export interface OfferingModel {
   title: string;
   crumb: string;
   icon: string;
+  iconImage?: string;
   gradient: string;
   tagline: string;
   tags: string[];
@@ -144,7 +147,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
           </ul>
         </div>
         <div style="background:#e8f5e9;border:2px solid #2d6a4f;border-radius:12px;padding:1.3rem;position:relative">
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#2d6a4f;color:#fff;font-size:.72rem;font-weight:700;padding:.2rem .8rem;border-radius:20px;white-space:nowrap">Included in Premium/Pro</div>
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#2d6a4f;color:#fff;font-size:.72rem;font-weight:700;padding:.2rem .8rem;border-radius:20px;white-space:nowrap">Included in Pro</div>
           <div style="font-weight:800;color:#2d6a4f;font-size:1rem;margin-bottom:.3rem">🟩 Combo 4 — ₹15 Lakh Cover</div>
           <div style="font-size:.82rem;color:#555;margin-bottom:.8rem">Premium: ₹1,020 + GST/year</div>
           <ul style="font-size:.83rem;color:#444;padding-left:1rem">
@@ -162,7 +165,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       </ul>
       <h2 style="color:#2d6a4f">What You Get — Accident & Hospitalization Cover</h2>
       <ul class="offering-checklist">
-        <li>Accidental Death Benefit: ₹10 Lakh (Basic/Standard) or ₹15 Lakh (Premium/Pro)</li>
+        <li>Accidental Death Benefit: ₹10 Lakh (Basic/Standard/Premium) or ₹15 Lakh (Pro)</li>
         <li>Permanent Partial Disability (PPD) coverage</li>
         <li>Permanent Total Disability (PTD) coverage</li>
         <li>Daily Hospital Cash: ₹500/day for normal hospitalization</li>
@@ -466,6 +469,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     title: 'Infomerics Trust Score & Business Verification',
     crumb: 'Trust Score',
     icon: '⭐',
+    iconImage: INFOMERICS_RATINGS_LOGO_SRC,
     gradient: 'linear-gradient(135deg,#7b1fa2,#4a148c)',
     tagline: 'Get your business credibility verified by SEBI-registered Infomerics — build trust with banks and partners',
     tags: ['Infomerics Verified', 'SEBI Registered', 'Credit Rating Agency', 'Business Credibility'],

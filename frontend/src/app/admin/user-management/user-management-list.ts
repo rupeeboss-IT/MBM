@@ -18,6 +18,8 @@ import { exportToExcel } from '../../core/utils/admin-excel-export';
 import { sortIndicator, toggleColumnSort } from '../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
+import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { formatMemberPartnerId } from '../../core/utils/member-id-display.util';
 
 type RoleConfig = {
   role: UserManagementRole;
@@ -32,7 +34,7 @@ type RoleConfig = {
 @Component({
   selector: 'app-user-management-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LocalDatePipe, AdminListToolbar, AdminPagination],
+  imports: [CommonModule, FormsModule, RouterLink, LocalDatePipe, AdminListToolbar, AdminPagination, PasswordInputComponent],
   templateUrl: './user-management-list.html',
   styleUrls: ['../admin-shared.css', './user-management-list.css'],
 })
@@ -124,6 +126,10 @@ export class UserManagementList {
       this.page.set(1);
       void this.load();
     });
+  }
+
+  idValue(memberId?: string | null, role?: string | null): string {
+    return formatMemberPartnerId(memberId ?? null, role ?? null) ?? '—';
   }
 
   listQueryOpts(exportAll = false) {

@@ -1,0 +1,455 @@
+<div class="admin-wrap la-dash">
+
+  <div class="admin-topbar la-dash__topbar">
+
+    <div>
+
+      <span class="admin-eyebrow">Lead Attribution</span>
+
+      <h2>Attribution Dashboard</h2>
+
+      <div class="muted">Track which employees and partners sourced customers, memberships, and reports.</div>
+
+    </div>
+
+    <div class="actions">
+
+      <a class="btn btn-outline" routerLink="/admin/lead-attribution/customers">View Customers</a>
+
+      <button class="btn" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+
+    </div>
+
+  </div>
+
+
+
+  <app-admin-list-toolbar
+
+    panelTitle="Date range"
+
+    [dateFrom]="dateFrom()"
+
+    [dateTo]="dateTo()"
+
+    [sortPreset]="'latest'"
+
+    [showSort]="false"
+
+    [showExport]="false"
+
+    [showSearch]="false"
+
+    [disabled]="loading()"
+
+    (dateFromChange)="dateFrom.set($event)"
+
+    (dateToChange)="dateTo.set($event)"
+
+    (applyFilters)="applyDateFilter()"
+
+  />
+
+
+
+  @if (loading()) {
+
+    <div class="section section--loading">
+
+      <div class="admin-loading">
+
+        <div class="admin-spinner" aria-hidden="true"></div>
+
+        <span>Loading attribution metrics…</span>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  @if (!loading() && stats(); as s) {
+
+    <section class="la-dash-hero">
+
+      <div class="la-dash-hero__main">
+
+        <p class="la-dash-hero__label">Total leads in scope</p>
+
+        <p class="la-dash-hero__value">{{ s.totalLeads }}</p>
+
+        <p class="la-dash-hero__hint">
+
+          {{ s.totalMembershipSales }} membership sales · {{ s.totalReportRequests }} report activity
+
+        </p>
+
+      </div>
+
+      <div class="la-dash-hero__chips">
+
+        <a class="la-dash-chip" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Direct Website' }">
+
+          <span class="la-dash-chip__label">Direct</span>
+
+          <span class="la-dash-chip__value">{{ s.directLeads }}</span>
+
+        </a>
+
+        <a class="la-dash-chip" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Employee' }">
+
+          <span class="la-dash-chip__label">Employee</span>
+
+          <span class="la-dash-chip__value">{{ s.employeeLeads }}</span>
+
+        </a>
+
+        <a class="la-dash-chip" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Partner' }">
+
+          <span class="la-dash-chip__label">Partner</span>
+
+          <span class="la-dash-chip__value">{{ s.partnerLeads }}</span>
+
+        </a>
+
+        <a class="la-dash-chip la-dash-chip--muted" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Organic' }">
+
+          <span class="la-dash-chip__label">Organic</span>
+
+          <span class="la-dash-chip__value">{{ s.organicLeads }}</span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+
+    <div class="la-dash-layout">
+
+      <section class="la-dash-panel la-dash-panel--sources">
+
+        <div class="la-dash-panel__head">
+
+          <h3>Leads by source</h3>
+
+          <a class="la-dash-panel__link" routerLink="/admin/lead-attribution/customers">All customers →</a>
+
+        </div>
+
+        @if (breakdown().length === 0) {
+
+          <div class="admin-empty">No lead data for this range.</div>
+
+        } @else {
+
+          <div class="la-source-list">
+
+            @for (b of breakdown(); track b.sourceType) {
+
+              <a
+
+                class="la-source-row"
+
+                routerLink="/admin/lead-attribution/customers"
+
+                [queryParams]="{ sourceType: b.sourceType }"
+
+              >
+
+                <div class="la-source-row__meta">
+
+                  <strong>{{ b.sourceType }}</strong>
+
+                  <span>{{ breakdownPercent(b.count) }}%</span>
+
+                </div>
+
+                <div class="la-source-row__bar" aria-hidden="true">
+
+                  <span class="la-source-row__fill" [style.width.%]="breakdownPercent(b.count)"></span>
+
+                </div>
+
+                <span class="la-source-row__count">{{ b.count }}</span>
+
+              </a>
+
+            }
+
+          </div>
+
+        }
+
+      </section>
+
+
+
+      <section class="la-dash-panel la-dash-panel--metrics">
+
+        <h3>Sales activity</h3>
+
+        <div class="la-metric-stack">
+
+          <div class="la-metric-card">
+
+            <span class="la-metric-card__label">Membership sales</span>
+
+            <span class="la-metric-card__value">{{ s.totalMembershipSales }}</span>
+
+            <span class="la-metric-card__hint">Paid membership orders (excludes one-time reports)</span>
+
+          </div>
+
+          <div class="la-metric-card">
+
+            <span class="la-metric-card__label">Report activity</span>
+
+            <span class="la-metric-card__value">{{ s.totalReportRequests }}</span>
+
+            <span class="la-metric-card__hint">Report purchases + generated reports</span>
+
+          </div>
+
+          <div class="la-metric-card la-metric-card--accent">
+
+            <span class="la-metric-card__label">Unknown / campaign</span>
+
+            <span class="la-metric-card__value">{{ s.unknownLeads + s.campaignLeads }}</span>
+
+            <span class="la-metric-card__hint">Needs UTM / campaign capture for full visibility</span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <div class="la-performer-grid">
+
+      <section class="la-dash-panel la-performer-panel">
+
+        <h3>Top employees</h3>
+
+        @if (topEmployees().length === 0) {
+
+          <div class="admin-empty">No employee-attributed leads yet.</div>
+
+        } @else {
+
+          <div class="admin-table-wrap">
+
+            <div class="table">
+
+              <div class="row header row-la-performers">
+
+                <div>Employee</div>
+
+                <div>Leads</div>
+
+                <div>Payments</div>
+
+                <div>Revenue</div>
+
+                <div>Memberships</div>
+
+                <div>Reports</div>
+
+              </div>
+
+              @for (p of topEmployees(); track p.name + (p.code ?? '')) {
+
+                <button
+                  type="button"
+                  class="row row-la-performers la-performer-row"
+                  [disabled]="!p.code"
+                  (click)="openPerformer('employee', p)"
+                >
+
+                  <div>
+
+                    <strong>{{ p.name }}</strong>
+
+                    @if (p.code) {
+
+                      <div class="muted la-sub">{{ p.code }}</div>
+
+                    }
+
+                  </div>
+
+                  <div>{{ p.leadsGenerated }}</div>
+
+                  <div>{{ p.paymentCount }}</div>
+
+                  <div class="la-revenue">{{ formatAmount(p.revenuePaise) }}</div>
+
+                  <div>{{ p.membershipsSold }}</div>
+
+                  <div>{{ p.reportsGenerated }}</div>
+
+                </button>
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </section>
+
+
+
+      <section class="la-dash-panel la-performer-panel">
+
+        <h3>Top RBA partners</h3>
+
+        @if (topPartners().length === 0) {
+
+          <div class="admin-empty">No RBA-attributed leads yet.</div>
+
+        } @else {
+
+          <div class="admin-table-wrap">
+
+            <div class="table">
+
+              <div class="row header row-la-performers">
+
+                <div>RBA Partner</div>
+
+                <div>Leads</div>
+
+                <div>Payments</div>
+
+                <div>Revenue</div>
+
+                <div>Memberships</div>
+
+                <div>Reports</div>
+
+              </div>
+
+              @for (p of topPartners(); track p.name + (p.code ?? '')) {
+
+                <button
+                  type="button"
+                  class="row row-la-performers la-performer-row"
+                  [disabled]="!p.code"
+                  (click)="openPerformer('rba', p)"
+                >
+
+                  <div>
+
+                    <strong>{{ p.name }}</strong>
+
+                    @if (p.code) {
+
+                      <div class="muted la-sub">{{ p.code }}</div>
+
+                    }
+
+                  </div>
+
+                  <div>{{ p.leadsGenerated }}</div>
+
+                  <div>{{ p.paymentCount }}</div>
+
+                  <div class="la-revenue">{{ formatAmount(p.revenuePaise) }}</div>
+
+                  <div>{{ p.membershipsSold }}</div>
+
+                  <div>{{ p.reportsGenerated }}</div>
+
+                </button>
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </section>
+
+    </div>
+
+  }
+
+</div>
+
+@if (performerModalOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="performer-detail-title">
+    <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closePerformerModal()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title" id="performer-detail-title">
+        {{ performerModalKind() === 'employee' ? 'Employee' : 'RBA' }} revenue details
+      </h3>
+      <p class="admin-modal__sub">
+        {{ performerModalTitle() }}
+        @if (performerModalCode()) {
+          · {{ performerModalCode() }}
+        }
+        · {{ formatAmount(performerModalRevenue()) }}
+        @if (performerModalPayments().length > 0) {
+          · {{ performerModalPayments().length }} payment{{ performerModalPayments().length === 1 ? '' : 's' }}
+        }
+      </p>
+
+      @if (performerModalLoading()) {
+        <div class="admin-loading">
+          <div class="admin-spinner" aria-hidden="true"></div>
+          <span>Loading payment history…</span>
+        </div>
+      } @else if (performerModalPayments().length === 0) {
+        <div class="admin-empty">No paid orders with this referral code in the selected period.</div>
+      } @else {
+        <div class="admin-table-wrap">
+          <div class="table">
+            <div class="row header row-la-performer-payments">
+              <div>Customer</div>
+              <div>Member ID</div>
+              <div>Plan</div>
+              <div>Type</div>
+              <div>Date</div>
+              <div>Amount</div>
+            </div>
+            @for (p of performerModalPayments(); track trackPayment($index, p)) {
+              <div class="row row-la-performer-payments">
+                <div>
+                  <a class="la-link" [routerLink]="['/admin/lead-attribution/customers', p.userId]" (click)="closePerformerModal()">
+                    {{ p.fullName }}
+                  </a>
+                </div>
+                <div>{{ p.memberId }}</div>
+                <div>
+                  <strong>{{ p.planName }}</strong>
+                  <div class="muted la-sub">{{ p.planCode }}</div>
+                </div>
+                <div>{{ p.orderType }}</div>
+                <div>{{ p.paidAt | localDate }}</div>
+                <div>{{ formatAmount(p.totalAmountPaise) }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="admin-modal__actions">
+        <button type="button" class="btn btn-outline" (click)="closePerformerModal()">Close</button>
+      </div>
+    </div>
+  </div>
+}
+
+

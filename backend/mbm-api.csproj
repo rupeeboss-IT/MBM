@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Content Include="Templates\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

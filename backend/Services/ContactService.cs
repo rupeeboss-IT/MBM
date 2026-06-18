@@ -70,6 +70,8 @@ public sealed class ContactService : IContactService
             ConsentAccepted = true,
             ConsentAcceptedAt = now,
             CreatedAt = now,
+            Source = EnquirySources.ContactUsPage,
+            Status = EnquiryStatuses.New,
         };
 
         try
@@ -146,6 +148,8 @@ public sealed class ContactService : IContactService
             ConsentAccepted = true,
             ConsentAcceptedAt = now,
             CreatedAt = now,
+            Source = EnquirySources.SchemeDiscoveryPage,
+            Status = EnquiryStatuses.New,
         };
 
         try

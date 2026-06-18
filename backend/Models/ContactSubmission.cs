@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using RB_Website_API.Auth;
 
 namespace RB_Website_API.Models;
 
@@ -31,4 +32,17 @@ public sealed class ContactSubmission
     public DateTime CreatedAt { get; set; }
 
     public DateTime? ConfirmationEmailSentAt { get; set; }
+
+    [MaxLength(200)]
+    public string? CompanyName { get; set; }
+
+    [MaxLength(80)]
+    public string Source { get; set; } = EnquirySources.OtherPages;
+
+    [MaxLength(20)]
+    public string Status { get; set; } = EnquiryStatuses.New;
+
+    public Guid? AssignedToUserId { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
 }

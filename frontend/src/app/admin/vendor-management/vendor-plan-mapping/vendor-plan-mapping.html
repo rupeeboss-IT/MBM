@@ -1,0 +1,133 @@
+<div class="admin-wrap">
+
+  <div class="admin-topbar">
+
+    <div>
+
+      <span class="admin-eyebrow">Vendor Management</span>
+
+      <h2>Vendor Plan Mapping</h2>
+
+      <div class="muted">View which vendors are assigned to each membership plan.</div>
+
+    </div>
+
+    <div class="actions">
+
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="section">
+
+    @if (loading()) {
+
+      <div class="admin-loading">
+
+        <div class="admin-spinner" aria-hidden="true"></div>
+
+        <span>Loading plan mappings…</span>
+
+      </div>
+
+    } @else if (groups().length === 0) {
+
+      <div class="admin-empty">No plan mappings found.</div>
+
+    } @else {
+
+      <div class="vm-accordion">
+
+        @for (g of groups(); track g.planId) {
+
+          <div class="vm-accordion-item" [class.open]="isExpanded(g.planId)">
+
+            <button
+
+              type="button"
+
+              class="vm-accordion-trigger"
+
+              (click)="togglePlan(g.planId)"
+
+              [attr.aria-expanded]="isExpanded(g.planId)"
+
+            >
+
+              <span class="vm-accordion-title">
+
+                <strong>{{ g.planName }}</strong>
+
+                <span class="muted vm-accordion-code">{{ g.planCode }}</span>
+
+              </span>
+
+              <span class="vm-accordion-meta">
+
+                <span class="vm-accordion-count">{{ g.vendors.length }} vendor{{ g.vendors.length === 1 ? '' : 's' }}</span>
+
+                <span class="vm-accordion-caret" aria-hidden="true">▾</span>
+
+              </span>
+
+            </button>
+
+            @if (isExpanded(g.planId)) {
+
+              <div class="vm-accordion-body">
+
+                @if (g.vendors.length === 0) {
+
+                  <div class="admin-empty vm-mapping-empty">No vendors assigned.</div>
+
+                } @else {
+
+                  <ul class="vm-mapping-list">
+
+                    @for (v of g.vendors; track v.vendorId) {
+
+                      <li>
+
+                        <a [routerLink]="['/admin/vendor-management/vendors', v.vendorId]" class="vm-link">
+
+                          {{ v.serviceName }}
+
+                        </a>
+
+                        <span class="muted"> — {{ v.companyName }}</span>
+
+                        @if (!v.isActive) {
+
+                          <span class="badge badge-danger vm-mapping-badge">Inactive</span>
+
+                        }
+
+                      </li>
+
+                    }
+
+                  </ul>
+
+                }
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+

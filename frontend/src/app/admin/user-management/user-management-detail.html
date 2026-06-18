@@ -37,7 +37,7 @@
           <dt>Email</dt><dd>{{ u.email }}</dd>
           <dt>Phone</dt><dd>{{ u.phone }}</dd>
           @if (u.memberId) {
-            <dt>Member ID</dt><dd>{{ u.memberId }}</dd>
+            <dt>{{ idLabel(u.role) }}</dt><dd>{{ idValue(u.memberId, u.role) }}</dd>
           }
           @if (u.companyName) {
             <dt>Company</dt><dd>{{ u.companyName }}</dd>
@@ -127,7 +127,7 @@
     <label>Email *<input type="email" [ngModel]="formEmail()" (ngModelChange)="formEmail.set($event)" /></label>
     <label>Phone *<input type="tel" [ngModel]="formPhone()" (ngModelChange)="formPhone.set($event)" /></label>
     <label>Company<input type="text" [ngModel]="formCompany()" (ngModelChange)="formCompany.set($event)" /></label>
-    <label>New password (optional)<input type="password" [ngModel]="formPassword()" (ngModelChange)="formPassword.set($event)" autocomplete="new-password" /></label>
+    <label>New password (optional)<app-password-input [ngModel]="formPassword()" (ngModelChange)="formPassword.set($event)" autocomplete="new-password" /></label>
     <div class="um-modal-actions">
       <button class="btn btn-outline" type="button" (click)="closeEdit()" [disabled]="editSubmitting()">Cancel</button>
       <button class="btn" type="button" (click)="submitEdit()" [disabled]="editSubmitting()">Save</button>

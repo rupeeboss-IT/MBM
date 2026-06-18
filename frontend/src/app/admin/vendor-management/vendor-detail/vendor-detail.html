@@ -1,0 +1,297 @@
+<div class="admin-wrap">
+  <div class="admin-topbar vd-topbar">
+    <div class="vd-topbar__intro">
+      <span class="admin-eyebrow">Vendor Management</span>
+      <h2>Vendor Details</h2>
+      <a [routerLink]="listLink" class="vd-back">← Back to vendors</a>
+    </div>
+    @if (vendor(); as v) {
+      @if (isSuperAdmin()) {
+        <div class="actions vd-actions">
+          <button class="btn btn-outline" type="button" (click)="openEdit()" [disabled]="loading()">Edit</button>
+          @if (v.isActive) {
+            <button class="btn btn-outline" type="button" (click)="openDeactivate()" [disabled]="actionSubmitting()">Deactivate</button>
+          } @else {
+            <button class="btn btn-outline" type="button" (click)="activate()" [disabled]="actionSubmitting()">Activate</button>
+          }
+          <button class="btn btn-danger" type="button" (click)="openDelete()" [disabled]="actionSubmitting()">Delete</button>
+        </div>
+      }
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="section">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading vendor…</span>
+      </div>
+    </div>
+  } @else if (vendor(); as v) {
+    <section class="section vd-hero">
+      <div class="vd-hero__identity">
+        <p class="vd-hero__eyebrow">Service</p>
+        <h3 class="vd-hero__title">{{ v.serviceName }}</h3>
+        <p class="vd-hero__subtitle">{{ v.companyName }}</p>
+      </div>
+      <div class="vd-hero__aside">
+        @if (v.isActive) {
+          <span class="badge badge-success vd-hero__badge">Active</span>
+        } @else {
+          <span class="badge badge-danger vd-hero__badge">Inactive</span>
+        }
+        @if (v.assignedPlans.length > 0) {
+          <div class="vd-plan-chips" aria-label="Assigned plans">
+            @for (p of v.assignedPlans; track p.planId) {
+              <span class="vd-plan-chip">{{ p.name }}</span>
+            }
+          </div>
+        } @else {
+          <span class="muted vd-hero__no-plans">No plans assigned</span>
+        }
+      </div>
+    </section>
+
+    <div class="vd-layout">
+      <div class="vd-main">
+        <section class="vd-card">
+          <h4 class="vd-card__title">Contact information</h4>
+          <div class="vd-info-grid">
+            <div class="vd-info-item">
+              <span class="vd-info-label">Contact person</span>
+              <span class="vd-info-value">{{ v.contactPersonName }}</span>
+            </div>
+            <div class="vd-info-item">
+              <span class="vd-info-label">Mobile</span>
+              <span class="vd-info-value">
+                <a class="vd-link" [href]="'tel:' + v.mobile">{{ v.mobile }}</a>
+              </span>
+            </div>
+            <div class="vd-info-item">
+              <span class="vd-info-label">Alt mobile</span>
+              <span class="vd-info-value">
+                @if (v.alternateMobile) {
+                  <a class="vd-link" [href]="'tel:' + v.alternateMobile">{{ v.alternateMobile }}</a>
+                } @else {
+                  —
+                }
+              </span>
+            </div>
+            <div class="vd-info-item">
+              <span class="vd-info-label">Email</span>
+              <span class="vd-info-value vd-info-value--break">
+                <a class="vd-link" [href]="'mailto:' + v.email">{{ v.email }}</a>
+              </span>
+            </div>
+            <div class="vd-info-item">
+              <span class="vd-info-label">Alt email</span>
+              <span class="vd-info-value vd-info-value--break">
+                @if (v.alternateEmail) {
+                  <a class="vd-link" [href]="'mailto:' + v.alternateEmail">{{ v.alternateEmail }}</a>
+                } @else {
+                  —
+                }
+              </span>
+            </div>
+            <div class="vd-info-item">
+              <span class="vd-info-label">Website</span>
+              <span class="vd-info-value vd-info-value--break">
+                @if (websiteUrl(v.website); as url) {
+                  <a class="vd-link" [href]="url" target="_blank" rel="noopener noreferrer">{{ v.website }}</a>
+                } @else {
+                  —
+                }
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section class="vd-card">
+          <h4 class="vd-card__title">Address &amp; location</h4>
+          <div class="vd-info-grid vd-info-grid--single">
+            <div class="vd-info-item">
+              <span class="vd-info-label">Address</span>
+              <span class="vd-info-value">{{ v.address || '—' }}</span>
+            </div>
+            @if (v.city || v.state || v.country || v.pincode) {
+              <div class="vd-info-item">
+                <span class="vd-info-label">Location</span>
+                <span class="vd-info-value">{{ locationLabel(v) }}</span>
+              </div>
+            }
+          </div>
+        </section>
+
+        @if (v.remarks) {
+          <section class="vd-card">
+            <h4 class="vd-card__title">Remarks</h4>
+            <p class="vd-remarks">{{ v.remarks }}</p>
+          </section>
+        }
+      </div>
+
+      <aside class="vd-sidebar">
+        <section class="vd-card">
+          <h4 class="vd-card__title">Record details</h4>
+          <dl class="vd-meta-list">
+            <div class="vd-meta-row">
+              <dt>Created</dt>
+              <dd>{{ v.createdAt | localDate }}</dd>
+            </div>
+            <div class="vd-meta-row">
+              <dt>Updated</dt>
+              <dd>{{ v.updatedAt | localDate }}</dd>
+            </div>
+            <div class="vd-meta-row">
+              <dt>Status</dt>
+              <dd>
+                @if (v.isActive) {
+                  <span class="badge badge-success">Active</span>
+                } @else {
+                  <span class="badge badge-danger">Inactive</span>
+                }
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="vd-card vd-card--audit">
+          <h4 class="vd-card__title">Audit history</h4>
+          @if (auditItems().length === 0) {
+            <div class="admin-empty">No audit entries yet.</div>
+          } @else {
+            <div class="vd-audit-list">
+              @for (a of auditItems(); track a.id) {
+                <article class="vd-audit-item">
+                  <div class="vd-audit-item__head">
+                    <strong class="vd-audit-action">{{ a.action }}</strong>
+                    <time class="vd-audit-time muted">{{ a.performedOn | localDate }}</time>
+                  </div>
+                  <p class="vd-audit-by muted">By {{ a.performedByName || a.performedByUserId }}</p>
+                  @if (a.remarks) {
+                    <p class="vd-audit-remarks">{{ a.remarks }}</p>
+                  }
+                </article>
+              }
+            </div>
+            <app-admin-pagination
+              [page]="auditPage()"
+              [pageSize]="auditPageSize"
+              [total]="auditTotal()"
+              (pageChange)="onAuditPageChange($event)"
+            />
+          }
+        </section>
+      </aside>
+    </div>
+  }
+</div>
+
+@if (editOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeEdit()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Edit Vendor</h3>
+      <div class="vm-modal-form">
+        <div class="admin-field">
+          <label for="vd-service">Service Name <span class="required">*</span></label>
+          <input id="vd-service" class="admin-input" type="text" [ngModel]="formServiceName()" (ngModelChange)="formServiceName.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-company">Company Name <span class="required">*</span></label>
+          <input id="vd-company" class="admin-input" type="text" [ngModel]="formCompanyName()" (ngModelChange)="formCompanyName.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-contact">Contact Person <span class="required">*</span></label>
+          <input id="vd-contact" class="admin-input" type="text" [ngModel]="formContactPerson()" (ngModelChange)="formContactPerson.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-mobile">Mobile <span class="required">*</span></label>
+          <input id="vd-mobile" class="admin-input" type="tel" [ngModel]="formMobile()" (ngModelChange)="formMobile.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-alt-mobile">Alt Mobile</label>
+          <input id="vd-alt-mobile" class="admin-input" type="tel" [ngModel]="formAltMobile()" (ngModelChange)="formAltMobile.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-email">Email <span class="required">*</span></label>
+          <input id="vd-email" class="admin-input" type="email" [ngModel]="formEmail()" (ngModelChange)="formEmail.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-alt-email">Alt Email</label>
+          <input id="vd-alt-email" class="admin-input" type="email" [ngModel]="formAltEmail()" (ngModelChange)="formAltEmail.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-website">Website</label>
+          <input id="vd-website" class="admin-input" type="url" [ngModel]="formWebsite()" (ngModelChange)="formWebsite.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vd-address">Address</label>
+          <textarea id="vd-address" class="admin-input admin-textarea" rows="2" [ngModel]="formAddress()" (ngModelChange)="formAddress.set($event)"></textarea>
+        </div>
+        <div class="admin-field">
+          <label for="vd-remarks">Remarks</label>
+          <textarea id="vd-remarks" class="admin-input admin-textarea" rows="2" [ngModel]="formRemarks()" (ngModelChange)="formRemarks.set($event)"></textarea>
+        </div>
+        <label class="vm-checkbox-row">
+          <input type="checkbox" [ngModel]="formIsActive()" (ngModelChange)="formIsActive.set($event)" />
+          Active
+        </label>
+        @if (plans().length > 0) {
+          <fieldset class="vm-plan-fieldset">
+            <legend>Assign to Plans</legend>
+            <div class="vm-plan-grid">
+              @for (p of plans(); track p.planId) {
+                <label class="vm-plan-option">
+                  <input type="checkbox" [checked]="isPlanSelected(p.planId)" (change)="togglePlan(p.planId)" />
+                  {{ p.name }}
+                </label>
+              }
+            </div>
+          </fieldset>
+        }
+      </div>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closeEdit()" [disabled]="editSubmitting()">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="submitEdit()" [disabled]="editSubmitting()">
+          {{ editSubmitting() ? 'Saving…' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (deleteOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeDelete()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Delete Vendor</h3>
+      <p class="admin-modal__sub">Soft-delete this vendor?</p>
+      <div class="admin-field">
+        <label for="vd-delete-remarks">Remarks</label>
+        <input id="vd-delete-remarks" class="admin-input" type="text" [ngModel]="deleteRemarks()" (ngModelChange)="deleteRemarks.set($event)" />
+      </div>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closeDelete()" [disabled]="actionSubmitting()">Cancel</button>
+        <button class="btn btn-danger" type="button" (click)="confirmDelete()" [disabled]="actionSubmitting()">Delete</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (deactivateOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeDeactivate()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Deactivate Vendor</h3>
+      <div class="admin-field">
+        <label for="vd-deactivate-remarks">Remarks <span class="required">*</span></label>
+        <input id="vd-deactivate-remarks" class="admin-input" type="text" [ngModel]="deactivateRemarks()" (ngModelChange)="deactivateRemarks.set($event)" />
+      </div>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closeDeactivate()" [disabled]="actionSubmitting()">Cancel</button>
+        <button class="btn btn-danger" type="button" (click)="confirmDeactivate()" [disabled]="actionSubmitting()">Deactivate</button>
+      </div>
+    </div>
+  </div>
+}

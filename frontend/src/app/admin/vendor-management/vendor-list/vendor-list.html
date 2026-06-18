@@ -1,0 +1,251 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Vendor Management</span>
+      <h2>Vendors</h2>
+      <div class="muted">Search, filter, and manage external service vendors.</div>
+    </div>
+    <div class="actions">
+      @if (isSuperAdmin()) {
+        <button class="btn btn-primary" type="button" (click)="openCreate()" [disabled]="loading()">Add Vendor</button>
+      }
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <app-admin-list-toolbar
+    panelTitle="Filters"
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="sortPreset()"
+    [showSearch]="false"
+    [disabled]="loading()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (sortPresetChange)="sortPreset.set($event); applyFilters()"
+    (applyFilters)="applyFilters()"
+    (exportClick)="exportExcel()"
+  />
+
+  <div class="section">
+    <div class="vm-filters">
+      <input
+        type="search"
+        class="vm-search"
+        placeholder="Search service, company, contact, phone, email…"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+      <select class="vm-status" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); applyFilters()">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="btn btn-outline" type="button" (click)="applyFilters()" [disabled]="loading()">Apply</button>
+    </div>
+
+    @if (loading()) {
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading vendors…</span>
+      </div>
+    } @else if (vendors().length === 0) {
+      <div class="admin-empty">No vendors found.</div>
+    } @else {
+      <div class="admin-table-wrap">
+        <div class="table">
+          <div class="row header row-vm-vendors">
+            <div (click)="onSortColumn('service')">Service Name {{ sortIndicator(sortBy(), sortDir(), 'service') }}</div>
+            <div (click)="onSortColumn('company')">Company Name {{ sortIndicator(sortBy(), sortDir(), 'company') }}</div>
+            <div (click)="onSortColumn('contact')">Contact Person {{ sortIndicator(sortBy(), sortDir(), 'contact') }}</div>
+            <div>Mobile</div>
+            <div>Alt Mobile</div>
+            <div>Email</div>
+            <div>Alt Email</div>
+            <div>Assigned Plans</div>
+            <div>Status</div>
+            <div>Actions</div>
+          </div>
+          @for (v of vendors(); track v.vendorId) {
+            <div class="row row-vm-vendors">
+              <div>
+                <a [routerLink]="detailLink(v)" class="vm-link">{{ v.serviceName }}</a>
+              </div>
+              <div>{{ v.companyName }}</div>
+              <div>{{ v.contactPersonName }}</div>
+              <div>{{ v.mobile }}</div>
+              <div>{{ v.alternateMobile || '—' }}</div>
+              <div>{{ v.email }}</div>
+              <div>{{ v.alternateEmail || '—' }}</div>
+              <div class="vm-plans">{{ planNamesLabel(v.assignedPlanNames) }}</div>
+              <div>
+                @if (v.isActive) {
+                  <span class="badge badge-success">Active</span>
+                } @else {
+                  <span class="badge badge-danger">Inactive</span>
+                }
+              </div>
+              <div class="vm-actions">
+                <a class="btn btn-outline btn-sm" [routerLink]="detailLink(v)">View</a>
+                @if (isSuperAdmin()) {
+                  <button class="btn btn-outline btn-sm" type="button" (click)="openEdit(v)" [disabled]="actionSubmitting()">Edit</button>
+                  <button class="btn btn-outline btn-sm" type="button" (click)="openAssignPlans(v)" [disabled]="actionSubmitting()">Assign Plans</button>
+                  @if (v.isActive) {
+                    <button class="btn btn-outline btn-sm" type="button" (click)="openDeactivate(v)" [disabled]="actionSubmitting()">Deactivate</button>
+                  } @else {
+                    <button class="btn btn-outline btn-sm" type="button" (click)="confirmActivate(v)" [disabled]="actionSubmitting()">Activate</button>
+                  }
+                  <button class="btn btn-outline btn-sm" type="button" (click)="openDelete(v)" [disabled]="actionSubmitting()">Delete</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <app-admin-pagination
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="total()"
+        [disabled]="loading()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  </div>
+</div>
+
+@if (formOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeForm()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">{{ formMode() === 'create' ? 'Add Vendor' : 'Edit Vendor' }}</h3>
+      <div class="vm-modal-form">
+        <div class="admin-field">
+          <label for="vm-service">Service Name <span class="required">*</span></label>
+          <input id="vm-service" class="admin-input" type="text" [ngModel]="formServiceName()" (ngModelChange)="formServiceName.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-company">Company Name <span class="required">*</span></label>
+          <input id="vm-company" class="admin-input" type="text" [ngModel]="formCompanyName()" (ngModelChange)="formCompanyName.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-contact">Contact Person <span class="required">*</span></label>
+          <input id="vm-contact" class="admin-input" type="text" [ngModel]="formContactPerson()" (ngModelChange)="formContactPerson.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-mobile">Mobile <span class="required">*</span></label>
+          <input id="vm-mobile" class="admin-input" type="tel" [ngModel]="formMobile()" (ngModelChange)="formMobile.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-alt-mobile">Alt Mobile</label>
+          <input id="vm-alt-mobile" class="admin-input" type="tel" [ngModel]="formAltMobile()" (ngModelChange)="formAltMobile.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-email">Email <span class="required">*</span></label>
+          <input id="vm-email" class="admin-input" type="email" [ngModel]="formEmail()" (ngModelChange)="formEmail.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-alt-email">Alt Email</label>
+          <input id="vm-alt-email" class="admin-input" type="email" [ngModel]="formAltEmail()" (ngModelChange)="formAltEmail.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-website">Website</label>
+          <input id="vm-website" class="admin-input" type="url" [ngModel]="formWebsite()" (ngModelChange)="formWebsite.set($event)" />
+        </div>
+        <div class="admin-field">
+          <label for="vm-address">Address</label>
+          <textarea id="vm-address" class="admin-input admin-textarea" rows="2" [ngModel]="formAddress()" (ngModelChange)="formAddress.set($event)"></textarea>
+        </div>
+        <div class="admin-field">
+          <label for="vm-remarks">Remarks</label>
+          <textarea id="vm-remarks" class="admin-input admin-textarea" rows="2" [ngModel]="formRemarks()" (ngModelChange)="formRemarks.set($event)"></textarea>
+        </div>
+        <label class="vm-checkbox-row">
+          <input type="checkbox" [ngModel]="formIsActive()" (ngModelChange)="formIsActive.set($event)" />
+          Active
+        </label>
+        @if (plans().length > 0) {
+          <fieldset class="vm-plan-fieldset">
+            <legend>Assign to Plans</legend>
+            <div class="vm-plan-grid">
+              @for (p of plans(); track p.planId) {
+                <label class="vm-plan-option">
+                  <input type="checkbox" [checked]="isPlanSelected(p.planId)" (change)="togglePlan(p.planId)" />
+                  {{ p.name }}
+                </label>
+              }
+            </div>
+          </fieldset>
+        }
+      </div>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closeForm()" [disabled]="formSubmitting()">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="submitForm()" [disabled]="formSubmitting()">
+          {{ formSubmitting() ? 'Saving…' : (formMode() === 'create' ? 'Create Vendor' : 'Save Changes') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (plansOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closePlansModal()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Assign Plans</h3>
+      <p class="muted admin-modal__sub">{{ plansTarget()?.serviceName }} — {{ plansTarget()?.companyName }}</p>
+      <fieldset class="vm-plan-fieldset">
+        <div class="vm-plan-grid">
+          @for (p of plans(); track p.planId) {
+            <label class="vm-plan-option">
+              <input type="checkbox" [checked]="isPlansSelection(p.planId)" (change)="togglePlansSelection(p.planId)" />
+              {{ p.name }}
+            </label>
+          }
+        </div>
+      </fieldset>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closePlansModal()" [disabled]="actionSubmitting()">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="submitPlans()" [disabled]="actionSubmitting()">
+          {{ actionSubmitting() ? 'Saving…' : 'Save Plans' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (deleteOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeDelete()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Delete Vendor</h3>
+      <p class="admin-modal__sub">Soft-delete <strong>{{ deleteTarget()?.serviceName }}</strong>?</p>
+      <div class="admin-field">
+        <label for="vm-delete-remarks">Remarks</label>
+        <input id="vm-delete-remarks" class="admin-input" type="text" [ngModel]="deleteRemarks()" (ngModelChange)="deleteRemarks.set($event)" />
+      </div>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closeDelete()" [disabled]="actionSubmitting()">Cancel</button>
+        <button class="btn btn-danger" type="button" (click)="confirmDelete()" [disabled]="actionSubmitting()">Delete</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (deactivateOpen()) {
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
+    <div class="admin-modal" (click)="$event.stopPropagation()">
+      <button type="button" class="admin-modal__close" (click)="closeDeactivate()" aria-label="Close">&times;</button>
+      <h3 class="admin-modal__title">Deactivate Vendor</h3>
+      <p class="admin-modal__sub">Deactivate <strong>{{ deactivateTarget()?.serviceName }}</strong>?</p>
+      <div class="admin-field">
+        <label for="vm-deactivate-remarks">Remarks <span class="required">*</span></label>
+        <input id="vm-deactivate-remarks" class="admin-input" type="text" [ngModel]="deactivateRemarks()" (ngModelChange)="deactivateRemarks.set($event)" />
+      </div>
+      <div class="admin-modal__actions">
+        <button class="btn btn-outline" type="button" (click)="closeDeactivate()" [disabled]="actionSubmitting()">Cancel</button>
+        <button class="btn btn-danger" type="button" (click)="confirmDeactivate()" [disabled]="actionSubmitting()">Deactivate</button>
+      </div>
+    </div>
+  </div>
+}

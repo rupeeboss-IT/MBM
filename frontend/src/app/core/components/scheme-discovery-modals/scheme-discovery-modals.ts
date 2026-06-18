@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { UdyamRegistrationInputComponent } from '../udyam-registration-input/udyam-registration-input';
 import { LocalDatePipe } from '../../pipes/local-date.pipe';
 import { SchemeDiscoveryFlowService } from '../../services/scheme-discovery-flow.service';
+import { AuthSessionService } from '../../services/auth-session.service';
+import { formatMemberPartnerId, getIdLabel } from '../../utils/member-id-display.util';
 
 @Component({
   selector: 'app-scheme-discovery-modals',
@@ -14,6 +16,15 @@ import { SchemeDiscoveryFlowService } from '../../services/scheme-discovery-flow
 })
 export class SchemeDiscoveryModals {
   readonly flow = inject(SchemeDiscoveryFlowService);
+  private readonly session = inject(AuthSessionService);
+
+  idLabel(): string {
+    return getIdLabel(this.session.role());
+  }
+
+  idValue(memberId: string | null | undefined): string {
+    return formatMemberPartnerId(memberId ?? null, this.session.role()) ?? '—';
+  }
 
   readonly title = computed(() => {
     switch (this.flow.modal()) {
@@ -50,9 +61,9 @@ export class SchemeDiscoveryModals {
       case 'auth':
         return 'Are you an existing user or a new user?';
       case 'no_membership':
-        return 'Pay ₹1,180 for a one-time report — no annual membership required — or upgrade to Premium/Pro for included reports.';
+        return 'Pay ₹999 + GST for a one-time report — no annual membership required — or upgrade to Premium/Pro for included reports.';
       case 'referral':
-        return 'Government Scheme Discovery Report — ₹1,180 incl. GST';
+        return 'Government Scheme Discovery Report — ₹999 + GST (₹1,178.82 incl.)';
       case 'plan_choice':
         return 'Upgrade for included reports, or purchase a one-time report for your current membership period.';
       case 'report_exists':

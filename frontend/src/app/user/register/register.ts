@@ -16,6 +16,7 @@ import { bannedWordsNameValidator, nameNoRepeatsValidator, strictFullNameValidat
 import { passwordComplexityValidator } from '../../core/validators/password.validators';
 import { strictEmailValidator } from '../../core/validators/email.validators';
 import { indianMobileValidator } from '../../core/validators/phone.validators';
+import { PasswordInputComponent } from '../../core/components/password-input/password-input';
 
 type ClearbitCompany = { name: string; domain: string; logo: string | null };
 
@@ -30,7 +31,7 @@ type RegisterRes = {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, PasswordInputComponent],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -66,9 +67,6 @@ export class Register implements OnInit {
 
   readonly step = signal<1 | 2 | 3 | 4>(1);
   readonly createdUserId = signal<string | null>(null);
-
-  readonly showPass = signal(false);
-  readonly showConfirmPass = signal(false);
 
   readonly emailOtpSent = signal(false);
   readonly emailVerified = signal(false);

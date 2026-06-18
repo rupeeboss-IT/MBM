@@ -15,6 +15,7 @@ import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { scrollToRouteFragment } from '../../core/utils/scroll-to-fragment';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
+import { formatMemberPartnerId, getIdLabel } from '../../core/utils/member-id-display.util';
 
 @Component({
   selector: 'app-profile',
@@ -136,6 +137,14 @@ export class Profile {
     if (!bytes || bytes < 1024) return `${bytes || 0} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  idLabel(role?: string | null): string {
+    return getIdLabel(role ?? null);
+  }
+
+  idValue(memberId?: string | null, role?: string | null): string {
+    return formatMemberPartnerId(memberId ?? null, role ?? null) ?? '—';
   }
 
   async downloadReport(item: CustomerReportListItem) {

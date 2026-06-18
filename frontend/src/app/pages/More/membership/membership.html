@@ -300,7 +300,7 @@
     </div>
   </section>
 
-  <!-- Referral code popup (before Razorpay) -->
+  <!-- Advisor Code popup (before Razorpay) -->
   <div
     class="modal-overlay referral-modal-overlay"
     [class.open]="referralModalOpen()"
@@ -314,10 +314,10 @@
         class="modal-close"
         (click)="$event.stopPropagation(); closeReferralModal()"
         aria-label="Close">&times;</button>
-      <h2 id="referral-modal-title">Referral code</h2>
-      <p class="sub">Optional — have a referral code? Enter it below or skip to continue to payment.</p>
+      <h2 id="referral-modal-title">Advisor Code</h2>
+      <p class="sub">Optional — have a advisor code? Enter it below or skip to continue to payment.</p>
 
-      <label class="referral-modal-label" for="referral-code-input">Referral code</label>
+      <label class="referral-modal-label" for="referral-code-input">Advisor Code</label>
       <div
         class="referral-input-wrap"
         [class.referral-input-wrap--valid]="referralValidationState() === 'valid'"
@@ -329,7 +329,7 @@
           class="referral-modal-input"
           [ngModel]="referralCodeInput()"
           (ngModelChange)="onReferralModelChange($event)"
-          placeholder="Enter referral code"
+          placeholder="Enter Advisor Code"
           maxlength="50"
           autocomplete="off" />
         <span
@@ -339,11 +339,11 @@
         <span
           class="referral-input-status referral-input-status--valid"
           *ngIf="referralValidationState() === 'valid'"
-          aria-label="Valid referral code">✓</span>
+          aria-label="Valid advisor code">✓</span>
         <span
           class="referral-input-status referral-input-status--invalid"
           *ngIf="referralValidationState() === 'invalid'"
-          aria-label="Invalid referral code">✕</span>
+          aria-label="Invalid advisor code">✕</span>
       </div>
 
       <p class="referral-modal-employee" *ngIf="referralValidationState() === 'valid' && referredByName()">
@@ -360,7 +360,7 @@
           *ngIf="referralValidationState() !== 'valid'"
           (click)="applyReferral()"
           [disabled]="referralValidationState() === 'validating' || !referralCodeInput().trim()">
-          {{ referralValidationState() === 'validating' ? 'Checking…' : 'Apply Referral' }}
+          {{ referralValidationState() === 'validating' ? 'Checking…' : 'Apply Advisor Code' }}
         </button>
         <button
           type="button"
@@ -376,8 +376,12 @@
         class="referral-skip-link"
         (click)="skipReferral()"
         [disabled]="referralValidationState() === 'validating'">
-        Skip Referral
+        Skip Advisor Code
       </button>
+
+      <small class="referral-modal-disclaimer" style="color: #888; font-size: 0.8em; font-style: italic; margin-top: 1rem; display: block;">
+        Note: You can get your Advisor code from your referring Advisor. Advisor codes are optional and do not affect your plan benefits.
+      </small>
     </div>
   </div>
 

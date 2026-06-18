@@ -26,6 +26,10 @@ namespace RB_Website_API.Data
         public DbSet<Models.LoanApplication> LoanApplications => Set<Models.LoanApplication>();
         public DbSet<Models.ContactSubmission> ContactSubmissions => Set<Models.ContactSubmission>();
         public DbSet<Models.SchemeDiscoveryRequest> SchemeDiscoveryRequests => Set<Models.SchemeDiscoveryRequest>();
+        public DbSet<Models.Vendor> Vendors => Set<Models.Vendor>();
+        public DbSet<Models.VendorPlanMapping> VendorPlanMappings => Set<Models.VendorPlanMapping>();
+        public DbSet<Models.VendorAuditLog> VendorAuditLogs => Set<Models.VendorAuditLog>();
+        public DbSet<Models.EnquiryStatusHistory> EnquiryStatusHistories => Set<Models.EnquiryStatusHistory>();
 
         public new DbSet<T> Set<T>() where T : class
         {
@@ -69,6 +73,18 @@ namespace RB_Website_API.Data
                 e.Property(x => x.Message).HasMaxLength(4000).IsRequired();
                 e.Property(x => x.ConsentAccepted).IsRequired();
                 e.Property(x => x.CreatedAt).IsRequired();
+                e.Property(x => x.CompanyName).HasMaxLength(200);
+                e.Property(x => x.Source).HasMaxLength(80).IsRequired();
+                e.Property(x => x.Status).HasMaxLength(20).IsRequired();
+            });
+
+            modelBuilder.Entity<Models.EnquiryStatusHistory>(e =>
+            {
+                e.ToTable("EnquiryStatusHistory", "dbo");
+                e.Property(x => x.OldStatus).HasMaxLength(20);
+                e.Property(x => x.NewStatus).HasMaxLength(20).IsRequired();
+                e.Property(x => x.Remarks).HasMaxLength(800);
+                e.Property(x => x.ChangedOn).IsRequired();
             });
         }
     }

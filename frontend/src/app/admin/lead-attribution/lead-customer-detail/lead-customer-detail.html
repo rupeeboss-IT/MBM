@@ -1,0 +1,393 @@
+<div class="admin-wrap">
+
+  <div class="admin-topbar la-detail-topbar">
+
+    <div class="la-detail-intro">
+
+      <span class="admin-eyebrow">Lead Attribution</span>
+
+      <h2>Customer Details</h2>
+
+      <a [routerLink]="listLink" class="la-back">← Back to customers</a>
+
+    </div>
+
+    @if (customer(); as c) {
+
+      <div class="actions">
+
+        <a class="btn btn-outline" [routerLink]="['/admin/user-management/members', c.userId]">User Profile</a>
+
+      </div>
+
+    }
+
+  </div>
+
+
+
+  @if (loading()) {
+
+    <div class="section">
+
+      <div class="admin-loading">
+
+        <div class="admin-spinner" aria-hidden="true"></div>
+
+        <span>Loading customer…</span>
+
+      </div>
+
+    </div>
+
+  } @else if (customer(); as c) {
+
+    <section class="section la-hero">
+
+      <div class="la-hero__main">
+
+        <p class="la-hero__member-id">{{ c.memberId }}</p>
+
+        <h3 class="la-hero__title">{{ c.fullName }}</h3>
+
+        <p class="la-hero__sub">{{ c.email }} · {{ c.phone }}</p>
+
+      </div>
+
+      <div class="la-hero__badge-wrap">
+
+        <span class="badge badge-outline">{{ c.sourceType }}</span>
+
+        @if (c.planName) {
+
+          <span class="badge badge-success">{{ c.planName }}</span>
+
+        }
+
+      </div>
+
+    </section>
+
+
+
+    <div class="la-detail-grid">
+
+      <section class="la-card">
+
+        <h4 class="la-card__title">Lead information</h4>
+
+        <div class="la-info-grid">
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Source type</span>
+
+            <span class="la-info-value">{{ c.sourceType }}</span>
+
+          </div>
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Source name</span>
+
+            <span class="la-info-value">{{ c.sourceName || '—' }}</span>
+
+          </div>
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Source code</span>
+
+            <span class="la-info-value">{{ c.sourceCode || '—' }}</span>
+
+          </div>
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Assigned advisor</span>
+
+            <span class="la-info-value">{{ c.assignedAdvisor || '—' }}</span>
+
+          </div>
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Assigned employee</span>
+
+            <span class="la-info-value">{{ c.assignedEmployee || '—' }}</span>
+
+          </div>
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Registration date</span>
+
+            <span class="la-info-value">{{ c.registrationDate | localDate }}</span>
+
+          </div>
+
+          <div class="la-info-item">
+
+            <span class="la-info-label">Created through</span>
+
+            <span class="la-info-value">{{ c.createdThrough || '—' }}</span>
+
+          </div>
+
+          @if (c.firstPaidAt) {
+
+            <div class="la-info-item">
+
+              <span class="la-info-label">First paid order</span>
+
+              <span class="la-info-value">{{ c.firstPaidAt | localDate }}</span>
+
+            </div>
+
+          }
+
+          @if (c.firstPaidPlanName) {
+
+            <div class="la-info-item">
+
+              <span class="la-info-label">First purchase</span>
+
+              <span class="la-info-value">{{ c.firstPaidPlanName }}</span>
+
+            </div>
+
+          }
+
+          @if (c.firstReferralCodeRaw) {
+
+            <div class="la-info-item la-info-item--wide">
+
+              <span class="la-info-label">First advisor code (checkout)</span>
+
+              <span class="la-info-value">{{ c.firstReferralCodeRaw }}</span>
+
+            </div>
+
+          }
+
+        </div>
+
+      </section>
+
+
+
+      <section class="la-card">
+
+        <h4 class="la-card__title">Membership &amp; reports</h4>
+
+        <dl class="la-meta-list">
+
+          <div class="la-meta-row">
+
+            <dt>Current plan</dt>
+
+            <dd>{{ c.planName || '—' }}</dd>
+
+          </div>
+
+          <div class="la-meta-row">
+
+            <dt>Membership status</dt>
+
+            <dd>{{ c.membershipStatus || 'None' }}</dd>
+
+          </div>
+
+          <div class="la-meta-row">
+
+            <dt>Membership sales</dt>
+
+            <dd>
+
+              @if (c.membershipSalesCount > 0) {
+
+                <button type="button" class="la-count-btn" (click)="openMembershipHistory()">
+
+                  {{ c.membershipSalesCount }}
+
+                </button>
+
+              } @else {
+
+                0
+
+              }
+
+            </dd>
+
+          </div>
+
+          <div class="la-meta-row">
+
+            <dt>Report purchases</dt>
+
+            <dd>{{ c.reportPurchaseCount }}</dd>
+
+          </div>
+
+          <div class="la-meta-row">
+
+            <dt>Reports generated</dt>
+
+            <dd>{{ c.reportGeneratedCount }}</dd>
+
+          </div>
+
+        </dl>
+
+      </section>
+
+    </div>
+
+
+
+    @if ((c.paymentHistory?.length ?? 0) > 0) {
+
+      <section class="la-card la-payment-section">
+
+        <h4 class="la-card__title">Payment history</h4>
+
+        <div class="admin-table-wrap">
+
+          <div class="table">
+
+            <div class="row header row-la-payments">
+
+              <div>Date</div>
+
+              <div>Plan</div>
+
+              <div>Type</div>
+
+              <div>Referral</div>
+
+              <div>Amount</div>
+
+            </div>
+
+            @for (p of c.paymentHistory; track trackPayment($index, p)) {
+
+              <div class="row row-la-payments">
+
+                <div>{{ p.paidAt | localDate }}</div>
+
+                <div>
+
+                  <strong>{{ p.planName }}</strong>
+
+                  <div class="muted la-sub">{{ p.planCode }}</div>
+
+                </div>
+
+                <div>
+
+                  <span class="badge" [class.badge-outline]="p.orderType === 'Report'" [class.badge-success]="p.orderType === 'Membership'">
+
+                    {{ p.orderType }}
+
+                  </span>
+
+                </div>
+
+                <div>{{ p.referralCode || '—' }}</div>
+
+                <div>{{ formatAmount(p.totalAmountPaise) }}</div>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      </section>
+
+    }
+
+  }
+
+</div>
+
+
+
+@if (showMembershipHistory() && customer(); as c) {
+
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="membership-history-title">
+
+    <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
+
+      <button type="button" class="admin-modal__close" (click)="closeMembershipHistory()" aria-label="Close">&times;</button>
+
+      <h3 class="admin-modal__title" id="membership-history-title">Membership sales history</h3>
+
+      <p class="admin-modal__sub">{{ c.fullName }} · {{ c.memberId }}</p>
+
+      @if (membershipHistory().length === 0) {
+
+        <div class="admin-empty">No membership orders found.</div>
+
+      } @else {
+
+        <div class="admin-table-wrap">
+
+          <div class="table">
+
+            <div class="row header row-la-payments">
+
+              <div>Date</div>
+
+              <div>Plan</div>
+
+              <div>Referral</div>
+
+              <div>Amount</div>
+
+            </div>
+
+            @for (p of membershipHistory(); track trackPayment($index, p)) {
+
+              <div class="row row-la-payments">
+
+                <div>{{ p.paidAt | localDate }}</div>
+
+                <div>
+
+                  <strong>{{ p.planName }}</strong>
+
+                  <div class="muted la-sub">{{ p.planCode }}</div>
+
+                </div>
+
+                <div>{{ p.referralCode || '—' }}</div>
+
+                <div>{{ formatAmount(p.totalAmountPaise) }}</div>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+      <div class="admin-modal__actions">
+
+        <button type="button" class="btn btn-outline" (click)="closeMembershipHistory()">Close</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+

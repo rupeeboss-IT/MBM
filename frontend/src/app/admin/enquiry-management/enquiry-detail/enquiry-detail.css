@@ -1,0 +1,89 @@
+.em-detail-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.em-detail-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.em-dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.25rem;
+  margin: 0;
+}
+
+.em-dl dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--admin-muted);
+  margin: 0 0 0.2rem;
+}
+
+.em-dl dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.em-message {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--admin-border);
+}
+
+.em-message h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-muted);
+}
+
+.em-message p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+
+.em-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.em-textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+  margin-bottom: 0.75rem;
+}
+
+.em-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.row-em-history {
+  grid-template-columns: 1fr 1fr 0.8fr 0.8fr 1.2fr;
+}
+
+@media (max-width: 900px) {
+  .em-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .em-dl {
+    grid-template-columns: 1fr;
+  }
+}

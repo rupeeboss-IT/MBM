@@ -41,7 +41,7 @@ public static class PlanBenefitsCatalog
             "Loan audit",
             "Insurance audit",
             "MSME events access",
-            "Practo Insurance (₹15 Lakh cover)",
+            "Practo Insurance (₹10 Lakh cover)",
         ],
         ["pro"] =
         [

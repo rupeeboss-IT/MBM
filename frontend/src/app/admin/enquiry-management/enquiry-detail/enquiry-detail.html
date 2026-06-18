@@ -1,0 +1,96 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Enquiry Management</span>
+      <h2>Enquiry Detail</h2>
+      <div class="muted">View enquiry information and status history.</div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" [routerLink]="listLink">Back to list</a>
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="admin-loading">
+      <div class="admin-spinner" aria-hidden="true"></div>
+      <span>Loading enquiry…</span>
+    </div>
+  } @else if (enquiry(); as e) {
+    <div class="em-detail-grid">
+      <section class="section em-detail-card">
+        <h3>Enquiry #{{ e.id }}</h3>
+        <dl class="em-dl">
+          <div><dt>Name</dt><dd>{{ e.fullName }}</dd></div>
+          <div><dt>Company Name</dt><dd>{{ e.companyName || '—' }}</dd></div>
+          <div><dt>Mobile</dt><dd>{{ e.phone }}</dd></div>
+          <div><dt>Email</dt><dd>{{ e.email || '—' }}</dd></div>
+          <div><dt>Subject</dt><dd>{{ e.subject }}</dd></div>
+          <div><dt>Source</dt><dd><span class="badge badge-outline">{{ e.source }}</span></dd></div>
+          <div><dt>Created Date</dt><dd>{{ e.createdAt | localDate }}</dd></div>
+          <div><dt>Current Status</dt><dd><span [class]="statusBadgeClass(e.status)">{{ e.status }}</span></dd></div>
+          <div><dt>Assigned To</dt><dd>{{ e.assignedToName || '—' }}</dd></div>
+        </dl>
+        <div class="em-message">
+          <h4>Message</h4>
+          <p>{{ e.message }}</p>
+        </div>
+      </section>
+
+      <section class="section em-detail-card">
+        <h3>Update Status</h3>
+        <label class="em-label" for="statusRemarks">Remarks (optional)</label>
+        <textarea
+          id="statusRemarks"
+          class="em-textarea"
+          rows="3"
+          [ngModel]="statusRemarks()"
+          (ngModelChange)="statusRemarks.set($event)"
+          placeholder="Add a note for the status change…"
+        ></textarea>
+        <div class="em-status-actions">
+          @if (e.status !== 'Read') {
+            <button class="btn btn-outline btn-sm" type="button" (click)="updateStatus('Read')" [disabled]="actionSubmitting()">Mark As Read</button>
+          }
+          @if (e.status !== 'In Progress') {
+            <button class="btn btn-outline btn-sm" type="button" (click)="updateStatus('In Progress')" [disabled]="actionSubmitting()">Mark As In Progress</button>
+          }
+          @if (e.status !== 'Resolved') {
+            <button class="btn btn-outline btn-sm" type="button" (click)="updateStatus('Resolved')" [disabled]="actionSubmitting()">Mark As Resolved</button>
+          }
+          @if (e.status !== 'Closed') {
+            <button class="btn btn-outline btn-sm" type="button" (click)="updateStatus('Closed')" [disabled]="actionSubmitting()">Mark As Closed</button>
+          }
+        </div>
+      </section>
+    </div>
+
+    <section class="section">
+      <h3>Status History</h3>
+      @if (e.statusHistory.length === 0) {
+        <div class="admin-empty">No status changes recorded yet.</div>
+      } @else {
+        <div class="admin-table-wrap">
+          <div class="table">
+            <div class="row header row-em-history">
+              <div>Changed On</div>
+              <div>Changed By</div>
+              <div>Old Status</div>
+              <div>New Status</div>
+              <div>Remarks</div>
+            </div>
+            @for (h of e.statusHistory; track h.id) {
+              <div class="row row-em-history">
+                <div>{{ h.changedOn | localDate }}</div>
+                <div>{{ h.changedByName || h.changedByUserId }}</div>
+                <div>{{ h.oldStatus || '—' }}</div>
+                <div><span [class]="statusBadgeClass(h.newStatus)">{{ h.newStatus }}</span></div>
+                <div>{{ h.remarks || '—' }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+  }
+</div>

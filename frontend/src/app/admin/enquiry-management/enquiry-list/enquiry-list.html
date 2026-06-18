@@ -1,0 +1,178 @@
+<div class="admin-wrap" (click)="closeRowActions()">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Enquiry Management</span>
+      <h2>Enquiries</h2>
+      <div class="muted">Review, filter, and update contact enquiries from all sources.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <nav class="admin-subnav">
+    <a
+      routerLink="/admin/enquiry-management/enquiries"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >All Enquiries</a>
+    <a routerLink="/admin/enquiry-management/new" routerLinkActive="active">New Enquiries</a>
+    <a routerLink="/admin/enquiry-management/resolved" routerLinkActive="active">Resolved Enquiries</a>
+    <a routerLink="/admin/enquiry-management/closed" routerLinkActive="active">Closed Enquiries</a>
+  </nav>
+
+  <app-admin-list-toolbar
+    panelTitle="Filters"
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="sortPreset()"
+    [showSearch]="false"
+    [disabled]="loading()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (sortPresetChange)="sortPreset.set($event); applyFilters()"
+    (applyFilters)="applyFilters()"
+    (exportClick)="exportExcel()"
+  />
+
+  <div class="section">
+    <div class="em-filters">
+      <input
+        type="search"
+        class="em-search"
+        placeholder="Search name, mobile, email, company…"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+      <select class="em-select" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+        <option value="">All statuses</option>
+        <option value="New">New</option>
+        <option value="Read">Read</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+        <option value="Closed">Closed</option>
+      </select>
+      <select class="em-select" [ngModel]="sourceFilter()" (ngModelChange)="sourceFilter.set($event)">
+        <option value="">All sources</option>
+        @for (s of sources(); track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+      <button class="btn btn-outline" type="button" (click)="applyFilters()" [disabled]="loading()">Apply</button>
+    </div>
+
+    @if (selectedCount() > 0) {
+      <div class="em-bulk-bar">
+        <span class="em-bulk-count">{{ selectedCount() }} selected</span>
+        <select class="em-select" [ngModel]="bulkAction()" (ngModelChange)="bulkAction.set($event)">
+          <option value="">Bulk action…</option>
+          <option value="Read">Mark As Read</option>
+          <option value="In Progress">Mark As In Progress</option>
+          <option value="Resolved">Mark As Resolved</option>
+          <option value="Closed">Mark As Closed</option>
+        </select>
+        <button
+          class="btn btn-primary btn-sm"
+          type="button"
+          (click)="applyBulkAction()"
+          [disabled]="actionSubmitting() || !bulkAction()"
+        >Apply</button>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading enquiries…</span>
+      </div>
+    } @else if (enquiries().length === 0) {
+      <div class="admin-empty">No enquiries found.</div>
+    } @else {
+      <div class="admin-table-wrap em-table-wrap">
+        <div class="table">
+          <div class="row header row-em-enquiries">
+            <div class="em-check-col">
+              <input
+                type="checkbox"
+                [checked]="allOnPageSelected()"
+                (change)="toggleSelectAll($any($event.target).checked)"
+                aria-label="Select all on page"
+              />
+            </div>
+            <div (click)="onSortColumn('created')">Enquiry Id {{ sortIndicator(sortBy(), sortDir(), 'created') }}</div>
+            <div (click)="onSortColumn('name')">Name {{ sortIndicator(sortBy(), sortDir(), 'name') }}</div>
+            <div (click)="onSortColumn('company')">Company {{ sortIndicator(sortBy(), sortDir(), 'company') }}</div>
+            <div>Mobile</div>
+            <div>Email</div>
+            <div (click)="onSortColumn('source')">Source {{ sortIndicator(sortBy(), sortDir(), 'source') }}</div>
+            <div (click)="onSortColumn('subject')">Subject {{ sortIndicator(sortBy(), sortDir(), 'subject') }}</div>
+            <div (click)="onSortColumn('created')">Created {{ sortIndicator(sortBy(), sortDir(), 'created') }}</div>
+            <div (click)="onSortColumn('status')">Status {{ sortIndicator(sortBy(), sortDir(), 'status') }}</div>
+            <div>Assigned To</div>
+            <div>Actions</div>
+          </div>
+          @for (e of enquiries(); track e.id) {
+            <div class="row row-em-enquiries" [class.em-row-unread]="e.isUnread">
+              <div class="em-check-col" data-label="Select">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(e.id)"
+                  (change)="toggleSelect(e.id, $any($event.target).checked)"
+                  [attr.aria-label]="'Select enquiry ' + e.id"
+                />
+              </div>
+              <div data-label="Enquiry Id">
+                <a [routerLink]="detailLink(e)" class="em-link">#{{ e.id }}</a>
+              </div>
+              <div data-label="Name">{{ e.fullName }}</div>
+              <div data-label="Company">{{ e.companyName || '—' }}</div>
+              <div data-label="Mobile">{{ e.phone }}</div>
+              <div data-label="Email" class="em-email">{{ e.email || '—' }}</div>
+              <div data-label="Source"><span class="badge badge-outline">{{ e.source }}</span></div>
+              <div data-label="Subject">{{ e.subject }}</div>
+              <div data-label="Created">{{ e.createdAt | localDate }}</div>
+              <div data-label="Status"><span [class]="statusBadgeClass(e.status)">{{ e.status }}</span></div>
+              <div data-label="Assigned To">{{ e.assignedToName || '—' }}</div>
+              <div class="em-actions" data-label="Actions" (click)="$event.stopPropagation()">
+                <a class="btn btn-outline btn-sm" [routerLink]="detailLink(e)">View</a>
+                <div class="em-dropdown" [class.open]="rowActionOpenId() === e.id">
+                  <button
+                    class="btn btn-outline btn-sm"
+                    type="button"
+                    (click)="toggleRowActions(e.id, $event)"
+                    [disabled]="actionSubmitting()"
+                  >Actions ▾</button>
+                  @if (rowActionOpenId() === e.id) {
+                    <div class="em-dropdown-menu">
+                      @if (e.status !== 'Read') {
+                        <button type="button" (click)="applyRowStatus(e, 'Read')">Mark As Read</button>
+                      }
+                      @if (e.status !== 'In Progress') {
+                        <button type="button" (click)="applyRowStatus(e, 'In Progress')">Mark As In Progress</button>
+                      }
+                      @if (e.status !== 'Resolved') {
+                        <button type="button" (click)="applyRowStatus(e, 'Resolved')">Mark As Resolved</button>
+                      }
+                      @if (e.status !== 'Closed') {
+                        <button type="button" (click)="applyRowStatus(e, 'Closed')">Mark As Closed</button>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <app-admin-pagination
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="total()"
+        [disabled]="loading()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  </div>
+</div>

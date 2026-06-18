@@ -1,0 +1,201 @@
+.vm-accordion {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.65rem;
+
+}
+
+
+
+.vm-accordion-item {
+
+  border: 1px solid var(--admin-border);
+
+  border-radius: 10px;
+
+  background: #fff;
+
+  overflow: hidden;
+
+}
+
+
+
+.vm-accordion-trigger {
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  padding: 0.9rem 1rem;
+
+  border: none;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  font: inherit;
+
+  color: inherit;
+
+  transition: background 0.15s ease;
+
+}
+
+
+
+.vm-accordion-trigger:hover {
+
+  background: var(--admin-surface-muted, #f8fafc);
+
+}
+
+
+
+.vm-accordion-item.open .vm-accordion-trigger {
+
+  background: var(--admin-surface-muted, #f8fafc);
+
+  border-bottom: 1px solid var(--admin-border);
+
+}
+
+
+
+.vm-accordion-title {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.15rem;
+
+}
+
+
+
+.vm-accordion-code {
+
+  font-size: 0.82rem;
+
+  text-transform: lowercase;
+
+}
+
+
+
+.vm-accordion-meta {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 0.65rem;
+
+  flex-shrink: 0;
+
+}
+
+
+
+.vm-accordion-count {
+
+  font-size: 0.82rem;
+
+  color: var(--admin-text-secondary);
+
+  white-space: nowrap;
+
+}
+
+
+
+.vm-accordion-caret {
+
+  display: inline-block;
+
+  transition: transform 0.2s ease;
+
+  color: var(--admin-text-secondary);
+
+}
+
+
+
+.vm-accordion-item.open .vm-accordion-caret {
+
+  transform: rotate(180deg);
+
+}
+
+
+
+.vm-accordion-body {
+
+  padding: 0.85rem 1rem 1rem;
+
+}
+
+
+
+.vm-mapping-list {
+
+  margin: 0;
+
+  padding-left: 1.1rem;
+
+  line-height: 1.65;
+
+}
+
+
+
+.vm-mapping-empty {
+
+  padding: 0.25rem 0;
+
+}
+
+
+
+.vm-mapping-badge {
+
+  margin-left: 0.35rem;
+
+  font-size: 0.72rem;
+
+}
+
+
+
+.vm-link {
+
+  font-weight: 600;
+
+  color: var(--admin-navy);
+
+  text-decoration: none;
+
+}
+
+
+
+.vm-link:hover {
+
+  text-decoration: underline;
+
+}
+
+

@@ -18,7 +18,7 @@ import { AdminSessionService } from '../core/services/admin-session.service';
 import { AuthService } from '../core/services/auth.service';
 import { AuthSessionService } from '../core/services/auth-session.service';
 
-type AdminDropdown = 'management' | 'content' | 'reports' | 'profile' | 'usermgmt';
+type AdminDropdown = 'people' | 'crm' | 'finance' | 'partners' | 'content' | 'account';
 
 @Component({
   selector: 'app-header',
@@ -55,29 +55,39 @@ export class Header implements OnDestroy {
   readonly mobileMenuOpen = signal(false);
   readonly servicesMenuOpen = signal(false);
   readonly moreMenuOpen = signal(false);
-  readonly adminManagementOpen = signal(false);
-  readonly adminUserMgmtOpen = signal(false);
+  readonly adminPeopleOpen = signal(false);
+  readonly adminCrmOpen = signal(false);
+  readonly adminFinanceOpen = signal(false);
+  readonly adminPartnersOpen = signal(false);
   readonly adminContentOpen = signal(false);
-  readonly adminReportsOpen = signal(false);
-  readonly adminProfileOpen = signal(false);
+  readonly adminAccountOpen = signal(false);
   readonly adminUrl = signal(this.router.url);
 
-  readonly isUserManagementActive = computed(() =>
+  readonly isPeopleActive = computed(() =>
     this.matchesAdminPrefix([
-      '/admin/user-management/admins',
-      '/admin/user-management/partners',
-      '/admin/user-management/members',
-    ]),
-  );
-
-  readonly isManagementActive = computed(() =>
-    this.matchesAdminPrefix([
+      '/admin/user-management',
       '/admin-dashboard/detail/members',
       '/admin-dashboard/detail/subscriptions',
       '/admin-dashboard/detail/plans',
       '/admin-dashboard/detail/expiring',
       '/admin-dashboard/detail/expired',
     ]),
+  );
+
+  readonly isCrmActive = computed(() =>
+    this.matchesAdminPrefix(['/admin/enquiry-management', '/admin/lead-attribution']),
+  );
+
+  readonly isFinanceActive = computed(() =>
+    this.matchesAdminPrefix([
+      '/admin-dashboard/detail/payments',
+      '/admin-dashboard/detail/payment-orders',
+      '/admin-reports',
+    ]),
+  );
+
+  readonly isPartnersActive = computed(() =>
+    this.matchesAdminPrefix(['/admin/vendor-management']),
   );
 
   readonly isContentActive = computed(() =>
@@ -88,15 +98,7 @@ export class Header implements OnDestroy {
     ]),
   );
 
-  readonly isReportsActive = computed(() =>
-    this.matchesAdminPrefix([
-      '/admin-dashboard/detail/payment-orders',
-      '/admin-dashboard/detail/payments',
-      '/admin-reports',
-    ]),
-  );
-
-  readonly isProfileActive = computed(() =>
+  readonly isAccountActive = computed(() =>
     this.matchesAdminPrefix(['/admin-forgot-password']),
   );
 
@@ -184,11 +186,12 @@ export class Header implements OnDestroy {
 
   toggleAdminDropdown(menu: AdminDropdown): void {
     const states: Record<AdminDropdown, ReturnType<typeof signal<boolean>>> = {
-      management: this.adminManagementOpen,
-      usermgmt: this.adminUserMgmtOpen,
+      people: this.adminPeopleOpen,
+      crm: this.adminCrmOpen,
+      finance: this.adminFinanceOpen,
+      partners: this.adminPartnersOpen,
       content: this.adminContentOpen,
-      reports: this.adminReportsOpen,
-      profile: this.adminProfileOpen,
+      account: this.adminAccountOpen,
     };
     const current = states[menu];
     const next = !current();
@@ -204,20 +207,22 @@ export class Header implements OnDestroy {
   }
 
   closeAdminDropdowns(): void {
-    this.adminManagementOpen.set(false);
-    this.adminUserMgmtOpen.set(false);
+    this.adminPeopleOpen.set(false);
+    this.adminCrmOpen.set(false);
+    this.adminFinanceOpen.set(false);
+    this.adminPartnersOpen.set(false);
     this.adminContentOpen.set(false);
-    this.adminReportsOpen.set(false);
-    this.adminProfileOpen.set(false);
+    this.adminAccountOpen.set(false);
   }
 
   closeAdminDropdown(menu: AdminDropdown): void {
     const states: Record<AdminDropdown, ReturnType<typeof signal<boolean>>> = {
-      management: this.adminManagementOpen,
-      usermgmt: this.adminUserMgmtOpen,
+      people: this.adminPeopleOpen,
+      crm: this.adminCrmOpen,
+      finance: this.adminFinanceOpen,
+      partners: this.adminPartnersOpen,
       content: this.adminContentOpen,
-      reports: this.adminReportsOpen,
-      profile: this.adminProfileOpen,
+      account: this.adminAccountOpen,
     };
     states[menu].set(false);
   }

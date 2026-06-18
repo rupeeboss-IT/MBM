@@ -919,7 +919,8 @@ select.admin-input {
   .row-subs,
   .row-content,
   .row-history,
-  .row-customers {
+  .row-customers,
+  .row-em-enquiries {
     grid-template-columns: 1fr;
     gap: 4px;
     padding: 16px;

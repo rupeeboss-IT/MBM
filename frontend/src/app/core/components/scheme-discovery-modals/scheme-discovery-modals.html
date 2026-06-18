@@ -85,7 +85,7 @@
         </div>
         <div class="sd-plan-card">
           <h3>One-Time Report</h3>
-          <p class="sd-plan-card__price">₹1,180 <span>incl. GST</span></p>
+          <p class="sd-plan-card__price">₹999 <span>+ GST (₹1,178.82 incl.)</span></p>
           <p class="sd-plan-card__note" *ngIf="flow.modal() === 'plan_choice' && flow.status()?.membership as m">
             For your current <strong>{{ m.planName }}</strong> membership period.
           </p>
@@ -97,7 +97,7 @@
             class="sd-btn sd-btn--outline"
             (click)="flow.startOneTimePurchase()"
             [disabled]="flow.paying() || flow.redirecting()">
-            Pay ₹1,180 for One-Time Report
+            Pay ₹1,178.82 incl. GST for One-Time Report
           </button>
         </div>
       </div>
@@ -115,8 +115,8 @@
         <p class="sd-referral__saved-udyam" *ngIf="flow.udyamCheckoutMode() && flow.udyam()">
           Udyam: <strong>{{ flow.udyam() }}</strong>
         </p>
-        <p class="sd-referral__lead">Optional — have a referral code? Enter it below or skip to continue to payment.</p>
-        <label class="sd-referral__label" for="scheme-discovery-referral-input">Referral code</label>
+        <p class="sd-referral__lead">Optional — have a Advisor Code? Enter it below or skip to continue to payment.</p>
+        <label class="sd-referral__label" for="scheme-discovery-referral-input">Advisor Code</label>
         <div
           class="sd-referral__input-wrap"
           [class.sd-referral__input-wrap--valid]="flow.referralValidationState() === 'valid'"
@@ -128,7 +128,7 @@
             class="sd-referral__input"
             [ngModel]="flow.referralCodeInput()"
             (ngModelChange)="flow.onReferralInputChange($event)"
-            placeholder="Enter referral code"
+            placeholder="Enter Advisor Code"
             maxlength="50"
             autocomplete="off" />
           <span
@@ -138,11 +138,11 @@
           <span
             class="sd-referral__status sd-referral__status--valid"
             *ngIf="flow.referralValidationState() === 'valid'"
-            aria-label="Valid referral code">✓</span>
+            aria-label="Valid Advisor Code">✓</span>
           <span
             class="sd-referral__status sd-referral__status--invalid"
             *ngIf="flow.referralValidationState() === 'invalid'"
-            aria-label="Invalid referral code">✕</span>
+            aria-label="Invalid Advisor Code">✕</span>
         </div>
         <p class="sd-referral__employee" *ngIf="flow.referralValidationState() === 'valid' && flow.referredByName()">
           Referred by: <strong>{{ flow.referredByName() }}</strong>
@@ -157,7 +157,7 @@
             *ngIf="flow.referralValidationState() !== 'valid'"
             (click)="flow.applyReferral()"
             [disabled]="flow.referralValidationState() === 'validating' || !flow.referralCodeInput().trim() || flow.paying()">
-            {{ flow.referralValidationState() === 'validating' ? 'Checking…' : 'Apply Referral' }}
+            {{ flow.referralValidationState() === 'validating' ? 'Checking…' : 'Apply Advisor Code' }}
           </button>
           <button
             type="button"
@@ -173,7 +173,7 @@
           class="sd-referral__skip"
           (click)="flow.skipReferralAndPay()"
           [disabled]="flow.referralValidationState() === 'validating' || flow.paying()">
-          Skip Referral
+          Skip Advisor Code
         </button>
       </div>
 
@@ -276,8 +276,8 @@
           <div class="sd-profile-card__title">Member details</div>
           <dl class="sd-profile-card__grid">
             <div *ngIf="p.memberId">
-              <dt>Member ID</dt>
-              <dd class="sd-profile-card__highlight">{{ p.memberId }}</dd>
+              <dt>{{ idLabel() }}</dt>
+              <dd class="sd-profile-card__highlight">{{ idValue(p.memberId) }}</dd>
             </div>
             <div>
               <dt>Name</dt>

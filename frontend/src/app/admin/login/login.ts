@@ -7,11 +7,12 @@ import { AuthService } from '../../core/services/auth.service';
 import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
+import { PasswordInputComponent } from '../../core/components/password-input/password-input';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PasswordInputComponent],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

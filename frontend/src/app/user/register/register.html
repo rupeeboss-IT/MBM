@@ -126,12 +126,12 @@
         </div>
         <div class="form-group">
           <label>Password *</label>
-          <div style="display:flex;gap:.5rem;align-items:center">
-            <input [type]="showPass() ? 'text' : 'password'" id="regPass" placeholder="Min. 9 characters" formControlName="password" autocomplete="new-password" style="flex:1">
-            <button type="button" class="btn-outline" style="padding:.65rem .8rem" (click)="showPass.set(!showPass())" aria-label="Toggle password visibility">
-              {{ showPass() ? '🙈' : '👁️' }}
-            </button>
-          </div>
+          <app-password-input
+            inputId="regPass"
+            placeholder="Min. 9 characters"
+            formControlName="password"
+            autocomplete="new-password"
+          ></app-password-input>
           <div style="margin-top:.35rem;font-size:.8rem">
             <div *ngIf="form.controls.password.touched && form.controls.password.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Password is required.</div>
             <div *ngIf="form.controls.password.touched && (form.controls.password.errors?.['minLength9'] || form.controls.password.errors?.['lowercase'] || form.controls.password.errors?.['uppercase'] || form.controls.password.errors?.['number'])" style="color:var(--red);font-weight:600">
@@ -143,22 +143,15 @@
 
         <div class="form-group">
           <label>Confirm Password *</label>
-          <div style="display:flex;gap:.5rem;align-items:center">
-            <input
-              [type]="showConfirmPass() ? 'text' : 'password'"
-              id="regConfirmPass"
-              placeholder="Re-enter password"
-              formControlName="confirmPassword"
-              autocomplete="new-password"
-              (paste)="preventClipboard($event)"
-              (copy)="preventClipboard($event)"
-              (cut)="preventClipboard($event)"
-              style="flex:1"
-            >
-            <button type="button" class="btn-outline" style="padding:.65rem .8rem" (click)="showConfirmPass.set(!showConfirmPass())" aria-label="Toggle confirm password visibility">
-              {{ showConfirmPass() ? '🙈' : '👁️' }}
-            </button>
-          </div>
+          <app-password-input
+            inputId="regConfirmPass"
+            placeholder="Re-enter password"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            (paste)="preventClipboard($event)"
+            (copy)="preventClipboard($event)"
+            (cut)="preventClipboard($event)"
+          ></app-password-input>
           <div style="margin-top:.35rem;font-size:.8rem">
             <div *ngIf="form.controls.confirmPassword.touched && form.controls.confirmPassword.errors?.['required']" style="color:var(--red);font-weight:600">⚠️ Confirm password is required.</div>
             <div *ngIf="form.touched && form.errors?.['passwordMismatch']" style="color:var(--red);font-weight:600">⚠️ Passwords do not match.</div>
@@ -261,8 +254,8 @@
         <div class="home-plan-card featured-plan" id="rplan-MSME Premium" style="cursor:pointer">
           <div class="plan-popular" style="top:-10px">Most Popular</div>
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🏆</div><h3 style="font-size:1rem">MSME Premium</h3></div><div class="hp-badge gold">₹9,999/yr</div></div>
-          <p class="hp-desc">Infomerics verified report + RM + Loan Audit + 15L Insurance</p>
-          <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Verified Report</li><li><span class="tick">✓</span>Free Relationship Manager</li><li><span class="tick">✓</span>Free Loan &amp; Insurance Audit</li><li><span class="tick">✓</span>2 Events + ₹15L Insurance</li></ul>
+          <p class="hp-desc">Infomerics verified report + RM + Loan Audit + 10L Insurance</p>
+          <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Verified Report</li><li><span class="tick">✓</span>Free Relationship Manager</li><li><span class="tick">✓</span>Free Loan &amp; Insurance Audit</li><li><span class="tick">✓</span>2 Events + ₹10L Insurance</li></ul>
           <div style="background:var(--red-light);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--red);font-size:.9rem">Select Premium — ₹9,999/yr</div>
         </div>
         <div class="home-plan-card" id="rplan-MSME Pro" style="cursor:pointer">

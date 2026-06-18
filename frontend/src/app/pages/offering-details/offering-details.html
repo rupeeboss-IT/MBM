@@ -5,7 +5,15 @@
     <div class="breadcrumb">
       <a routerLink="/home">Home</a><span class="sep">›</span><a routerLink="/membership">Plans</a><span class="sep">›</span><span id="offeringCrumb">{{ off.crumb }}</span>
     </div>
-    <div class="offering-hero-icon" id="offeringHeroIcon">{{ off.icon }}</div>
+    <div class="offering-hero-icon" id="offeringHeroIcon">
+      <img
+        *ngIf="off.iconImage"
+        [src]="off.iconImage"
+        [alt]="'Infomerics Ratings'"
+        style="max-width:85%;max-height:85%;object-fit:contain"
+      />
+      <ng-container *ngIf="!off.iconImage">{{ off.icon }}</ng-container>
+    </div>
     <h1 id="offeringHeroTitle">{{ off.title }}</h1>
     <p id="offeringHeroDesc">{{ off.tagline }}</p>
     <div class="offering-hero-tags" id="offeringHeroTags">
@@ -44,7 +52,15 @@
         <h4>Key Highlights</h4>
         <div class="offering-highlight-item" *ngFor="let h of off.highlights">
           <div class="hi-dot" style="background:var(--red)"></div>
-          {{ h }}
+          <span>
+            <img
+              *ngIf="off.iconImage && h.startsWith('⭐')"
+              [src]="off.iconImage"
+              alt=""
+              style="height:1em;width:auto;vertical-align:middle;margin-right:.25em;object-fit:contain"
+            />
+            {{ off.iconImage && h.startsWith('⭐') ? h.slice(h.indexOf(' ') + 1) : h }}
+          </span>
         </div>
       </div>
       <div class="sidebar-card" style="background:#e8f5e9;border-color:#c8e6c9">

@@ -9,6 +9,10 @@ public sealed class InvoiceSettings
     public string? Gstin { get; set; }
     public string? Pan { get; set; }
     public string SacCode { get; set; } = "998314";
-    public string SupportEmail { get; set; } = "sales@rupeeboss.com";
+    public string Website { get; set; } = "www.msmebharatmanch.com";
+    public string SupportEmail { get; set; } = "support@msmebharatmanch.com";
     public string? SupportPhone { get; set; }
+
+    /// <summary>When true, GST is shown as IGST; otherwise CGST + SGST (half rate each).</summary>
+    public bool UseIgst { get; set; }
 }

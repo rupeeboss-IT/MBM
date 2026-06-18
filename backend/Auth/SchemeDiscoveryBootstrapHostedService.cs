@@ -112,10 +112,10 @@ public sealed class SchemeDiscoveryBootstrapHostedService : IHostedService
                     Code = code,
                     Name = "Government Scheme Discovery Report (One-Time)",
                     Description = "One-time purchase for a personalized government scheme eligibility report.",
-                    BaseAmountPaise = 100_000,
+                    BaseAmountPaise = 99_900,
                     GstPercent = 18m,
-                    GstPaise = 18_000,
-                    TotalAmountPaise = 118_000,
+                    GstPaise = 17_982,
+                    TotalAmountPaise = 117_882,
                     Currency = "INR",
                     DurationDays = 0,
                     IsActive = true,
@@ -133,12 +133,12 @@ public sealed class SchemeDiscoveryBootstrapHostedService : IHostedService
                 existing.IsActive = true;
                 changed = true;
             }
-            if (existing.TotalAmountPaise != 118_000)
+            if (existing.TotalAmountPaise != 117_882)
             {
-                existing.BaseAmountPaise = 100_000;
+                existing.BaseAmountPaise = 99_900;
                 existing.GstPercent = 18m;
-                existing.GstPaise = 18_000;
-                existing.TotalAmountPaise = 118_000;
+                existing.GstPaise = 17_982;
+                existing.TotalAmountPaise = 117_882;
                 changed = true;
             }
             if (string.IsNullOrWhiteSpace(existing.Name))

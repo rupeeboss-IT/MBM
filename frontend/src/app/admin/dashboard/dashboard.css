@@ -91,6 +91,28 @@
   outline-offset: 2px;
 }
 
+.em-notify-card {
+  margin: 0 0 1rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(230, 57, 70, 0.08) 0%, rgba(230, 57, 70, 0.02) 100%);
+  border: 1px solid rgba(230, 57, 70, 0.25);
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow);
+}
+
+.em-notify-content h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: var(--admin-navy);
+}
+
+.em-notify-count {
+  margin: 0 0 0.85rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--admin-accent, #e63946);
+}
+
 .kpi-card__top {
   display: flex;
   align-items: flex-start;

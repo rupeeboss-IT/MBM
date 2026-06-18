@@ -34,32 +34,6 @@
       </div>
     </div>
   }
-
-  @if (!loading() && userStats(); as s) {
-    <section class="section section--kpi">
-      <p class="kpi-section-title">User management</p>
-      <div class="kpi-grid">
-        @if (isSuperAdmin()) {
-          <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/admins" style="text-decoration:none;color:inherit">
-            <div class="kpi-label">Total Admins</div>
-            <p class="kpi-value">{{ s.totalAdmins }}</p>
-            <div class="kpi-hint">Active {{ s.activeAdmins }} · Inactive {{ s.inactiveAdmins }}</div>
-          </a>
-        }
-        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/partners" style="text-decoration:none;color:inherit">
-          <div class="kpi-label">Total Partners</div>
-          <p class="kpi-value">{{ s.totalPartners }}</p>
-          <div class="kpi-hint">Active {{ s.activePartners }} · Inactive {{ s.inactivePartners }}</div>
-        </a>
-        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/members" style="text-decoration:none;color:inherit">
-          <div class="kpi-label">Total Members</div>
-          <p class="kpi-value">{{ s.totalMembers }}</p>
-          <div class="kpi-hint">Active {{ s.activeMembers }} · Inactive {{ s.inactiveMembers }}</div>
-        </a>
-      </div>
-    </section>
-  }
-
   @if (!loading() && counts(); as c) {
     <section class="section section--kpi">
     <p class="kpi-section-title">Platform metrics</p>
@@ -158,4 +132,140 @@
     </div>
     </section>
   }
+  
+  @if (!loading() && userStats(); as s) {
+    <section class="section section--kpi">
+      <p class="kpi-section-title">User management</p>
+      <div class="kpi-grid">
+        @if (isSuperAdmin()) {
+          <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/admins" style="text-decoration:none;color:inherit">
+            <div class="kpi-label">Total Admins</div>
+            <p class="kpi-value">{{ s.totalAdmins }}</p>
+            <div class="kpi-hint">Active {{ s.activeAdmins }} · Inactive {{ s.inactiveAdmins }}</div>
+          </a>
+        }
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/partners" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Partners</div>
+          <p class="kpi-value">{{ s.totalPartners }}</p>
+          <div class="kpi-hint">Active {{ s.activePartners }} · Inactive {{ s.inactivePartners }}</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/user-management/members" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Members</div>
+          <p class="kpi-value">{{ s.totalMembers }}</p>
+          <div class="kpi-hint">Active {{ s.activeMembers }} · Inactive {{ s.inactiveMembers }}</div>
+        </a>
+      </div>
+    </section>
+  }
+
+  @if (!loading() && vendorStats(); as vs) {
+    <section class="section section--kpi">
+      <p class="kpi-section-title">Vendor management</p>
+      <div class="kpi-grid">
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/vendor-management/vendors" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Vendors</div>
+          <p class="kpi-value">{{ vs.totalVendors }}</p>
+          <div class="kpi-hint">Active {{ vs.activeVendors }} · Inactive {{ vs.inactiveVendors }}</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/vendor-management/vendors" [queryParams]="{ status: 'active' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Active Vendors</div>
+          <p class="kpi-value">{{ vs.activeVendors }}</p>
+          <div class="kpi-hint">View active vendors →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/vendor-management/vendors" [queryParams]="{ status: 'inactive' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Inactive Vendors</div>
+          <p class="kpi-value">{{ vs.inactiveVendors }}</p>
+          <div class="kpi-hint">View inactive vendors →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/vendor-management/plan-mapping" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Vendors Assigned To Plans</div>
+          <p class="kpi-value">{{ vs.vendorsAssignedToPlans }}</p>
+          <div class="kpi-hint">Plan mapping →</div>
+        </a>
+      </div>
+    </section>
+  }
+
+  @if (!loading() && leadStats(); as ls) {
+    <section class="section section--kpi">
+      <p class="kpi-section-title">Lead attribution</p>
+      <div class="kpi-grid">
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/lead-attribution" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Leads</div>
+          <p class="kpi-value">{{ ls.totalLeads }}</p>
+          <div class="kpi-hint">Attribution dashboard →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Direct Website' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Direct Leads</div>
+          <p class="kpi-value">{{ ls.directLeads }}</p>
+          <div class="kpi-hint">Direct website →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Employee' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Employee Leads</div>
+          <p class="kpi-value">{{ ls.employeeLeads }}</p>
+          <div class="kpi-hint">Employee sourced →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/lead-attribution/customers" [queryParams]="{ sourceType: 'Partner' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Partner Leads</div>
+          <p class="kpi-value">{{ ls.partnerLeads }}</p>
+          <div class="kpi-hint">Partner sourced →</div>
+        </a>
+        <div class="kpi-card">
+          <div class="kpi-label">Membership Sales</div>
+          <p class="kpi-value">{{ ls.totalMembershipSales }}</p>
+          <div class="kpi-hint">Paid orders in scope</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Report Requests</div>
+          <p class="kpi-value">{{ ls.totalReportRequests }}</p>
+          <div class="kpi-hint">Reports generated</div>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (!loading() && enquiryStats(); as es) {
+    @if (es.newEnquiries > 0) {
+      <section class="section em-notify-card">
+        <div class="em-notify-content">
+          <h3>New Enquiries Waiting</h3>
+          <p class="em-notify-count">{{ es.newEnquiries }} New Enquiries</p>
+          <a class="btn btn-primary" routerLink="/admin/enquiry-management/new">View Enquiries</a>
+        </div>
+      </section>
+    }
+
+    <section class="section section--kpi">
+      <p class="kpi-section-title">Enquiry management</p>
+      <div class="kpi-grid">
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/enquiry-management/enquiries" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total Enquiries</div>
+          <p class="kpi-value">{{ es.totalEnquiries }}</p>
+          <div class="kpi-hint">All enquiries →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/enquiry-management/new" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">New Enquiries</div>
+          <p class="kpi-value">{{ es.newEnquiries }}</p>
+          <div class="kpi-hint">Unread / new →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/enquiry-management/enquiries" [queryParams]="{ status: 'Read' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Read Enquiries</div>
+          <p class="kpi-value">{{ es.readEnquiries }}</p>
+          <div class="kpi-hint">View read →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/enquiry-management/resolved" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Resolved Enquiries</div>
+          <p class="kpi-value">{{ es.resolvedEnquiries }}</p>
+          <div class="kpi-hint">Resolved list →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/enquiry-management/closed" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Closed Enquiries</div>
+          <p class="kpi-value">{{ es.closedEnquiries }}</p>
+          <div class="kpi-hint">Closed list →</div>
+        </a>
+      </div>
+    </section>
+  }
+
+
 </div>

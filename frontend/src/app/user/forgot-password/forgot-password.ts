@@ -5,11 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastService } from '../../core/services/toast.service';
+import { PasswordInputComponent } from '../../core/components/password-input/password-input';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, PasswordInputComponent],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })

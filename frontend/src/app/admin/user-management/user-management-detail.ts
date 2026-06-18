@@ -15,11 +15,13 @@ import {
 } from '../../core/services/user-management.service';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
+import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { formatMemberPartnerId, getIdLabel } from '../../core/utils/member-id-display.util';
 
 @Component({
   selector: 'app-user-management-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, LocalDatePipe, AdminPagination],
+  imports: [CommonModule, FormsModule, RouterLink, LocalDatePipe, AdminPagination, PasswordInputComponent],
   templateUrl: './user-management-detail.html',
   styleUrls: ['../admin-shared.css', './user-management-detail.css'],
 })
@@ -254,5 +256,13 @@ export class UserManagementDetail {
     if (r === 'partner') return 'Partner';
     if (r === 'member') return 'Member';
     return role;
+  }
+
+  idLabel(role?: string | null): string {
+    return getIdLabel(role ?? null);
+  }
+
+  idValue(memberId?: string | null, role?: string | null): string {
+    return formatMemberPartnerId(memberId ?? null, role ?? null) ?? '—';
   }
 }

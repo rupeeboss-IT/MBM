@@ -71,7 +71,7 @@
               <div>
                 <a [routerLink]="detailLink(u)" class="um-link">{{ u.fullName }}</a>
                 @if (u.memberId) {
-                  <div class="muted um-sub">{{ u.memberId }}</div>
+                  <div class="muted um-sub">{{ idValue(u.memberId, u.role) }}</div>
                 }
               </div>
               <div>{{ u.email }}</div>
@@ -120,7 +120,7 @@
     @if (config().showCompany) {
       <label>Company<input type="text" [ngModel]="formCompany()" (ngModelChange)="formCompany.set($event)" /></label>
     }
-    <label>Password *<input type="password" [ngModel]="formPassword()" (ngModelChange)="formPassword.set($event)" autocomplete="new-password" /></label>
+    <label>Password *<app-password-input [ngModel]="formPassword()" (ngModelChange)="formPassword.set($event)" autocomplete="new-password" /></label>
     <div class="um-modal-actions">
       <button class="btn btn-outline" type="button" (click)="closeCreate()" [disabled]="createSubmitting()">Cancel</button>
       <button class="btn" type="button" (click)="submitCreate()" [disabled]="createSubmitting()">Create</button>

@@ -37,6 +37,14 @@ import { AdminUploadReports } from './admin/reports/upload-reports/upload-report
 import { AdminViewReports } from './admin/reports/view-reports/view-reports';
 import { UserManagementList } from './admin/user-management/user-management-list';
 import { UserManagementDetail } from './admin/user-management/user-management-detail';
+import { VendorList } from './admin/vendor-management/vendor-list/vendor-list';
+import { VendorDetail } from './admin/vendor-management/vendor-detail/vendor-detail';
+import { VendorPlanMapping } from './admin/vendor-management/vendor-plan-mapping/vendor-plan-mapping';
+import { LeadDashboard } from './admin/lead-attribution/lead-dashboard/lead-dashboard';
+import { LeadCustomerList } from './admin/lead-attribution/lead-customer-list/lead-customer-list';
+import { LeadCustomerDetail } from './admin/lead-attribution/lead-customer-detail/lead-customer-detail';
+import { EnquiryList } from './admin/enquiry-management/enquiry-list/enquiry-list';
+import { EnquiryDetail } from './admin/enquiry-management/enquiry-detail/enquiry-detail';
 
 export const routes: Routes = [
     {
@@ -311,6 +319,75 @@ export const routes: Routes = [
     {
         path: 'admin-reports',
         redirectTo: 'admin-reports/upload',
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/vendor-management/vendors/:vendorId',
+        component: VendorDetail,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/vendor-management/vendors',
+        component: VendorList,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/vendor-management/plan-mapping',
+        component: VendorPlanMapping,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/vendor-management',
+        redirectTo: 'admin/vendor-management/vendors',
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/lead-attribution/customers/:userId',
+        component: LeadCustomerDetail,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/lead-attribution/customers',
+        component: LeadCustomerList,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/lead-attribution',
+        component: LeadDashboard,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/enquiry-management/enquiries/:enquiryId',
+        component: EnquiryDetail,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/enquiry-management/enquiries',
+        component: EnquiryList,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/enquiry-management/new',
+        component: EnquiryList,
+        canActivate: [adminGuard],
+        data: { view: 'new' },
+    },
+    {
+        path: 'admin/enquiry-management/resolved',
+        component: EnquiryList,
+        canActivate: [adminGuard],
+        data: { view: 'resolved' },
+    },
+    {
+        path: 'admin/enquiry-management/closed',
+        component: EnquiryList,
+        canActivate: [adminGuard],
+        data: { view: 'closed' },
+    },
+    {
+        path: 'admin/enquiry-management',
+        redirectTo: 'admin/enquiry-management/enquiries',
         pathMatch: 'full'
     },
     {

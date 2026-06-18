@@ -201,6 +201,12 @@ builder.Services.AddScoped<RB_Website_API.Services.ISaarthiApiClient, RB_Website
 builder.Services.AddScoped<RB_Website_API.Services.ISdrReportService, RB_Website_API.Services.SdrReportService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IUserManagementRepository, RB_Website_API.Services.Repository.UserManagementRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IUserManagementService, RB_Website_API.Services.UserManagementService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IVendorManagementRepository, RB_Website_API.Services.Repository.VendorManagementRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IVendorManagementService, RB_Website_API.Services.VendorManagementService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.ILeadAttributionRepository, RB_Website_API.Services.Repository.LeadAttributionRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.ILeadAttributionService, RB_Website_API.Services.LeadAttributionService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IEnquiryManagementRepository, RB_Website_API.Services.Repository.EnquiryManagementRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IEnquiryManagementService, RB_Website_API.Services.EnquiryManagementService>();
 
 var app = builder.Build();
 

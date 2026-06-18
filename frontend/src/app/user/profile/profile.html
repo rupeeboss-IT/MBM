@@ -78,9 +78,9 @@
 
         <div class="details" *ngIf="!loading()">
           <div class="row" *ngIf="profile()?.memberId">
-            <div class="label">Member ID</div>
+            <div class="label">{{ idLabel(profile()?.role) }}</div>
             <div class="value" style="font-weight:900; color:var(--red) !important;">
-              {{ profile()?.memberId }}
+              {{ idValue(profile()?.memberId, profile()?.role) }}
             </div>
           </div>
           <div class="row">

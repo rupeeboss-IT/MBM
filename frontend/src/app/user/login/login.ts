@@ -9,11 +9,12 @@ import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
+import { PasswordInputComponent } from '../../core/components/password-input/password-input';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, PasswordInputComponent],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })

@@ -1,0 +1,122 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Lead Attribution</span>
+      <h2>Customer Leads</h2>
+      <div class="muted">View source attribution for every customer registration.</div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" routerLink="/admin/lead-attribution">Dashboard</a>
+      <button class="btn" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <app-admin-list-toolbar
+    panelTitle="Filters"
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="sortPreset()"
+    [showSearch]="false"
+    [disabled]="loading()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (sortPresetChange)="sortPreset.set($event); applyFilters()"
+    (applyFilters)="applyFilters()"
+    (exportClick)="exportExcel()"
+  />
+
+  <div class="section">
+    <div class="la-filters">
+      <input
+        type="search"
+        class="la-search"
+        placeholder="Search name, email, phone, source…"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+      <select class="la-select" [ngModel]="sourceTypeFilter()" (ngModelChange)="sourceTypeFilter.set($event)">
+        <option value="">All source types</option>
+        @for (t of filterOptions().sourceTypes; track t) {
+          <option [value]="t">{{ t }}</option>
+        }
+      </select>
+      <select class="la-select" [ngModel]="employeeFilter()" (ngModelChange)="employeeFilter.set($event)">
+        <option value="">All employees</option>
+        @for (e of filterOptions().employeeNames; track e) {
+          <option [value]="e">{{ e }}</option>
+        }
+      </select>
+      <select class="la-select" [ngModel]="partnerFilter()" (ngModelChange)="partnerFilter.set($event)">
+        <option value="">All partners</option>
+        @for (p of filterOptions().partnerNames; track p) {
+          <option [value]="p">{{ p }}</option>
+        }
+      </select>
+      <select class="la-select" [ngModel]="planFilter()" (ngModelChange)="planFilter.set($event)">
+        <option value="">All plans</option>
+        @for (p of filterOptions().planCodes; track p) {
+          <option [value]="p">{{ p }}</option>
+        }
+      </select>
+      <button class="btn btn-outline" type="button" (click)="applyFilters()" [disabled]="loading()">Apply</button>
+    </div>
+
+    @if (loading()) {
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading customers…</span>
+      </div>
+    } @else if (customers().length === 0) {
+      <div class="admin-empty">No customers found.</div>
+    } @else {
+      <div class="admin-table-wrap">
+        <div class="table">
+          <div class="row header row-la-customers">
+            <div (click)="onSortColumn('name')">Customer {{ sortIndicator(sortBy(), sortDir(), 'name') }}</div>
+            <div>Member ID</div>
+            <div>Mobile</div>
+            <div>Email</div>
+            <div (click)="onSortColumn('source')">Source {{ sortIndicator(sortBy(), sortDir(), 'source') }}</div>
+            <div>Current plan</div>
+            <div (click)="onSortColumn('membership')">Memberships {{ sortIndicator(sortBy(), sortDir(), 'membership') }}</div>
+            <div (click)="onSortColumn('reports')">Reports {{ sortIndicator(sortBy(), sortDir(), 'reports') }}</div>
+            <div>Registered</div>
+            <div>Actions</div>
+          </div>
+          @for (c of customers(); track c.userId) {
+            <div class="row row-la-customers">
+              <div>
+                <a [routerLink]="detailLink(c)" class="la-link">{{ c.fullName }}</a>
+              </div>
+              <div class="la-member-id">{{ c.memberId }}</div>
+              <div>{{ c.phone }}</div>
+              <div class="la-email">{{ c.email }}</div>
+              <div><span class="badge badge-outline">{{ c.sourceType }}</span></div>
+              <div>{{ c.planName || c.membershipStatus || '—' }}</div>
+              <div>{{ c.membershipSalesCount }}</div>
+              <div>
+                @if (c.reportPurchaseCount > 0 || c.reportGeneratedCount > 0) {
+                  {{ c.reportPurchaseCount }}<span class="muted la-sub-inline"> / {{ c.reportGeneratedCount }} gen</span>
+                } @else {
+                  0
+                }
+              </div>
+              <div>{{ c.registrationDate | localDate }}</div>
+              <div>
+                <a class="btn btn-outline btn-sm" [routerLink]="detailLink(c)">View</a>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <app-admin-pagination
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="total()"
+        [disabled]="loading()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  </div>
+</div>
