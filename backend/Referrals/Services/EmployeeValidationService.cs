@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RB_Website_API.Auth;
@@ -9,10 +8,6 @@ namespace RB_Website_API.Referrals.Services;
 
 public sealed class EmployeeValidationService : IEmployeeValidationService
 {
-    private static readonly Regex PanRegex = new(
-        @"^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$",
-        RegexOptions.Compiled | RegexOptions.CultureInvariant);
-
     private readonly ReferralDbContext _db;
     private readonly ReferralSettings _settings;
     private readonly ILogger<EmployeeValidationService> _logger;
@@ -35,51 +30,58 @@ public sealed class EmployeeValidationService : IEmployeeValidationService
         var code = referralCode.Trim();
         try
         {
-            if (long.TryParse(code, out var empId))
+            if (code.Length >= 2 && code.StartsWith("RB", StringComparison.OrdinalIgnoreCase))
             {
+                if (!int.TryParse(code[2..], out var empId))
+                    return new ReferralValidationResult(false, "Invalid referral code.");
+
                 var emp = await _db.EmployeeMaster.AsNoTracking()
                     .Where(e => e.EmpId == empId)
                     .Select(e => new { e.Emp_Code, e.Emp_Name, e.EmpId, e.Is_Active })
                     .FirstOrDefaultAsync(ct);
 
-                if (emp is not null)
-                {
-                    if (!emp.Is_Active)
-                        return new ReferralValidationResult(false, "Referral code is inactive.");
+                if (emp is null)
+                    return new ReferralValidationResult(false, "Invalid referral code.");
 
-                    return new ReferralValidationResult(
-                        true,
-                        "Valid referral code.",
-                        ReferralType.Employee,
-                        emp.Emp_Name,
-                        emp.EmpId,
-                        BrokerId: null,
-                        emp.Emp_Code,
-                        emp.Emp_Code);
-                }
+                if (!emp.Is_Active)
+                    return new ReferralValidationResult(false, "Referral code is inactive.");
+
+                return new ReferralValidationResult(
+                    true,
+                    "Valid referral code.",
+                    ReferralType.Employee,
+                    emp.Emp_Name,
+                    emp.EmpId,
+                    BrokerId: null,
+                    emp.Emp_Code,
+                    emp.Emp_Code);
             }
 
-            if (!PanRegex.IsMatch(code))
-                return new ReferralValidationResult(false, "Invalid referral code.");
+            if (code.Length >= 2 && code.StartsWith("GP", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!int.TryParse(code[2..], out var brokerId))
+                    return new ReferralValidationResult(false, "Invalid referral code.");
 
-            var normalizedPan = code.ToUpperInvariant();
-            var broker = await _db.BrokerMaster.AsNoTracking()
-                .Where(b => b.PAN_No.ToUpper() == normalizedPan && b.Is_Active == 1)
-                .Select(b => new { b.Broker_id, b.Broker_Name, b.PAN_No, b.Emp_Code })
-                .FirstOrDefaultAsync(ct);
+                var broker = await _db.BrokerMaster.AsNoTracking()
+                    .Where(b => b.Broker_id == brokerId && b.Is_Active == 1)
+                    .Select(b => new { b.Broker_id, b.Broker_Name, b.Emp_Code })
+                    .FirstOrDefaultAsync(ct);
 
-            if (broker is null)
-                return new ReferralValidationResult(false, "Invalid referral code.");
+                if (broker is null)
+                    return new ReferralValidationResult(false, "Invalid referral code.");
 
-            return new ReferralValidationResult(
-                true,
-                "Valid referral code.",
-                ReferralType.RBA,
-                broker.Broker_Name,
-                EmployeeId: null,
-                broker.Broker_id,
-                normalizedPan,
-                broker.Emp_Code);
+                return new ReferralValidationResult(
+                    true,
+                    "Valid referral code.",
+                    ReferralType.RBA,
+                    broker.Broker_Name,
+                    EmployeeId: null,
+                    broker.Broker_id,
+                    code,
+                    broker.Emp_Code);
+            }
+
+            return new ReferralValidationResult(false, "Invalid referral code.");
         }
         catch (Exception ex)
         {

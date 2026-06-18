@@ -1,0 +1,97 @@
+@if (visible()) {
+  <div id="mbm-root" [class.open]="isOpen()">
+    <div
+      id="mbm-panel"
+      role="dialog"
+      [attr.aria-label]="config.brand + ' chat assistant'"
+    >
+      <div id="mbm-head">
+        <div class="av">₹</div>
+        <div class="meta">
+          <div class="nm">{{ config.botName }}</div>
+          <div class="st"><i></i> Online · usually replies instantly</div>
+        </div>
+        <button type="button" id="mbm-x" aria-label="Close chat" (click)="closeChat()">&times;</button>
+      </div>
+
+      <div id="mbm-body" aria-live="polite" #bodyEl>
+        @for (msg of messages(); track $index) {
+          <div class="mbm-row" [class.bot]="msg.role === 'bot'" [class.user]="msg.role === 'user'">
+            @if (msg.role === 'bot') {
+              <div class="mbm-av">₹</div>
+            }
+            <div class="mbm-bub">
+              @if (msg.html) {
+                <span [innerHTML]="msg.html"></span>
+              } @else {
+                {{ msg.text }}
+              }
+            </div>
+          </div>
+        }
+
+        @if (isTyping()) {
+          <div class="mbm-row bot">
+            <div class="mbm-av">₹</div>
+            <div class="mbm-typing">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div id="mbm-chips">
+        @for (chip of chips(); track chip.label) {
+          @if (chip.url) {
+            <a class="mbm-chip" [href]="chip.url" target="_blank" rel="noopener">{{ chip.label }}</a>
+          } @else {
+            <button type="button" class="mbm-chip" (click)="onChipClick(chip)">{{ chip.label }}</button>
+          }
+        }
+      </div>
+
+      <div id="mbm-foot">
+        <form id="mbm-form" (submit)="submit($event)">
+          <input
+            id="mbm-in"
+            type="text"
+            autocomplete="off"
+            placeholder="Type your question…"
+            aria-label="Type your message"
+            [value]="inputValue()"
+            (input)="onInput($any($event.target).value)"
+            (keydown.enter)="submit($event)"
+            #inputEl
+          />
+          <button type="submit" id="mbm-send" aria-label="Send message" [disabled]="sendDisabled">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 12l16-8-6 16-2.5-6.5L4 12z" fill="currentColor" />
+            </svg>
+          </button>
+        </form>
+        <div class="mbm-cred">Powered by <b>MSME Bharat Manch</b> · RupeeBoss</div>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      id="mbm-launch"
+      [class.ring]="showRing()"
+      [attr.aria-label]="'Open chat with ' + config.botName"
+      (click)="toggleChat()"
+    >
+      @if (showRing() && !isOpen()) {
+        <span class="dot"></span>
+      }
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M12 3C6.9 3 3 6.6 3 11c0 2.2 1 4.2 2.7 5.6L5 21l4.7-1.6c.7.15 1.5.23 2.3.23 5.1 0 9-3.6 9-8.6S17.1 3 12 3z"
+          fill="#fff"
+        />
+        <circle cx="8.5" cy="11" r="1.2" fill="var(--red)" />
+        <circle cx="12" cy="11" r="1.2" fill="var(--red)" />
+        <circle cx="15.5" cy="11" r="1.2" fill="var(--red)" />
+      </svg>
+    </button>
+  </div>
+}
