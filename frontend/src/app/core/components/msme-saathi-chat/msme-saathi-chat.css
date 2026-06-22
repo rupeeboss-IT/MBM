@@ -137,15 +137,16 @@
 #mbm-head .av {
   width: 42px;
   height: 42px;
-  border-radius: 13px;
+  border-radius: 6px;
   flex-shrink: 0;
-  background: linear-gradient(140deg, var(--red), var(--red-dark));
+  background: linear-gradient(140deg, #fff, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-size: 20px;
   box-shadow: 0 4px 10px rgba(230, 57, 70, 0.4);
+  padding: 5px;
 }
 
 #mbm-head .meta {
@@ -264,9 +265,9 @@
 .mbm-av {
   width: 28px;
   height: 28px;
-  border-radius: 9px;
+  /* border-radius: 9px; */
   flex-shrink: 0;
-  background: linear-gradient(140deg, var(--red), var(--red-dark));
+  /* background: linear-gradient(140deg, var(--red), var(--red-dark)); */
   color: #fff;
   display: flex;
   align-items: center;

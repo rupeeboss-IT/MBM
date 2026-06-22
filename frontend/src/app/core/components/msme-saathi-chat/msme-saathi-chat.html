@@ -6,19 +6,23 @@
       [attr.aria-label]="config.brand + ' chat assistant'"
     >
       <div id="mbm-head">
-        <div class="av">₹</div>
+        <div class="av">
+          <div class="av">
+            <img src="/assets/mbmlogo.png" alt="MSME" class="av-icon">
+          </div>
+        </div>
         <div class="meta">
           <div class="nm">{{ config.botName }}</div>
           <div class="st"><i></i> Online · usually replies instantly</div>
         </div>
         <button type="button" id="mbm-x" aria-label="Close chat" (click)="closeChat()">&times;</button>
-      </div>
+        </div>
 
       <div id="mbm-body" aria-live="polite" #bodyEl>
         @for (msg of messages(); track $index) {
           <div class="mbm-row" [class.bot]="msg.role === 'bot'" [class.user]="msg.role === 'user'">
             @if (msg.role === 'bot') {
-              <div class="mbm-av">₹</div>
+              <div class="mbm-av"> <img src="/assets/mbmlogo.png" alt="MSME" class="av-icon"></div>
             }
             <div class="mbm-bub">
               @if (msg.html) {
@@ -32,7 +36,7 @@
 
         @if (isTyping()) {
           <div class="mbm-row bot">
-            <div class="mbm-av">₹</div>
+            <div class="mbm-av"> <img src="/assets/mbmlogo.png" alt="MSME" class="av-icon"></div>
             <div class="mbm-typing">
               <span></span><span></span><span></span>
             </div>
