@@ -207,6 +207,32 @@
           </button>
         </div>
       </div>
+
+      <div class="membership-onetime" role="region" aria-label="Scheme Discovery one-time report">
+        <div class="membership-onetime__content">
+          <span class="membership-onetime__icon" aria-hidden="true">🏛️</span>
+          <div>
+            <h2>Government Scheme Discovery Report</h2>
+            <p>
+              Not ready for annual membership? Get a personalized one-time report listing government schemes
+              and subsidies your MSME may qualify for — separate from MSME Basic (₹999/year).
+            </p>
+            <ul class="membership-onetime__features">
+              <li>100+ central &amp; state schemes analyzed</li>
+              <li>One-time payment — no annual subscription</li>
+              <li>Premium &amp; Pro members get reports included every cycle</li>
+            </ul>
+          </div>
+          <div class="membership-onetime__cta">
+            <div class="membership-onetime__price">₹999 <span>+ GST (₹1,178.82 incl.)</span></div>
+            <button type="button" class="btn-primary" (click)="startSchemeDiscoveryOneTime()">
+              Get One-Time Report
+            </button>
+            <a class="membership-onetime__link" routerLink="/offering/scheme-discovery">Learn more</a>
+          </div>
+        </div>
+      </div>
+
       <div class="section-header" style="margin-bottom:1.5rem;margin-top:3rem">
         <h2>Frequently Asked Questions</h2>
       </div>
@@ -314,14 +340,48 @@
         class="modal-close"
         (click)="$event.stopPropagation(); closeReferralModal()"
         aria-label="Close">&times;</button>
-      <h2 id="referral-modal-title">Advisor Code</h2>
-      <p class="sub">Optional — have a advisor code? Enter it below or skip to continue to payment.</p>
+      <h2 id="referral-modal-title">
+        {{ referralModalMode() === 'confirm' ? 'Confirm Your Advisor' : 'Advisor Code' }}
+      </h2>
+      <p class="sub" *ngIf="referralModalMode() === 'confirm'">
+        Your advisor is linked from registration. Continue to payment or change the code below.
+      </p>
+      <p class="sub" *ngIf="referralModalMode() !== 'confirm'">
+        Optional — have a advisor code? Enter it below or skip to continue to payment.
+      </p>
 
+      <ng-container *ngIf="referralModalMode() === 'confirm' && referralValidationState() === 'valid'">
+        <div class="referral-confirm-card">
+          <p class="referral-confirm-card__label">Advisor code</p>
+          <p class="referral-confirm-card__code">{{ referralCodeInput() }}</p>
+          <p class="referral-modal-employee" *ngIf="referredByName()">
+            Referred by: <strong>{{ referredByName() }}</strong>
+          </p>
+        </div>
+        <div class="referral-modal-actions">
+          <button type="button" class="btn-primary referral-btn-continue" (click)="continueFromReferral()">
+            Continue to Payment
+          </button>
+          <button type="button" class="btn-outline referral-btn-apply" (click)="editReferralCode()">
+            Change Advisor Code
+          </button>
+        </div>
+        <button
+          type="button"
+          class="referral-skip-link"
+          (click)="skipReferral()"
+          [disabled]="referralValidationState() === 'validating'">
+          Skip Advisor Code
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="referralModalMode() !== 'confirm'">
       <label class="referral-modal-label" for="referral-code-input">Advisor Code</label>
       <div
         class="referral-input-wrap"
         [class.referral-input-wrap--valid]="referralValidationState() === 'valid'"
         [class.referral-input-wrap--invalid]="referralValidationState() === 'invalid'"
+        [class.referral-input-wrap--inactive]="referralValidationState() === 'inactive'"
         [class.referral-input-wrap--validating]="referralValidationState() === 'validating'">
         <input
           id="referral-code-input"
@@ -352,12 +412,15 @@
       <p class="referral-modal-error" *ngIf="referralValidationState() === 'invalid'">
         {{ referralInvalidMessage }}
       </p>
+      <p class="referral-modal-inactive" *ngIf="referralValidationState() === 'inactive'">
+        {{ referralInactiveMessage }}
+      </p>
 
       <div class="referral-modal-actions">
         <button
           type="button"
           class="btn-outline referral-btn-apply"
-          *ngIf="referralValidationState() !== 'valid'"
+          *ngIf="referralValidationState() !== 'valid' && referralValidationState() !== 'inactive'"
           (click)="applyReferral()"
           [disabled]="referralValidationState() === 'validating' || !referralCodeInput().trim()">
           {{ referralValidationState() === 'validating' ? 'Checking…' : 'Apply Advisor Code' }}
@@ -365,9 +428,9 @@
         <button
           type="button"
           class="btn-primary referral-btn-continue"
-          *ngIf="referralValidationState() === 'valid'"
+          *ngIf="referralValidationState() === 'valid' || referralValidationState() === 'inactive'"
           (click)="continueFromReferral()">
-          Continue
+          {{ referralValidationState() === 'inactive' ? 'Continue with Default Assignment' : 'Continue' }}
         </button>
       </div>
 
@@ -382,6 +445,7 @@
       <small class="referral-modal-disclaimer" style="color: #888; font-size: 0.8em; font-style: italic; margin-top: 1rem; display: block;">
         Note: You can get your Advisor code from your referring Advisor. Advisor codes are optional and do not affect your plan benefits.
       </small>
+      </ng-container>
     </div>
   </div>
 

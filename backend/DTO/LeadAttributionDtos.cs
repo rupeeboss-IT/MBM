@@ -106,6 +106,7 @@ public sealed record LeadCustomerDetailDto(
     string? FirstPaidPlanCode,
     string? FirstPaidPlanName,
     string? FirstReferralCodeRaw,
+    string? RegistrationAdvisorCodeRaw,
     IReadOnlyList<LeadPaymentHistoryItemDto>? PaymentHistory);
 
 public sealed record LeadAttributionStatsResponse(

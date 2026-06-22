@@ -44,7 +44,7 @@ public sealed class EmployeeValidationService : IEmployeeValidationService
                     return new ReferralValidationResult(false, "Invalid referral code.");
 
                 if (!emp.Is_Active)
-                    return new ReferralValidationResult(false, "Referral code is inactive.");
+                    return new ReferralValidationResult(false, "Referral code is inactive.", IsInactive: true);
 
                 return new ReferralValidationResult(
                     true,
@@ -105,6 +105,13 @@ public sealed class EmployeeValidationService : IEmployeeValidationService
                     validated.EmployeeId,
                     validated.BrokerId,
                     UsedDefaultEmployee: false);
+            }
+
+            if (validated.IsInactive)
+            {
+                _logger.LogInformation(
+                    "Referral code {Code} is inactive; falling back to default employee for lead assignment.",
+                    referralCode.Trim());
             }
         }
 

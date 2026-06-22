@@ -753,11 +753,49 @@
   color: #1b7a3a;
 }
 
+.sd-referral__confirm-card {
+  margin-top: 0.5rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.sd-referral__confirm-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.sd-referral__confirm-code {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #0f3460;
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .sd-referral__error {
   margin: 0.35rem 0 0;
   font-size: 0.88rem;
   color: #c62828;
   line-height: 1.45;
+}
+
+.sd-referral__inactive {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: #b45309;
+  line-height: 1.45;
+}
+
+.sd-referral__input-wrap--inactive .sd-referral__input {
+  border-color: #f59e0b;
 }
 
 .sd-referral__actions {

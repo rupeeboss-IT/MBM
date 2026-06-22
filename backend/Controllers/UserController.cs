@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RB_Website_API.Auth;
 using RB_Website_API.Data;
 using RB_Website_API.Models;
+using RB_Website_API.Referrals.Services;
 using RB_Website_API.Services;
 
 namespace RB_Website_API.Controllers;
@@ -17,6 +18,8 @@ public sealed class UserController : ControllerBase
     private readonly IPasswordResetService _pwReset;
     private readonly IJwtTokenService _jwt;
     private readonly IMemberIdGeneratorService _memberIds;
+    private readonly ILeadPushService _leadPush;
+    private readonly IEmployeeValidationService _employees;
     private readonly ILogger<UserController> _logger;
 
     public UserController(
@@ -25,6 +28,8 @@ public sealed class UserController : ControllerBase
         IPasswordResetService pwReset,
         IJwtTokenService jwt,
         IMemberIdGeneratorService memberIds,
+        ILeadPushService leadPush,
+        IEmployeeValidationService employees,
         ILogger<UserController> logger)
     {
         _db = db;
@@ -32,6 +37,8 @@ public sealed class UserController : ControllerBase
         _pwReset = pwReset;
         _jwt = jwt;
         _memberIds = memberIds;
+        _leadPush = leadPush;
+        _employees = employees;
         _logger = logger;
     }
 
@@ -42,7 +49,9 @@ public sealed class UserController : ControllerBase
         string Phone,
         string? CompanyName,
         string Password,
-        bool ConsentAccepted
+        bool ConsentAccepted,
+        string? RegistrationSource = null,
+        string? AdvisorCode = null
     );
 
     public sealed record RegisterResponse(
@@ -71,7 +80,12 @@ public sealed class UserController : ControllerBase
         DateTime? EmailVerifiedAt = null,
         DateTime? PhoneVerifiedAt = null,
         DateTime? CreatedAt = null,
-        string? MemberId = null
+        string? MemberId = null,
+        /// <summary>Advisor code captured at registration, if any.</summary>
+        string? RegistrationAdvisorCode = null,
+        /// <summary>True when registration used a validated non-default advisor (locks attribution).</summary>
+        bool RegistrationAdvisorLocked = false,
+        string? RegistrationAdvisorDisplayName = null
     );
 
     [Authorize(Policy = "MemberAccess")]
@@ -102,6 +116,22 @@ public sealed class UserController : ControllerBase
         if (dto is null) return NotFound(new MeResponse(false, "User not found."));
         if (!dto.IsActive) return Unauthorized(new MeResponse(false, "Account is inactive."));
 
+        var regLead = await _db.UserRegistrationLeads.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.UserId == userId, ct);
+
+        string? advisorCode = null;
+        var advisorLocked = false;
+        string? advisorDisplayName = null;
+
+        if (regLead is not null && !string.IsNullOrWhiteSpace(regLead.AdvisorCode))
+        {
+            advisorCode = regLead.AdvisorCode.Trim();
+            var validation = await _employees.ValidateReferralCodeAsync(advisorCode, ct);
+            advisorLocked = validation.IsValid;
+            if (validation.IsValid && !string.IsNullOrWhiteSpace(validation.DisplayName))
+                advisorDisplayName = StripReferrerRoleSuffix(validation.DisplayName);
+        }
+
         return Ok(new MeResponse(
             true,
             "OK",
@@ -114,8 +144,20 @@ public sealed class UserController : ControllerBase
             dto.EmailVerifiedAt,
             dto.PhoneVerifiedAt,
             dto.CreatedAt,
-            dto.MemberId
+            dto.MemberId,
+            advisorCode,
+            advisorLocked,
+            advisorDisplayName
         ));
+    }
+
+    private static string StripReferrerRoleSuffix(string displayName)
+    {
+        var trimmed = displayName.Trim();
+        var idx = trimmed.LastIndexOf('(');
+        if (idx > 0 && trimmed.EndsWith(')'))
+            return trimmed[..idx].Trim();
+        return trimmed;
     }
 
     [HttpPost("login")]
@@ -188,6 +230,7 @@ public sealed class UserController : ControllerBase
                     "Registration idempotent retry for existing email {Email} (UserId={UserId})",
                     email,
                     existingByEmail.UserId);
+                await TryPushRegistrationLeadAsync(existingByEmail.UserId, req.RegistrationSource, req.AdvisorCode, ct);
                 return Ok(idempotent);
             }
 
@@ -203,6 +246,7 @@ public sealed class UserController : ControllerBase
                     "Registration idempotent retry for existing phone {Phone} (UserId={UserId})",
                     phoneDigits,
                     existingByPhone.UserId);
+                await TryPushRegistrationLeadAsync(existingByPhone.UserId, req.RegistrationSource, req.AdvisorCode, ct);
                 return Ok(idempotent);
             }
 
@@ -244,6 +288,8 @@ public sealed class UserController : ControllerBase
             await _db.SaveChangesAsync(ct);
             await tx.CommitAsync(ct);
 
+            await TryPushRegistrationLeadAsync(user.UserId, req.RegistrationSource, req.AdvisorCode, ct);
+
             var token = _jwt.CreateToken(user.UserId, memberRole, user.Email);
             _logger.LogInformation("User registered successfully {UserId} ({Email})", user.UserId, email);
             return Ok(new RegisterResponse(
@@ -259,6 +305,22 @@ public sealed class UserController : ControllerBase
             await tx.RollbackAsync(ct);
             _logger.LogError(ex, "Registration failed for email {Email}", email);
             throw;
+        }
+    }
+
+    private async Task TryPushRegistrationLeadAsync(
+        Guid userId,
+        string? registrationSource,
+        string? advisorCode,
+        CancellationToken ct)
+    {
+        try
+        {
+            await _leadPush.CreateLeadAfterRegistrationAsync(userId, registrationSource, advisorCode, ct);
+        }
+        catch (Exception leadEx)
+        {
+            _logger.LogError(leadEx, "Registration lead push failed for user {UserId}", userId);
         }
     }
 

@@ -11,12 +11,27 @@ import {
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { AuthSessionService } from '../../services/auth-session.service';
+import { captureContactLeadSourceFromUrl } from '../../utils/contact-lead-source.util';
 import {
+  CHIPS_MAIN,
   KB,
   MBM_CHAT_CONFIG,
-  type MbmChip,
   matchIntent,
 } from './msme-saathi-chat.config';
+
+/** Chip actions shown under bot replies (includes in-app routes for logged-in users). */
+export interface SaathiChatChip {
+  label: string;
+  intent?: string;
+  url?: string;
+  route?: string;
+}
+
+const BACK_TO_MAIN_MENU_CHIP: SaathiChatChip = {
+  label: 'Back to main menu',
+  intent: 'welcome',
+};
 
 interface ChatMessage {
   role: 'user' | 'bot';
@@ -33,6 +48,7 @@ interface ChatMessage {
 })
 export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
   private readonly router = inject(Router);
+  private readonly session = inject(AuthSessionService);
   private navSub?: Subscription;
   private shouldScroll = false;
   private typingTimer?: ReturnType<typeof setTimeout>;
@@ -43,7 +59,7 @@ export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
   readonly showRing = signal(true);
   readonly isTyping = signal(false);
   readonly messages = signal<ChatMessage[]>([]);
-  readonly chips = signal<MbmChip[]>([]);
+  readonly chips = signal<SaathiChatChip[]>([]);
   readonly inputValue = signal('');
   readonly visible = signal(true);
 
@@ -88,6 +104,7 @@ export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
   }
 
   openChat(): void {
+    this.session.refreshFromStorage();
     this.isOpen.set(true);
     this.showRing.set(false);
     if (!this.started()) {
@@ -109,9 +126,22 @@ export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
     this.handleText(value);
   }
 
-  onChipClick(chip: MbmChip): void {
-    if (chip.url) return;
+  onChipClick(chip: SaathiChatChip): void {
+    if (chip.url || chip.route) return;
     if (chip.intent) this.handleIntent(chip.intent, chip.label);
+  }
+
+  onRouteChip(chip: SaathiChatChip): void {
+    const route = chip.route?.trim();
+    if (!route) return;
+
+    const queryIndex = route.indexOf('?');
+    if (queryIndex >= 0) {
+      captureContactLeadSourceFromUrl(route.slice(queryIndex));
+    }
+
+    this.closeChat();
+    void this.router.navigateByUrl(route);
   }
 
   private updateVisibility(url: string): void {
@@ -144,19 +174,77 @@ export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
   }
 
   private showIntent(key: string): void {
+    this.session.refreshFromStorage();
     const node = KB[key] ?? KB['fallback'];
+    const loggedIn = this.session.isLoggedIn();
+    const { reply, chips: resolvedChips } = this.resolveIntentContent(key, node.reply, node.chips ?? [], loggedIn);
+    const chips = this.withMainMenuChip(key, resolvedChips);
+
     this.chips.set([]);
     this.isTyping.set(true);
     this.shouldScroll = true;
 
-    const delay = Math.min(900, 350 + node.reply.length * 1.2);
+    const delay = Math.min(900, 350 + reply.length * 1.2);
     if (this.typingTimer) clearTimeout(this.typingTimer);
 
     this.typingTimer = setTimeout(() => {
       this.isTyping.set(false);
-      this.messages.update((m) => [...m, { role: 'bot', html: node.reply }]);
-      this.chips.set(node.chips ?? []);
+      this.messages.update((m) => [...m, { role: 'bot', html: reply }]);
+      this.chips.set(chips);
       this.shouldScroll = true;
     }, delay);
+  }
+
+  private resolveIntentContent(
+    key: string,
+    reply: string,
+    chips: SaathiChatChip[],
+    loggedIn: boolean,
+  ): { reply: string; chips: SaathiChatChip[] } {
+    if (!loggedIn) return { reply, chips };
+
+    if (key === 'join') {
+      return {
+        reply:
+          'You\'re already signed in. 🎉<br><br>' +
+          'Reach out to our team below, or open <b>My plan</b> to see your current subscription.',
+        chips: [
+          { label: 'Contact us', route: '/contact' },
+          { label: 'My plan', route: '/my-plan' },
+        ],
+      };
+    }
+
+    return { reply, chips: this.adaptChipsForLoggedIn(chips) };
+  }
+
+  /** Ensures every sub-menu chip row ends with a way back to CHIPS_MAIN (welcome). */
+  private withMainMenuChip(intentKey: string, chips: SaathiChatChip[]): SaathiChatChip[] {
+    if (intentKey === 'welcome' || this.isMainMenuChips(chips)) return chips;
+    if (chips.some((c) => c.intent === 'welcome')) return chips;
+    return [...chips, BACK_TO_MAIN_MENU_CHIP];
+  }
+
+  private isMainMenuChips(chips: SaathiChatChip[]): boolean {
+    if (chips.length !== CHIPS_MAIN.length) return false;
+    return chips.every(
+      (chip, i) => chip.label === CHIPS_MAIN[i].label && chip.intent === CHIPS_MAIN[i].intent,
+    );
+  }
+
+  private adaptChipsForLoggedIn(chips: SaathiChatChip[]): SaathiChatChip[] {
+    const hasContactChip = chips.some(
+      (c) => c.label === 'Contact us' || (c.route?.includes('/contact') ?? false),
+    );
+
+    return chips.flatMap((chip) => {
+      if (chip.url === MBM_CHAT_CONFIG.registerUrl || chip.intent === 'join') {
+        if (hasContactChip) {
+          return [{ label: 'My plan', route: '/my-plan' }];
+        }
+        return [{ label: 'Contact us', route: '/contact?source=MSMECHATBOT' }];
+      }
+      return [chip];
+    });
   }
 }

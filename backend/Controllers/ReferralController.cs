@@ -25,7 +25,8 @@ public sealed class ReferralController : ControllerBase
         string? ReferralCode = null,
         string? ReferralType = null,
         string? DisplayName = null,
-        int? BrokerId = null);
+        int? BrokerId = null,
+        bool Inactive = false);
 
     // Keep it public: payment page needs it before login sometimes.
     [AllowAnonymous]
@@ -37,7 +38,12 @@ public sealed class ReferralController : ControllerBase
 
         var result = await _employees.ValidateReferralCodeAsync(req.ReferralCode, ct);
         if (!result.IsValid)
-            return BadRequest(new ValidateReferralResponse(false, result.Message));
+        {
+            return Ok(new ValidateReferralResponse(
+                false,
+                result.Message,
+                Inactive: result.IsInactive));
+        }
 
         return Ok(new ValidateReferralResponse(
             true,

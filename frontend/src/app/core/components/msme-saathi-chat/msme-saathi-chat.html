@@ -42,7 +42,9 @@
 
       <div id="mbm-chips">
         @for (chip of chips(); track chip.label) {
-          @if (chip.url) {
+          @if (chip.route) {
+            <button type="button" class="mbm-chip" (click)="onRouteChip(chip)">{{ chip.label }}</button>
+          } @else if (chip.url) {
             <a class="mbm-chip" [href]="chip.url" target="_blank" rel="noopener">{{ chip.label }}</a>
           } @else {
             <button type="button" class="mbm-chip" (click)="onChipClick(chip)">{{ chip.label }}</button>

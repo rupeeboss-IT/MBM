@@ -155,6 +155,35 @@ public sealed class LeadAttributionRepository : ILeadAttributionRepository
                 });
     }
 
+    public async Task<Dictionary<Guid, RegistrationAdvisorRow>> GetRegistrationAdvisorsAsync(
+        IReadOnlyList<Guid> userIds,
+        CancellationToken ct)
+    {
+        if (userIds.Count == 0) return new Dictionary<Guid, RegistrationAdvisorRow>();
+
+        var rows = await _db.UserRegistrationLeads.AsNoTracking()
+            .Where(r => userIds.Contains(r.UserId) && r.LeadPushedAt != default)
+            .Select(r => new
+            {
+                r.UserId,
+                r.AdvisorCode,
+                r.ResolvedEmpCode,
+                r.LeadType,
+                r.BrokerId,
+                r.UsedDefaultEmployee,
+            })
+            .ToListAsync(ct);
+
+        return rows.ToDictionary(
+            x => x.UserId,
+            x => new RegistrationAdvisorRow(
+                x.AdvisorCode,
+                x.ResolvedEmpCode,
+                x.LeadType,
+                x.BrokerId,
+                x.UsedDefaultEmployee));
+    }
+
     public async Task<IReadOnlyList<PaymentHistoryRow>> GetPaymentHistoryAsync(Guid userId, CancellationToken ct)
     {
         var rows = await (

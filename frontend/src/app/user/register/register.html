@@ -206,6 +206,43 @@
             Suggestions powered by Clearbit.
           </div>
         </div>
+        <div class="form-group reg-advisor">
+          <label for="regAdvisor">Advisor Code <span class="reg-advisor__optional">(optional)</span></label>
+          <p class="reg-advisor__hint">Have an advisor or referral code? Enter it here to link your registration.</p>
+          <div
+            class="reg-advisor__input-wrap"
+            [class.reg-advisor__input-wrap--valid]="advisorValidationState() === 'valid'"
+            [class.reg-advisor__input-wrap--invalid]="advisorValidationState() === 'invalid'"
+            [class.reg-advisor__input-wrap--validating]="advisorValidationState() === 'validating'">
+            <input
+              type="text"
+              id="regAdvisor"
+              placeholder="e.g. RB12345 or GP12345"
+              formControlName="advisorCode"
+              autocomplete="off"
+              maxlength="50">
+            <span
+              class="reg-advisor__status reg-advisor__status--loading"
+              *ngIf="advisorValidationState() === 'validating'"
+              aria-hidden="true"></span>
+            <span
+              class="reg-advisor__status reg-advisor__status--valid"
+              *ngIf="advisorValidationState() === 'valid'"
+              aria-label="Valid advisor code">✓</span>
+            <span
+              class="reg-advisor__status reg-advisor__status--invalid"
+              *ngIf="advisorValidationState() === 'invalid'"
+              aria-label="Invalid advisor code">✕</span>
+          </div>
+          <div style="margin-top:.35rem;font-size:.8rem">
+            <div *ngIf="advisorValidationState() === 'valid' && advisorReferredByName()" style="color:var(--green);font-weight:700">
+              ✓ Referred by {{ advisorReferredByName() }}
+            </div>
+            <div *ngIf="advisorValidationState() === 'invalid'" style="color:var(--red);font-weight:600">
+              ⚠️ {{ advisorInvalidMessage }}
+            </div>
+          </div>
+        </div>
         <div
           class="reg-consent-box"
           [class.reg-consent-box--invalid]="form.controls.consent.touched && form.controls.consent.invalid">
@@ -237,28 +274,42 @@
 
     <!-- Step 2: Choose Plan -->
     <div class="auth-box" id="reg-step-2" *ngIf="step() === 2" style="max-width:760px;width:100%">
-      <div class="auth-logo"><span style="font-size:2rem">💎</span><h2>Choose Your Plan</h2><p>Step 2 of 4 — Start free, upgrade anytime</p></div>
+      <div class="auth-logo"><span style="font-size:2rem">💎</span><h2>Choose Your Plan</h2><p>Step 2 of 4 — Annual membership or a one-time Scheme Discovery Report</p></div>
+      <div class="reg-plan-onetime" role="region" aria-label="Scheme Discovery Report">
+        <div class="reg-plan-onetime__head">
+          <span class="reg-plan-onetime__icon" aria-hidden="true">🏛️</span>
+          <div>
+            <h3>Government Scheme Discovery Report</h3>
+            <p>One-time personalized report — no annual membership required</p>
+          </div>
+          <div class="reg-plan-onetime__price">₹999 <small>+ GST</small></div>
+        </div>
+        <button type="button" class="btn-primary" style="width:100%" (click)="selectSchemeDiscoveryReport()">
+          Get One-Time Report — ₹999 + GST
+        </button>
+      </div>
+      <p class="reg-plan-divider">Or choose an annual membership plan</p>
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem" id="reg-plan-grid">
-        <div class="home-plan-card" id="rplan-MSME Basic" style="cursor:pointer">
+        <div class="home-plan-card" id="rplan-MSME Basic" style="cursor:pointer" (click)="selectMembershipPlan('basic')">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌱</div><h3 style="font-size:1rem">MSME Basic</h3></div><div class="hp-badge free">₹999/yr</div></div>
           <p class="hp-desc">Udyam Aadhaar + credibility profile + WhatsApp + Basic Website</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Join with Udyam Aadhaar</li><li><span class="tick">✓</span>WhatsApp Platform</li><li><span class="tick">✓</span>Basic Website</li><li><span class="tick">✓</span>Practo Insurance + Credit Report</li></ul>
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--green);font-size:.9rem">Select Basic — ₹999/yr</div>
         </div>
-        <div class="home-plan-card" id="rplan-MSME Standard" style="cursor:pointer">
+        <div class="home-plan-card" id="rplan-MSME Standard" style="cursor:pointer" (click)="selectMembershipPlan('standard')">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌐</div><h3 style="font-size:1rem">MSME Standard</h3></div><div class="hp-badge silver">₹4,999/yr</div></div>
           <p class="hp-desc">Website + WhatsApp automation + hosting + lead capture</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Website Development + Hosting</li><li><span class="tick">✓</span>Free subdomain on qobo.dev</li><li><span class="tick">✓</span>WhatsApp FAQ automation</li><li><span class="tick">✓</span>Mobile-friendly + fast loading</li></ul>
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#555;font-size:.9rem">Select Standard — ₹4,999/yr</div>
         </div>
-        <div class="home-plan-card featured-plan" id="rplan-MSME Premium" style="cursor:pointer">
+        <div class="home-plan-card featured-plan" id="rplan-MSME Premium" style="cursor:pointer" (click)="selectMembershipPlan('premium')">
           <div class="plan-popular" style="top:-10px">Most Popular</div>
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🏆</div><h3 style="font-size:1rem">MSME Premium</h3></div><div class="hp-badge gold">₹9,999/yr</div></div>
           <p class="hp-desc">Infomerics verified report + RM + Loan Audit + 10L Insurance</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Verified Report</li><li><span class="tick">✓</span>Free Relationship Manager</li><li><span class="tick">✓</span>Free Loan &amp; Insurance Audit</li><li><span class="tick">✓</span>2 Events + ₹10L Insurance</li></ul>
           <div style="background:var(--red-light);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--red);font-size:.9rem">Select Premium — ₹9,999/yr</div>
         </div>
-        <div class="home-plan-card" id="rplan-MSME Pro" style="cursor:pointer">
+        <div class="home-plan-card" id="rplan-MSME Pro" style="cursor:pointer" (click)="selectMembershipPlan('pro')">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">💎</div><h3 style="font-size:1rem">MSME Pro</h3></div><div class="hp-badge platinum">₹19,999/yr</div></div>
           <p class="hp-desc">GeM Portal + Business Assessment + 4 Events + 15L Insurance</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Infomerics Business Assessment</li><li><span class="tick">✓</span>GeM Portal Registration</li><li><span class="tick">✓</span>4 MSME Events Access</li><li><span class="tick">✓</span>₹15L Insurance + Free RM</li></ul>

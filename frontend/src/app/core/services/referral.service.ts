@@ -16,6 +16,7 @@ export interface ValidateReferralRes {
   referralType?: 'Employee' | 'RBA';
   displayName?: string;
   brokerId?: number;
+  inactive?: boolean;
 }
 
 /** UI display: referrer name only, without role/type suffixes such as (RBA) or (Employee). */

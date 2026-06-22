@@ -105,6 +105,14 @@ export class PaymentService {
     return this.http.post<CreateOrderRes>(apiUrl('/api/payment/razorpay/order'), req);
   }
 
+  /** Attach optional referral code when present. */
+  buildCreateOrderRequest(planCode: string, referralCode?: string | null): CreateOrderReq {
+    return {
+      planCode,
+      ...(referralCode?.trim() ? { referralCode: referralCode.trim() } : {}),
+    };
+  }
+
   verify(req: VerifyReq): Observable<VerifyRes> {
     return this.http.post<VerifyRes>(apiUrl('/api/payment/razorpay/verify'), req);
   }

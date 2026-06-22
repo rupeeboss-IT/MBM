@@ -17,6 +17,13 @@ import { passwordComplexityValidator } from '../../core/validators/password.vali
 import { strictEmailValidator } from '../../core/validators/email.validators';
 import { indianMobileValidator } from '../../core/validators/phone.validators';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { captureRegistrationLeadSourceFromUrl, clearRegistrationLeadSource, getRegistrationLeadSource } from '../../core/utils/registration-lead-source.util';
+import { captureRegistrationAdvisorFromUrl, getRegistrationAdvisorCode, setRegistrationAdvisorCode } from '../../core/utils/registration-advisor.util';
+import { ReferralService, referrerDisplayName } from '../../core/services/referral.service';
+import {
+  consumeStashedMembershipSource,
+  isSchemeDiscoveryMembershipSource,
+} from '../../core/utils/membership-source.util';
 
 type ClearbitCompany = { name: string; domain: string; logo: string | null };
 
@@ -27,6 +34,11 @@ type RegisterRes = {
   role?: string;
   token?: string;
 };
+
+const ADVISOR_DEBOUNCE_MS = 500;
+const ADVISOR_INVALID_MSG =
+  'Advisor code is incorrect. Please check and enter the correct code.';
+type AdvisorValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
 
 @Component({
   selector: 'app-register',
@@ -44,7 +56,15 @@ export class Register implements OnInit {
   private readonly router = inject(Router);
   private readonly session = inject(AuthSessionService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
+  private readonly referrals = inject(ReferralService);
   private readonly host = inject(ElementRef<HTMLElement>);
+
+  private advisorDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private advisorValidationSeq = 0;
+
+  readonly advisorValidationState = signal<AdvisorValidationState>('idle');
+  readonly advisorReferredByName = signal<string | null>(null);
+  readonly advisorInvalidMessage = ADVISOR_INVALID_MSG;
 
   readonly roleOpen = signal(false);
 
@@ -124,6 +144,9 @@ export class Register implements OnInit {
       company: this.fb.nonNullable.control('', {
         validators: [Validators.maxLength(120)]
       }),
+      advisorCode: this.fb.nonNullable.control('', {
+        validators: [Validators.maxLength(50)]
+      }),
       consent: this.fb.nonNullable.control(false, { validators: [Validators.requiredTrue] })
     },
     {
@@ -144,6 +167,10 @@ export class Register implements OnInit {
     });
     this.form.controls.phone.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.syncPhoneVerificationUi();
+    });
+
+    this.form.controls.advisorCode.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.onAdvisorInputChange();
     });
 
     this.form.controls.company.valueChanges
@@ -184,10 +211,81 @@ export class Register implements OnInit {
   }
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      captureRegistrationLeadSourceFromUrl(window.location.search);
+      captureRegistrationAdvisorFromUrl(window.location.search);
+    }
+    const stashedAdvisor = getRegistrationAdvisorCode();
+    if (stashedAdvisor) {
+      this.form.controls.advisorCode.setValue(stashedAdvisor);
+      void this.runAdvisorValidation();
+    }
     this.session.refreshFromStorage();
     if (this.session.isLoggedIn()) {
       void this.redirectIfAlreadyAuthenticated();
     }
+  }
+
+  private onAdvisorInputChange() {
+    const code = this.form.controls.advisorCode.value.trim();
+    this.advisorReferredByName.set(null);
+
+    if (!code) {
+      if (this.advisorDebounceTimer) clearTimeout(this.advisorDebounceTimer);
+      this.advisorValidationSeq++;
+      this.advisorValidationState.set('idle');
+      setRegistrationAdvisorCode(null);
+      return;
+    }
+
+    this.advisorValidationState.set('validating');
+    if (this.advisorDebounceTimer) clearTimeout(this.advisorDebounceTimer);
+    this.advisorDebounceTimer = setTimeout(() => void this.runAdvisorValidation(), ADVISOR_DEBOUNCE_MS);
+  }
+
+  private async runAdvisorValidation(): Promise<boolean> {
+    const code = this.form.controls.advisorCode.value.trim();
+    if (!code) {
+      this.advisorValidationState.set('idle');
+      setRegistrationAdvisorCode(null);
+      return false;
+    }
+
+    const seq = ++this.advisorValidationSeq;
+    this.advisorValidationState.set('validating');
+    this.advisorReferredByName.set(null);
+
+    try {
+      const res = await firstValueFrom(this.referrals.validate({ referralCode: code }));
+      if (seq !== this.advisorValidationSeq) return false;
+
+      const name = referrerDisplayName(res);
+      if (res?.success && name) {
+        this.advisorReferredByName.set(name);
+        this.advisorValidationState.set('valid');
+        setRegistrationAdvisorCode(code);
+        return true;
+      }
+
+      this.advisorValidationState.set('invalid');
+      return false;
+    } catch {
+      if (seq !== this.advisorValidationSeq) return false;
+      this.advisorValidationState.set('invalid');
+      return false;
+    }
+  }
+
+  private async resolveAdvisorCodeForSubmit(): Promise<string | null> {
+    const code = this.form.controls.advisorCode.value.trim();
+    if (!code) return null;
+
+    if (this.advisorValidationState() !== 'valid') {
+      const ok = await this.runAdvisorValidation();
+      if (!ok) return null;
+    }
+
+    return code;
   }
 
   readonly canContinue = computed(() => {
@@ -440,8 +538,16 @@ export class Register implements OnInit {
       return;
     }
 
+    const advisorCode = await this.resolveAdvisorCodeForSubmit();
+    if (this.form.controls.advisorCode.value.trim() && !advisorCode) {
+      this.form.controls.advisorCode.markAsTouched();
+      this.toast.warning('Please enter a valid advisor code or leave the field empty.');
+      return;
+    }
+
     try {
       this.submitting.set(true);
+      const registrationSource = getRegistrationLeadSource();
       const res = await firstValueFrom(
         this.auth.register({
           role: this.form.controls.role.value,
@@ -451,6 +557,8 @@ export class Register implements OnInit {
           companyName: this.form.controls.company.value?.trim() ? this.form.controls.company.value.trim() : null,
           password: this.form.controls.password.value,
           consentAccepted: this.form.controls.consent.value === true,
+          ...(registrationSource ? { registrationSource } : {}),
+          ...(advisorCode ? { advisorCode } : {}),
         })
       );
       if (!res?.success) {
@@ -480,11 +588,27 @@ export class Register implements OnInit {
     this.step.set(3);
   }
 
+  selectMembershipPlan(code: 'basic' | 'standard' | 'premium' | 'pro'): void {
+    try {
+      window.localStorage.setItem('mbm_pending_plan', code);
+    } catch {
+      // ignore
+    }
+    this.toast.success('Opening membership checkout…');
+    void this.router.navigateByUrl('/membership');
+  }
+
+  selectSchemeDiscoveryReport(): void {
+    this.schemeDiscovery.beginOneTimeReportCheckout();
+  }
+
   skipPayment() {
     this.router.navigateByUrl('/profile');
   }
 
   private async handleRegistrationSuccess(res: RegisterRes): Promise<void> {
+    clearRegistrationLeadSource();
+    // Keep advisor in session for membership checkout pre-fill / payment reconciliation.
     const userId = this.coerceUserId(res.userId);
     const token = (res.token ?? '').trim();
     if (!userId || !token) {
@@ -507,6 +631,13 @@ export class Register implements OnInit {
       }
     } catch (e) {
       console.error('[Register] Scheme discovery resume failed after registration', e);
+    }
+
+    const schemeDiscoverySource = consumeStashedMembershipSource();
+    if (schemeDiscoverySource && isSchemeDiscoveryMembershipSource(schemeDiscoverySource)) {
+      this.toast.success('Account created. Continue with your Scheme Discovery Report.');
+      this.schemeDiscovery.beginOneTimeReportCheckout();
+      return;
     }
 
     const pendingPlan =

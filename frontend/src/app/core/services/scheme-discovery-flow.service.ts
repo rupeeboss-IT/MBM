@@ -2,10 +2,11 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { firstValueFrom, timeout } from 'rxjs';
 import { AuthSessionService } from './auth-session.service';
+import { AuthService } from './auth.service';
 import { CustomerReportService } from './customer-report.service';
 import { PaymentService } from './payment.service';
 import { RazorpayLoaderService } from './razorpay-loader.service';
-import { ReferralService, referrerDisplayName } from './referral.service';
+import { ReferralService } from './referral.service';
 import { SchemeDiscoveryApi, type SchemeDiscoveryStatus, type SchemeDiscoverySubmitRes } from './scheme-discovery.service';
 import { ToastService } from './toast.service';
 import { API_USER_MESSAGES } from '../utils/api-user-messages';
@@ -19,6 +20,17 @@ import {
   setSchemeDiscoveryReturnUrl,
 } from '../utils/scheme-discovery-journey.util';
 import { formatUdyamFromRaw } from '../utils/udyam-input.util';
+import {
+  applyReferralConfirmPrefill,
+  canProceedWithReferralState,
+  REFERRAL_DEBOUNCE_MS,
+  REFERRAL_INACTIVE_MSG,
+  REFERRAL_INVALID_MSG,
+  resolveReferralCheckoutAction,
+  type ReferralValidationState,
+  validateReferralCode,
+} from '../utils/referral-capture.util';
+import { getRegistrationAdvisorCode } from '../utils/registration-advisor.util';
 
 export type SchemeDiscoveryModal =
   | 'none'
@@ -37,15 +49,11 @@ export type SchemeDiscoveryModal =
   | 'report_failed';
 
 const ONE_TIME_PLAN = 'scheme-report-onetime';
-const REFERRAL_DEBOUNCE_MS = 500;
-const REFERRAL_INVALID_MSG =
-  'Referral code is incorrect. Please check and enter the correct code.';
-
-type ReferralValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
 
 @Injectable({ providedIn: 'root' })
 export class SchemeDiscoveryFlowService {
   private readonly session = inject(AuthSessionService);
+  private readonly auth = inject(AuthService);
   private readonly api = inject(SchemeDiscoveryApi);
   private readonly payments = inject(PaymentService);
   private readonly razorpayLoader = inject(RazorpayLoaderService);
@@ -71,6 +79,8 @@ export class SchemeDiscoveryFlowService {
   readonly referredByName = signal<string | null>(null);
   readonly referralValidationState = signal<ReferralValidationState>('idle');
   readonly referralInvalidMessage = REFERRAL_INVALID_MSG;
+  readonly referralInactiveMessage = REFERRAL_INACTIVE_MSG;
+  readonly referralModalMode = signal<'entry' | 'confirm'>('entry');
   readonly udyamCheckoutMode = signal(false);
   readonly draftRequestId = signal<string | null>(null);
   readonly generatedReportId = signal<string | null>(null);
@@ -204,7 +214,13 @@ export class SchemeDiscoveryFlowService {
     if (this.paying() || this.redirecting() || this.submitting()) return;
     const current = this.modal();
     if (current !== 'no_membership' && current !== 'plan_choice') return;
-    this.referralReturnModal.set('udyam');
+    this.beginOneTimeReportCheckout('no_membership');
+  }
+
+  /** Start one-time ₹999 scheme discovery checkout (Udyam → referral → payment). */
+  beginOneTimeReportCheckout(returnModal: SchemeDiscoveryModal = 'no_membership'): void {
+    if (this.paying() || this.redirecting() || this.submitting()) return;
+    this.referralReturnModal.set(returnModal);
     this.udyamCheckoutMode.set(true);
     this.draftRequestId.set(null);
     this.udyam.set('');
@@ -213,9 +229,45 @@ export class SchemeDiscoveryFlowService {
     this.openModal('udyam');
   }
 
+  editReferralCode(): void {
+    this.referralModalMode.set('entry');
+    this.referralValidationState.set('idle');
+    this.referredByName.set(null);
+  }
+
+  private async openReferralStep(): Promise<void> {
+    const action = await resolveReferralCheckoutAction(this.auth, this.referrals);
+
+    if (action.kind === 'skip_modal') {
+      await this.completeOneTimePurchase(action.code);
+      return;
+    }
+
+    this.resetReferralFields();
+    this.referralModalMode.set('entry');
+
+    if (action.kind === 'confirm') {
+      applyReferralConfirmPrefill(action.code, action.displayName, {
+        setCode: (v) => this.referralCodeInput.set(v),
+        setName: (v) => this.referredByName.set(v),
+        setState: (v) => this.referralValidationState.set(v),
+      });
+      this.referralModalMode.set('confirm');
+    } else {
+      const stashed = getRegistrationAdvisorCode();
+      if (stashed) {
+        this.referralCodeInput.set(stashed);
+        void this.runReferralValidation();
+      }
+    }
+
+    this.openModal('referral');
+  }
+
   cancelReferralStep(): void {
     this.clearReferralTimer();
     this.resetReferralFields();
+    this.referralModalMode.set('entry');
     const back = this.referralReturnModal();
     if (back === 'udyam' && this.udyamCheckoutMode()) {
       this.openModal('udyam');
@@ -259,7 +311,7 @@ export class SchemeDiscoveryFlowService {
   }
 
   continueReferralAndPay(): void {
-    if (this.referralValidationState() !== 'valid' || this.paying()) return;
+    if (!canProceedWithReferralState(this.referralValidationState()) || this.paying()) return;
     const referralToSend = this.referralCodeInput().trim();
     void this.completeOneTimePurchase(referralToSend || undefined);
   }
@@ -361,7 +413,7 @@ export class SchemeDiscoveryFlowService {
   }
 
   async purchaseOneTimeReport(): Promise<void> {
-    this.startOneTimePurchase();
+    this.beginOneTimeReportCheckout('no_membership');
   }
 
   private async completeOneTimePurchase(referralCode?: string): Promise<void> {
@@ -414,22 +466,22 @@ export class SchemeDiscoveryFlowService {
     this.referralValidationState.set('validating');
     this.referredByName.set(null);
 
-    try {
-      const res = await firstValueFrom(this.referrals.validate({ referralCode: code }));
-      if (seq !== this.referralValidationSeq) return false;
-      const name = referrerDisplayName(res);
-      if (res?.success && name) {
-        this.referredByName.set(name);
-        this.referralValidationState.set('valid');
-        return true;
-      }
-      this.referralValidationState.set('invalid');
-      return false;
-    } catch {
-      if (seq !== this.referralValidationSeq) return false;
-      this.referralValidationState.set('invalid');
-      return false;
+    const validated = await validateReferralCode(this.referrals, code);
+    if (seq !== this.referralValidationSeq) return false;
+
+    if (validated.valid && validated.displayName) {
+      this.referredByName.set(validated.displayName);
+      this.referralValidationState.set('valid');
+      return true;
     }
+
+    if (validated.inactive) {
+      this.referralValidationState.set('inactive');
+      return true;
+    }
+
+    this.referralValidationState.set('invalid');
+    return false;
   }
 
   private clearReferralTimer(): void {
@@ -445,6 +497,7 @@ export class SchemeDiscoveryFlowService {
     this.referralCodeInput.set('');
     this.referredByName.set(null);
     this.referralValidationState.set('idle');
+    this.referralModalMode.set('entry');
   }
 
   async submitUdyam(): Promise<void> {
@@ -462,8 +515,7 @@ export class SchemeDiscoveryFlowService {
         }
         this.draftRequestId.set(res.requestId);
         this.referralReturnModal.set('udyam');
-        this.resetReferralFields();
-        this.openModal('referral');
+        await this.openReferralStep();
         return;
       }
 
@@ -623,10 +675,12 @@ export class SchemeDiscoveryFlowService {
     let order;
     try {
       order = await firstValueFrom(
-        this.payments.createOrder({
-          planCode: ONE_TIME_PLAN,
-          ...(trimmedReferral ? { referralCode: trimmedReferral } : {}),
-        }),
+        this.payments.createOrder(
+          this.payments.buildCreateOrderRequest(
+            ONE_TIME_PLAN,
+            trimmedReferral || undefined,
+          ),
+        ),
       );
     } catch (e: unknown) {
       this.toast.error(getHttpErrorMessage(e, 'Could not start payment.'));

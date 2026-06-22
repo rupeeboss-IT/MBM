@@ -55,7 +55,7 @@ public sealed class PaymentController : ControllerBase
         _logger = logger;
     }
 
-    public sealed record CreateOrderRequest(string PlanCode, string? ReferralCode = null);
+    public sealed record CreateOrderRequest(string PlanCode, string? ReferralCode = null, string? RegistrationSource = null);
 
     public sealed record CreateOrderResponse(
         bool Success,
@@ -202,9 +202,19 @@ public sealed class PaymentController : ControllerBase
             var validation = await _employeeValidation.ValidateReferralCodeAsync(req.ReferralCode, ct);
             if (!validation.IsValid)
             {
-                if (_referralSettings.StrictReferralValidationOnOrderCreate)
-                    return BadRequest(new CreateOrderResponse(false, validation.Message ?? "Invalid referral code."));
-                _logger.LogWarning("Invalid referral code on order create (non-strict): {Code}", req.ReferralCode);
+                if (validation.IsInactive)
+                {
+                    _logger.LogInformation(
+                        "Inactive referral code {Code} on order create; default employee will be used at payment if still inactive.",
+                        req.ReferralCode.Trim());
+                }
+                else
+                {
+                    _logger.LogInformation(
+                        "Invalid referral code {Code} on order create ({Message}); default employee will be used at payment.",
+                        req.ReferralCode.Trim(),
+                        validation.Message);
+                }
             }
         }
 
@@ -216,6 +226,7 @@ public sealed class PaymentController : ControllerBase
 
         var orderId = Guid.NewGuid();
         var receipt = $"mbm_{orderId.ToString("N")[..16]}";
+        var registrationSource = RegistrationLeadSources.Normalize(req.RegistrationSource);
 
         var po = new PaymentOrder
         {
@@ -230,6 +241,7 @@ public sealed class PaymentController : ControllerBase
             Provider         = "Razorpay",
             Receipt          = receipt,
             Status           = "Created",
+            Notes            = PaymentOrderRegistrationSource.EncodeNotes(registrationSource),
             CreatedAt        = now,
             UpdatedAt        = now,
         };

@@ -186,6 +186,7 @@ public sealed class LeadAttributionService : ILeadAttributionService
         var activePlans = await _repo.GetActivePlansAsync(userIds, now, ct);
         var membershipCounts = await _repo.GetMembershipSalesCountsAsync(userIds, ct);
         var firstReferrals = await _repo.GetFirstPaidReferralsAsync(userIds, ct);
+        var registrationAdvisors = await _repo.GetRegistrationAdvisorsAsync(userIds, ct);
 
         var creatorIds = members
             .Where(m => m.CreatedByUserId.HasValue)
@@ -203,6 +204,7 @@ public sealed class LeadAttributionService : ILeadAttributionService
                 member,
                 creators,
                 firstReferrals,
+                registrationAdvisors,
                 reportCounts,
                 reportPurchaseCounts,
                 activePlans,
@@ -223,6 +225,7 @@ public sealed class LeadAttributionService : ILeadAttributionService
         var activePlans = await _repo.GetActivePlansAsync(userIds, now, ct);
         var membershipCounts = await _repo.GetMembershipSalesCountsAsync(userIds, ct);
         var firstReferrals = await _repo.GetFirstPaidReferralsAsync(userIds, ct);
+        var registrationAdvisors = await _repo.GetRegistrationAdvisorsAsync(userIds, ct);
 
         var creatorIds = member.CreatedByUserId.HasValue
             ? new List<Guid> { member.CreatedByUserId.Value }
@@ -234,6 +237,7 @@ public sealed class LeadAttributionService : ILeadAttributionService
             member,
             creators,
             firstReferrals,
+            registrationAdvisors,
             reportCounts,
             reportPurchaseCounts,
             activePlans,
@@ -246,6 +250,7 @@ public sealed class LeadAttributionService : ILeadAttributionService
         User member,
         Dictionary<Guid, User> creators,
         Dictionary<Guid, FirstReferralRow> firstReferrals,
+        Dictionary<Guid, RegistrationAdvisorRow> registrationAdvisors,
         Dictionary<Guid, int> reportCounts,
         Dictionary<Guid, int> reportPurchaseCounts,
         Dictionary<Guid, (string? PlanCode, string? PlanName, string Status)> activePlans,
@@ -258,9 +263,10 @@ public sealed class LeadAttributionService : ILeadAttributionService
         reportPurchaseCounts.TryGetValue(member.UserId, out var reportPurchases);
         membershipCounts.TryGetValue(member.UserId, out var membershipSales);
         firstReferrals.TryGetValue(member.UserId, out var firstReferral);
+        registrationAdvisors.TryGetValue(member.UserId, out var registrationAdvisor);
 
         var createdThrough = ResolveCreatedThrough(member, creators);
-        var attribution = await ResolveAttributionAsync(member, creators, firstReferral, referralCache, ct);
+        var attribution = await ResolveAttributionAsync(member, creators, registrationAdvisor, firstReferral, referralCache, ct);
 
         return new LeadCustomerRow(
             member,
@@ -281,12 +287,14 @@ public sealed class LeadAttributionService : ILeadAttributionService
             firstReferral?.PaidAt,
             firstReferral?.PlanCode,
             firstReferral?.PlanName,
-            firstReferral?.ReferralCode);
+            firstReferral?.ReferralCode,
+            registrationAdvisor?.AdvisorCode);
     }
 
     private async Task<AttributionInfo> ResolveAttributionAsync(
         User member,
         Dictionary<Guid, User> creators,
+        RegistrationAdvisorRow? registrationAdvisor,
         FirstReferralRow? firstReferral,
         Dictionary<string, ResolvedReferral?> referralCache,
         CancellationToken ct)
@@ -304,41 +312,27 @@ public sealed class LeadAttributionService : ILeadAttributionService
                 null);
         }
 
+        if (registrationAdvisor is not null
+            && !registrationAdvisor.UsedDefaultEmployee
+            && !string.IsNullOrWhiteSpace(registrationAdvisor.AdvisorCode))
+        {
+            var fromRegistration = await ResolveAttributionFromReferralCodeAsync(
+                registrationAdvisor.AdvisorCode,
+                referralCache,
+                ct);
+            if (fromRegistration is not null)
+                return fromRegistration;
+        }
+
         if (firstReferral is not null)
         {
-            var resolved = await ResolveReferralCachedAsync(firstReferral.ReferralCode, referralCache, ct);
-            if (resolved is not null)
-            {
-                if (resolved.ReferralType == ReferralType.RBA)
-                {
-                    return new AttributionInfo(
-                        IsRba: true,
-                        LeadSourceTypes.Partner,
-                        resolved.DisplayName,
-                        resolved.ReferralCode,
-                        resolved.DisplayName,
-                        null);
-                }
-
-                if (resolved.UsedDefaultEmployee && string.IsNullOrWhiteSpace(firstReferral.ReferralCode))
-                {
-                    return new AttributionInfo(
-                        IsRba: false,
-                        LeadSourceTypes.Direct,
-                        "Direct Website",
-                        null,
-                        null,
-                        null);
-                }
-
-                return new AttributionInfo(
-                    IsRba: false,
-                    LeadSourceTypes.Employee,
-                    resolved.DisplayName,
-                    resolved.EmpCode,
-                    resolved.DisplayName,
-                    resolved.DisplayName);
-            }
+            var fromPayment = await ResolveAttributionFromReferralCodeAsync(
+                firstReferral.ReferralCode,
+                referralCache,
+                ct,
+                treatEmptyAsDirect: true);
+            if (fromPayment is not null)
+                return fromPayment;
         }
 
         if (member.CreatedByUserId is null)
@@ -359,6 +353,58 @@ public sealed class LeadAttributionService : ILeadAttributionService
             null,
             null,
             null);
+    }
+
+    private async Task<AttributionInfo?> ResolveAttributionFromReferralCodeAsync(
+        string? referralCode,
+        Dictionary<string, ResolvedReferral?> referralCache,
+        CancellationToken ct,
+        bool treatEmptyAsDirect = false)
+    {
+        if (string.IsNullOrWhiteSpace(referralCode))
+        {
+            if (!treatEmptyAsDirect) return null;
+            return new AttributionInfo(
+                IsRba: false,
+                LeadSourceTypes.Direct,
+                "Direct Website",
+                null,
+                null,
+                null);
+        }
+
+        var resolved = await ResolveReferralCachedAsync(referralCode, referralCache, ct);
+        if (resolved is null) return null;
+
+        if (resolved.ReferralType == ReferralType.RBA)
+        {
+            return new AttributionInfo(
+                IsRba: true,
+                LeadSourceTypes.Partner,
+                resolved.DisplayName,
+                resolved.ReferralCode,
+                resolved.DisplayName,
+                null);
+        }
+
+        if (resolved.UsedDefaultEmployee && string.IsNullOrWhiteSpace(referralCode))
+        {
+            return new AttributionInfo(
+                IsRba: false,
+                LeadSourceTypes.Direct,
+                "Direct Website",
+                null,
+                null,
+                null);
+        }
+
+        return new AttributionInfo(
+            IsRba: false,
+            LeadSourceTypes.Employee,
+            resolved.DisplayName,
+            resolved.EmpCode,
+            resolved.DisplayName,
+            resolved.DisplayName);
     }
 
     private async Task<ResolvedReferral?> ResolveReferralCachedAsync(
@@ -764,6 +810,7 @@ public sealed class LeadAttributionService : ILeadAttributionService
             r.FirstPaidPlanCode,
             r.FirstPaidPlanName,
             r.FirstReferralCodeRaw,
+            r.RegistrationAdvisorCodeRaw,
             paymentHistory.Select(ToPaymentHistoryItem).ToList());
 
     private static LeadPaymentHistoryItemDto ToPaymentHistoryItem(PaymentHistoryRow row) =>
@@ -803,5 +850,6 @@ public sealed class LeadAttributionService : ILeadAttributionService
         DateTime? FirstPaidAt,
         string? FirstPaidPlanCode,
         string? FirstPaidPlanName,
-        string? FirstReferralCodeRaw);
+        string? FirstReferralCodeRaw,
+        string? RegistrationAdvisorCodeRaw);
 }

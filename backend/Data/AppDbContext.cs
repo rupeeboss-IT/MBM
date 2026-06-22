@@ -18,6 +18,7 @@ namespace RB_Website_API.Data
         public DbSet<Models.Payment> Payments => Set<Models.Payment>();
         public DbSet<Models.UserPlan> UserPlans => Set<Models.UserPlan>();
         public DbSet<Models.PaymentOrderReferral> PaymentOrderReferrals => Set<Models.PaymentOrderReferral>();
+        public DbSet<Models.UserRegistrationLead> UserRegistrationLeads => Set<Models.UserRegistrationLead>();
         public DbSet<Models.ReferralLeadOutbox> ReferralLeadOutbox => Set<Models.ReferralLeadOutbox>();
         public DbSet<Models.CustomerReport> CustomerReports => Set<Models.CustomerReport>();
         public DbSet<Models.ReportAuditLog> ReportAuditLogs => Set<Models.ReportAuditLog>();

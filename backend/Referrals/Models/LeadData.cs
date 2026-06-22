@@ -75,4 +75,8 @@ public sealed class LeadData
     [Column("CompanyName")]
     [MaxLength(550)]
     public string? CompanyName { get; set; }
+
+    [Column("remark")]
+    [MaxLength(4000)]
+    public string? remark { get; set; }
 }

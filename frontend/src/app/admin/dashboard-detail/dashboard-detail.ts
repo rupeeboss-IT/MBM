@@ -43,6 +43,7 @@ export type DashboardDetailRes = {
     createdAt: string;
     planCode?: string | null;
     planName?: string | null;
+    advisorCode?: string | null;
   }>;
   plans?: Array<{
     planId: number;
@@ -417,6 +418,7 @@ export class AdminDashboardDetail {
           { header: 'Phone', value: (r) => (r as MemberRow).phone },
           { header: 'Role', value: (r) => (r as MemberRow).role },
           { header: 'Plan', value: (r) => (r as MemberRow).planName || (r as MemberRow).planCode || '—' },
+          { header: 'Advisor code', value: (r) => (r as MemberRow).advisorCode || '—' },
           { header: 'Status', value: (r) => ((r as MemberRow).isActive ? 'Active' : 'Inactive') },
           { header: 'Joined', value: (r) => (r as MemberRow).createdAt, type: 'datetime' },
         ],

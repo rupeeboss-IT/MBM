@@ -13,6 +13,8 @@ type RegisterReq = {
   companyName?: string | null;
   password: string;
   consentAccepted: boolean;
+  registrationSource?: string | null;
+  advisorCode?: string | null;
 };
 type RegisterRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
 type LoginReq = { identifier: string; password: string };
@@ -36,6 +38,9 @@ export type MeRes = {
   emailVerifiedAt?: string | null;
   phoneVerifiedAt?: string | null;
   createdAt?: string | null;
+  registrationAdvisorCode?: string | null;
+  registrationAdvisorLocked?: boolean;
+  registrationAdvisorDisplayName?: string | null;
 };
 
 @Injectable({ providedIn: 'root' })

@@ -9,6 +9,7 @@ public interface IContactService
         int subjectId,
         string message,
         bool consentAccepted,
+        string? leadSource,
         CancellationToken ct);
 
     Task<(bool Success, string? Message, int? SubmissionId)> SubmitCallbackAsync(

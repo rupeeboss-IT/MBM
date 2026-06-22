@@ -10,6 +10,7 @@ export interface SubmitContactRequest {
   subjectId: number;
   message: string;
   consentAccepted: boolean;
+  leadSource?: string | null;
 }
 
 export interface SubmitCallbackRequest {

@@ -89,6 +89,7 @@ export type LeadCustomerDetail = LeadCustomerListItem & {
   firstPaidPlanCode?: string | null;
   firstPaidPlanName?: string | null;
   firstReferralCodeRaw?: string | null;
+  registrationAdvisorCodeRaw?: string | null;
   paymentHistory?: LeadPaymentHistoryItem[];
 };
 

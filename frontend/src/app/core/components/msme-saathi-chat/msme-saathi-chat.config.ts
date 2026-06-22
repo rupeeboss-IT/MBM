@@ -1,7 +1,12 @@
+import { MBM_WHATSAPP_NUMBER, mbmWhatsAppUrl } from '../../brand';
+
 export interface MbmChip {
   label: string;
   intent?: string;
+  /** External link (opens in new tab). */
   url?: string;
+  /** In-app route for logged-in users (e.g. /contact). */
+  route?: string;
 }
 
 export interface MbmIntent {
@@ -13,23 +18,21 @@ export interface MbmIntent {
 export const MBM_CHAT_CONFIG = {
   botName: 'MSME Saathi',
   brand: 'MSME Bharat Manch',
-  waNumber: '917982218029',
-  registerUrl: 'https://www.msmebharatmanch.com/register',
+  waNumber: MBM_WHATSAPP_NUMBER,
+  registerUrl: 'https://www.msmebharatmanch.com/register?source=MSMECHATBOT',
 } as const;
 
-const WA = `https://wa.me/${MBM_CHAT_CONFIG.waNumber}`;
-
 export function waLink(msg?: string): string {
-  return WA + (msg ? `?text=${encodeURIComponent(msg)}` : '');
+  return mbmWhatsAppUrl(msg);
 }
 
 export const CHIPS_MAIN: MbmChip[] = [
-  { label: '💰 Loans & Finance', intent: 'loans' },
-  { label: '🏛️ Govt Schemes', intent: 'schemes' },
-  { label: '🪪 Membership', intent: 'membership' },
-  { label: '🧰 Business Services', intent: 'services' },
-  { label: '🎁 Free Audits', intent: 'free' },
-  { label: '📞 Talk to us', intent: 'contact' },
+  { label: 'Loans & Finance', intent: 'loans' },
+  { label: 'Govt Schemes', intent: 'schemes' },
+  { label: 'Membership', intent: 'membership' },
+  { label: 'Business Services', intent: 'services' },
+  { label: 'Free Audits', intent: 'free' },
+  { label: 'Talk to us', intent: 'contact' },
 ];
 
 export const GREETINGS = [
@@ -117,7 +120,6 @@ export const KB: Record<string, MbmIntent> = {
     chips: [
       { label: 'Apply now', intent: 'apply_loan' },
       { label: 'Documents needed', intent: 'loan_docs' },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -130,11 +132,10 @@ export const KB: Record<string, MbmIntent> = {
       '👉 <b>Start your free application on WhatsApp</b> and we\'ll get back quickly.',
     chips: [
       {
-        label: '📲 Apply on WhatsApp',
+        label: 'Apply on WhatsApp',
         url: waLink('Hi! I\'d like to apply for a business loan through MSME Bharat Manch.'),
       },
       { label: 'Documents needed', intent: 'loan_docs' },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -150,10 +151,9 @@ export const KB: Record<string, MbmIntent> = {
       'Don\'t have everything? No problem — share what you have and we\'ll guide you.',
     chips: [
       {
-        label: '📲 Apply on WhatsApp',
+        label: 'Apply on WhatsApp',
         url: waLink('Hi! I want to apply for a loan. Here are my details:'),
       },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -210,7 +210,6 @@ export const KB: Record<string, MbmIntent> = {
     chips: [
       { label: 'Check my eligibility', intent: 'scheme_apply' },
       { label: 'State schemes', intent: 'state' },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -235,7 +234,6 @@ export const KB: Record<string, MbmIntent> = {
     chips: [
       { label: 'Check my eligibility', intent: 'scheme_apply' },
       { label: 'Central schemes', intent: 'central' },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -256,10 +254,9 @@ export const KB: Record<string, MbmIntent> = {
       'get paid.',
     chips: [
       {
-        label: '📲 Get help on WhatsApp',
+        label: 'Get help on WhatsApp',
         url: waLink('Hi! I need help with delayed payments / MSME Samadhan.'),
       },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -271,12 +268,11 @@ export const KB: Record<string, MbmIntent> = {
       '(manufacturing or services), and our team takes it from there.',
     chips: [
       {
-        label: '📲 Share details on WhatsApp',
+        label: 'Share details on WhatsApp',
         url: waLink(
           'Hi! Please check which government schemes / subsidies I\'m eligible for. My state & industry are:',
         ),
       },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -323,7 +319,6 @@ export const KB: Record<string, MbmIntent> = {
       '• Free loan, insurance &amp; business-health audits',
     chips: [
       { label: 'How to join', intent: 'join' },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -333,12 +328,11 @@ export const KB: Record<string, MbmIntent> = {
       'Becoming a member takes a few minutes. 🚀<br><br>' +
       'Register online and our team will help you pick the right tier and get you onboarded.',
     chips: [
-      { label: '📝 Register now', url: MBM_CHAT_CONFIG.registerUrl },
+      { label: 'Register now', url: MBM_CHAT_CONFIG.registerUrl },
       {
-        label: '📲 Ask on WhatsApp',
+        label: 'Ask on WhatsApp',
         url: waLink('Hi! I\'d like to become a member of MSME Bharat Manch. Please guide me.'),
       },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -384,7 +378,7 @@ export const KB: Record<string, MbmIntent> = {
       'Private Limited — plus GST, Udyam (MSME) and other licences. Start right, stay compliant.',
     chips: [
       {
-        label: '📲 Get started',
+        label: 'Get started',
         url: waLink('Hi! I need help with company formation / business registration.'),
       },
       { label: 'Back to services', intent: 'services' },
@@ -409,7 +403,7 @@ export const KB: Record<string, MbmIntent> = {
       'and member features in our magazine and broadcasts that reach a huge MSME network.',
     chips: [
       {
-        label: '📲 Talk to us',
+        label: 'Talk to us',
         url: waLink('Hi! I\'m interested in digital marketing / branding support.'),
       },
       { label: 'Back to services', intent: 'services' },
@@ -432,7 +426,7 @@ export const KB: Record<string, MbmIntent> = {
       'advisory and the path to raising public capital.',
     chips: [
       {
-        label: '📲 Explore IPO listing',
+        label: 'Explore IPO listing',
         url: waLink('Hi! I\'d like to know about SME IPO / listing support.'),
       },
       { label: 'Back to services', intent: 'services' },
@@ -447,7 +441,7 @@ export const KB: Record<string, MbmIntent> = {
       'can sell to government buyers. We handle registration, catalogue setup and guidance.',
     chips: [
       {
-        label: '📲 Get GeM help',
+        label: 'Get GeM help',
         url: waLink('Hi! I need help with GeM portal registration / technology support.'),
       },
       { label: 'Back to services', intent: 'services' },
@@ -461,7 +455,7 @@ export const KB: Record<string, MbmIntent> = {
       'Employees implement your vision. We help you acquire, develop and retain the right people, ' +
       'plus labour-advisory support for your business.',
     chips: [
-      { label: '📲 Talk to us', url: waLink('Hi! I need HR / hiring support for my business.') },
+      { label: 'Talk to us', url: waLink('Hi! I need HR / hiring support for my business.') },
       { label: 'Back to services', intent: 'services' },
     ],
   },
@@ -474,7 +468,7 @@ export const KB: Record<string, MbmIntent> = {
       'story through the Business Leadership League, and join our webinars, seminars and summits.',
     chips: [
       {
-        label: '📲 Join the network',
+        label: 'Join the network',
         url: waLink('Hi! I\'d like to join the MSME Bharat Manch network / forum.'),
       },
       { label: 'Back to services', intent: 'services' },
@@ -491,10 +485,9 @@ export const KB: Record<string, MbmIntent> = {
       'No cost, no obligation. Want one?',
     chips: [
       {
-        label: '📲 Get my free audit',
+        label: 'Get my free audit',
         url: waLink('Hi! I\'d like a free Loan / Insurance / Business Scan audit.'),
       },
-      { label: 'Back to menu', intent: 'welcome' },
     ],
   },
 
@@ -514,10 +507,11 @@ export const KB: Record<string, MbmIntent> = {
     keywords: ['contact', 'talk', 'human', 'call', 'phone', 'whatsapp', 'reach', 'support', 'email', 'help'],
     reply:
       '📞 <b>We\'re here to help.</b><br><br>' +
-      'The fastest way to reach a real person is WhatsApp — tap below and our team will assist you.',
+      'Fill out our contact form or reach us on WhatsApp — our team will assist you.',
     chips: [
-      { label: '💬 Chat on WhatsApp', url: waLink('Hi MSME Bharat Manch team! I have a question.') },
-      { label: '📝 Register', url: MBM_CHAT_CONFIG.registerUrl },
+      { label: 'Contact us', route: '/contact?source=MSMECHATBOT' },
+      { label: 'Chat on WhatsApp', url: waLink('Hi MSME Bharat Manch team! I have a question.') },
+      { label: 'Register', url: MBM_CHAT_CONFIG.registerUrl },
     ],
   },
 
@@ -537,8 +531,7 @@ export const KB: Record<string, MbmIntent> = {
       '</b>! 🙏 ' +
       'Come back anytime — and reach us on WhatsApp whenever you need us.',
     chips: [
-      { label: '💬 WhatsApp us', url: waLink('Hi! I have a question for MSME Bharat Manch.') },
-      { label: 'Back to menu', intent: 'welcome' },
+      { label: 'WhatsApp us', url: waLink('Hi! I have a question for MSME Bharat Manch.') },
     ],
   },
 

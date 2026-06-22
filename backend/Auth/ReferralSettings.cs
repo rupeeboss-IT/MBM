@@ -11,6 +11,9 @@ public sealed class ReferralSettings
 
     public string LeadSource { get; set; } = "MBM Website";
 
+    /// <summary>lead_data.lead_source for membership payment leads when no per-order override is stored.</summary>
+    public string MembershipLeadSource { get; set; } = RegistrationLeadSources.MsmeRegistration;
+
     public string CampaignName { get; set; } = "Online Leads";
 
     public int LeadStatusId { get; set; } = 46;

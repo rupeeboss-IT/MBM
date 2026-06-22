@@ -18,7 +18,8 @@ public sealed class ContactController : ControllerBase
         string Email,
         int SubjectId,
         string Message,
-        bool ConsentAccepted);
+        bool ConsentAccepted,
+        string? LeadSource = null);
 
     public sealed record SubmitContactResponse(
         bool Success,
@@ -41,6 +42,7 @@ public sealed class ContactController : ControllerBase
             req.SubjectId,
             req.Message,
             req.ConsentAccepted,
+            req.LeadSource,
             ct);
 
         if (!success)

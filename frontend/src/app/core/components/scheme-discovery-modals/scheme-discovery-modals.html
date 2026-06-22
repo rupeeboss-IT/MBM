@@ -115,12 +115,49 @@
         <p class="sd-referral__saved-udyam" *ngIf="flow.udyamCheckoutMode() && flow.udyam()">
           Udyam: <strong>{{ flow.udyam() }}</strong>
         </p>
-        <p class="sd-referral__lead">Optional — have a Advisor Code? Enter it below or skip to continue to payment.</p>
+        <p class="sd-referral__lead" *ngIf="flow.referralModalMode() === 'confirm'">
+          Your advisor is linked from registration. Continue to payment or change the code below.
+        </p>
+        <p class="sd-referral__lead" *ngIf="flow.referralModalMode() !== 'confirm'">
+          Optional — have a Advisor Code? Enter it below or skip to continue to payment.
+        </p>
+
+        <ng-container *ngIf="flow.referralModalMode() === 'confirm' && flow.referralValidationState() === 'valid'">
+          <div class="sd-referral__confirm-card">
+            <p class="sd-referral__confirm-label">Advisor code</p>
+            <p class="sd-referral__confirm-code">{{ flow.referralCodeInput() }}</p>
+            <p class="sd-referral__employee" *ngIf="flow.referredByName()">
+              Referred by: <strong>{{ flow.referredByName() }}</strong>
+            </p>
+          </div>
+          <div class="sd-referral__actions">
+            <button
+              type="button"
+              class="sd-btn sd-btn--primary"
+              (click)="flow.continueReferralAndPay()"
+              [disabled]="flow.paying()">
+              {{ flow.paying() ? 'Opening payment…' : 'Continue to Payment' }}
+            </button>
+            <button type="button" class="sd-btn sd-btn--outline" (click)="flow.editReferralCode()">
+              Change Advisor Code
+            </button>
+          </div>
+          <button
+            type="button"
+            class="sd-referral__skip"
+            (click)="flow.skipReferralAndPay()"
+            [disabled]="flow.referralValidationState() === 'validating' || flow.paying()">
+            Skip Advisor Code
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="flow.referralModalMode() !== 'confirm'">
         <label class="sd-referral__label" for="scheme-discovery-referral-input">Advisor Code</label>
         <div
           class="sd-referral__input-wrap"
           [class.sd-referral__input-wrap--valid]="flow.referralValidationState() === 'valid'"
           [class.sd-referral__input-wrap--invalid]="flow.referralValidationState() === 'invalid'"
+          [class.sd-referral__input-wrap--inactive]="flow.referralValidationState() === 'inactive'"
           [class.sd-referral__input-wrap--validating]="flow.referralValidationState() === 'validating'">
           <input
             id="scheme-discovery-referral-input"
@@ -150,11 +187,14 @@
         <p class="sd-referral__error" *ngIf="flow.referralValidationState() === 'invalid'">
           {{ flow.referralInvalidMessage }}
         </p>
+        <p class="sd-referral__inactive" *ngIf="flow.referralValidationState() === 'inactive'">
+          {{ flow.referralInactiveMessage }}
+        </p>
         <div class="sd-referral__actions">
           <button
             type="button"
             class="sd-btn sd-btn--outline"
-            *ngIf="flow.referralValidationState() !== 'valid'"
+            *ngIf="flow.referralValidationState() !== 'valid' && flow.referralValidationState() !== 'inactive'"
             (click)="flow.applyReferral()"
             [disabled]="flow.referralValidationState() === 'validating' || !flow.referralCodeInput().trim() || flow.paying()">
             {{ flow.referralValidationState() === 'validating' ? 'Checking…' : 'Apply Advisor Code' }}
@@ -162,10 +202,10 @@
           <button
             type="button"
             class="sd-btn sd-btn--primary"
-            *ngIf="flow.referralValidationState() === 'valid'"
+            *ngIf="flow.referralValidationState() === 'valid' || flow.referralValidationState() === 'inactive'"
             (click)="flow.continueReferralAndPay()"
             [disabled]="flow.paying()">
-            {{ flow.paying() ? 'Opening payment…' : 'Continue to Payment' }}
+            {{ flow.paying() ? 'Opening payment…' : (flow.referralValidationState() === 'inactive' ? 'Continue with Default Assignment' : 'Continue to Payment') }}
           </button>
         </div>
         <button
@@ -175,6 +215,7 @@
           [disabled]="flow.referralValidationState() === 'validating' || flow.paying()">
           Skip Advisor Code
         </button>
+        </ng-container>
       </div>
 
       <!-- Report exists -->

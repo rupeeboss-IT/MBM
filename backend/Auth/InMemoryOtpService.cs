@@ -11,17 +11,20 @@ public sealed class InMemoryOtpService : IOtpService
     private readonly IEmailSender _email;
     private readonly ISmsSender _sms;
     private readonly IOtpRateLimiter _rate;
+    private readonly IOtpEmailTemplateService _otpEmail;
     private readonly ILogger<InMemoryOtpService> _logger;
 
     public InMemoryOtpService(
         IEmailSender email,
         ISmsSender sms,
         IOtpRateLimiter rate,
+        IOtpEmailTemplateService otpEmail,
         ILogger<InMemoryOtpService> logger)
     {
         _email = email;
         _sms = sms;
         _rate = rate;
+        _otpEmail = otpEmail;
         _logger = logger;
     }
 
@@ -38,7 +41,14 @@ public sealed class InMemoryOtpService : IOtpService
         var sw = Stopwatch.StartNew();
         try
         {
-            await _email.SendAsync(email, "Your MBM OTP", $"Your OTP is {otp}. It expires in 10 minutes.", ct);
+            var htmlBody = _otpEmail.BuildRegistrationOtpEmail(otp);
+            await _email.SendAsync(
+                email,
+                "Your MSME Bharat Manch verification code",
+                htmlBody,
+                isHtml: true,
+                attachments: null,
+                ct);
             _logger.LogInformation(
                 "Email provider response success for {Email} ElapsedMs={ElapsedMs}",
                 normalizedEmail,

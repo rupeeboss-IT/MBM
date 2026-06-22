@@ -27,4 +27,5 @@ public sealed record ReferralValidationResult(
     int? EmployeeId = null,
     int? BrokerId = null,
     string? ReferralCode = null,
-    string? EmpCode = null);
+    string? EmpCode = null,
+    bool IsInactive = false);

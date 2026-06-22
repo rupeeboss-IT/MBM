@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { AuthSessionService } from '../../../core/services/auth-session.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { PaymentService, type CreateOrderRes } from '../../../core/services/payment.service';
-import { ReferralService, referrerDisplayName } from '../../../core/services/referral.service';
+import { ReferralService } from '../../../core/services/referral.service';
 import { RazorpayLoaderService } from '../../../core/services/razorpay-loader.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { JoinCtaService } from '../../../core/services/join-cta.service';
@@ -27,14 +28,22 @@ import {
 } from '../../../core/utils/membership-source.util';
 import { OFFERING_EXPLORER_CARDS } from '../../../data/offering-explorer-cards.data';
 import { isApiLocalDateOnOrBeforeNow } from '../../../core/utils/parse-api-local-date';
+import {
+  applyReferralConfirmPrefill,
+  canProceedWithReferralState,
+  REFERRAL_DEBOUNCE_MS,
+  REFERRAL_INACTIVE_MSG,
+  REFERRAL_INVALID_MSG,
+  resolveReferralCheckoutAction,
+  type ReferralValidationState,
+  validateReferralCode,
+} from '../../../core/utils/referral-capture.util';
+import { clearRegistrationAdvisorCode, getRegistrationAdvisorCode } from '../../../core/utils/registration-advisor.util';
 
 const PENDING_PLAN_KEY = 'mbm_pending_plan';
-const REFERRAL_DEBOUNCE_MS = 500;
-const REFERRAL_INVALID_MSG =
-  'Referral code is incorrect. Please check and enter the correct code.';
 
 type PlanCode = 'basic' | 'standard' | 'premium' | 'pro';
-type ReferralValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
+type ReferralModalMode = 'entry' | 'confirm';
 
 interface PlanCard {
   code: PlanCode;
@@ -53,6 +62,7 @@ interface PlanCard {
 export class Membership implements OnInit, OnDestroy {
   readonly offeringExplorerCards = OFFERING_EXPLORER_CARDS;
   private readonly session = inject(AuthSessionService);
+  private readonly auth = inject(AuthService);
   private readonly payments = inject(PaymentService);
   private readonly referrals = inject(ReferralService);
   private readonly razorpayLoader = inject(RazorpayLoaderService);
@@ -71,6 +81,7 @@ export class Membership implements OnInit, OnDestroy {
   readonly checkingPlan = signal(false);
 
   readonly referralModalOpen = signal(false);
+  readonly referralModalMode = signal<ReferralModalMode>('entry');
   readonly pendingPlanCode = signal<PlanCode | null>(null);
 
   readonly referralCodeInput = signal('');
@@ -150,6 +161,16 @@ export class Membership implements OnInit, OnDestroy {
     if (this.debounceTimer) clearTimeout(this.debounceTimer);
   }
 
+  startSchemeDiscoveryOneTime(): void {
+    if (!this.session.isLoggedIn()) {
+      stashMembershipSource('scheme-discovery');
+      this.toast.info('Please login or register to get your Scheme Discovery Report.');
+      void this.router.navigateByUrl('/register');
+      return;
+    }
+    this.schemeDiscovery.beginOneTimeReportCheckout();
+  }
+
   async choosePlan(code: PlanCode) {
     if (this.sourceGuidance() && shouldConfirmPlanChoice(code, this.membershipSource())) {
       this.pendingBasicPlan.set(code);
@@ -181,10 +202,30 @@ export class Membership implements OnInit, OnDestroy {
         this.toast.info('You already have an active subscription for this plan.');
         return;
       }
-      this.openReferralModal(code);
+      await this.beginCheckoutWithReferral(code);
     } finally {
       this.checkingPlan.set(false);
     }
+  }
+
+  private async beginCheckoutWithReferral(code: PlanCode) {
+    const action = await resolveReferralCheckoutAction(this.auth, this.referrals);
+
+    if (action.kind === 'skip_modal') {
+      await this.startCheckout(code, action.code);
+      return;
+    }
+
+    if (action.kind === 'confirm') {
+      this.openReferralModal(code, {
+        mode: 'confirm',
+        code: action.code,
+        displayName: action.displayName,
+      });
+      return;
+    }
+
+    this.openReferralModal(code);
   }
 
   private async checkPlanEligibility(
@@ -213,14 +254,42 @@ export class Membership implements OnInit, OnDestroy {
     }
   }
 
-  openReferralModal(code: PlanCode) {
+  openReferralModal(
+    code: PlanCode,
+    options?: { mode?: ReferralModalMode; code?: string; displayName?: string },
+  ) {
     this.resetReferralFields();
+    this.referralModalMode.set(options?.mode ?? 'entry');
     this.pendingPlanCode.set(code);
+
+    if (options?.mode === 'confirm' && options.code && options.displayName) {
+      applyReferralConfirmPrefill(options.code, options.displayName, {
+        setCode: (v) => this.referralCodeInput.set(v),
+        setName: (v) => this.referredByName.set(v),
+        setState: (v) => this.referralValidationState.set(v),
+      });
+      this.referralModalOpen.set(true);
+      return;
+    }
+
+    const stashedAdvisor = getRegistrationAdvisorCode();
+    if (stashedAdvisor) {
+      this.referralCodeInput.set(stashedAdvisor);
+      void this.runReferralValidation();
+    }
+
     this.referralModalOpen.set(true);
+  }
+
+  editReferralCode() {
+    this.referralModalMode.set('entry');
+    this.referralValidationState.set('idle');
+    this.referredByName.set(null);
   }
 
   closeReferralModal() {
     this.clearReferralInput();
+    this.referralModalMode.set('entry');
     this.referralModalOpen.set(false);
     this.pendingPlanCode.set(null);
     this.cdr.markForCheck();
@@ -278,24 +347,22 @@ export class Membership implements OnInit, OnDestroy {
     this.referralValidationState.set('validating');
     this.referredByName.set(null);
 
-    try {
-      const res = await firstValueFrom(this.referrals.validate({ referralCode: code }));
-      if (seq !== this.validationSeq) return false;
+    const validated = await validateReferralCode(this.referrals, code);
+    if (seq !== this.validationSeq) return false;
 
-      const name = referrerDisplayName(res);
-      if (res?.success && name) {
-        this.referredByName.set(name);
-        this.referralValidationState.set('valid');
-        return true;
-      }
-
-      this.referralValidationState.set('invalid');
-      return false;
-    } catch {
-      if (seq !== this.validationSeq) return false;
-      this.referralValidationState.set('invalid');
-      return false;
+    if (validated.valid && validated.displayName) {
+      this.referredByName.set(validated.displayName);
+      this.referralValidationState.set('valid');
+      return true;
     }
+
+    if (validated.inactive) {
+      this.referralValidationState.set('inactive');
+      return true;
+    }
+
+    this.referralValidationState.set('invalid');
+    return false;
   }
 
   skipReferral() {
@@ -303,7 +370,7 @@ export class Membership implements OnInit, OnDestroy {
   }
 
   continueFromReferral() {
-    if (this.referralValidationState() !== 'valid') return;
+    if (!canProceedWithReferralState(this.referralValidationState())) return;
     const referralToSend = this.referralCodeInput().trim();
     void this.proceedToPayment(referralToSend || undefined);
   }
@@ -347,10 +414,9 @@ export class Membership implements OnInit, OnDestroy {
 
     try {
       const order = await firstValueFrom(
-        this.payments.createOrder({
-          planCode: code,
-          referralCode: referralCode || undefined,
-        }),
+        this.payments.createOrder(
+          this.payments.buildCreateOrderRequest(code, referralCode),
+        ),
       );
       if (!order?.success || !order.razorpayOrderId || !order.keyId || !order.paymentOrderId) {
         const msg = order?.message || 'Could not start payment. Please try again.';
@@ -433,6 +499,7 @@ export class Membership implements OnInit, OnDestroy {
               }),
             );
               if (verify?.success) {
+              clearRegistrationAdvisorCode();
               void this.joinCta.refresh();
               const resumeSchemeDiscovery = shouldResumeSchemeDiscoveryAfterMembership(
                 order.planCode,
@@ -493,4 +560,5 @@ export class Membership implements OnInit, OnDestroy {
   }
 
   readonly referralInvalidMessage = REFERRAL_INVALID_MSG;
+  readonly referralInactiveMessage = REFERRAL_INACTIVE_MSG;
 }

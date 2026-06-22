@@ -174,6 +174,7 @@ builder.Services.AddHttpClient("Saarthi", client =>
         new System.Net.Http.Headers.ProductInfoHeaderValue("MSME-Bharat-Manch", "1.0"));
 });
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpRateLimiter, RB_Website_API.Auth.OtpRateLimiter>();
+builder.Services.AddSingleton<RB_Website_API.Auth.IOtpEmailTemplateService, RB_Website_API.Auth.OtpEmailTemplateService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpService, RB_Website_API.Auth.InMemoryOtpService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IPasswordResetService, RB_Website_API.Auth.InMemoryPasswordResetService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IEmailSender, RB_Website_API.Auth.SmtpEmailSender>();

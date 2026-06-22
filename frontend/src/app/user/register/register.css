@@ -263,6 +263,70 @@
   color: var(--muted);
 }
 
+.reg-advisor__optional {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.85em;
+}
+
+.reg-advisor__hint {
+  margin: 0.25rem 0 0.6rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.reg-advisor__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.reg-advisor__input-wrap input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.reg-advisor__input-wrap--valid input {
+  border-color: var(--green);
+}
+
+.reg-advisor__input-wrap--invalid input {
+  border-color: var(--red);
+}
+
+.reg-advisor__status {
+  position: absolute;
+  right: 0.85rem;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.reg-advisor__status--valid {
+  color: var(--green);
+}
+
+.reg-advisor__status--invalid {
+  color: var(--red);
+}
+
+.reg-advisor__status--loading {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #ddd;
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: reg-advisor-spin 0.7s linear infinite;
+}
+
+@keyframes reg-advisor-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .reg-verify-btn {
   margin-top: 0.6rem;
   width: 100%;
@@ -295,3 +359,68 @@
   }
 }
 
+.reg-plan-onetime {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f5e9 100%);
+  border: 1.5px solid #b8d4f0;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.reg-plan-onetime__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.reg-plan-onetime__icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.reg-plan-onetime__head h3 {
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+  color: var(--navy, #1a1a2e);
+}
+
+.reg-plan-onetime__head p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted, #666);
+  line-height: 1.4;
+}
+
+.reg-plan-onetime__price {
+  margin-left: auto;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--green, #2e7d32);
+  white-space: nowrap;
+}
+
+.reg-plan-onetime__price small {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted, #666);
+}
+
+.reg-plan-divider {
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted, #888);
+  margin: 0 0 1rem;
+}
+
+@media (max-width: 640px) {
+  .reg-plan-onetime__head {
+    flex-wrap: wrap;
+  }
+
+  .reg-plan-onetime__price {
+    margin-left: 2.35rem;
+  }
+}

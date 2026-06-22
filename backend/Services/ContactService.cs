@@ -13,12 +13,18 @@ public sealed class ContactService : IContactService
 
     private readonly AppDbContext _db;
     private readonly IContactEmailService _email;
+    private readonly ILeadPushService _leadPush;
     private readonly ILogger<ContactService> _log;
 
-    public ContactService(AppDbContext db, IContactEmailService email, ILogger<ContactService> log)
+    public ContactService(
+        AppDbContext db,
+        IContactEmailService email,
+        ILeadPushService leadPush,
+        ILogger<ContactService> log)
     {
         _db = db;
         _email = email;
+        _leadPush = leadPush;
         _log = log;
     }
 
@@ -29,6 +35,7 @@ public sealed class ContactService : IContactService
         int subjectId,
         string message,
         bool consentAccepted,
+        string? leadSource,
         CancellationToken ct)
     {
         var nameErr = ValidateName(fullName);
@@ -97,6 +104,22 @@ public sealed class ContactService : IContactService
             entity.Id,
             emailResult.CustomerNotified,
             emailResult.SupportNotified);
+
+        var leadPushed = await _leadPush.CreateLeadAfterContactSubmissionAsync(
+            entity.FullName,
+            entity.Phone,
+            entity.Email,
+            leadSource,
+            entity.Message,
+            ct);
+
+        if (!leadPushed)
+        {
+            _log.LogWarning(
+                "Contact submission {Id} saved but lead_data insert failed (lead_source {LeadSource}).",
+                entity.Id,
+                ContactLeadSources.Resolve(leadSource));
+        }
 
         return (
             true,

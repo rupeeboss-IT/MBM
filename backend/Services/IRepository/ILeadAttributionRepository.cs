@@ -28,6 +28,10 @@ public interface ILeadAttributionRepository
         IReadOnlyList<Guid> userIds,
         CancellationToken ct);
 
+    Task<Dictionary<Guid, RegistrationAdvisorRow>> GetRegistrationAdvisorsAsync(
+        IReadOnlyList<Guid> userIds,
+        CancellationToken ct);
+
     Task<IReadOnlyList<PaymentHistoryRow>> GetPaymentHistoryAsync(Guid userId, CancellationToken ct);
 
     Task<IReadOnlyList<ReferralPaymentRow>> GetReferralPaymentsForUsersAsync(
@@ -66,3 +70,10 @@ public sealed record FirstReferralRow(
     DateTime PaidAt,
     string PlanCode,
     string PlanName);
+
+public sealed record RegistrationAdvisorRow(
+    string? AdvisorCode,
+    string? ResolvedEmpCode,
+    string? LeadType,
+    int? BrokerId,
+    bool UsedDefaultEmployee);

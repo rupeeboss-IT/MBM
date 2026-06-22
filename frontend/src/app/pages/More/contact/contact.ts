@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ContactService } from '../../../core/services/contact.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../../core/utils/api-user-messages';
+import { captureContactLeadSourceFromUrl, getContactLeadSource } from '../../../core/utils/contact-lead-source.util';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
+import { MBM_WHATSAPP_DISPLAY, mbmWhatsAppUrl } from '../../../core/brand';
 
 @Component({
   selector: 'app-contact',
@@ -15,10 +17,23 @@ import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
   templateUrl: './contact.html',
   styleUrl: './contact.css',
 })
-export class Contact {
+export class Contact implements OnInit {
   private readonly contactApi = inject(ContactService);
   private readonly toast = inject(ToastService);
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly route = inject(ActivatedRoute);
+
+  readonly whatsAppDisplay = MBM_WHATSAPP_DISPLAY;
+  readonly whatsAppUrl = mbmWhatsAppUrl('Hi MSME Bharat Manch team! I have a question.');
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const source = params.get('source');
+      if (source) {
+        captureContactLeadSourceFromUrl(`?source=${encodeURIComponent(source)}`);
+      }
+    });
+  }
 
   readonly subjectOpen = signal(false);
 
@@ -192,6 +207,7 @@ export class Contact {
           subjectId,
           message: this.form.message.trim(),
           consentAccepted: this.form.consent === true,
+          leadSource: getContactLeadSource(),
         }),
       );
 

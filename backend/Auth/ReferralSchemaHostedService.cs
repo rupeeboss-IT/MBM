@@ -71,6 +71,47 @@ public sealed class ReferralSchemaHostedService : IHostedService
             CREATE UNIQUE INDEX UX_ReferralLeadOutbox_PaymentOrderId
                 ON ReferralLeadOutbox(PaymentOrderId);
             """,
+            """
+            IF OBJECT_ID('UserRegistrationLeads', 'U') IS NULL
+            CREATE TABLE UserRegistrationLeads (
+                UserId uniqueidentifier NOT NULL PRIMARY KEY,
+                RegistrationSource nvarchar(50) NOT NULL,
+                AdvisorCode nvarchar(50) NULL,
+                ResolvedEmpCode nvarchar(50) NULL,
+                LeadType nvarchar(50) NULL,
+                BrokerId int NULL,
+                LeadId int NULL,
+                UsedDefaultEmployee bit NOT NULL CONSTRAINT DF_UserRegistrationLeads_UsedDefaultEmployee DEFAULT (1),
+                LeadPushedAt datetime2 NOT NULL,
+                CreatedAt datetime2 NOT NULL,
+                UpdatedAt datetime2 NOT NULL
+            );
+            """,
+            """
+            IF COL_LENGTH('UserRegistrationLeads', 'AdvisorCode') IS NULL
+            ALTER TABLE UserRegistrationLeads ADD AdvisorCode nvarchar(50) NULL;
+            """,
+            """
+            IF COL_LENGTH('UserRegistrationLeads', 'ResolvedEmpCode') IS NULL
+            ALTER TABLE UserRegistrationLeads ADD ResolvedEmpCode nvarchar(50) NULL;
+            """,
+            """
+            IF COL_LENGTH('UserRegistrationLeads', 'LeadType') IS NULL
+            ALTER TABLE UserRegistrationLeads ADD LeadType nvarchar(50) NULL;
+            """,
+            """
+            IF COL_LENGTH('UserRegistrationLeads', 'BrokerId') IS NULL
+            ALTER TABLE UserRegistrationLeads ADD BrokerId int NULL;
+            """,
+            """
+            IF COL_LENGTH('UserRegistrationLeads', 'LeadId') IS NULL
+            ALTER TABLE UserRegistrationLeads ADD LeadId int NULL;
+            """,
+            """
+            IF COL_LENGTH('UserRegistrationLeads', 'UsedDefaultEmployee') IS NULL
+            ALTER TABLE UserRegistrationLeads ADD UsedDefaultEmployee bit NOT NULL
+                CONSTRAINT DF_UserRegistrationLeads_UsedDefaultEmployee DEFAULT (1);
+            """,
         };
 
         foreach (var sql in scripts)

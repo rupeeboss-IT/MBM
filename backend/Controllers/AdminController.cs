@@ -167,7 +167,8 @@ public sealed class AdminController : ControllerBase
         bool IsActive,
         DateTime CreatedAt,
         string? PlanCode = null,
-        string? PlanName = null
+        string? PlanName = null,
+        string? AdvisorCode = null
     );
 
     public sealed record MembersResponse(
@@ -764,7 +765,11 @@ public sealed class AdminController : ControllerBase
                 || (u.Role ?? "").ToLower().Contains(s)
                 || _db.UserPlans.Any(up =>
                     up.UserId == u.UserId
-                    && up.PlanCode.ToLower().Contains(s)));
+                    && up.PlanCode.ToLower().Contains(s))
+                || _db.UserRegistrationLeads.Any(r =>
+                    r.UserId == u.UserId
+                    && r.AdvisorCode != null
+                    && r.AdvisorCode.ToLower().Contains(s)));
         }
 
         var total = await q.CountAsync(ct);
@@ -802,7 +807,11 @@ public sealed class AdminController : ControllerBase
                  join p in _db.Plans on up.PlanId equals p.PlanId
                  where up.UserId == u.UserId && up.Status == "Active" && (up.ActiveTo == null || up.ActiveTo > now)
                  orderby up.ActiveFrom descending
-                 select p.Name).FirstOrDefault()))
+                 select p.Name).FirstOrDefault(),
+                _db.UserRegistrationLeads
+                    .Where(r => r.UserId == u.UserId)
+                    .Select(r => r.AdvisorCode)
+                    .FirstOrDefault()))
             .ToListAsync(ct);
 
         return (rows, total);
