@@ -4567,6 +4567,43 @@ select.status-select {
   background: var(--navy)
 }
 
+#page-connect .msme-card--locked {
+  filter: none
+}
+
+#page-connect .mc-banner--locked {
+  background: linear-gradient(135deg, #64748b 0%, #334155 100%);
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+#page-connect .mc-locked-ico {
+  font-size: 28px;
+  filter: blur(0)
+}
+
+#page-connect .mc-body--locked {
+  text-align: center;
+  padding-top: 20px
+}
+
+#page-connect .mc-locked-title {
+  font-weight: 800;
+  letter-spacing: .06em;
+  font-size: 13px;
+  color: var(--navy);
+  margin-bottom: 8px
+}
+
+#page-connect .mc-locked-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.5
+}
+
 #page-connect .mc-count-bar {
   display: flex;
   align-items: center;

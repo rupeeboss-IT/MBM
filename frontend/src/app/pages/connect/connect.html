@@ -12,39 +12,44 @@
 
   <section class="sec" style="background:var(--off-white);padding-bottom:40px;">
     <div class="sec-inner">
-      <!-- Info strip -->
       <div class="info-strip">
         <div class="info-box">
           <div class="info-ico">👥</div>
           <div>
-            <div class="info-val">1,000+</div>
+            <div class="info-val">{{ statsListedLabel() }}</div>
             <div class="info-lbl">Registered MSMEs</div>
           </div>
         </div>
         <div class="info-box">
           <div class="info-ico">🏭</div>
           <div>
-            <div class="info-val">28+</div>
+            <div class="info-val">{{ stats()?.sectorCount ?? 0 }}+</div>
             <div class="info-lbl">Industry Sectors</div>
           </div>
         </div>
         <div class="info-box">
           <div class="info-ico">🏛️</div>
           <div>
-            <div class="info-val">22</div>
+            <div class="info-val">{{ stats()?.stateCount ?? 0 }}</div>
             <div class="info-lbl">States Represented</div>
           </div>
         </div>
-        <button class="info-box info-box--cta" type="button" (click)="openUpgrade()">
+        <button class="info-box info-box--cta" type="button" (click)="openUpgrade()" *ngIf="!hasPlan()">
           <div class="info-ico">🔒</div>
           <div>
             <div class="info-cta-title">Unlock Connections</div>
             <div class="info-cta-sub">Requires paid plan →</div>
           </div>
         </button>
+        <div class="info-box" *ngIf="hasPlan()">
+          <div class="info-ico">✅</div>
+          <div>
+            <div class="info-cta-title">Connect Active</div>
+            <div class="info-cta-sub">{{ access()?.planName || 'Paid plan' }}</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Filters -->
       <div class="connect-filters">
         <input
           class="cf-search"
@@ -98,57 +103,80 @@
         <div class="mc-count-label">
           Showing <strong>{{ countLabel() }}</strong> registered MSMEs
         </div>
-        <div class="mc-lock-note" *ngIf="!isUnlocked()">
+        <div class="mc-lock-note" *ngIf="!hasPlan()">
           🔒 Connect requires <a (click)="openUpgrade()">a paid plan</a>
         </div>
-        <div class="mc-lock-note ok" *ngIf="isUnlocked()">
-          ✅ Unlocked ({{ activePlan()?.planName }})
+        <div class="mc-lock-note ok" *ngIf="hasPlan()">
+          {{ unlockNote() }}
         </div>
       </div>
 
-      <!-- Cards -->
-      <div class="connect-grid" *ngIf="filtered().length; else noRes">
-        <div class="msme-card" *ngFor="let m of filtered()">
-          <div class="mc-banner">
-            <div class="mc-banner-pattern"></div>
-            <div class="mc-verified" *ngIf="m.verified">✓ Verified</div>
-            <div class="mc-avatar" [style.color]="avatarColor(m.id)">{{ m.initials }}</div>
-          </div>
-          <div class="mc-body">
-            <div class="mc-name">{{ m.name }}</div>
-            <div class="mc-type">{{ m.type }} · {{ m.city }}</div>
-            <div class="mc-tags">
-              <span class="mc-tag sector">{{ m.sector }}</span>
-              <span class="mc-tag">{{ m.state }}</span>
-              <span class="mc-tag">{{ m.turnover }}</span>
+      <div class="connect-grid" *ngIf="!loading() && profiles().length; else gridState">
+        <ng-container *ngFor="let m of profiles()">
+          <div class="msme-card msme-card--locked" *ngIf="m.isLocked; else openCard">
+            <div class="mc-banner mc-banner--locked">
+              <div class="mc-banner-pattern"></div>
+              <div class="mc-locked-ico">🔒</div>
             </div>
-            <div class="mc-desc">{{ m.desc }}</div>
-            <div class="mc-actions">
-              <button class="mc-btn-view" type="button" (click)="openProfile(m)">View Profile</button>
-              <button
-                class="mc-btn-connect"
-                type="button"
-                [class.locked]="!isUnlocked()"
-                (click)="connectTo(m)"
-              >
-                {{ isUnlocked() ? 'Connect' : '🔒 Connect' }}
-              </button>
+            <div class="mc-body mc-body--locked">
+              <div class="mc-locked-title">LOCKED PROFILE</div>
+              <div class="mc-locked-sub">Upgrade Membership Plan to Access Network</div>
+              <button class="mc-btn-connect locked" type="button" (click)="openUpgrade()">Upgrade Now</button>
             </div>
           </div>
-        </div>
+
+          <ng-template #openCard>
+            <div class="msme-card">
+              <div class="mc-banner">
+                <div class="mc-banner-pattern"></div>
+                <div class="mc-verified" *ngIf="m.verified">✓ Verified</div>
+                <div class="mc-avatar" [style.color]="avatarColor(m.userId)">{{ m.initials }}</div>
+              </div>
+              <div class="mc-body">
+                <div class="mc-name">{{ display(m.displayName) }}</div>
+                <div class="mc-type">{{ display(m.businessType) }} · {{ display(m.city) }}</div>
+                <div class="mc-tags">
+                  <span class="mc-tag sector">{{ display(m.sector) }}</span>
+                  <span class="mc-tag">{{ display(m.state) }}</span>
+                  <span class="mc-tag">{{ display(m.turnover) }}</span>
+                </div>
+                <div class="mc-desc">{{ display(m.description) }}</div>
+                <div class="mc-actions">
+                  <button class="mc-btn-view" type="button" (click)="openProfile(m)">View Profile</button>
+                  <button
+                    class="mc-btn-connect"
+                    type="button"
+                    [class.locked]="!hasPlan() || !m.canConnect"
+                    [disabled]="!hasPlan() || !m.canConnect"
+                    (click)="connectTo(m)"
+                  >
+                    {{ connectLabel(m.connectionStatus, hasPlan()) }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
       </div>
 
-      <ng-template #noRes>
-        <div class="no-results">
+      <ng-template #gridState>
+        <div class="no-results" *ngIf="!loading()">
           <div class="nr-ico">🔎</div>
           <div class="nr-title">No MSMEs Found</div>
-          <div class="nr-sub">Try adjusting your search or filters.</div>
+          <div class="nr-sub" *ngIf="total() === 0">
+            No members are listed on Connect yet. Users in the database must be added to
+            <strong>Connect Admin Listings</strong> first (Admin → Manage Connect), or run
+            <code>database/connect-seed-from-users.sql</code> to import existing members/partners.
+          </div>
+          <div class="nr-sub" *ngIf="total() > 0">Try adjusting your search or filters.</div>
+        </div>
+        <div class="no-results" *ngIf="loading()">
+          <div class="nr-sub">Loading network...</div>
         </div>
       </ng-template>
     </div>
   </section>
 
-  <!-- Upgrade modal -->
   <div class="connect-upgrade-modal" *ngIf="upgradeOpen()" (click)="closeUpgrade()">
     <div class="cum-box" (click)="$event.stopPropagation()">
       <button class="cum-close" type="button" (click)="closeUpgrade()">✕</button>
@@ -167,7 +195,7 @@
         >
           <div class="cum-plan-name">MSME Premium</div>
           <div class="cum-plan-price">₹9,999</div>
-          <div class="cum-plan-note">Unlock Connect feature</div>
+          <div class="cum-plan-note">Unlimited Connect</div>
         </button>
         <button
           type="button"
@@ -186,80 +214,84 @@
     </div>
   </div>
 
-  <!-- Profile modal -->
   <div class="profile-modal-overlay" *ngIf="profileOpen()" (click)="closeProfile()">
     <div class="profile-modal" (click)="$event.stopPropagation()">
-      <div class="pm-banner">
+      <div class="pm-banner" *ngIf="currentProfile() as m">
         <div class="pm-banner-pattern"></div>
         <button class="pm-close" type="button" (click)="closeProfile()">✕</button>
-        <div class="pm-avatar" [style.color]="currentProfile()?.id ? avatarColor(currentProfile()!.id) : '#C8102E'">
-          {{ currentProfile()?.initials }}
-        </div>
+        <div class="pm-avatar" [style.color]="avatarColor(m.userId)">{{ m.initials }}</div>
       </div>
 
-      <div class="pm-body" *ngIf="currentProfile() as m">
+      <div class="pm-body" *ngIf="profileLoading()">
+        <div class="pm-value">Loading profile...</div>
+      </div>
+
+      <div class="pm-body" *ngIf="!profileLoading() && currentProfile() as m">
         <div class="pm-head">
           <div>
-            <div class="pm-name">{{ m.name }}</div>
-            <div class="pm-type">{{ m.type }} · {{ m.city }}, {{ m.state }}</div>
+            <div class="pm-name">{{ display(m.displayName) }}</div>
+            <div class="pm-type">{{ display(m.businessType) }} · {{ display(m.city) }}, {{ display(m.state) }}</div>
           </div>
           <div class="pm-verified" *ngIf="m.verified">✓ Verified</div>
         </div>
 
         <div class="mc-tags" style="margin-bottom:16px;">
-          <span class="mc-tag sector">{{ m.sector }}</span>
-          <span class="mc-tag">{{ m.turnover }}</span>
-          <span class="mc-tag">Est. {{ m.established }}</span>
+          <span class="mc-tag sector">{{ display(m.sector) }}</span>
+          <span class="mc-tag">{{ display(m.turnover) }}</span>
+          <span class="mc-tag">Est. {{ display(m.established) }}</span>
         </div>
 
         <div class="pm-section">
           <div class="pm-label">About</div>
-          <div class="pm-value">{{ m.desc }}</div>
+          <div class="pm-value">{{ display(m.description) }}</div>
         </div>
 
         <div class="pm-row">
           <div>
             <div class="pm-label">Business Type</div>
-            <div class="pm-value">{{ m.type }}</div>
+            <div class="pm-value">{{ display(m.businessType) }}</div>
           </div>
           <div>
             <div class="pm-label">Employees</div>
-            <div class="pm-value">{{ m.employees }}</div>
+            <div class="pm-value">{{ display(m.employees) }}</div>
           </div>
         </div>
 
         <div class="pm-row">
           <div>
             <div class="pm-label">Udyam No.</div>
-            <div class="pm-value">{{ m.udyam }}</div>
+            <div class="pm-value">{{ display(m.udyam) }}</div>
           </div>
           <div>
-            <div class="pm-label">Location</div>
-            <div class="pm-value">{{ m.city }}, {{ m.state }}</div>
+            <div class="pm-label">Designation</div>
+            <div class="pm-value">{{ display(m.designation) }}</div>
           </div>
         </div>
 
-        <div class="pm-lock-notice" *ngIf="!isUnlocked()">
-          <p>🔒 Contact details are hidden. Upgrade to a paid plan to view phone, email, website &amp; connect.</p>
-          <button type="button" (click)="closeProfile(); openUpgrade()">Unlock Contact &amp; Connect</button>
+        <div class="pm-lock-notice" *ngIf="m.connectionStatus !== 'connected'">
+          <p>Contact details are available after the member accepts your connection request.</p>
         </div>
 
-        <div class="pm-row" [class.pm-blurred]="!isUnlocked()">
+        <div class="pm-lock-notice" *ngIf="m.connectionStatus === 'connected' && !m.contactVisible">
+          <p>Connection accepted. Upgrade to Premium or use your remaining contact unlocks to view details.</p>
+          <button type="button" (click)="closeProfile(); openUpgrade()">Upgrade</button>
+        </div>
+
+        <div class="pm-row" [class.pm-blurred]="!m.contactVisible">
           <div>
             <div class="pm-label">Phone</div>
-            <div class="pm-value">{{ m.contact }}</div>
+            <div class="pm-value">{{ display(m.phone) }}</div>
           </div>
           <div>
             <div class="pm-label">Email</div>
-            <div class="pm-value">{{ m.email }}</div>
+            <div class="pm-value">{{ display(m.email) }}</div>
           </div>
         </div>
-        <div class="pm-section" [class.pm-blurred]="!isUnlocked()">
+        <div class="pm-section" [class.pm-blurred]="!m.contactVisible">
           <div class="pm-label">Website</div>
-          <div class="pm-value">{{ m.website }}</div>
+          <div class="pm-value">{{ display(m.website) }}</div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

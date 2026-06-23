@@ -9,11 +9,12 @@ function isMemberApiUrl(url: string): boolean {
     path.startsWith('/api/payment') ||
     path.startsWith('/api/user/me') ||
     path.startsWith('/api/customer/reports') ||
-    path.startsWith('/api/scheme-discovery')
+    path.startsWith('/api/scheme-discovery') ||
+    path.startsWith('/api/connect')
   );
 }
 
-/** Attach member JWT for payment and profile APIs. */
+/** Attach member JWT for payment, profile, scheme-discovery, and connect APIs. */
 export const memberTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (!isMemberApiUrl(req.url)) return next(req);
 

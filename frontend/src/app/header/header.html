@@ -23,7 +23,7 @@
     >
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-links " id="navLinks" [class.open]="mobileMenuOpen()">
+    <div class="nav-links" [class.nav-links--admin]="showAdminNav()" id="navLinks" [class.open]="mobileMenuOpen()">
       @if (showAdminNav()) {
         <div class="nav-links__primary">
           <a
@@ -33,148 +33,51 @@
             [routerLinkActiveOptions]="{ exact: true }"
             (click)="closeMobileMenu()"
           >
-          
             Dashboard
           </a>
 
-          <div
-            class="dropdown"
-            [class.open]="adminPeopleOpen()"
-            [class.active-section]="isPeopleActive()"
-          >
-            <button
-              type="button"
-              class="dropdown-trigger dropdown-trigger--admin"
-              (click)="toggleAdminDropdown('people'); $event.stopPropagation()"
-              [attr.aria-expanded]="adminPeopleOpen()"
+          @for (group of adminMenuGroups; track group.id) {
+            <div
+              class="dropdown"
+              [class.open]="adminDropdownOpen(group.id)"
+              [class.active-section]="isAdminGroupActive(group)"
             >
-              People &amp; Membership
-              <span class="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            @if (adminPeopleOpen()) {
-              <div class="dropdown-menu dropdown-menu--mega">
-                <p class="dd-group-label">User administration</p>
-                @if (isSuperAdmin()) {
-                  <a routerLink="/admin/user-management/admins" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Admin users</a>
-                }
-                <a routerLink="/admin/user-management/partners" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Partners</a>
-                <a routerLink="/admin/user-management/members" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Member accounts</a>
-                <div class="dd-sep"></div>
-                <p class="dd-group-label">Membership operations</p>
-                <a routerLink="/admin-dashboard/detail/members" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Members overview</a>
-                <a routerLink="/admin-dashboard/detail/subscriptions" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Subscriptions</a>
-                <a routerLink="/admin-dashboard/detail/plans" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Membership plans</a>
-                <a routerLink="/admin-dashboard/detail/expiring" [queryParams]="{ days: 30 }" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('people')">Expiring soon</a>
-              </div>
-            }
-          </div>
-
-          <div
-            class="dropdown"
-            [class.open]="adminCrmOpen()"
-            [class.active-section]="isCrmActive()"
-          >
-            <button
-              type="button"
-              class="dropdown-trigger dropdown-trigger--admin"
-              (click)="toggleAdminDropdown('crm'); $event.stopPropagation()"
-              [attr.aria-expanded]="adminCrmOpen()"
-            >
-              
-              CRM &amp; Enquiries
-              <span class="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            @if (adminCrmOpen()) {
-              <div class="dropdown-menu dropdown-menu--mega">
-                <p class="dd-group-label">Enquiry management</p>
-                <a routerLink="/admin/enquiry-management/enquiries" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu(); closeAdminDropdown('crm')">All enquiries</a>
-                <a routerLink="/admin/enquiry-management/new" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('crm')">New enquiries</a>
-                <a routerLink="/admin/enquiry-management/resolved" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('crm')">Resolved enquiries</a>
-                <a routerLink="/admin/enquiry-management/closed" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('crm')">Closed enquiries</a>
-                <div class="dd-sep"></div>
-                <p class="dd-group-label">Lead attribution</p>
-                <a routerLink="/admin/lead-attribution" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu(); closeAdminDropdown('crm')">Attribution dashboard</a>
-                <a routerLink="/admin/lead-attribution/customers" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('crm')">Lead customers</a>
-              </div>
-            }
-          </div>
-
-          <div
-            class="dropdown"
-            [class.open]="adminFinanceOpen()"
-            [class.active-section]="isFinanceActive()"
-          >
-            <button
-              type="button"
-              class="dropdown-trigger dropdown-trigger--admin"
-              (click)="toggleAdminDropdown('finance'); $event.stopPropagation()"
-              [attr.aria-expanded]="adminFinanceOpen()"
-            >
-              
-              Finance &amp; Reports
-              <span class="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            @if (adminFinanceOpen()) {
-              <div class="dropdown-menu dropdown-menu--mega">
-                <p class="dd-group-label">Payments &amp; billing</p>
-                <a routerLink="/admin-dashboard/detail/payments" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('finance')">Payments</a>
-                <a routerLink="/admin-dashboard/detail/payment-orders" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('finance')">Payment orders</a>
-                <div class="dd-sep"></div>
-                <p class="dd-group-label">Customer reports</p>
-                <a routerLink="/admin-reports/upload" routerLinkActive="active" [routerLinkActiveOptions]="{ paths: 'subset' }" (click)="closeMobileMenu(); closeAdminDropdown('finance')">Upload reports</a>
-                <a routerLink="/admin-reports/history" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('finance')">Report history</a>
-              </div>
-            }
-          </div>
-
-          <div
-            class="dropdown"
-            [class.open]="adminPartnersOpen()"
-            [class.active-section]="isPartnersActive()"
-          >
-            <button
-              type="button"
-              class="dropdown-trigger dropdown-trigger--admin"
-              (click)="toggleAdminDropdown('partners'); $event.stopPropagation()"
-              [attr.aria-expanded]="adminPartnersOpen()"
-            >
-            
-              Partners &amp; Vendors
-              <span class="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            @if (adminPartnersOpen()) {
-              <div class="dropdown-menu dropdown-menu--mega">
-                <p class="dd-group-label">Vendor management</p>
-                <a routerLink="/admin/vendor-management/vendors" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('partners')">Vendors</a>
-                <a routerLink="/admin/vendor-management/plan-mapping" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('partners')">Vendor plan mapping</a>
-              </div>
-            }
-          </div>
-
-          <div
-            class="dropdown"
-            [class.open]="adminContentOpen()"
-            [class.active-section]="isContentActive()"
-          >
-            <button
-              type="button"
-              class="dropdown-trigger dropdown-trigger--admin"
-              (click)="toggleAdminDropdown('content'); $event.stopPropagation()"
-              [attr.aria-expanded]="adminContentOpen()"
-            >
-              
-              Content
-              <span class="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            @if (adminContentOpen()) {
-              <div class="dropdown-menu dropdown-menu--mega">
-                <p class="dd-group-label">Website content</p>
-                <a routerLink="/admin-dashboard/detail/blogs" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('content')">Blogs &amp; news</a>
-                <a routerLink="/admin-dashboard/detail/events" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('content')">Events</a>
-                <a routerLink="/admin-dashboard/detail/schemes" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('content')">Schemes</a>
-              </div>
-            }
-          </div>
+              <button
+                type="button"
+                class="dropdown-trigger dropdown-trigger--admin"
+                (click)="toggleAdminDropdown(group.id); $event.stopPropagation()"
+                [attr.aria-expanded]="adminDropdownOpen(group.id)"
+              >
+                {{ group.label }}
+                <span class="nav-caret" aria-hidden="true">▾</span>
+              </button>
+              @if (adminDropdownOpen(group.id)) {
+                <div class="dropdown-menu dropdown-menu--tree">
+                  @for (section of group.sections; track section.label) {
+                    <div class="admin-nav-tree__branch">
+                      <div class="admin-nav-tree__section">{{ section.label }}</div>
+                      <div class="admin-nav-tree__children">
+                        @for (item of section.children; track item.route) {
+                          @if (!item.superAdminOnly || isSuperAdmin()) {
+                            <a
+                              class="admin-nav-tree__link"
+                              [routerLink]="item.route"
+                              [queryParams]="item.queryParams ?? null"
+                              routerLinkActive="active"
+                              [routerLinkActiveOptions]="item.pathsSubset ? { paths: 'subset' } : { exact: item.exact ?? false }"
+                              (click)="closeMobileMenu(); closeAdminDropdown(group.id)"
+                            >
+                              {{ item.label }}
+                            </a>
+                          }
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
         </div>
 
         <div class="nav-links__account">

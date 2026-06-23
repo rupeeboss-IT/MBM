@@ -386,6 +386,16 @@ export class AdminDashboardDetail {
     return isActive ? 'badge-success' : 'badge-error';
   }
 
+  memberHasPlan(u: { planName?: string | null; planCode?: string | null }): boolean {
+    return !!(u.planName?.trim() || u.planCode?.trim());
+  }
+
+  memberPlanLabel(u: { planName?: string | null; planCode?: string | null }): string {
+    const name = (u.planName ?? '').trim();
+    if (name) return name;
+    return (u.planCode ?? '').trim();
+  }
+
   private extractExportRows(res: DashboardDetailRes): {
     columns: ExportColumn<unknown>[];
     rows: unknown[];
@@ -417,7 +427,7 @@ export class AdminDashboardDetail {
           { header: 'Email', value: (r) => (r as MemberRow).email },
           { header: 'Phone', value: (r) => (r as MemberRow).phone },
           { header: 'Role', value: (r) => (r as MemberRow).role },
-          { header: 'Plan', value: (r) => (r as MemberRow).planName || (r as MemberRow).planCode || '—' },
+          { header: 'Plan', value: (r) => this.memberPlanLabel(r as MemberRow) || 'No plans' },
           { header: 'Advisor code', value: (r) => (r as MemberRow).advisorCode || '—' },
           { header: 'Status', value: (r) => ((r as MemberRow).isActive ? 'Active' : 'Inactive') },
           { header: 'Joined', value: (r) => (r as MemberRow).createdAt, type: 'datetime' },

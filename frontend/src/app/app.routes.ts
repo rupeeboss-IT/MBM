@@ -45,6 +45,7 @@ import { LeadCustomerList } from './admin/lead-attribution/lead-customer-list/le
 import { LeadCustomerDetail } from './admin/lead-attribution/lead-customer-detail/lead-customer-detail';
 import { EnquiryList } from './admin/enquiry-management/enquiry-list/enquiry-list';
 import { EnquiryDetail } from './admin/enquiry-management/enquiry-detail/enquiry-detail';
+import { ConnectList } from './admin/connect-management/connect-list/connect-list';
 
 export const routes: Routes = [
     {
@@ -388,6 +389,16 @@ export const routes: Routes = [
     {
         path: 'admin/enquiry-management',
         redirectTo: 'admin/enquiry-management/enquiries',
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/connect-management/listings',
+        component: ConnectList,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/connect-management',
+        redirectTo: 'admin/connect-management/listings',
         pathMatch: 'full'
     },
     {

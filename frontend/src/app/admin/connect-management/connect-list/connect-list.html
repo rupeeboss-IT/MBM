@@ -1,0 +1,186 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Connect Management</span>
+      <h2>MSME Connect Listings</h2>
+      <div class="muted">Add Connect data for existing members/partners. Customer-entered fields are read-only.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" type="button" (click)="openCreate()">Add Listing</button>
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="em-filters">
+      <input
+        type="search"
+        class="em-search admin-input"
+        placeholder="Search name, email, phone, company…"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+      <select class="em-select" [ngModel]="roleFilter()" (ngModelChange)="roleFilter.set($event); applyFilters()">
+        <option value="">All roles</option>
+        <option value="member">Members</option>
+        <option value="partner">Partners</option>
+      </select>
+      <select class="em-select" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); applyFilters()">
+        <option value="">All listings</option>
+        <option value="listed">Listed</option>
+        <option value="unlisted">Unlisted</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading(); else loadingTpl">
+      <table class="admin-table" *ngIf="listings().length; else emptyTpl">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Role</th>
+            <th>Sector</th>
+            <th>Listed</th>
+            <th>Verified</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of listings()">
+            <td>{{ display(row.fullName) }}</td>
+            <td>{{ display(row.companyName) }}</td>
+            <td>{{ row.role }}</td>
+            <td>{{ display(row.sector) }}</td>
+            <td>{{ row.isListed ? 'Yes' : 'No' }}</td>
+            <td>{{ row.isVerified ? 'Yes' : 'No' }}</td>
+            <td><button class="btn btn-outline btn-sm" type="button" (click)="openEdit(row)">Manage</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyTpl>
+      <div class="muted" style="padding:1rem 0">No Connect listings yet.</div>
+    </ng-template>
+    <ng-template #loadingTpl>
+      <div class="muted" style="padding:1rem 0">Loading…</div>
+    </ng-template>
+
+    <app-admin-pagination
+      [page]="page()"
+      [pageSize]="pageSize"
+      [total]="total()"
+      (pageChange)="onPageChange($event)"
+    />
+  </div>
+</div>
+
+<div class="admin-modal-overlay" *ngIf="formOpen()" (click)="closeForm()">
+  <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
+    <div class="admin-modal__head">
+      <h3>{{ formMode() === 'create' ? 'Add Connect Listing' : 'Manage Connect Listing' }}</h3>
+      <button type="button" class="admin-modal__close" (click)="closeForm()">✕</button>
+    </div>
+
+    <div class="admin-modal__body">
+      <div class="muted" *ngIf="formSubmitting() && formMode() === 'edit'">Loading listing…</div>
+
+      <ng-container *ngIf="!formSubmitting() || formMode() === 'create'">
+      <ng-container *ngIf="formMode() === 'create'">
+        <label class="admin-label">Search member / partner</label>
+        <input
+          class="admin-input"
+          type="search"
+          [ngModel]="userSearch()"
+          (ngModelChange)="userSearch.set($event)"
+          (keyup.enter)="searchUsers()"
+          placeholder="Name, email, phone, member ID"
+        />
+        <button class="btn btn-outline btn-sm" type="button" (click)="searchUsers()" style="margin:.5rem 0 1rem">Search</button>
+        <div class="user-pick-list" *ngIf="userResults().length">
+          <button
+            type="button"
+            class="user-pick"
+            *ngFor="let u of userResults()"
+            (click)="pickUser(u)"
+          >
+            {{ u.fullName }} · {{ u.role }} · {{ u.phone }}
+          </button>
+        </div>
+      </ng-container>
+
+      <div class="readonly-member" *ngIf="readOnlyMember() as m">
+        <div class="admin-label">Customer data (read-only)</div>
+        <div class="readonly-grid">
+          <div><span class="k">Name</span><span class="v">{{ display(m.fullName) }}</span></div>
+          <div><span class="k">Company</span><span class="v">{{ display(m.companyName) }}</span></div>
+          <div><span class="k">Phone</span><span class="v">{{ display(m.phone) }}</span></div>
+          <div><span class="k">Email</span><span class="v">{{ display(m.email) }}</span></div>
+        </div>
+      </div>
+
+      <div class="admin-form-grid">
+        <label><input type="checkbox" [ngModel]="formIsListed()" (ngModelChange)="formIsListed.set($event)" /> Listed on Connect</label>
+        <label><input type="checkbox" [ngModel]="formIsVerified()" (ngModelChange)="formIsVerified.set($event)" /> Verified badge</label>
+        <label><input type="checkbox" [ngModel]="formIsActive()" (ngModelChange)="formIsActive.set($event)" /> Active</label>
+      </div>
+
+      <div class="admin-form-grid two-col">
+        <div>
+          <label class="admin-label">Business type</label>
+          <input class="admin-input" [ngModel]="formBusinessType()" (ngModelChange)="formBusinessType.set($event)" [disabled]="isFieldLocked()('BusinessType')" />
+        </div>
+        <div>
+          <label class="admin-label">Sector</label>
+          <input class="admin-input" [ngModel]="formSector()" (ngModelChange)="formSector.set($event)" [disabled]="isFieldLocked()('Sector')" />
+        </div>
+        <div>
+          <label class="admin-label">State</label>
+          <input class="admin-input" [ngModel]="formState()" (ngModelChange)="formState.set($event)" [disabled]="isFieldLocked()('State')" />
+        </div>
+        <div>
+          <label class="admin-label">City</label>
+          <input class="admin-input" [ngModel]="formCity()" (ngModelChange)="formCity.set($event)" [disabled]="isFieldLocked()('City')" />
+        </div>
+        <div>
+          <label class="admin-label">Turnover</label>
+          <input class="admin-input" [ngModel]="formTurnover()" (ngModelChange)="formTurnover.set($event)" [disabled]="isFieldLocked()('Turnover')" />
+        </div>
+        <div>
+          <label class="admin-label">Udyam</label>
+          <input class="admin-input" [ngModel]="formUdyam()" (ngModelChange)="formUdyam.set($event)" [disabled]="isFieldLocked()('Udyam')" />
+        </div>
+        <div>
+          <label class="admin-label">Employees</label>
+          <input class="admin-input" [ngModel]="formEmployees()" (ngModelChange)="formEmployees.set($event)" [disabled]="isFieldLocked()('Employees')" />
+        </div>
+        <div>
+          <label class="admin-label">Established</label>
+          <input class="admin-input" [ngModel]="formEstablished()" (ngModelChange)="formEstablished.set($event)" [disabled]="isFieldLocked()('Established')" />
+        </div>
+      </div>
+
+      <label class="admin-label">Description</label>
+      <textarea class="admin-input" rows="3" [ngModel]="formDescription()" (ngModelChange)="formDescription.set($event)" [disabled]="isFieldLocked()('Description')"></textarea>
+
+      <label class="admin-label">Website</label>
+      <input class="admin-input" [ngModel]="formWebsite()" (ngModelChange)="formWebsite.set($event)" [disabled]="isFieldLocked()('Website')" />
+
+      <label class="admin-label">Admin remarks</label>
+      <textarea class="admin-input" rows="2" [ngModel]="formRemarks()" (ngModelChange)="formRemarks.set($event)"></textarea>
+
+      <p class="muted small" *ngIf="customerLocked().length">Locked fields (entered by customer): {{ customerLocked().join(', ') }}</p>
+      </ng-container>
+    </div>
+
+    <div class="admin-modal__foot">
+      <button class="btn btn-outline" type="button" (click)="closeForm()">Cancel</button>
+      <button class="btn btn-primary" type="button" [disabled]="formSubmitting()" (click)="submitForm()">
+        {{ formMode() === 'create' ? 'Create Listing' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</div>

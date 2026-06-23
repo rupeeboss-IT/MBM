@@ -251,6 +251,182 @@
         </div>
       </section>
 
+      <section class="card profile-card profile-card--connect d-none" id="connect">
+        <div class="connect-head">
+          <div class="connect-head__copy">
+            <span class="connect-head__eyebrow">Business networking</span>
+            <div class="card__title">MSME Connect</div>
+            <p class="muted connect-head__desc">
+              Accept peer requests and keep your public network profile current.
+            </p>
+          </div>
+          <a class="btn-outline connect-head__cta" [routerLink]="['/connect']">Browse network</a>
+        </div>
+
+        <div class="connect-panels">
+          <div class="connect-panel connect-panel--requests">
+            <div class="connect-panel__head">
+              <h3 class="connect-panel__title">Incoming requests</h3>
+              <span class="connect-count" *ngIf="!connectIncomingLoading() && connectIncoming().length">
+                {{ connectIncoming().length }}
+              </span>
+            </div>
+
+            <div class="connect-skeleton" *ngIf="connectIncomingLoading()">
+              <div class="connect-skeleton__row" *ngFor="let _ of [1, 2]"></div>
+            </div>
+
+            <div class="connect-empty" *ngIf="!connectIncomingLoading() && !connectIncoming().length">
+              <div class="connect-empty__icon" aria-hidden="true">📬</div>
+              <p class="connect-empty__title">No pending requests</p>
+              <p class="connect-empty__text">When another member sends a connection request, it will show up here.</p>
+            </div>
+
+            <ul class="connect-request-list" *ngIf="!connectIncomingLoading() && connectIncoming().length">
+              <li class="connect-request" *ngFor="let req of connectIncoming()">
+                <div class="connect-request__avatar" aria-hidden="true">
+                  {{ connectInitials(req.fromDisplayName) }}
+                </div>
+                <div class="connect-request__body">
+                  <div class="connect-request__top">
+                    <strong class="connect-request__name">{{ req.fromDisplayName || 'Member' }}</strong>
+                    <time class="connect-request__date" *ngIf="req.createdAt">
+                      {{ req.createdAt | localDate:'dd MMM yyyy' }}
+                    </time>
+                  </div>
+                  <div class="connect-request__company muted" *ngIf="req.fromCompanyName">
+                    {{ req.fromCompanyName }}
+                  </div>
+                  <blockquote class="connect-request__message" *ngIf="req.message">{{ req.message }}</blockquote>
+                  <div class="connect-request__actions">
+                    <button type="button" class="btn-primary btn-sm" (click)="acceptConnect(req)">Accept</button>
+                    <button type="button" class="btn-outline btn-sm" (click)="rejectConnect(req)">Decline</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="connect-panel connect-panel--profile">
+            <div class="connect-panel__head">
+              <h3 class="connect-panel__title">Your network profile</h3>
+            </div>
+
+            <div class="connect-skeleton" *ngIf="connectProfileLoading()">
+              <div class="connect-skeleton__row"></div>
+              <div class="connect-skeleton__row connect-skeleton__row--short"></div>
+            </div>
+
+            <ng-container *ngIf="connectProfile() as cp; else noConnectListing">
+              <div class="connect-preview" *ngIf="!connectProfileLoading()">
+                <div class="connect-preview__banner" aria-hidden="true"></div>
+                <div class="connect-preview__avatar">{{ cp.initials || connectInitials(cp.displayName) }}</div>
+                <div class="connect-preview__body">
+                  <div class="connect-preview__name">
+                    {{ connectDisplay(cp.displayName) }}
+                    <span class="connect-verified" *ngIf="cp.verified" title="Verified">✓</span>
+                  </div>
+                  <div class="connect-preview__company muted" *ngIf="cp.companyName">
+                    {{ connectDisplay(cp.companyName) }}
+                  </div>
+                  <div class="connect-preview__tags">
+                    <span class="connect-tag" *ngIf="connectBusinessType() || (cp.businessType && cp.businessType !== '-')">
+                      {{ connectBusinessType() || cp.businessType }}
+                    </span>
+                    <span class="connect-tag connect-tag--sector" *ngIf="connectSector() || (cp.sector && cp.sector !== '-')">
+                      {{ connectSector() || cp.sector }}
+                    </span>
+                    <span class="connect-tag" *ngIf="connectCity() || connectState() || (cp.city && cp.city !== '-')">
+                      {{ connectCity() || cp.city }}<ng-container *ngIf="(connectState() || cp.state) && (connectState() || cp.state) !== '-'">, {{ connectState() || cp.state }}</ng-container>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <p class="connect-form-hint muted" *ngIf="!connectProfileLoading()">
+                Fields you fill here appear on MSME Connect.
+              </p>
+
+              <div class="connect-form" *ngIf="!connectProfileLoading()">
+                <div class="connect-form__grid">
+                  <label class="connect-field">
+                    <span class="connect-field__label">Business type</span>
+                    <input
+                      class="connect-field__input"
+                      type="text"
+                      placeholder="e.g. Manufacturer"
+                      [ngModel]="connectBusinessType()"
+                      (ngModelChange)="connectBusinessType.set($event)"
+                    />
+                  </label>
+                  <label class="connect-field">
+                    <span class="connect-field__label">Sector</span>
+                    <input
+                      class="connect-field__input"
+                      type="text"
+                      placeholder="e.g. Manufacturing"
+                      [ngModel]="connectSector()"
+                      (ngModelChange)="connectSector.set($event)"
+                    />
+                  </label>
+                  <label class="connect-field">
+                    <span class="connect-field__label">City</span>
+                    <input
+                      class="connect-field__input"
+                      type="text"
+                      placeholder="City"
+                      [ngModel]="connectCity()"
+                      (ngModelChange)="connectCity.set($event)"
+                    />
+                  </label>
+                  <label class="connect-field">
+                    <span class="connect-field__label">State</span>
+                    <input
+                      class="connect-field__input"
+                      type="text"
+                      placeholder="State"
+                      [ngModel]="connectState()"
+                      (ngModelChange)="connectState.set($event)"
+                    />
+                  </label>
+                </div>
+                <label class="connect-field connect-field--full">
+                  <span class="connect-field__label">About your business</span>
+                  <textarea
+                    class="connect-field__input connect-field__textarea"
+                    rows="4"
+                    placeholder="Brief description visible to other members on Connect"
+                    [ngModel]="connectDescription()"
+                    (ngModelChange)="connectDescription.set($event)"
+                  ></textarea>
+                </label>
+                <div class="connect-form__actions">
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    [disabled]="connectSaving()"
+                    (click)="saveConnectProfile()"
+                  >
+                    {{ connectSaving() ? 'Saving…' : 'Save profile' }}
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noConnectListing>
+              <div class="connect-empty connect-empty--listing" *ngIf="!connectProfileLoading()">
+                <div class="connect-empty__icon" aria-hidden="true">🔗</div>
+                <p class="connect-empty__title">Not listed yet</p>
+                <p class="connect-empty__text">
+                  Your account is not on MSME Connect yet. Contact support or wait for admin to enable your listing.
+                </p>
+                <a class="btn-outline btn-sm" [routerLink]="['/connect']">Explore MSME Connect</a>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+
       <section class="profile-grid">
         <!-- <a class="card profile-card profile-card--shortcut" routerLink="." fragment="reports">
           <div class="card__title">Reports</div>
@@ -302,6 +478,7 @@
       <div class="profile-aside__title">Quick menu</div>
       <a class="profile-nav" [routerLink]="['/profile']"> Profile</a>
       <a class="profile-nav" routerLink="." fragment="invoices"> Invoices</a>
+      <a class="profile-nav" routerLink="." fragment="connect"> MSME Connect</a>
       <a class="profile-nav" [routerLink]="['/my-plan']"> Subscription</a>
       <a class="profile-nav" routerLink="." fragment="reports"> Reports</a>
       <a class="profile-nav" [routerLink]="['/membership']"> Pricing / Plans</a>

@@ -112,6 +112,7 @@
                 <div class="sortable" (click)="onColumnSort('email')">Email{{ sortIndicator(sortBy(), sortDir(), 'email') }}</div>
                 <div class="sortable" (click)="onColumnSort('phone')">Phone{{ sortIndicator(sortBy(), sortDir(), 'phone') }}</div>
                 <div class="sortable" (click)="onColumnSort('role')">Role{{ sortIndicator(sortBy(), sortDir(), 'role') }}</div>
+                <div class="sortable" (click)="onColumnSort('plan')">Plan{{ sortIndicator(sortBy(), sortDir(), 'plan') }}</div>
                 <div>Advisor code</div>
                 <div class="sortable" (click)="onColumnSort('status')">Status{{ sortIndicator(sortBy(), sortDir(), 'status') }}</div>
                 <div class="sortable" (click)="onColumnSort('created')">Joined{{ sortIndicator(sortBy(), sortDir(), 'created') }}</div>
@@ -122,6 +123,13 @@
                   <div class="text-truncate" data-label="Email" [title]="u.email">{{ u.email }}</div>
                   <div data-label="Phone">{{ u.phone }}</div>
                   <div data-label="Role"><span class="badge badge-neutral">{{ u.role }}</span></div>
+                  <div data-label="Plan">
+                    @if (memberHasPlan(u)) {
+                      <span class="badge badge-info" [title]="u.planCode || ''">{{ memberPlanLabel(u) }}</span>
+                    } @else {
+                      <span class="badge badge-neutral">No plans</span>
+                    }
+                  </div>
                   <div data-label="Advisor code">
                     @if (u.advisorCode) {
                       <span class="badge badge-info">{{ u.advisorCode }}</span>

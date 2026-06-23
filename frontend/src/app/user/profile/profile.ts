@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { afterNextRender, Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, firstValueFrom, timeout } from 'rxjs';
 import { AuthService, type MeRes } from '../../core/services/auth.service';
@@ -16,11 +17,16 @@ import { scrollToRouteFragment } from '../../core/utils/scroll-to-fragment';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
 import { formatMemberPartnerId, getIdLabel } from '../../core/utils/member-id-display.util';
+import {
+  ConnectService,
+  type ConnectIncomingItem,
+  type ConnectProfileDetail,
+} from '../../core/services/connect.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess],
+  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess, FormsModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -31,6 +37,7 @@ export class Profile {
   private readonly payments = inject(PaymentService);
   private readonly reportsApi = inject(CustomerReportService);
   private readonly toast = inject(ToastService);
+  private readonly connectApi = inject(ConnectService);
 
   readonly userId = this.session.userId;
   /** Signals so updates run change detection in zoneless mode (this app has no zone.js). */
@@ -44,6 +51,16 @@ export class Profile {
   readonly reports = signal<CustomerReportListItem[]>([]);
   readonly reportsLoading = signal(false);
   readonly reportDownloading = signal<string | null>(null);
+  readonly connectIncoming = signal<ConnectIncomingItem[]>([]);
+  readonly connectIncomingLoading = signal(false);
+  readonly connectProfile = signal<ConnectProfileDetail | null>(null);
+  readonly connectProfileLoading = signal(false);
+  readonly connectSaving = signal(false);
+  readonly connectSector = signal('');
+  readonly connectCity = signal('');
+  readonly connectState = signal('');
+  readonly connectBusinessType = signal('');
+  readonly connectDescription = signal('');
   private lastLoadedUserId: string | null = null;
   /** Ignores stale HTTP completions if userId/effect re-runs before the request finishes. */
   private loadGen = 0;
@@ -65,6 +82,8 @@ export class Profile {
       void this.loadActivePlan();
       void this.loadInvoices();
       void this.loadReports();
+      void this.loadConnectIncoming();
+      void this.loadConnectProfile();
     });
   }
 
@@ -190,6 +209,103 @@ export class Profile {
   logout() {
     this.session.logout();
     this.router.navigateByUrl('/home');
+  }
+
+  readonly connectDisplay = ConnectService.display;
+
+  connectInitials(name?: string | null): string {
+    const s = (name ?? '').trim();
+    if (!s) return '?';
+    const parts = s.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    return s.slice(0, 2).toUpperCase();
+  }
+
+  private async loadConnectIncoming() {
+    try {
+      this.connectIncomingLoading.set(true);
+      const res = await firstValueFrom(this.connectApi.incoming().pipe(timeout(15000)));
+      this.connectIncoming.set(res?.items ?? []);
+    } catch {
+      this.connectIncoming.set([]);
+    } finally {
+      this.connectIncomingLoading.set(false);
+    }
+  }
+
+  private async loadConnectProfile() {
+    try {
+      this.connectProfileLoading.set(true);
+      const res = await firstValueFrom(this.connectApi.getMyProfile().pipe(timeout(15000)));
+      const p = res?.profile ?? null;
+      this.connectProfile.set(p);
+      if (p) {
+        this.connectSector.set(p.sector && p.sector !== '-' ? p.sector : '');
+        this.connectCity.set(p.city && p.city !== '-' ? p.city : '');
+        this.connectState.set(p.state && p.state !== '-' ? p.state : '');
+        this.connectBusinessType.set(p.businessType && p.businessType !== '-' ? p.businessType : '');
+        this.connectDescription.set(p.description && p.description !== '-' ? p.description : '');
+      }
+    } catch {
+      this.connectProfile.set(null);
+    } finally {
+      this.connectProfileLoading.set(false);
+    }
+  }
+
+  async acceptConnect(req: ConnectIncomingItem) {
+    try {
+      const res = await firstValueFrom(this.connectApi.acceptRequest(req.requestId).pipe(timeout(15000)));
+      if (res?.success === false) {
+        this.toast.error(res.message || 'Unable to accept request.');
+        return;
+      }
+      this.toast.success(res.message || 'Connection accepted.');
+      await this.loadConnectIncoming();
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, 'Unable to accept request.'));
+    }
+  }
+
+  async rejectConnect(req: ConnectIncomingItem) {
+    try {
+      const res = await firstValueFrom(this.connectApi.rejectRequest(req.requestId).pipe(timeout(15000)));
+      if (res?.success === false) {
+        this.toast.error(res.message || 'Unable to reject request.');
+        return;
+      }
+      this.toast.success(res.message || 'Request rejected.');
+      await this.loadConnectIncoming();
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, 'Unable to reject request.'));
+    }
+  }
+
+  async saveConnectProfile() {
+    try {
+      this.connectSaving.set(true);
+      const res = await firstValueFrom(
+        this.connectApi
+          .updateMyProfile({
+            sector: this.connectSector() || null,
+            city: this.connectCity() || null,
+            state: this.connectState() || null,
+            businessType: this.connectBusinessType() || null,
+            description: this.connectDescription() || null,
+          })
+          .pipe(timeout(15000)),
+      );
+      if (res?.success === false) {
+        this.toast.error(res.message || 'Unable to save Connect profile.');
+        return;
+      }
+      this.toast.success('Connect profile updated.');
+      await this.loadConnectProfile();
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, 'Unable to save Connect profile.'));
+    } finally {
+      this.connectSaving.set(false);
+    }
   }
 }
 

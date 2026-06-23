@@ -206,6 +206,10 @@ builder.Services.AddScoped<RB_Website_API.Services.IRepository.IVendorManagement
 builder.Services.AddScoped<RB_Website_API.Services.IVendorManagementService, RB_Website_API.Services.VendorManagementService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.ILeadAttributionRepository, RB_Website_API.Services.Repository.LeadAttributionRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.ILeadAttributionService, RB_Website_API.Services.LeadAttributionService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.IConnectRepository, RB_Website_API.Services.Repository.ConnectRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.IConnectService, RB_Website_API.Services.ConnectService>();
+builder.Services.Configure<RB_Website_API.Auth.ConnectSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.ConnectSettings.SectionName));
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IEnquiryManagementRepository, RB_Website_API.Services.Repository.EnquiryManagementRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IEnquiryManagementService, RB_Website_API.Services.EnquiryManagementService>();
 

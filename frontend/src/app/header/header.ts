@@ -17,8 +17,11 @@ import { MBM_LOGO_ALT, MBM_LOGO_SRC } from '../core/brand';
 import { AdminSessionService } from '../core/services/admin-session.service';
 import { AuthService } from '../core/services/auth.service';
 import { AuthSessionService } from '../core/services/auth-session.service';
-
-type AdminDropdown = 'people' | 'crm' | 'finance' | 'partners' | 'content' | 'account';
+import {
+  ADMIN_MENU_GROUPS,
+  type AdminDropdown,
+  type AdminNavGroup,
+} from './admin-nav.config';
 
 @Component({
   selector: 'app-header',
@@ -60,43 +63,28 @@ export class Header implements OnDestroy {
   readonly adminFinanceOpen = signal(false);
   readonly adminPartnersOpen = signal(false);
   readonly adminContentOpen = signal(false);
+  readonly adminConnectOpen = signal(false);
   readonly adminAccountOpen = signal(false);
   readonly adminUrl = signal(this.router.url);
+  readonly adminMenuGroups = ADMIN_MENU_GROUPS;
 
-  readonly isPeopleActive = computed(() =>
-    this.matchesAdminPrefix([
-      '/admin/user-management',
-      '/admin-dashboard/detail/members',
-      '/admin-dashboard/detail/subscriptions',
-      '/admin-dashboard/detail/plans',
-      '/admin-dashboard/detail/expiring',
-      '/admin-dashboard/detail/expired',
-    ]),
-  );
+  isAdminGroupActive(group: AdminNavGroup): boolean {
+    return this.matchesAdminPrefix(group.prefixes);
+  }
 
-  readonly isCrmActive = computed(() =>
-    this.matchesAdminPrefix(['/admin/enquiry-management', '/admin/lead-attribution']),
-  );
+  adminDropdownOpen(menu: AdminDropdown): boolean {
+    return this.adminDropdownSignals[menu]();
+  }
 
-  readonly isFinanceActive = computed(() =>
-    this.matchesAdminPrefix([
-      '/admin-dashboard/detail/payments',
-      '/admin-dashboard/detail/payment-orders',
-      '/admin-reports',
-    ]),
-  );
-
-  readonly isPartnersActive = computed(() =>
-    this.matchesAdminPrefix(['/admin/vendor-management']),
-  );
-
-  readonly isContentActive = computed(() =>
-    this.matchesAdminPrefix([
-      '/admin-dashboard/detail/blogs',
-      '/admin-dashboard/detail/events',
-      '/admin-dashboard/detail/schemes',
-    ]),
-  );
+  private readonly adminDropdownSignals: Record<AdminDropdown, ReturnType<typeof signal<boolean>>> = {
+    people: this.adminPeopleOpen,
+    crm: this.adminCrmOpen,
+    finance: this.adminFinanceOpen,
+    partners: this.adminPartnersOpen,
+    content: this.adminContentOpen,
+    connect: this.adminConnectOpen,
+    account: this.adminAccountOpen,
+  };
 
   readonly isAccountActive = computed(() =>
     this.matchesAdminPrefix(['/admin-forgot-password']),
@@ -185,15 +173,7 @@ export class Header implements OnDestroy {
   }
 
   toggleAdminDropdown(menu: AdminDropdown): void {
-    const states: Record<AdminDropdown, ReturnType<typeof signal<boolean>>> = {
-      people: this.adminPeopleOpen,
-      crm: this.adminCrmOpen,
-      finance: this.adminFinanceOpen,
-      partners: this.adminPartnersOpen,
-      content: this.adminContentOpen,
-      account: this.adminAccountOpen,
-    };
-    const current = states[menu];
+    const current = this.adminDropdownSignals[menu];
     const next = !current();
     this.closeDropdowns();
     current.set(next);
@@ -207,24 +187,13 @@ export class Header implements OnDestroy {
   }
 
   closeAdminDropdowns(): void {
-    this.adminPeopleOpen.set(false);
-    this.adminCrmOpen.set(false);
-    this.adminFinanceOpen.set(false);
-    this.adminPartnersOpen.set(false);
-    this.adminContentOpen.set(false);
-    this.adminAccountOpen.set(false);
+    for (const sig of Object.values(this.adminDropdownSignals)) {
+      sig.set(false);
+    }
   }
 
   closeAdminDropdown(menu: AdminDropdown): void {
-    const states: Record<AdminDropdown, ReturnType<typeof signal<boolean>>> = {
-      people: this.adminPeopleOpen,
-      crm: this.adminCrmOpen,
-      finance: this.adminFinanceOpen,
-      partners: this.adminPartnersOpen,
-      content: this.adminContentOpen,
-      account: this.adminAccountOpen,
-    };
-    states[menu].set(false);
+    this.adminDropdownSignals[menu].set(false);
   }
 
   toggleSearch(): void {

@@ -31,6 +31,10 @@ namespace RB_Website_API.Data
         public DbSet<Models.VendorPlanMapping> VendorPlanMappings => Set<Models.VendorPlanMapping>();
         public DbSet<Models.VendorAuditLog> VendorAuditLogs => Set<Models.VendorAuditLog>();
         public DbSet<Models.EnquiryStatusHistory> EnquiryStatusHistories => Set<Models.EnquiryStatusHistory>();
+        public DbSet<Models.ConnectMemberProfile> ConnectMemberProfiles => Set<Models.ConnectMemberProfile>();
+        public DbSet<Models.ConnectAdminListing> ConnectAdminListings => Set<Models.ConnectAdminListing>();
+        public DbSet<Models.ConnectRequest> ConnectRequests => Set<Models.ConnectRequest>();
+        public DbSet<Models.ConnectContactUnlock> ConnectContactUnlocks => Set<Models.ConnectContactUnlock>();
 
         public new DbSet<T> Set<T>() where T : class
         {
@@ -86,6 +90,12 @@ namespace RB_Website_API.Data
                 e.Property(x => x.NewStatus).HasMaxLength(20).IsRequired();
                 e.Property(x => x.Remarks).HasMaxLength(800);
                 e.Property(x => x.ChangedOn).IsRequired();
+            });
+
+            modelBuilder.Entity<Models.ConnectContactUnlock>(e =>
+            {
+                e.ToTable("ConnectContactUnlocks", "dbo");
+                e.HasKey(x => new { x.ViewerUserId, x.TargetUserId });
             });
         }
     }
