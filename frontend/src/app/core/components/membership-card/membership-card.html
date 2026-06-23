@@ -1,0 +1,119 @@
+<div class="mbm-card-root">
+  @if (loading()) {
+    <div class="mbm-card-skeleton" aria-hidden="true"></div>
+  } @else {
+    <p class="mbm-card-hint">Tap the card to flip · front &amp; back</p>
+
+    <div
+      class="scene"
+      role="button"
+      tabindex="0"
+      aria-label="Flip membership card"
+      (click)="toggleFlip()"
+      (keydown)="onSceneKeydown($event)"
+    >
+      <div class="card3d" [class.flipped]="flipped()">
+        <div class="face front">
+          <ng-container *ngTemplateOutlet="frontFace"></ng-container>
+        </div>
+        <div class="face back">
+          <ng-container *ngTemplateOutlet="backFace"></ng-container>
+        </div>
+      </div>
+    </div>
+
+    @if (!hasActivePlan()) {
+      <p class="mbm-card-no-plan muted">No active plan — choose membership to unlock full benefits.</p>
+      <a class="btn-primary mbm-card-upgrade" routerLink="/membership">Choose a Plan</a>
+    } @else {
+      <div class="mbm-card-links">
+        <a class="btn-outline" routerLink="/my-plan">View benefits &amp; invoices</a>
+        <a class="btn-outline" routerLink="/membership">Upgrade Plan</a>
+      </div>
+    }
+  }
+</div>
+
+<ng-template #frontFace>
+  <div class="cardwrap" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
+    <div class="elite-ribbon">ELITE</div>
+    <div class="c-head">
+      <div>
+        <div class="c-word">MSME BHARAT MANCH</div>
+        <div class="c-power">Powered by RupeeBoss</div>
+        <div class="c-eyebrow">Official Member Card</div>
+      </div>
+      <div class="c-logo">
+        <img [src]="logoSrc" alt="MSME Bharat Manch" />
+      </div>
+    </div>
+    <div class="c-body">
+      <div class="c-left">
+        <div class="chip"></div>
+        <div class="c-name">{{ profile()?.fullName || 'Member Name' }}</div>
+        <div class="c-company">{{ profile()?.companyName || 'Company Name' }}</div>
+        <div class="c-fields">
+          <div class="c-field">
+            <div class="k">Plan</div>
+            <div class="v">{{ planCfg().tier }}</div>
+          </div>
+          <div class="c-field">
+            <div class="k">Member No</div>
+            <div class="v">{{ memberNo() }}</div>
+          </div>
+          <div class="c-field">
+            <div class="k">Valid Till</div>
+            <div class="v">
+              @if (plan()?.activeTo; as till) {
+                {{ till | localDate:'dd MMMM yyyy' }}
+              } @else {
+                —
+              }
+            </div>
+          </div>
+          <div class="c-field">
+            <div class="k">Location</div>
+            <div class="v">{{ location() }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-right">
+        <div class="c-photo">
+          <span class="mono">{{ memberInitials() }}</span>
+        </div>
+        @if (qrDataUrl()) {
+          <div class="c-qr"><img [src]="qrDataUrl()" alt="" /></div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #backFace>
+  <div class="cardwrap" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
+    <div class="c-head">
+      <div>
+        <div class="c-word">MSME BHARAT MANCH</div>
+        <div class="b-tag">India's Fastest Growing MSME Business Network</div>
+      </div>
+    </div>
+    <ul class="b-services">
+      @for (s of services; track s) {
+        <li>{{ s }}</li>
+      }
+    </ul>
+    <div class="b-elite">ELITE BENEFITS — {{ eliteBenefits }}</div>
+    <div class="b-foot">
+      <div class="b-contact">
+        <b>Corporate Office · Mumbai, Maharashtra</b>
+        {{ orgPhone }}<br />{{ orgEmail }}<br />{{ orgSite }}
+      </div>
+      <div class="b-verify">
+        <div class="vl">Scan to visit</div>
+        @if (qrDataUrl()) {
+          <div class="b-qr"><img [src]="qrDataUrl()" alt="" /></div>
+        }
+      </div>
+    </div>
+  </div>
+</ng-template>

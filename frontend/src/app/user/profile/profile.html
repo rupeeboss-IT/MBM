@@ -28,39 +28,13 @@
          1) Membership 2) Details 3) Dashboard 4) Quick menu 5) Support -->
     <div class="profile-aside__card profile-aside__card--membership">
       <div class="profile-aside__title">Membership</div>
-
-      <ng-container *ngIf="planLoading(); else planLoaded">
-        <div class="plan-pill plan-pill--loading">Loading…</div>
-      </ng-container>
-
-      <ng-template #planLoaded>
-        <ng-container *ngIf="activePlan() as plan; else noPlan">
-          <div><span class="plan-pill plan-pill--active">{{ plan.planName }}</span></div>
-          <div class="muted d-flex" *ngIf="plan.activeFrom"  style="justify-content: space-between;">
-            <span class="k">Active since</span>
-            <span class="v">{{ plan.activeFrom | localDate:'dd MMM yyyy' }}</span>
-          </div><hr/>
-          <div class="muted d-flex" *ngIf="plan.activeTo" style="justify-content: space-between;">
-            <span class="k">Renews on</span>
-            <span class="v">{{ plan.activeTo | localDate:'dd MMM yyyy' }}</span>
-          </div>
-          <div style="margin-top:.8rem;display:flex;flex-direction:column;gap:.5rem">
-            <a class="btn-outline" [routerLink]="['/my-plan']"
-               style="width:100%;text-align:center;display:block">View benefits &amp; invoices</a>
-            <a class="btn-outline" [routerLink]="['/membership']"
-               style="width:100%;text-align:center;display:block">Upgrade Plan</a>
-          </div>
-        </ng-container>
-
-        <ng-template #noPlan>
-          <div class="plan-pill">No active plan</div>
-          <div class="muted">Pick a plan to unlock benefits and dashboard features.</div>
-          <div style="margin-top:.8rem">
-            <a class="btn-primary" [routerLink]="['/membership']"
-               style="width:100%;text-align:center;display:block">Choose a Plan</a>
-          </div>
-        </ng-template>
-      </ng-template>
+      <app-membership-card
+        [profile]="profile()"
+        [plan]="activePlan()"
+        [city]="connectCity()"
+        [state]="connectState()"
+        [loading]="planLoading() || loading()"
+      />
     </div>
 
     <main class="profile-main">

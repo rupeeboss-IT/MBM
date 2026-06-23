@@ -16,6 +16,7 @@ import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { scrollToRouteFragment } from '../../core/utils/scroll-to-fragment';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
+import { MembershipCard } from '../../core/components/membership-card/membership-card';
 import { formatMemberPartnerId, getIdLabel } from '../../core/utils/member-id-display.util';
 import {
   ConnectService,
@@ -26,7 +27,7 @@ import {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess, FormsModule],
+  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess, MembershipCard, FormsModule],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
