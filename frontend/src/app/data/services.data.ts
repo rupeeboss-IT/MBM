@@ -186,7 +186,8 @@ export const SERVICES_DATA: Record<ServiceSlug, ServiceModel> = {
       'FSSAI License',
       'MSME Udyam Registration',
       'Import Export Code (IEC)',
-      'Labour Law Compliance'
+      'Labour Law Compliance',
+      'ROC filings'
     ],
     targets: ['🏭 All MSMEs', '🛒 Food & FSSAI businesses', '🌐 Exporters', '🏢 Corporate MSMEs'],
     process:

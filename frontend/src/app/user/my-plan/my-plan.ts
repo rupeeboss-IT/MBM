@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom, timeout } from 'rxjs';
+import { AuthService, type MeRes } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
 import {
   PaymentService,
@@ -11,6 +12,7 @@ import {
 import { ToastService } from '../../core/services/toast.service';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
+import { MembershipCard } from '../../core/components/membership-card/membership-card';
 
 type Benefit = { title: string; desc: string };
 
@@ -63,7 +65,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
 @Component({
   selector: 'app-my-plan',
   standalone: true,
-  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess],
+  imports: [CommonModule, RouterLink, LocalDatePipe, SchemeDiscoveryReportAccess, MembershipCard],
   template: `
     <div class="page active plan-page">
       <div class="plan-hero">
@@ -83,7 +85,18 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
       </div>
 
       <div class="container plan-shell">
-        <div class="card plan-card">
+        <aside class="plan-aside">
+          <div class="card plan-card plan-card--membership">
+            <div class="card__title">Membership</div>
+            <app-membership-card
+              [profile]="profile()"
+              [plan]="plan()"
+              [loading]="loading()"
+              [showLinks]="false"
+            />
+          </div>
+
+          <div class="card plan-card">
           <div class="card__title">Current plan</div>
 
           <div *ngIf="loading()" class="muted">Loading your plan…</div>
@@ -132,7 +145,8 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
               </div>
             </ng-template>
           </ng-container>
-        </div>
+          </div>
+        </aside>
 
         <div class="card plan-card" *ngIf="!loading() && plan()">
           <div class="card__title">Benefits included</div>
@@ -233,6 +247,15 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         grid-template-columns: 420px 1fr;
         gap: 1rem;
         align-items:start;
+      }
+      .plan-aside{
+        display:flex;
+        flex-direction:column;
+        gap:1rem;
+        min-width:0;
+      }
+      .plan-card--membership{
+        overflow:hidden;
       }
       .plan-card{
         background:#fff; border:1px solid var(--border); border-radius: 16px;
@@ -384,12 +407,14 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
 })
 export class MyPlan {
   private readonly session = inject(AuthSessionService);
+  private readonly api = inject(AuthService);
   private readonly payments = inject(PaymentService);
   private readonly toast = inject(ToastService);
 
   readonly loading = signal(false);
   readonly cancelling = signal(false);
   readonly plan = signal<ActivePlan | null>(null);
+  readonly profile = signal<MeRes | null>(null);
   readonly history = signal<PaymentHistoryItem[]>([]);
 
   constructor() {
@@ -435,14 +460,17 @@ export class MyPlan {
   private async load() {
     try {
       this.loading.set(true);
-      const [planRes, histRes] = await Promise.all([
+      const [planRes, histRes, profileRes] = await Promise.all([
         firstValueFrom(this.payments.myPlan().pipe(timeout(15000))),
         firstValueFrom(this.payments.paymentHistory().pipe(timeout(15000))),
+        firstValueFrom(this.api.me().pipe(timeout(15000))).catch(() => null),
       ]);
       this.plan.set(planRes?.plan ?? null);
       this.history.set(histRes?.items ?? []);
+      this.profile.set(profileRes);
     } catch (e: any) {
       this.plan.set(null);
+      this.profile.set(null);
       this.history.set([]);
       const msg =
         (e?.error?.message as string | undefined) ||

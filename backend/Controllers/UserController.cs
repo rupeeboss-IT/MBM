@@ -20,6 +20,7 @@ public sealed class UserController : ControllerBase
     private readonly IMemberIdGeneratorService _memberIds;
     private readonly ILeadPushService _leadPush;
     private readonly IEmployeeValidationService _employees;
+    private readonly RegistrationWelcomeEmailService _registrationWelcome;
     private readonly ILogger<UserController> _logger;
 
     public UserController(
@@ -30,6 +31,7 @@ public sealed class UserController : ControllerBase
         IMemberIdGeneratorService memberIds,
         ILeadPushService leadPush,
         IEmployeeValidationService employees,
+        RegistrationWelcomeEmailService registrationWelcome,
         ILogger<UserController> logger)
     {
         _db = db;
@@ -39,6 +41,7 @@ public sealed class UserController : ControllerBase
         _memberIds = memberIds;
         _leadPush = leadPush;
         _employees = employees;
+        _registrationWelcome = registrationWelcome;
         _logger = logger;
     }
 
@@ -289,6 +292,7 @@ public sealed class UserController : ControllerBase
             await tx.CommitAsync(ct);
 
             await TryPushRegistrationLeadAsync(user.UserId, req.RegistrationSource, req.AdvisorCode, ct);
+            await _registrationWelcome.TrySendAfterRegistrationAsync(user.UserId, ct);
 
             var token = _jwt.CreateToken(user.UserId, memberRole, user.Email);
             _logger.LogInformation("User registered successfully {UserId} ({Email})", user.UserId, email);

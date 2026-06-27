@@ -31,8 +31,6 @@
       <app-membership-card
         [profile]="profile()"
         [plan]="activePlan()"
-        [city]="connectCity()"
-        [state]="connectState()"
         [loading]="planLoading() || loading()"
       />
     </div>
@@ -452,7 +450,7 @@
       <div class="profile-aside__title">Quick menu</div>
       <a class="profile-nav" [routerLink]="['/profile']"> Profile</a>
       <a class="profile-nav" routerLink="." fragment="invoices"> Invoices</a>
-      <a class="profile-nav" routerLink="." fragment="connect"> MSME Connect</a>
+      <a class="profile-nav d-none" routerLink="." fragment="connect"> MSME Connect</a>
       <a class="profile-nav" [routerLink]="['/my-plan']"> Subscription</a>
       <a class="profile-nav" routerLink="." fragment="reports"> Reports</a>
       <a class="profile-nav" [routerLink]="['/membership']"> Pricing / Plans</a>

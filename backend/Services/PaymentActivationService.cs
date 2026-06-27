@@ -9,11 +9,16 @@ public sealed class PaymentActivationService
 {
     private readonly AppDbContext _db;
     private readonly MembershipEmailService _email;
+    private readonly RegistrationWelcomeEmailService _registrationWelcome;
 
-    public PaymentActivationService(AppDbContext db, MembershipEmailService email)
+    public PaymentActivationService(
+        AppDbContext db,
+        MembershipEmailService email,
+        RegistrationWelcomeEmailService registrationWelcome)
     {
         _db = db;
         _email = email;
+        _registrationWelcome = registrationWelcome;
     }
 
     /// <summary>
@@ -164,7 +169,10 @@ public sealed class PaymentActivationService
             activeFrom,
             activeTo);
 
-        await _email.SendActivationEmailAsync(result, ct);
+        if (kind == ActivationKind.FirstPurchase)
+            await _registrationWelcome.TrySendPaidWelcomeAfterFirstPurchaseAsync(result, ct);
+        else
+            await _email.SendActivationEmailAsync(result, ct);
         return result;
     }
 

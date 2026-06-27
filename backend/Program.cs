@@ -110,6 +110,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddScoped<RB_Website_API.Services.PaymentActivationService>();
 builder.Services.AddScoped<RB_Website_API.Services.MembershipEmailService>();
+builder.Services.AddScoped<RB_Website_API.Services.RegistrationWelcomeEmailService>();
 builder.Services.AddScoped<RB_Website_API.Services.InvoicePdfService>();
 builder.Services.Configure<RB_Website_API.Auth.InvoiceSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.InvoiceSettings.SectionName));

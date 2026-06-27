@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome — Membership Activated</title>
+  <style type="text/css">
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #eef1f6; }
+    @media only screen and (max-width: 620px) {
+      .email-container { width: 100% !important; }
+      .px-mobile { padding-left: 20px !important; padding-right: 20px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#eef1f6;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+    Welcome {{FullName}}! Your {{PlanName}} membership on MSME Bharat Manch is now active.
+  </div>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#eef1f6;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" class="email-container" width="600" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(26,26,46,0.12);">
+          <tr>
+            <td style="background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%);padding:28px 32px;" class="px-mobile">
+              <p style="margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.75);">MSME Bharat Manch</p>
+              <p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;">Welcome — Membership Activated</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 32px;" class="px-mobile">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:-20px;">
+                <tr>
+                  <td align="center" style="background:#fff;border-radius:14px;border:1px solid #e8ecf2;padding:28px 22px;box-shadow:0 4px 16px rgba(26,26,46,0.06);">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td align="center" width="56" height="56" style="background:#ecfdf3;border-radius:50%;font-size:28px;color:#16a34a;line-height:56px;">&#10003;</td>
+                      </tr>
+                    </table>
+                    <h1 style="margin:18px 0 8px;font-size:24px;font-weight:800;color:#1a1a2e;">You're All Set!</h1>
+                    <p style="margin:0;font-size:15px;line-height:1.6;color:#5c6578;">Dear <strong>{{FullName}}</strong>,</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 32px 8px;" class="px-mobile">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f8fafc;border:1px solid #e8ecf2;border-radius:12px;">
+                <tr>
+                  <td style="padding:22px 24px;">
+                    <p style="margin:0 0 16px;font-size:16px;line-height:1.7;color:#334155;">
+                      Welcome to <strong style="color:#0f3460;">MSME Bharat Manch</strong>! Your account is registered and your <strong>{{PlanName}}</strong> membership is now active.
+                    </p>
+                    <p style="margin:0;font-size:16px;line-height:1.7;color:#334155;">
+                      Thank you for your payment. You can now access your membership benefits from your dashboard.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:12px 32px 8px;" class="px-mobile">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 22px;">
+                    <p style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#e63946;">Membership details</p>
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;width:120px;vertical-align:top;">Member ID</td>
+                        <td style="padding:6px 0;font-size:15px;font-weight:700;color:#0f3460;font-family:Consolas,'Courier New',monospace;">{{MemberId}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;vertical-align:top;">Plan</td>
+                        <td style="padding:6px 0;font-size:15px;font-weight:600;color:#1a1a2e;">{{PlanName}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;vertical-align:top;">Valid from</td>
+                        <td style="padding:6px 0;font-size:15px;color:#1a1a2e;">{{ActiveFrom}}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0;font-size:14px;color:#64748b;vertical-align:top;">Valid until</td>
+                        <td style="padding:6px 0;font-size:15px;color:#1a1a2e;">{{ActiveTo}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 32px;" class="px-mobile">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;">
+                <tr>
+                  <td style="padding:18px 22px;">
+                    <p style="margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#64748b;">Benefits included</p>
+                    {{BenefitsHtml}}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 32px;" class="px-mobile">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0;font-size:14px;line-height:1.65;color:#1e40af;">
+                      <strong>Invoice attached:</strong> Your payment invoice is attached to this email. You can also download it anytime from your profile.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 32px 28px;" class="px-mobile">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td style="border-radius:10px;background:#e63946;padding-right:8px;">
+                    <a href="{{MyPlanUrl}}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;">View My Plan</a>
+                  </td>
+                  <td style="padding-left:8px;">
+                    <a href="{{DashboardUrl}}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#0f3460;text-decoration:none;border:1px solid #cbd5e1;border-radius:10px;">Go to Dashboard</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f1f5f9;padding:22px 32px;border-top:1px solid #e2e8f0;" class="px-mobile">
+              <p style="margin:0 0 6px;font-size:13px;color:#64748b;">Need help? Contact us at</p>
+              <p style="margin:0;font-size:14px;color:#1a1a2e;">
+                <a href="mailto:{{SupportEmail}}" style="color:#0f3460;font-weight:600;text-decoration:none;">{{SupportEmail}}</a>
+                &nbsp;|&nbsp; {{SupportPhone}}
+              </p>
+              <p style="margin:14px 0 0;font-size:12px;color:#94a3b8;">&copy; {{Year}} MSME Bharat Manch. All rights reserved.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -25,16 +25,19 @@ const PLANS: Record<PlanCode, PlanCardConfig> = {
 
 const SERVICES = [
   'Business Funding',
-  'Government Schemes',
+  'Govt. Schemes',
   'Market Linkages',
-  'Business Networking',
+  'Networking',
   'SME IPO Support',
   'Subsidy Advisory',
-  'Digital Transformation',
 ];
 
-const ELITE_BENEFITS =
-  'Priority Funding · Exclusive Networking · National Directory Listing · Dedicated Relationship Manager';
+const ELITE_PERKS = [
+  'Priority Funding',
+  'VIP Networking',
+  'National Directory',
+  'Dedicated RM',
+];
 
 const ORG_PHONE = '+91 90059 00921';
 const ORG_EMAIL = 'support@msmebharatmanch.com';
@@ -50,15 +53,15 @@ const ORG_SITE = 'www.msmebharatmanch.com';
 export class MembershipCard {
   readonly profile = input<MeRes | null>(null);
   readonly plan = input<ActivePlan | null>(null);
-  readonly city = input('');
-  readonly state = input('');
   readonly loading = input(false);
+  /** When false, hides footer CTA links (e.g. on my-plan where actions are redundant). */
+  readonly showLinks = input(true);
 
   readonly flipped = signal(false);
   readonly qrDataUrl = signal('');
 
   readonly services = SERVICES;
-  readonly eliteBenefits = ELITE_BENEFITS;
+  readonly elitePerks = ELITE_PERKS;
   readonly orgPhone = ORG_PHONE;
   readonly orgEmail = ORG_EMAIL;
   readonly orgSite = ORG_SITE;
@@ -91,11 +94,6 @@ export class MembershipCard {
   readonly isElite = computed(() => this.planCfg().elite);
   readonly hasActivePlan = computed(() => !!this.plan()?.planCode);
 
-  readonly location = computed(() => {
-    const parts = [this.city().trim(), this.state().trim()].filter(Boolean);
-    return parts.length ? parts.join(', ') : '—';
-  });
-
   readonly verifyUrl = computed(() => 'https://msmebharatmanch.com');
 
   constructor() {
@@ -103,14 +101,6 @@ export class MembershipCard {
       const url = this.verifyUrl();
       void this.refreshQr(url);
     });
-  }
-
-  memberInitials(): string {
-    const name = (this.profile()?.fullName ?? '').trim();
-    if (!name) return 'M';
-    const parts = name.split(/\s+/).filter(Boolean);
-    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    return name.slice(0, 2).toUpperCase();
   }
 
   toggleFlip(): void {

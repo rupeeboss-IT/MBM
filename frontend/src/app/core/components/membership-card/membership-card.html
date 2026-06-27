@@ -22,91 +22,99 @@
       </div>
     </div>
 
-    @if (!hasActivePlan()) {
-      <p class="mbm-card-no-plan muted">No active plan — choose membership to unlock full benefits.</p>
-      <a class="btn-primary mbm-card-upgrade" routerLink="/membership">Choose a Plan</a>
-    } @else {
-      <div class="mbm-card-links">
-        <a class="btn-outline" routerLink="/my-plan">View benefits &amp; invoices</a>
-        <a class="btn-outline" routerLink="/membership">Upgrade Plan</a>
-      </div>
+    @if (showLinks()) {
+      @if (!hasActivePlan()) {
+        <p class="mbm-card-no-plan muted">No active plan — choose membership to unlock full benefits.</p>
+        <a class="btn-primary mbm-card-upgrade" routerLink="/membership">Choose a Plan</a>
+      } @else {
+        <div class="mbm-card-links">
+          <a class="btn-outline" routerLink="/my-plan">View benefits &amp; invoices</a>
+          <a class="btn-outline" routerLink="/membership">Upgrade Plan</a>
+        </div>
+      }
     }
   }
 </div>
 
 <ng-template #frontFace>
-  <div class="cardwrap" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
+  <div class="cardwrap cardwrap--front" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
     <div class="elite-ribbon">ELITE</div>
-    <div class="c-head">
-      <div>
+
+    <header class="fc-head">
+      <div class="fc-brand">
         <div class="c-word">MSME BHARAT MANCH</div>
         <div class="c-power">Powered by RupeeBoss</div>
-        <div class="c-eyebrow">Official Member Card</div>
       </div>
-      <div class="c-logo">
-        <img [src]="logoSrc" alt="MSME Bharat Manch" />
+      <div class="fc-mark">
+        <div class="c-logo">
+          <img [src]="logoSrc" alt="MSME Bharat Manch" />
+        </div>
       </div>
+    </header>
+
+    <div class="fc-mid">
+      <div class="chip"></div>
     </div>
-    <div class="c-body">
-      <div class="c-left">
-        <div class="chip"></div>
-        <div class="c-name">{{ profile()?.fullName || 'Member Name' }}</div>
-        <div class="c-company">{{ profile()?.companyName || 'Company Name' }}</div>
-        <div class="c-fields">
-          <div class="c-field">
-            <div class="k">Plan</div>
-            <div class="v">{{ planCfg().tier }}</div>
-          </div>
-          <div class="c-field">
-            <div class="k">Member No</div>
-            <div class="v">{{ memberNo() }}</div>
-          </div>
-          <div class="c-field">
-            <div class="k">Valid Till</div>
-            <div class="v">
-              @if (plan()?.activeTo; as till) {
-                {{ till | localDate:'dd MMMM yyyy' }}
-              } @else {
-                —
-              }
-            </div>
-          </div>
-          <div class="c-field">
-            <div class="k">Location</div>
-            <div class="v">{{ location() }}</div>
+
+    <footer class="fc-foot">
+      <div class="c-name">{{ profile()?.fullName || 'Member Name' }}</div>
+      <div class="c-company">{{ profile()?.companyName || 'Company Name' }}</div>
+      <div class="c-fields">
+        <div class="c-field">
+          <div class="k">Plan</div>
+          <div class="v">{{ planCfg().tier }}</div>
+        </div>
+        <div class="c-field">
+          <div class="k">Member No</div>
+          <div class="v v--mono">{{ memberNo() }}</div>
+        </div>
+        <div class="c-field">
+          <div class="k">Valid Till</div>
+          <div class="v">
+            @if (plan()?.activeTo; as till) {
+              {{ till | localDate:'dd MMM yyyy' }}
+            } @else {
+              —
+            }
           </div>
         </div>
       </div>
-      <div class="c-right">
-        <div class="c-photo">
-          <span class="mono">{{ memberInitials() }}</span>
-        </div>
-        @if (qrDataUrl()) {
-          <div class="c-qr"><img [src]="qrDataUrl()" alt="" /></div>
-        }
-      </div>
-    </div>
+    </footer>
   </div>
 </ng-template>
 
 <ng-template #backFace>
-  <div class="cardwrap" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
-    <div class="c-head">
-      <div>
-        <div class="c-word">MSME BHARAT MANCH</div>
-        <div class="b-tag">India's Fastest Growing MSME Business Network</div>
-      </div>
-    </div>
-    <ul class="b-services">
-      @for (s of services; track s) {
-        <li>{{ s }}</li>
+  <div class="cardwrap cardwrap--back" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
+    <header class="bc-head">
+      <div class="c-word">MSME BHARAT MANCH</div>
+      @if (!isElite()) {
+        <div class="b-tag">India's MSME Business Network</div>
       }
-    </ul>
-    <div class="b-elite">ELITE BENEFITS — {{ eliteBenefits }}</div>
-    <div class="b-foot">
+    </header>
+
+    <div class="bc-body">
+      <ul class="b-services">
+        @for (s of services; track s) {
+          <li>{{ s }}</li>
+        }
+      </ul>
+
+      @if (isElite()) {
+        <div class="b-elite-block">
+          <div class="b-elite-label">Elite Benefits</div>
+          <ul class="b-elite-list">
+            @for (p of elitePerks; track p) {
+              <li>{{ p }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+
+    <footer class="b-foot">
       <div class="b-contact">
-        <b>Corporate Office · Mumbai, Maharashtra</b>
-        {{ orgPhone }}<br />{{ orgEmail }}<br />{{ orgSite }}
+        <b>Mumbai, Maharashtra</b>
+        {{ orgPhone }}<br />{{ orgSite }}
       </div>
       <div class="b-verify">
         <div class="vl">Scan to visit</div>
@@ -114,6 +122,6 @@
           <div class="b-qr"><img [src]="qrDataUrl()" alt="" /></div>
         }
       </div>
-    </div>
+    </footer>
   </div>
 </ng-template>

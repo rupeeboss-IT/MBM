@@ -27,6 +27,9 @@ public sealed class ApplicationUrlsSettings
     public string MyPlanUrl =>
         string.IsNullOrWhiteSpace(FrontendBase) ? "" : $"{FrontendBase}/my-plan";
 
+    public string ProfileUrl =>
+        string.IsNullOrWhiteSpace(FrontendBase) ? "" : $"{FrontendBase}/profile";
+
     public string PaymentWebhookUrl =>
         string.IsNullOrWhiteSpace(ApiBase) ? "" : $"{ApiBase}/api/payment/razorpay/webhook";
 }
