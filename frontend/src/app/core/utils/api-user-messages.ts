@@ -17,6 +17,7 @@ export const API_USER_MESSAGES = {
   reportUpload: 'Unable to upload the report. Please try again.',
   reportDownload: 'Unable to download the report. Please try again.',
   reportSearch: 'Unable to retrieve search results. Please try again.',
+  sdrGenerate: 'Unable to generate the scheme discovery report. Please try again.',
   dashboard: 'Unable to load dashboard data. Please try again.',
   save: 'Unable to save changes. Please try again.',
   delete: 'Unable to delete the record. Please try again.',
@@ -33,6 +34,7 @@ export function resolveApiFallback(url: string, method: string): string {
   const path = url.toLowerCase();
   const m = method.toUpperCase();
 
+  if (path.includes('/admin/reports/sdr')) return API_USER_MESSAGES.sdrGenerate;
   if (path.includes('/admin/reports/history')) return API_USER_MESSAGES.reportHistory;
   if (path.includes('/admin/reports/upload')) return API_USER_MESSAGES.reportUpload;
   if (path.includes('/admin/reports') && path.includes('/customers/search')) return API_USER_MESSAGES.reportSearch;

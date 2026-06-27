@@ -13,13 +13,19 @@ public sealed class AdminReportsController : ControllerBase
 {
     private readonly ICustomerReportService _reports;
     private readonly IReportChangeRequestService _changeRequests;
+    private readonly ISdrReportService _sdrReports;
+    private readonly IReportAuditService _audit;
 
     public AdminReportsController(
         ICustomerReportService reports,
-        IReportChangeRequestService changeRequests)
+        IReportChangeRequestService changeRequests,
+        ISdrReportService sdrReports,
+        IReportAuditService audit)
     {
         _reports = reports;
         _changeRequests = changeRequests;
+        _sdrReports = sdrReports;
+        _audit = audit;
     }
 
     public sealed record SearchCustomersResponse(bool Success, string? Message, List<CustomerSearchResultDto>? Customers);
@@ -54,6 +60,89 @@ public sealed class AdminReportsController : ControllerBase
     public sealed record ActionResponse(bool Success, string? Message);
 
     public sealed record AuditHistoryResponse(bool Success, string? Message, List<ReportAuditLogItemDto>? Items);
+
+    public sealed record GenerateSdrBody(Guid CustomerId, string UdyamNumber);
+
+    public sealed record ListSdrReportsResponse(bool Success, string? Message, List<CustomerReportListItemDto>? Items);
+
+    [HttpPost("sdr/generate")]
+    public async Task<ActionResult<AdminSdrGenerateResponse>> GenerateSdr(
+        [FromBody] GenerateSdrBody? body,
+        CancellationToken ct)
+    {
+        if (body is null || body.CustomerId == Guid.Empty)
+            return BadRequest(new AdminSdrGenerateResponse(false, "Customer is required.", null, null, null, null));
+        if (string.IsNullOrWhiteSpace(body.UdyamNumber))
+            return BadRequest(new AdminSdrGenerateResponse(false, "Udyam Registration Number is required.", null, null, null, null));
+
+        var adminId = CurrentUser.RequireUserId(User);
+        var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+
+        var result = await _sdrReports.GenerateForAdminAsync(
+            adminId,
+            body.CustomerId,
+            body.UdyamNumber,
+            ct);
+
+        if (result.ReportId is Guid reportId)
+        {
+            await _audit.LogAsync(
+                ReportAuditService.ActionSdrAdminGenerate,
+                adminId,
+                reportId,
+                body.CustomerId,
+                ip,
+                ct);
+        }
+
+        if (!result.Success || result.Outcome == SdrReportCatalog.OutcomeFailed)
+            return BadRequest(new AdminSdrGenerateResponse(
+                false,
+                result.UserMessage,
+                result.ReportId,
+                null,
+                result.ExpiryDate,
+                result.Outcome));
+
+        return Ok(new AdminSdrGenerateResponse(
+            true,
+            result.UserMessage,
+            result.ReportId,
+            null,
+            result.ExpiryDate,
+            result.Outcome));
+    }
+
+    [HttpGet("sdr/customers/{customerId:guid}")]
+    public async Task<ActionResult<ListSdrReportsResponse>> ListCustomerSdrReports(
+        Guid customerId,
+        CancellationToken ct)
+    {
+        if (customerId == Guid.Empty)
+            return BadRequest(new ListSdrReportsResponse(false, "Customer is required.", null));
+
+        var items = await _reports.ListCustomerSdrReportsForAdminAsync(customerId, ct);
+        return Ok(new ListSdrReportsResponse(true, "OK", items.ToList()));
+    }
+
+    [HttpGet("{reportId:guid}/download")]
+    public async Task<IActionResult> DownloadReport(Guid reportId, CancellationToken ct)
+    {
+        var adminId = CurrentUser.RequireUserId(User);
+        var (allowed, error, path, downloadName) = await _reports.GetDownloadForAdminAsync(
+            adminId,
+            reportId,
+            HttpContext.Connection.RemoteIpAddress?.ToString(),
+            ct);
+
+        if (!allowed)
+            return NotFound(new { success = false, message = error ?? "Report not found." });
+
+        var contentType = (downloadName ?? "").EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)
+            ? "application/pdf"
+            : "application/zip";
+        return PhysicalFile(path!, contentType, downloadName);
+    }
 
     [HttpGet("customers/search")]
     public async Task<ActionResult<SearchCustomersResponse>> SearchCustomers(

@@ -35,6 +35,14 @@ public sealed record AdminReportHistoryItemDto(
     string? PendingRequestType = null,
     string? LatestRequestStatus = null);
 
+public sealed record AdminSdrGenerateResponse(
+    bool Success,
+    string? Message,
+    Guid? ReportId,
+    Guid? RequestId,
+    DateTime? ExpiryDate,
+    string? Outcome);
+
 public sealed record PagedResultDto<T>(
     bool Success,
     string? Message,

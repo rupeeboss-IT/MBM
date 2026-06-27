@@ -6,6 +6,7 @@ public static class SchemeDiscoveryCatalog
     public const string OneTimePlanCode = "scheme-report-onetime";
     public const string EntitlementMembership = "MembershipBenefit";
     public const string EntitlementOneTime = "OneTimePurchase";
+    public const string EntitlementAdmin = "AdminGeneration";
 
     public const string StatusAwaitingPayment = "AwaitingPayment";
     public const string StatusPending = "Pending";

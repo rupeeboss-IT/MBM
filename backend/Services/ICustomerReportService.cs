@@ -38,4 +38,14 @@ public interface ICustomerReportService
         Guid reportId,
         string? ipAddress,
         CancellationToken ct);
+
+    Task<(bool Allowed, string? Error, string? PhysicalPath, string? DownloadName)> GetDownloadForAdminAsync(
+        Guid adminUserId,
+        Guid reportId,
+        string? ipAddress,
+        CancellationToken ct);
+
+    Task<IReadOnlyList<CustomerReportListItemDto>> ListCustomerSdrReportsForAdminAsync(
+        Guid customerId,
+        CancellationToken ct);
 }

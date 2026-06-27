@@ -234,7 +234,7 @@ public sealed class CustomerReportService : ICustomerReportService
             _logger.LogError(ex, "Report uploaded but email failed for report {ReportId}.", report.Id);
         }
 
-        return (true, "Report uploaded successfully.", report.Id);
+        return (true, "Report uploaded successfully. The customer has been notified by email.", report.Id);
     }
 
     public async Task<IReadOnlyList<CustomerReportListItemDto>> ListCustomerReportsAsync(
@@ -377,5 +377,72 @@ public sealed class CustomerReportService : ICustomerReportService
             : report.OriginalFileName;
 
         return (true, null, physical, downloadName);
+    }
+
+    public async Task<(bool Allowed, string? Error, string? PhysicalPath, string? DownloadName)> GetDownloadForAdminAsync(
+        Guid adminUserId,
+        Guid reportId,
+        string? ipAddress,
+        CancellationToken ct)
+    {
+        var report = await _reports.GetByIdAsync(reportId, ct);
+        if (report is null || !report.IsActive)
+            return (false, "Report not found.", null, null);
+
+        var wwwroot = Path.Combine(_env.ContentRootPath, "wwwroot");
+        var physical = Path.Combine(wwwroot, report.FilePath.Replace('/', Path.DirectorySeparatorChar));
+        if (!System.IO.File.Exists(physical))
+        {
+            _logger.LogWarning("Report file missing on disk: {Path}", physical);
+            return (false, "Report file not found.", null, null);
+        }
+
+        await _reports.IncrementDownloadAsync(report, ct);
+
+        await _audit.LogAsync(
+            ReportAuditService.ActionDownload,
+            adminUserId,
+            report.Id,
+            report.CustomerId,
+            ipAddress,
+            ct);
+
+        var isSdr = string.Equals(report.ReportType, SdrReportCatalog.ReportType, StringComparison.OrdinalIgnoreCase);
+        var downloadName = string.IsNullOrWhiteSpace(report.OriginalFileName)
+            ? (isSdr ? "Government-Scheme-Discovery-Report.pdf" : "Report.zip")
+            : report.OriginalFileName;
+
+        return (true, null, physical, downloadName);
+    }
+
+    public async Task<IReadOnlyList<CustomerReportListItemDto>> ListCustomerSdrReportsForAdminAsync(
+        Guid customerId,
+        CancellationToken ct)
+    {
+        var reports = await _db.CustomerReports.AsNoTracking()
+            .Where(r => r.CustomerId == customerId
+                        && r.IsActive
+                        && r.ReportType == SdrReportCatalog.ReportType)
+            .OrderByDescending(r => r.UploadDate)
+            .Take(20)
+            .ToListAsync(ct);
+
+        if (reports.Count == 0)
+            return Array.Empty<CustomerReportListItemDto>();
+
+        var subIds = reports.Select(r => r.SubscriptionId).Distinct().ToList();
+        var planNames = await _db.UserPlans.AsNoTracking()
+            .Where(up => subIds.Contains(up.UserPlanId))
+            .Join(_db.Plans.AsNoTracking(), up => up.PlanId, p => p.PlanId, (up, p) => new { up.UserPlanId, p.Name })
+            .ToDictionaryAsync(x => x.UserPlanId, x => x.Name, ct);
+
+        return reports.Select(r => new CustomerReportListItemDto(
+            r.Id,
+            r.OriginalFileName,
+            r.UploadDate,
+            planNames.GetValueOrDefault(r.SubscriptionId) ?? "—",
+            r.FileSize,
+            r.MemberId,
+            r.ReportType)).ToList();
     }
 }

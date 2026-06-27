@@ -17,6 +17,7 @@ public sealed class ReportAuditService : IReportAuditService
     public const string ActionSoftDelete = "ReportSoftDelete";
     public const string ActionReplace = "ReportReplace";
     public const string ActionEdit = "ReportEdit";
+    public const string ActionSdrAdminGenerate = "SdrAdminGenerate";
 
     private readonly IReportAuditRepository _audit;
 

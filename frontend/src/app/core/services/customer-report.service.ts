@@ -159,6 +159,21 @@ export type PendingCountRes = { success: boolean; count: number };
 
 export type CreateChangeRequestRes = { success: boolean; message?: string; requestId?: string };
 
+export type AdminSdrGenerateRes = {
+  success: boolean;
+  message?: string;
+  reportId?: string;
+  requestId?: string;
+  expiryDate?: string;
+  outcome?: string;
+};
+
+export type AdminSdrListRes = {
+  success: boolean;
+  message?: string;
+  items?: CustomerReportListItem[];
+};
+
 @Injectable({ providedIn: 'root' })
 export class CustomerReportService {
   private readonly http = inject(HttpClient);
@@ -287,5 +302,24 @@ export class CustomerReportService {
     return this.http.get<ReportAuditHistoryRes>(
       apiUrl(`/api/admin/reports/${encodeURIComponent(reportId)}/audit`),
     );
+  }
+
+  adminGenerateSdr(customerId: string, udyamNumber: string): Observable<AdminSdrGenerateRes> {
+    return this.http.post<AdminSdrGenerateRes>(apiUrl('/api/admin/reports/sdr/generate'), {
+      customerId,
+      udyamNumber: udyamNumber.trim(),
+    });
+  }
+
+  adminListCustomerSdrReports(customerId: string): Observable<AdminSdrListRes> {
+    return this.http.get<AdminSdrListRes>(
+      apiUrl(`/api/admin/reports/sdr/customers/${encodeURIComponent(customerId)}`),
+    );
+  }
+
+  adminDownloadReport(reportId: string): Observable<Blob> {
+    return this.http.get(apiUrl(`/api/admin/reports/${encodeURIComponent(reportId)}/download`), {
+      responseType: 'blob',
+    });
   }
 }

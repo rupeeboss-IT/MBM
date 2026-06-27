@@ -1,0 +1,41 @@
+.sdr-customer-summary {
+  margin: 0 0 16px;
+}
+
+.sdr-generate-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.sdr-generate-form .admin-field {
+  flex: 1 1 280px;
+  margin: 0;
+}
+
+.sdr-success-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(22, 163, 74, 0.08);
+  color: #166534;
+}
+
+.row-selected {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.row-sdr-history {
+  grid-template-columns: 2fr 1.2fr 0.8fr 0.8fr;
+}
+
+@media (max-width: 768px) {
+  .row-sdr-history {
+    grid-template-columns: 1fr;
+  }
+}

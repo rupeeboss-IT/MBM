@@ -123,6 +123,11 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
             route: '/admin-reports/upload',
             pathsSubset: true,
           },
+          {
+            label: 'Generate SDR',
+            route: '/admin-reports/sdr',
+            pathsSubset: true,
+          },
           { label: 'Report history', route: '/admin-reports/history' },
         ],
       },

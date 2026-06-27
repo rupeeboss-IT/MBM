@@ -11,4 +11,10 @@ public interface ISdrReportService
         Guid userId,
         SchemeDiscoveryRequest request,
         CancellationToken ct);
+
+    Task<SdrGenerationResult> GenerateForAdminAsync(
+        Guid adminUserId,
+        Guid customerId,
+        string udyamNumber,
+        CancellationToken ct);
 }

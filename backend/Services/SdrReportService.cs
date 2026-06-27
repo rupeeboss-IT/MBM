@@ -144,6 +144,7 @@ public sealed class SdrReportService : ISdrReportService
                 relativePath,
                 fileName,
                 fileSize,
+                userId,
                 ct);
 
             _logger.LogInformation(
@@ -203,6 +204,146 @@ public sealed class SdrReportService : ISdrReportService
                 true,
                 SdrReportCatalog.OutcomeFailed,
                 "We received your payment successfully, but report generation is currently unavailable. Our team has been notified and will assist you shortly.",
+                null,
+                null,
+                request.Status);
+        }
+    }
+
+    public async Task<SdrGenerationResult> GenerateForAdminAsync(
+        Guid adminUserId,
+        Guid customerId,
+        string udyamNumber,
+        CancellationToken ct)
+    {
+        var udyamErr = ValidateUdyam(udyamNumber);
+        if (udyamErr is not null)
+            return new SdrGenerationResult(false, SdrReportCatalog.OutcomeFailed, udyamErr, null, null, null);
+
+        var user = await _db.Users.AsNoTracking()
+            .FirstOrDefaultAsync(u => u.UserId == customerId && !u.IsDeleted, ct);
+        if (user is null)
+            return new SdrGenerationResult(false, SdrReportCatalog.OutcomeFailed, "Customer not found.", null, null, null);
+
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+        if (role is "admin" or "superadmin")
+            return new SdrGenerationResult(false, SdrReportCatalog.OutcomeFailed, "Invalid customer.", null, null, null);
+
+        var normalizedUdyam = udyamNumber.Trim().ToUpperInvariant();
+        var now = DateTime.Now;
+        var request = new SchemeDiscoveryRequest
+        {
+            Id = Guid.NewGuid(),
+            UserId = customerId,
+            MemberId = _memberIds.GetDisplayMemberId(user),
+            UserPlanId = await ResolveOptionalSubscriptionIdAsync(customerId, ct),
+            UdyamNumber = normalizedUdyam,
+            PaymentId = null,
+            EntitlementType = SchemeDiscoveryCatalog.EntitlementAdmin,
+            Status = SchemeDiscoveryCatalog.StatusProcessing,
+            RequestedAt = now,
+            CreatedAt = now,
+            UpdatedAt = now,
+        };
+
+        _db.SchemeDiscoveryRequests.Add(request);
+        await _db.SaveChangesAsync(ct);
+
+        _logger.LogInformation(
+            "[SDR Service] Admin generation START AdminId={AdminId} UserId={UserId} RequestId={RequestId} Udyam={UdyamMasked}",
+            adminUserId,
+            customerId,
+            request.Id,
+            MaskUdyam(normalizedUdyam));
+
+        var apiResult = await _saarthi.GenerateSdrAsync(
+            normalizedUdyam,
+            request.Id.ToString(),
+            ct);
+
+        if (!apiResult.Success || apiResult.PdfBytes is null)
+        {
+            _logger.LogError(
+                "[SDR Service] Admin generation API FAILED AdminId={AdminId} UserId={UserId} RequestId={RequestId} Error={Error}",
+                adminUserId,
+                customerId,
+                request.Id,
+                apiResult.ErrorMessage);
+
+            request.Status = SchemeDiscoveryCatalog.StatusFailed;
+            request.ErrorMessage = apiResult.ErrorMessage ?? "SDR API generation failed.";
+            request.ExternalReference = apiResult.ExternalReference;
+            request.UpdatedAt = DateTime.Now;
+            await _db.SaveChangesAsync(ct);
+
+            return new SdrGenerationResult(
+                false,
+                SdrReportCatalog.OutcomeFailed,
+                apiResult.ErrorMessage ?? "Report generation failed. Please try again.",
+                null,
+                null,
+                request.Status);
+        }
+
+        try
+        {
+            var (relativePath, fileName, fileSize) = await SaveReportFileAsync(customerId, apiResult.PdfBytes, ct);
+            var report = await SaveGeneratedReportRecordAsync(
+                customerId,
+                request,
+                relativePath,
+                fileName,
+                fileSize,
+                adminUserId,
+                ct);
+
+            request.Status = SchemeDiscoveryCatalog.StatusCompleted;
+            request.CustomerReportId = report.Id;
+            request.CompletedAt = DateTime.Now;
+            request.ExternalReference = apiResult.ExternalReference;
+            request.ErrorMessage = null;
+            request.UpdatedAt = DateTime.Now;
+            await _db.SaveChangesAsync(ct);
+
+            _logger.LogInformation(
+                "[SDR Service] Admin generation COMPLETE AdminId={AdminId} UserId={UserId} RequestId={RequestId} ReportId={ReportId}",
+                adminUserId,
+                customerId,
+                request.Id,
+                report.Id);
+
+            try
+            {
+                _logger.LogInformation("[SDR Service] Sending report email ReportId={ReportId} Email={Email}", report.Id, user.Email);
+                await _email.SendReportReadyEmailAsync(user, report, ct);
+                _logger.LogInformation("[SDR Service] Report email sent ReportId={ReportId}", report.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[SDR Service] Report email FAILED ReportId={ReportId}", report.Id);
+            }
+
+            return new SdrGenerationResult(
+                true,
+                SdrReportCatalog.OutcomeGenerated,
+                "Government Scheme Discovery Report generated successfully.",
+                report.Id,
+                report.ExpiryDate,
+                request.Status);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "[SDR Service] Admin generation save FAILED RequestId={RequestId}", request.Id);
+
+            request.Status = SchemeDiscoveryCatalog.StatusFailed;
+            request.ErrorMessage = "Failed to save generated report.";
+            request.UpdatedAt = DateTime.Now;
+            await _db.SaveChangesAsync(ct);
+
+            return new SdrGenerationResult(
+                false,
+                SdrReportCatalog.OutcomeFailed,
+                "Failed to save generated report.",
                 null,
                 null,
                 request.Status);
@@ -270,11 +411,20 @@ public sealed class SdrReportService : ISdrReportService
         string relativePath,
         string fileName,
         long fileSize,
+        Guid uploadedBy,
         CancellationToken ct)
     {
         var user = await _db.Users.AsNoTracking().FirstAsync(u => u.UserId == userId, ct);
         var now = DateTime.Now;
         var expiry = now.Date.AddDays(Math.Max(1, _settings.ValidityDays));
+
+        var subscriptionId = request.UserPlanId;
+        if (subscriptionId == Guid.Empty)
+        {
+            subscriptionId = string.Equals(request.EntitlementType, SchemeDiscoveryCatalog.EntitlementAdmin, StringComparison.OrdinalIgnoreCase)
+                ? Guid.Empty
+                : await ResolveSubscriptionIdAsync(userId, ct);
+        }
 
         var report = new CustomerReport
         {
@@ -286,10 +436,8 @@ public sealed class SdrReportService : ISdrReportService
             FilePath = relativePath,
             FileSize = fileSize,
             UploadDate = now,
-            UploadedBy = userId,
-            SubscriptionId = request.UserPlanId == Guid.Empty
-                ? await ResolveSubscriptionIdAsync(userId, ct)
-                : request.UserPlanId,
+            UploadedBy = uploadedBy,
+            SubscriptionId = subscriptionId,
             IsActive = true,
             DownloadCount = 0,
             ReportType = SdrReportCatalog.ReportType,
@@ -323,5 +471,28 @@ public sealed class SdrReportService : ISdrReportService
         return plan == Guid.Empty
             ? throw new InvalidOperationException("Active one-time subscription not found for report.")
             : plan;
+    }
+
+    private async Task<Guid> ResolveOptionalSubscriptionIdAsync(Guid userId, CancellationToken ct)
+    {
+        var now = DateTime.Now;
+        var plan = await _db.UserPlans.AsNoTracking()
+            .Where(up => up.UserId == userId
+                         && up.Status == "Active"
+                         && (up.ActiveTo == null || up.ActiveTo > now))
+            .OrderByDescending(up => up.ActiveFrom)
+            .Select(up => up.UserPlanId)
+            .FirstOrDefaultAsync(ct);
+
+        return plan;
+    }
+
+    private static string? ValidateUdyam(string? raw)
+    {
+        var u = (raw ?? "").Trim();
+        if (string.IsNullOrEmpty(u)) return "Udyam Registration Number is required.";
+        if (!System.Text.RegularExpressions.Regex.IsMatch(u, "^UDYAM-[A-Z]{2}-\\d{2}-\\d{7}$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            return "Enter a valid Udyam number (e.g. UDYAM-XX-00-0000000).";
+        return null;
     }
 }

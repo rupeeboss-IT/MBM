@@ -1,0 +1,168 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Document management</span>
+      <h2>Generate Scheme Discovery Report</h2>
+      <div class="muted">
+        Generate Government Scheme Discovery Reports via the Saarthi API. No subscription or validity limits apply for admin generation.
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" href="/home">Website</a>
+      <a class="btn btn-outline" routerLink="/admin-dashboard">← Dashboard</a>
+      <button class="btn btn-outline" type="button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <nav class="admin-subnav">
+    <a routerLink="/admin-reports/upload" routerLinkActive="active">Upload Reports</a>
+    <a routerLink="/admin-reports/sdr" routerLinkActive="active">Generate SDR</a>
+    <a routerLink="/admin-reports/history" routerLinkActive="active">View Uploaded Reports</a>
+  </nav>
+
+  <div class="section">
+    <div class="section-head">
+      <h3>Search customer</h3>
+      <p class="muted">Any member account can be selected — active subscription is not required.</p>
+    </div>
+    <form class="form form-reports-search" [formGroup]="searchForm" (ngSubmit)="search()">
+      <input placeholder="Member ID" formControlName="memberId" />
+      <input placeholder="Mobile number" formControlName="mobile" />
+      <input placeholder="Email" formControlName="email" />
+      <input placeholder="Customer name" formControlName="customerName" />
+      <button class="btn btn-primary" type="submit" [disabled]="searching()">
+        {{ searching() ? 'Searching…' : 'Search' }}
+      </button>
+    </form>
+  </div>
+
+  @if (results().length > 0) {
+    <div class="section">
+      <div class="section-head">
+        <h3>Search results</h3>
+        <div class="muted">{{ results().length }} found</div>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="table">
+          <div class="row header row-customers">
+            <div>Name</div>
+            <div>Member ID</div>
+            <div>Email</div>
+            <div>Phone</div>
+            <div>Subscription</div>
+            <div>Actions</div>
+          </div>
+          @for (c of results(); track c.userId) {
+            <div class="row row-customers" [class.row-selected]="selected()?.userId === c.userId">
+              <div class="text-truncate" data-label="Name" [title]="c.fullName">{{ c.fullName }}</div>
+              <div class="mono text-truncate" data-label="Member ID" [title]="c.memberId">{{ c.memberId }}</div>
+              <div class="text-truncate" data-label="Email" [title]="c.email">{{ c.email }}</div>
+              <div data-label="Phone">{{ c.phone }}</div>
+              <div data-label="Subscription">
+                <span class="badge" [class.badge-ok]="c.hasActiveSubscription" [class.badge-danger]="!c.hasActiveSubscription">
+                  {{ c.hasActiveSubscription ? (c.planName || 'Active') : 'None' }}
+                </span>
+              </div>
+              <div data-label="Actions">
+                <button type="button" class="btn btn-primary" (click)="selectCustomer(c)">
+                  {{ selected()?.userId === c.userId ? 'Selected' : 'Select' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (selected(); as c) {
+    <div class="section section-highlight">
+      <div class="section-head">
+        <h3>Generate report</h3>
+      </div>
+      <p class="muted sdr-customer-summary">
+        <strong>{{ c.fullName }}</strong> · Member ID {{ c.memberId }} · {{ c.email }}
+      </p>
+      <form class="form sdr-generate-form" [formGroup]="udyamForm" (ngSubmit)="generate()">
+        <div class="admin-field">
+          <label for="udyam-number">Udyam Registration Number</label>
+          <input
+            id="udyam-number"
+            class="admin-input"
+            type="text"
+            formControlName="udyamNumber"
+            placeholder="UDYAM-XX-00-0000000"
+            autocomplete="off"
+          />
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="generating()">
+          {{ generating() ? 'Generating… (this may take up to 2 minutes)' : 'Generate Report' }}
+        </button>
+      </form>
+
+      @if (lastGeneratedReportId()) {
+        <div class="sdr-success-banner">
+          <span>Report generated successfully.</span>
+          <button
+            type="button"
+            class="btn btn-sm btn-primary"
+            [disabled]="downloadingId() === lastGeneratedReportId()"
+            (click)="downloadReport({ id: lastGeneratedReportId()!, reportName: 'Government Scheme Discovery Report.pdf', uploadDate: '', planName: '', fileSize: 0, memberId: c.memberId })"
+          >
+            {{ downloadingId() === lastGeneratedReportId() ? 'Downloading…' : 'Download now' }}
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <h3>Previous SDR reports</h3>
+        <p class="muted">All scheme discovery reports generated for this customer.</p>
+      </div>
+
+      @if (loadingReports()) {
+        <div class="admin-loading">
+          <div class="admin-spinner" aria-hidden="true"></div>
+          <span>Loading reports…</span>
+        </div>
+      }
+
+      @if (!loadingReports() && existingReports().length > 0) {
+        <div class="admin-table-wrap">
+          <div class="table">
+            <div class="row header row-sdr-history">
+              <div>Report</div>
+              <div>Generated</div>
+              <div>Size</div>
+              <div>Actions</div>
+            </div>
+            @for (r of existingReports(); track r.id) {
+              <div class="row row-sdr-history">
+                <div data-label="Report">{{ r.reportName }}</div>
+                <div data-label="Generated">{{ r.uploadDate | localDate:'dd-MMM-yyyy HH:mm' }}</div>
+                <div data-label="Size">{{ formatSize(r.fileSize) }}</div>
+                <div data-label="Actions">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline"
+                    [disabled]="downloadingId() === r.id"
+                    (click)="downloadReport(r)"
+                  >
+                    {{ downloadingId() === r.id ? 'Downloading…' : 'Download' }}
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (!loadingReports() && existingReports().length === 0) {
+        <div class="admin-empty">
+          <p class="admin-empty__text">No scheme discovery reports yet for this customer.</p>
+        </div>
+      }
+    </div>
+  }
+</div>

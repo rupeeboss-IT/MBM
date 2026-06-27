@@ -16,6 +16,7 @@ public sealed class ReportChangeRequestService : IReportChangeRequestService
     private readonly IReportChangeRequestRepository _requests;
     private readonly IReportAuditRepository _auditRepo;
     private readonly IReportAuditService _audit;
+    private readonly IReportEmailService _email;
     private readonly CustomerReportSettings _settings;
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<ReportChangeRequestService> _logger;
@@ -28,6 +29,7 @@ public sealed class ReportChangeRequestService : IReportChangeRequestService
         IReportChangeRequestRepository requests,
         IReportAuditRepository auditRepo,
         IReportAuditService audit,
+        IReportEmailService email,
         IOptions<CustomerReportSettings> settings,
         IWebHostEnvironment env,
         ILogger<ReportChangeRequestService> logger)
@@ -37,6 +39,7 @@ public sealed class ReportChangeRequestService : IReportChangeRequestService
         _requests = requests;
         _auditRepo = auditRepo;
         _audit = audit;
+        _email = email;
         _settings = settings.Value;
         _env = env;
         _logger = logger;
@@ -261,6 +264,9 @@ public sealed class ReportChangeRequestService : IReportChangeRequestService
             _logger.LogError(ex, "Failed to approve report change request {RequestId}.", requestId);
             return (false, "Unable to approve request. Please try again.");
         }
+
+        if (request.RequestType == ReportChangeRequestCatalog.TypeReplace)
+            await TryNotifyReportReadyAsync(report, superAdminUserId, ipAddress, ct);
 
         return (true, "Request approved.");
     }
@@ -489,7 +495,9 @@ public sealed class ReportChangeRequestService : IReportChangeRequestService
             return (false, "Unable to replace report. Please try again.");
         }
 
-        return (true, "Report replaced.");
+        await TryNotifyReportReadyAsync(report, superAdminUserId, ipAddress, ct);
+
+        return (true, "Report replaced. The customer has been notified by email.");
     }
 
     public async Task<IReadOnlyList<ReportAuditLogItemDto>> ListAuditHistoryAsync(
@@ -818,6 +826,34 @@ public sealed class ReportChangeRequestService : IReportChangeRequestService
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Could not delete file at {Path}.", relativePath);
+        }
+    }
+
+    private async Task TryNotifyReportReadyAsync(
+        CustomerReport report,
+        Guid actorUserId,
+        string? ipAddress,
+        CancellationToken ct)
+    {
+        var user = await _db.Users.AsNoTracking()
+            .FirstOrDefaultAsync(u => u.UserId == report.CustomerId && !u.IsDeleted, ct);
+        if (user is null)
+            return;
+
+        try
+        {
+            await _email.SendReportReadyEmailAsync(user, report, ct);
+            await _audit.LogAsync(
+                ReportAuditService.ActionEmailSent,
+                actorUserId,
+                report.Id,
+                report.CustomerId,
+                ipAddress,
+                ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Report ready email failed for report {ReportId}.", report.Id);
         }
     }
 

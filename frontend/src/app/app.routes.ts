@@ -34,6 +34,7 @@ import { adminGuard } from './core/guards/admin.guard';
 import { AdminDashboard } from './admin/dashboard/dashboard';
 import { AdminDashboardDetail } from './admin/dashboard-detail/dashboard-detail';
 import { AdminUploadReports } from './admin/reports/upload-reports/upload-reports';
+import { AdminGenerateSdr } from './admin/reports/generate-sdr/generate-sdr';
 import { AdminViewReports } from './admin/reports/view-reports/view-reports';
 import { UserManagementList } from './admin/user-management/user-management-list';
 import { UserManagementDetail } from './admin/user-management/user-management-detail';
@@ -308,6 +309,12 @@ export const routes: Routes = [
     {
         path: 'admin-reports/upload',
         component: AdminUploadReports,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin-reports/sdr',
+        component: AdminGenerateSdr,
         canActivate: [adminGuard],
         pathMatch: 'full'
     },
