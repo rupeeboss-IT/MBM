@@ -11,6 +11,7 @@ import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
+import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.util';
 
 @Component({
   selector: 'app-home',
@@ -55,13 +56,12 @@ export class Home implements OnInit {
     void this.schemeDiscovery.startFlow();
   }
 
-  goToPlan(planCode: 'premium' | 'pro') {
-    try {
-      window.localStorage.setItem('mbm_pending_plan', planCode);
-    } catch {
-      // ignore storage errors
-    }
-    this.router.navigateByUrl('/membership');
+  goToFreeRegister(): void {
+    void this.router.navigate(['/register'], { queryParams: FREE_REGISTER_QUERY_PARAMS });
+  }
+
+  goToMembership(): void {
+    void this.router.navigateByUrl('/membership');
   }
 
   openLightbox(src: string, alt: string, event: MouseEvent) {

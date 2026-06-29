@@ -11,12 +11,11 @@
         <p class="hero-sub">Access I-Verified Business Verification, Government Scheme Reports, Loan Audits &amp; Bank
           Statement Analysis &mdash; all in one powerful membership for growing MSMEs across India.</p>
         <div class="hero-btns">
-          <button class="btn-primary" style="padding: 16px 34px;" type="button" (click)="goToPlan('premium')">
-            <!-- Get Started &mdash; &#8377;9,999 -->
-            Get Started
+          <button class="btn-primary" style="padding: 16px 34px;" type="button" (click)="goToFreeRegister()">
+            Register Free
           </button>
-          <button class="btn-ghost" type="button" (click)="goToPlan('pro')">
-            Explore Premium &mdash; &#8377;19,999
+          <button class="btn-ghost" type="button" (click)="goToMembership()">
+            Explore All Plans
           </button>
         </div>
         <p class="hero-trust">Powered by <strong><a href="https://www.rupeeboss.com" target="_blank"
@@ -672,7 +671,7 @@
       <h2>Ready to Grow Your MSME?</h2>
       <p>Join 7 Crore+ MSMEs who trust MSME Bharat Manch for 360° business support</p>
       <div class="cta-actions">
-        <app-join-today-button variant="white-lg" />
+        <app-join-today-button variant="white-lg" [freeRegister]="true" />
         <a class="btn-outline-lg" routerLink="/contact">Talk to an Expert</a>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.util';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,8 @@ import { PasswordInputComponent } from '../../core/components/password-input/pas
   styleUrl: './login.css',
 })
 export class Login {
+  readonly freeRegisterQueryParams = FREE_REGISTER_QUERY_PARAMS;
+
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly session = inject(AuthSessionService);

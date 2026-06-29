@@ -7,6 +7,7 @@ import { ToastContainer } from './core/components/toast-container/toast-containe
 import { captureContactLeadSourceFromUrl } from './core/utils/contact-lead-source.util';
 import { captureRegistrationAdvisorFromUrl } from './core/utils/registration-advisor.util';
 import { captureRegistrationLeadSourceFromUrl } from './core/utils/registration-lead-source.util';
+import { captureRegistrationModeFromUrl } from './core/utils/registration-mode.util';
 import { Header } from "./header/header";
 import { Footer } from "./footer/footer";
 
@@ -36,5 +37,6 @@ export class App implements OnInit {
     captureRegistrationLeadSourceFromUrl(search);
     captureRegistrationAdvisorFromUrl(search);
     captureContactLeadSourceFromUrl(search);
+    captureRegistrationModeFromUrl(search);
   }
 }

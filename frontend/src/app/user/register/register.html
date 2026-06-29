@@ -3,7 +3,7 @@
 <div class="auth-wrap" style="align-items:flex-start;padding-top:2rem">
   <div style="width:100%;max-width:540px;margin:0 auto">
     <!-- Steps indicator -->
-    <div class="payment-steps" style="margin-bottom:2rem">
+    <div class="payment-steps" style="margin-bottom:2rem" *ngIf="!isFreeRegistration()">
       <div class="pay-step active" id="reg-step-ind-1"><div class="pay-step-num">1</div><span>Account</span></div>
       <div class="pay-step-line" id="reg-line-1"></div>
       <div class="pay-step" id="reg-step-ind-2"><div class="pay-step-num">2</div><span>Choose Plan</span></div>
@@ -17,7 +17,9 @@
     <div class="auth-box" id="reg-step-1" *ngIf="step() === 1">
       <div class="auth-logo">
         <img class="brand-logo brand-logo--auth" src="/assets/mbmlogo.png" alt="MSME Bharat Manch" width="72" height="72" />
-        <h2>Create Your Account</h2><p>Step 1 of 4 — Basic details</p>
+        <h2>Create Your Account</h2>
+        <p *ngIf="!isFreeRegistration()">Step 1 of 4 — Basic details</p>
+        <p *ngIf="isFreeRegistration()">Create your free account — no membership required</p>
       </div>
       <form id="registerForm" [formGroup]="form" (ngSubmit)="continueToPlan()">
         <div class="form-group reg-role-group">
@@ -207,39 +209,68 @@
           </div>
         </div>
         <div class="form-group reg-advisor">
-          <label for="regAdvisor">Advisor Code <span class="reg-advisor__optional">(optional)</span></label>
-          <p class="reg-advisor__hint">Have an advisor or referral code? Enter it here to link your registration.</p>
-          <div
-            class="reg-advisor__input-wrap"
-            [class.reg-advisor__input-wrap--valid]="advisorValidationState() === 'valid'"
-            [class.reg-advisor__input-wrap--invalid]="advisorValidationState() === 'invalid'"
-            [class.reg-advisor__input-wrap--validating]="advisorValidationState() === 'validating'">
-            <input
-              type="text"
-              id="regAdvisor"
-              placeholder="e.g. RB12345 or GP12345"
-              formControlName="advisorCode"
-              autocomplete="off"
-              maxlength="50">
-            <span
-              class="reg-advisor__status reg-advisor__status--loading"
-              *ngIf="advisorValidationState() === 'validating'"
-              aria-hidden="true"></span>
-            <span
-              class="reg-advisor__status reg-advisor__status--valid"
-              *ngIf="advisorValidationState() === 'valid'"
-              aria-label="Valid advisor code">✓</span>
-            <span
-              class="reg-advisor__status reg-advisor__status--invalid"
-              *ngIf="advisorValidationState() === 'invalid'"
-              aria-label="Invalid advisor code">✕</span>
-          </div>
-          <div style="margin-top:.35rem;font-size:.8rem">
-            <div *ngIf="advisorValidationState() === 'valid' && advisorReferredByName()" style="color:var(--green);font-weight:700">
-              ✓ Referred by {{ advisorReferredByName() }}
-            </div>
-            <div *ngIf="advisorValidationState() === 'invalid'" style="color:var(--red);font-weight:600">
-              ⚠️ {{ advisorInvalidMessage }}
+          <div class="reg-advisor__slot">
+            <button
+              type="button"
+              class="reg-advisor__toggle"
+              [class.reg-advisor__toggle--receded]="advisorInputOpen()"
+              (click)="openAdvisorInput()"
+              [attr.aria-expanded]="advisorInputOpen()"
+              aria-controls="regAdvisorPanel">
+              Do you have an Advisor/Referral Code?
+            </button>
+            <div
+              id="regAdvisorPanel"
+              class="reg-advisor__panel"
+              [class.reg-advisor__panel--open]="advisorInputOpen()"
+              [attr.aria-hidden]="!advisorInputOpen()">
+              <div class="reg-advisor__panel-body">
+                <div class="reg-advisor__panel-head">
+                  <label for="regAdvisor">Advisor Code</label>
+                  <button
+                    type="button"
+                    class="reg-advisor__close"
+                    (click)="closeAdvisorInput()"
+                    aria-label="Close advisor code">
+                    Close
+                  </button>
+                </div>
+                <p class="reg-advisor__hint">Enter the code shared by your advisor to link your registration.</p>
+                <div
+                  class="reg-advisor__input-wrap"
+                  [class.reg-advisor__input-wrap--valid]="advisorValidationState() === 'valid'"
+                  [class.reg-advisor__input-wrap--invalid]="advisorValidationState() === 'invalid'"
+                  [class.reg-advisor__input-wrap--validating]="advisorValidationState() === 'validating'">
+                  <input
+                    type="text"
+                    id="regAdvisor"
+                    placeholder="e.g. RB12345 or GP12345"
+                    formControlName="advisorCode"
+                    autocomplete="off"
+                    maxlength="50"
+                    [attr.tabindex]="advisorInputOpen() ? 0 : -1">
+                  <span
+                    class="reg-advisor__status reg-advisor__status--loading"
+                    *ngIf="advisorValidationState() === 'validating'"
+                    aria-hidden="true"></span>
+                  <span
+                    class="reg-advisor__status reg-advisor__status--valid"
+                    *ngIf="advisorValidationState() === 'valid'"
+                    aria-label="Valid advisor code">✓</span>
+                  <span
+                    class="reg-advisor__status reg-advisor__status--invalid"
+                    *ngIf="advisorValidationState() === 'invalid'"
+                    aria-label="Invalid advisor code">✕</span>
+                </div>
+                <div class="reg-advisor__feedback">
+                  <div *ngIf="advisorValidationState() === 'valid' && advisorReferredByName()" class="reg-advisor__feedback--valid">
+                    ✓ Referred by {{ advisorReferredByName() }}
+                  </div>
+                  <div *ngIf="advisorValidationState() === 'invalid'" class="reg-advisor__feedback--invalid">
+                    ⚠️ {{ advisorInvalidMessage }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -266,7 +297,7 @@
           </div>
         </div>
         <button type="submit" class="btn-submit" [disabled]="submitting()">
-          {{ submitting() ? 'Creating account…' : 'Continue to Plan Selection →' }}
+          {{ submitting() ? 'Creating account…' : (isFreeRegistration() ? 'Create Free Account →' : 'Continue to Plan Selection →') }}
         </button>
       </form>
       <div class="auth-footer">Already have an account? <a [routerLink]="['/login']">Login here</a></div>
@@ -316,9 +347,16 @@
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#3949ab;font-size:.9rem">Select Pro — ₹19,999/yr</div>
         </div>
       </div>
-      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn-outline" style="flex:1;min-width:160px" type="button" (click)="backToAccount()">← Back</button>
-        <button class="btn-outline" style="flex:1;min-width:160px" type="button" (click)="skipPlan()">Skip Plan →</button>
+      </div>
+      <div class="reg-skip-plan">
+        <div class="reg-skip-plan__divider" aria-hidden="true"><span>OR</span></div>
+        <button class="reg-skip-plan__btn btn-outline" type="button" (click)="skipPlan()">
+          <span class="reg-skip-plan__title">Skip for Now</span>
+          <span class="reg-skip-plan__sub">Register without a Membership Plan</span>
+        </button>
+        <p class="reg-skip-plan__hint">You can always purchase a membership later from your dashboard.</p>
       </div>
     </div>
 

@@ -145,7 +145,12 @@
         <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
         <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
           <a class="btn-outline" routerLink="/login">Login</a>
-          <a class="btn-primary" routerLink="/register" style="margin-left:.5rem">Join Now</a>
+          <a
+            class="btn-primary"
+            routerLink="/register"
+            [queryParams]="guestRegisterQueryParams"
+            queryParamsHandling="merge"
+            style="margin-left:.5rem">{{ guestRegisterLabel }}</a>
         </div>
         <div id="nav-auth-user" *ngIf="isLoggedIn()">
           <div class="dropdown" [class.open]="userMenuOpen()">

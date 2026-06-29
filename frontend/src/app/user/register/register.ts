@@ -4,7 +4,7 @@ import { Component, computed, DestroyRef, ElementRef, HostListener, inject, OnIn
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, debounceTime, distinctUntilChanged, firstValueFrom, map, of, switchMap, tap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
 import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
@@ -24,6 +24,11 @@ import {
   consumeStashedMembershipSource,
   isSchemeDiscoveryMembershipSource,
 } from '../../core/utils/membership-source.util';
+import {
+  captureRegistrationModeFromUrl,
+  clearRegistrationMode,
+  isFreeRegistrationMode,
+} from '../../core/utils/registration-mode.util';
 
 type ClearbitCompany = { name: string; domain: string; logo: string | null };
 
@@ -36,6 +41,7 @@ type RegisterRes = {
 };
 
 const ADVISOR_DEBOUNCE_MS = 500;
+const ADVISOR_PANEL_ANIM_MS = 420;
 const ADVISOR_INVALID_MSG =
   'Advisor code is incorrect. Please check and enter the correct code.';
 type AdvisorValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
@@ -54,17 +60,21 @@ export class Register implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly session = inject(AuthSessionService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly referrals = inject(ReferralService);
   private readonly host = inject(ElementRef<HTMLElement>);
 
   private advisorDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private advisorPanelTimer: ReturnType<typeof setTimeout> | null = null;
   private advisorValidationSeq = 0;
 
   readonly advisorValidationState = signal<AdvisorValidationState>('idle');
   readonly advisorReferredByName = signal<string | null>(null);
   readonly advisorInvalidMessage = ADVISOR_INVALID_MSG;
+  readonly advisorInputOpen = signal(false);
+  readonly isFreeRegistration = signal(false);
 
   readonly roleOpen = signal(false);
 
@@ -215,14 +225,32 @@ export class Register implements OnInit {
       captureRegistrationLeadSourceFromUrl(window.location.search);
       captureRegistrationAdvisorFromUrl(window.location.search);
     }
+
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.syncRegistrationModeFromRoute();
+    });
+
     const stashedAdvisor = getRegistrationAdvisorCode();
     if (stashedAdvisor) {
+      this.advisorInputOpen.set(true);
       this.form.controls.advisorCode.setValue(stashedAdvisor);
       void this.runAdvisorValidation();
     }
     this.session.refreshFromStorage();
     if (this.session.isLoggedIn()) {
       void this.redirectIfAlreadyAuthenticated();
+    }
+  }
+
+  private syncRegistrationModeFromRoute(): void {
+    const query = this.router.url.includes('?')
+      ? this.router.url.slice(this.router.url.indexOf('?'))
+      : '';
+    captureRegistrationModeFromUrl(query);
+    const isFree = isFreeRegistrationMode();
+    this.isFreeRegistration.set(isFree);
+    if (isFree && this.step() > 1) {
+      this.step.set(1);
     }
   }
 
@@ -323,6 +351,36 @@ export class Register implements OnInit {
     this.form.controls.role.setValue(value);
     this.form.controls.role.markAsDirty();
     this.roleOpen.set(false);
+  }
+
+  openAdvisorInput(): void {
+    if (this.advisorPanelTimer) {
+      clearTimeout(this.advisorPanelTimer);
+      this.advisorPanelTimer = null;
+    }
+    this.advisorInputOpen.set(true);
+    window.setTimeout(() => {
+      const input = this.host.nativeElement.querySelector('#regAdvisor') as HTMLInputElement | null;
+      input?.focus();
+    }, 180);
+  }
+
+  closeAdvisorInput(): void {
+    this.advisorInputOpen.set(false);
+    if (this.advisorPanelTimer) clearTimeout(this.advisorPanelTimer);
+    this.advisorPanelTimer = setTimeout(() => {
+      this.resetAdvisorFields();
+      this.advisorPanelTimer = null;
+    }, ADVISOR_PANEL_ANIM_MS);
+  }
+
+  private resetAdvisorFields(): void {
+    if (this.advisorDebounceTimer) clearTimeout(this.advisorDebounceTimer);
+    this.advisorValidationSeq++;
+    this.form.controls.advisorCode.setValue('');
+    this.advisorReferredByName.set(null);
+    this.advisorValidationState.set('idle');
+    setRegistrationAdvisorCode(null);
   }
 
   @HostListener('document:click', ['$event'])
@@ -538,8 +596,9 @@ export class Register implements OnInit {
       return;
     }
 
-    const advisorCode = await this.resolveAdvisorCodeForSubmit();
-    if (this.form.controls.advisorCode.value.trim() && !advisorCode) {
+    const wantsAdvisor = this.advisorInputOpen();
+    const advisorCode = wantsAdvisor ? await this.resolveAdvisorCodeForSubmit() : null;
+    if (wantsAdvisor && this.form.controls.advisorCode.value.trim() && !advisorCode) {
       this.form.controls.advisorCode.markAsTouched();
       this.toast.warning('Please enter a valid advisor code or leave the field empty.');
       return;
@@ -584,8 +643,18 @@ export class Register implements OnInit {
     this.step.set(1);
   }
 
-  skipPlan() {
-    this.step.set(3);
+  skipPlan(): void {
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem('mbm_pending_plan');
+      }
+    } catch {
+      // ignore
+    }
+    this.toast.success(
+      'Welcome to MSME Bharat Manch! You can choose a membership plan anytime from your dashboard.',
+    );
+    void this.router.navigateByUrl('/profile');
   }
 
   selectMembershipPlan(code: 'basic' | 'standard' | 'premium' | 'pro'): void {
@@ -626,6 +695,7 @@ export class Register implements OnInit {
   private async completePostRegistrationNavigation(successMessage: string): Promise<void> {
     try {
       if (await this.schemeDiscovery.resumeAfterAuth()) {
+        clearRegistrationMode();
         await this.router.navigateByUrl('/profile');
         return;
       }
@@ -635,6 +705,7 @@ export class Register implements OnInit {
 
     const schemeDiscoverySource = consumeStashedMembershipSource();
     if (schemeDiscoverySource && isSchemeDiscoveryMembershipSource(schemeDiscoverySource)) {
+      clearRegistrationMode();
       this.toast.success('Account created. Continue with your Scheme Discovery Report.');
       this.schemeDiscovery.beginOneTimeReportCheckout();
       return;
@@ -643,8 +714,25 @@ export class Register implements OnInit {
     const pendingPlan =
       typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
     if (pendingPlan) {
+      clearRegistrationMode();
       this.toast.success('Account created. Opening payment for your selected plan…');
       await this.router.navigateByUrl('/membership');
+      return;
+    }
+
+    if (this.isFreeRegistration()) {
+      clearRegistrationMode();
+      try {
+        if (typeof window !== 'undefined') {
+          window.localStorage.removeItem('mbm_pending_plan');
+        }
+      } catch {
+        // ignore
+      }
+      this.toast.success(
+        'Welcome to MSME Bharat Manch! You can choose a membership plan anytime from your dashboard.',
+      );
+      await this.router.navigateByUrl('/profile');
       return;
     }
 
@@ -666,6 +754,12 @@ export class Register implements OnInit {
       typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
     if (pendingPlan) {
       await this.router.navigateByUrl('/membership');
+      return;
+    }
+
+    if (this.isFreeRegistration()) {
+      clearRegistrationMode();
+      await this.router.navigateByUrl('/profile');
       return;
     }
 

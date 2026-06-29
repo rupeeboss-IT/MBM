@@ -28,7 +28,7 @@
     </form>
     <div style="text-align:center;margin-top:1rem"><a [routerLink]="['/forgot-password']" style="color:var(--red);font-size:.88rem;cursor:pointer">Forgot Password?</a></div>
     <div class="auth-divider">or</div>
-    <div class="auth-footer">New here? <a [routerLink]="['/register']">Create free account</a></div>
+    <div class="auth-footer">New here? <a [routerLink]="['/register']" [queryParams]="freeRegisterQueryParams">Create free account</a></div>
   </div>
 </div>
 </div><!-- /login -->

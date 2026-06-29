@@ -22,6 +22,7 @@ import {
   type AdminDropdown,
   type AdminNavGroup,
 } from './admin-nav.config';
+import { FREE_REGISTER_QUERY_PARAMS } from '../core/utils/registration-mode.util';
 
 @Component({
   selector: 'app-header',
@@ -89,6 +90,10 @@ export class Header implements OnDestroy {
   readonly isAccountActive = computed(() =>
     this.matchesAdminPrefix(['/admin-forgot-password']),
   );
+
+  readonly guestRegisterLabel = 'Register Free';
+
+  readonly guestRegisterQueryParams = FREE_REGISTER_QUERY_PARAMS;
 
   searchOpen = false;
   searchQuery = '';
