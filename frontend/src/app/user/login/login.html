@@ -28,7 +28,14 @@
     </form>
     <div style="text-align:center;margin-top:1rem"><a [routerLink]="['/forgot-password']" style="color:var(--red);font-size:.88rem;cursor:pointer">Forgot Password?</a></div>
     <div class="auth-divider">or</div>
-    <div class="auth-footer">New here? <a [routerLink]="['/register']" [queryParams]="freeRegisterQueryParams">Create free account</a></div>
+    <div class="auth-footer">
+      New here?
+      @if (registerCta.queryParams) {
+        <a [routerLink]="['/register']" [queryParams]="registerCta.queryParams">{{ registerCta.label }}</a>
+      } @else {
+        <a [routerLink]="['/register']">{{ registerCta.label }}</a>
+      }
+    </div>
   </div>
 </div>
 </div><!-- /login -->

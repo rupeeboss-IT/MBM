@@ -79,7 +79,7 @@ const CARD_BY_SLUG: Record<OfferingSlug, OfferingExplorerCard> = {
     iconBg: 'linear-gradient(135deg,#2d6a4f,#52b788)',
     title: 'Practo Health Plan',
     description: 'Family health cover + accident protection + hospital cash',
-    badge: 'Basic & Standard',
+    badge: 'MSME Basic',
     badgeBg: '#e3f2fd',
     badgeColor: '#1565c0',
   },

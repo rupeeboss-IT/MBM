@@ -2943,10 +2943,18 @@ select.status-select {
 
 /* ===== HOME PLANS GRID ===== */
 .home-plans-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
   gap: 1.5rem;
   margin-bottom: 2rem
+}
+
+.home-plans-grid .home-plan-card {
+  flex: 0 1 calc((100% - 4.5rem) / 4);
+  max-width: calc((100% - 4.5rem) / 4);
+  box-sizing: border-box
 }
 
 .home-plan-card {
@@ -3047,18 +3055,26 @@ select.status-select {
   flex-shrink: 0
 }
 
-/* Plan grids — 4 desktop / 2 tablet / 1 mobile (Home + Membership) */
+/* Plan grids — card width matches original 4-col layout; fewer plans stay centered */
 @media (max-width: 991px) {
-  .plans-grid,
-  .home-plans-grid {
+  .plans-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-plans-grid .home-plan-card {
+    flex: 0 1 calc((100% - 1.5rem) / 2);
+    max-width: calc((100% - 1.5rem) / 2);
   }
 }
 
 @media (max-width: 550px) {
-  .plans-grid,
-  .home-plans-grid {
+  .plans-grid {
     grid-template-columns: 1fr;
+  }
+
+  .home-plans-grid .home-plan-card {
+    flex: 0 1 100%;
+    max-width: 100%;
   }
 }
 
@@ -5201,7 +5217,6 @@ button,
 
 /* Equal-height card grids */
 .plans-grid .plan-card,
-.home-plans-grid .home-plan-card,
 .services-grid .service-card,
 .testimonials-grid .testimonial-card,
 .testimonial-card,
@@ -5210,6 +5225,10 @@ button,
 .event-card,
 .news-card {
   height: 100%;
+}
+
+.home-plans-grid .home-plan-card {
+  height: auto;
 }
 
 .plans-grid,

@@ -559,6 +559,28 @@
   margin: 0 0 1rem;
 }
 
+.reg-plan-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.reg-plan-grid .home-plan-card {
+  flex: 0 1 calc((100% - 1rem) / 2);
+  max-width: calc((100% - 1rem) / 2);
+  box-sizing: border-box;
+}
+
+@media (max-width: 550px) {
+  .reg-plan-grid .home-plan-card {
+    flex: 0 1 100%;
+    max-width: 100%;
+  }
+}
+
 .reg-skip-plan {
   margin-top: 0.25rem;
 }

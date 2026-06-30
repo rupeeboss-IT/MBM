@@ -38,7 +38,6 @@ export class OfferingDetails implements OnInit {
 
     const planColors: Record<string, string> = {
       'MSME Basic': '#e8f5e9',
-      'MSME Standard': '#e3f2fd',
       'MSME Premium': '#fff3e0',
       'MSME Pro': '#ede7f6',
       'MSME Premium (2 events)': '#fff3e0',
@@ -46,7 +45,6 @@ export class OfferingDetails implements OnInit {
     };
     const planIcons: Record<string, string> = {
       'MSME Basic': '🌱',
-      'MSME Standard': '🌐',
       'MSME Premium': '🏆',
       'MSME Pro': '💎',
       'MSME Premium (2 events)': '🏆',

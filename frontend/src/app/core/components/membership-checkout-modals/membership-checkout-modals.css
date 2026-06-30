@@ -1,0 +1,207 @@
+.referral-modal-overlay.open {
+  display: flex;
+}
+
+.referral-modal-box {
+  max-width: 440px;
+  padding: 2rem 1.75rem 1.5rem;
+}
+
+.referral-modal-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy, #1a2f5e);
+  margin-bottom: 0.4rem;
+}
+
+.referral-input-wrap {
+  position: relative;
+  margin-bottom: 0.35rem;
+}
+
+.referral-modal-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 2.75rem 0.7rem 0.85rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.referral-input-wrap--valid .referral-modal-input {
+  border-color: #2d6a4f;
+}
+
+.referral-input-wrap--invalid .referral-modal-input {
+  border-color: #c62828;
+}
+
+.referral-input-status {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.referral-input-status--valid {
+  background: #e8f5e9;
+  color: #2d6a4f;
+  border: 1px solid #2d6a4f;
+}
+
+.referral-input-status--invalid {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #c62828;
+}
+
+.referral-input-status--loading {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #ddd;
+  border-top-color: var(--red, #e63946);
+  border-radius: 50%;
+  animation: referral-spin 0.7s linear infinite;
+}
+
+@keyframes referral-spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+.referral-modal-employee {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: #1b7a3a;
+}
+
+.referral-confirm-card {
+  margin-top: 0.5rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.referral-confirm-card__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.referral-confirm-card__code {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #0f3460;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.referral-modal-error {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: #c62828;
+  line-height: 1.45;
+}
+
+.referral-modal-inactive {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: #b45309;
+  line-height: 1.45;
+}
+
+.referral-input-wrap--inactive .referral-modal-input {
+  border-color: #f59e0b;
+}
+
+.referral-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+}
+
+.referral-btn-apply {
+  flex: 1 1 auto;
+  min-width: 140px;
+}
+
+.referral-btn-continue {
+  flex: 1 1 100%;
+  min-width: 120px;
+  width: 100%;
+}
+
+.referral-skip-link {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted, #666);
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+}
+
+.referral-skip-link:hover:not(:disabled) {
+  color: var(--navy, #1a2f5e);
+}
+
+.referral-skip-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.referral-modal-disclaimer {
+  color: #888;
+  font-size: 0.8em;
+  font-style: italic;
+  margin-top: 1rem;
+  display: block;
+}
+
+.membership-basic-confirm__message {
+  white-space: pre-line;
+  color: #444;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+}
+
+.membership-basic-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.membership-basic-confirm-overlay.open {
+  display: flex;
+  z-index: 10050;
+}

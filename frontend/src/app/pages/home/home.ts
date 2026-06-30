@@ -8,6 +8,7 @@ import { JoinTodayButton } from '../../core/components/join-today-button/join-to
 import { ImageLightbox } from '../../core/components/image-lightbox/image-lightbox';
 import { ContactService } from '../../core/services/contact.service';
 import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
+import { MembershipPlanCheckoutService, type MembershipPlanCode } from '../../core/services/membership-plan-checkout.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
@@ -24,6 +25,7 @@ export class Home implements OnInit {
   private readonly contactApi = inject(ContactService);
   private readonly toast = inject(ToastService);
   readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
+  private readonly planCheckout = inject(MembershipPlanCheckoutService);
 
   readonly lightboxOpen = signal(false);
   readonly lightboxSrc = signal<string | null>(null);
@@ -62,6 +64,10 @@ export class Home implements OnInit {
 
   goToMembership(): void {
     void this.router.navigateByUrl('/membership');
+  }
+
+  choosePlan(code: MembershipPlanCode): void {
+    void this.planCheckout.choosePlan(code);
   }
 
   openLightbox(src: string, alt: string, event: MouseEvent) {

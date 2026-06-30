@@ -106,6 +106,16 @@ export function stashMembershipSource(source: MembershipSource | null): void {
   }
 }
 
+export function peekStashedMembershipSource(): MembershipSource | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(SESSION_SOURCE_KEY);
+    return parseMembershipSource(raw);
+  } catch {
+    return null;
+  }
+}
+
 export function consumeStashedMembershipSource(): MembershipSource | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -125,15 +135,14 @@ export function isRecommendedPlan(code: string, source: MembershipSource | null)
 
 export function shouldConfirmPlanChoice(code: string, source: MembershipSource | null): boolean {
   if (!source) return false;
-  const normalized = code.toLowerCase();
-  return normalized === 'basic' || normalized === 'standard';
+  return code.toLowerCase() === 'basic';
 }
 
 export function getPlanConfirmMessage(
   guidance: MembershipSourceGuidance,
-  planCode: 'basic' | 'standard',
+  planCode: 'basic',
 ): string {
-  const planName = planCode === 'basic' ? 'Basic Membership' : 'Standard Membership';
+  const planName = 'Basic Membership';
   const accessNote =
     guidance.source === 'scheme-discovery'
       ? 'Scheme Discovery benefits'
@@ -144,6 +153,6 @@ export function getPlanConfirmMessage(
   return `You originally selected ${guidance.featureLabel}.\n\nThe ${planName} may not include access to ${accessNote}.\n\nWould you still like to continue with ${planName}?`;
 }
 
-export function getPlanConfirmContinueLabel(planCode: 'basic' | 'standard'): string {
-  return planCode === 'basic' ? 'Continue with Basic' : 'Continue with Standard';
+export function getPlanConfirmContinueLabel(_planCode: 'basic'): string {
+  return 'Continue with Basic';
 }

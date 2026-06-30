@@ -296,7 +296,7 @@ export const KB: Record<string, MbmIntent> = {
       '🪪 <b>MSME Bharat Manch Membership</b><br>' +
       'Membership unlocks our full ecosystem — credibility for your business, scheme discovery, ' +
       'GeM portal access, financial tools, networking and expert support.<br><br>' +
-      'We offer four tiers — <b>Basic, Standard, Premium and Pro</b> — so you can start small ' +
+      'We offer three tiers — <b>Basic, Premium and Pro</b> — so you can start small ' +
       'and grow.',
     chips: [
       { label: 'Membership benefits', intent: 'membership_benefits' },

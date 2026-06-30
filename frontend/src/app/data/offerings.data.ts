@@ -37,7 +37,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     gradient: 'linear-gradient(135deg,#25d366,#128c7e)',
     tagline: 'Reach your customers directly where they are — on WhatsApp',
     tags: ['Digital Marketing', 'Lead Generation', 'Customer Engagement', 'By MSME Bharat Manch'],
-    plans: ['MSME Basic', 'MSME Standard', 'MSME Premium', 'MSME Pro'],
+    plans: ['MSME Basic', 'MSME Premium', 'MSME Pro'],
     highlights: [
       '📨 High open rates vs email',
       '💸 Cost-effective marketing',
@@ -85,16 +85,16 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     gradient: 'linear-gradient(135deg,#0f3460,#1a56db)',
     tagline: 'A professional website for your MSME — built, hosted, and maintained for you',
     tags: ['Website', 'Hosting Included', 'qobo.dev subdomain', 'Mobile-Friendly'],
-    plans: ['MSME Basic', 'MSME Standard', 'MSME Premium', 'MSME Pro'],
+    plans: ['MSME Basic', 'MSME Premium', 'MSME Pro'],
     highlights: ['🌐 Free subdomain on qobo.dev', '📱 Mobile-friendly design', '⚡ Fast loading speed', '🔒 SSL + Secure hosting'],
     ctaTitle: 'Get Your Website',
-    ctaDesc: 'Basic site in Basic plan; full development in Standard+',
+    ctaDesc: 'Included from MSME Basic plan upward',
     content: `
       <h2 style="color:#1a56db">Your MSME Deserves a Professional Online Presence</h2>
       <p>In today's digital world, a website is your most important business asset. Customers Google you before they call you. MSME Bharat Manch provides complete website development — design, development, hosting, and ongoing maintenance — so you focus on your business while we handle your digital presence.</p>
       <h2 style="color:#1a56db">What's Included</h2>
       <div class="offering-benefit-grid">
-        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">🎨</div><div class="ob-text"><strong>Professional Design</strong><span>Business/Service/Portfolio/E-commerce — designed for your industry</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">🎨</div><div class="ob-text"><strong>Professional Design</strong><span>Business, Service &amp; Portfolio websites — designed for your industry</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">🌐</div><div class="ob-text"><strong>Free Subdomain</strong><span>Your business at yourname.qobo.dev — free domain mapping available</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">🖥️</div><div class="ob-text"><strong>Hosting + Server + DB</strong><span>Complete hosting infrastructure included in your annual plan</span></div></div>
         <div class="offering-benefit"><div class="ob-icon" style="background:#fff5f5">📱</div><div class="ob-text"><strong>Mobile-Friendly</strong><span>Responsive design that works perfectly on all devices</span></div></div>
@@ -102,13 +102,22 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
         <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">⚙️</div><div class="ob-text"><strong>Setup + Yearly Maintenance</strong><span>One-time setup plus annual hosting and maintenance included</span></div></div>
       </div>
       <h2 style="color:#1a56db">Website Types Available</h2>
-      <ul class="offering-checklist">
-        <li><strong>Business/Company Website</strong> — About, services, contact, team page</li>
-        <li><strong>Service Website</strong> — Service listings, enquiry forms, booking</li>
-        <li><strong>Portfolio Website</strong> — Showcase your work and projects</li>
-        <li><strong>E-commerce Website</strong> — Product catalogue, cart, payment integration</li>
-      </ul>
-      <h2 style="color:#1a56db">Standard Plan: Advanced Website Features</h2>
+      <p style="margin-bottom:1rem">Your Basic Website plan includes a professionally built site in any of the formats below — ideal for establishing credibility and capturing enquiries online.</p>
+      <div class="offering-benefit-grid">
+        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f0fe">🏢</div><div class="ob-text"><strong>Business / Company Website</strong><span>About, services, contact, and team pages to present your company professionally</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#e8f5e9">🛠️</div><div class="ob-text"><strong>Service Website</strong><span>Service listings, enquiry forms, and booking options for service-based businesses</span></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fff3e0">🎨</div><div class="ob-text"><strong>Portfolio Website</strong><span>Showcase your work, projects, and case studies to win new clients</span></div></div>
+      </div>
+      <div style="background:#f8f9fc;border:1px solid #d6e0f5;border-left:4px solid #1a56db;border-radius:10px;padding:1.1rem 1.25rem;margin-bottom:1.5rem">
+        <div style="display:flex;align-items:flex-start;gap:.85rem">
+          <div style="font-size:1.35rem;line-height:1;flex-shrink:0">🛒</div>
+          <div>
+            <div style="font-weight:700;color:var(--navy);font-size:.92rem;margin-bottom:.35rem">E-commerce Website <span style="display:inline-block;background:#fff3e0;color:#e65100;font-size:.72rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;margin-left:.35rem;vertical-align:middle">Additional charges apply</span></div>
+            <p style="margin:0;color:#555;font-size:.88rem;line-height:1.6">Product catalogue, shopping cart, and payment integration require a dedicated e-commerce setup beyond the Basic Website plan. We can build this for you — speak with our team for scope and pricing.</p>
+          </div>
+        </div>
+      </div>
+      <h2 style="color:#1a56db">Website Features in Membership Plans</h2>
       <ul class="offering-checklist">
         <li>FAQ automation — answer common questions automatically</li>
         <li>Lead capture forms integrated with WhatsApp notifications</li>
@@ -125,7 +134,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     gradient: 'linear-gradient(135deg,#2d6a4f,#52b788)',
     tagline: 'Comprehensive healthcare and financial protection for your family — powered by Practo',
     tags: ['Health Insurance', 'Accident Cover', 'Practo Network', 'Family Protection'],
-    plans: ['MSME Basic', 'MSME Standard'],
+    plans: ['MSME Basic'],
     highlights: [
       '👨‍👩‍👧 Covers 2 adults + 1 child',
       '💊 Unlimited doctor consults',
@@ -133,7 +142,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       '🔬 20% off diagnostics'
     ],
     ctaTitle: 'Get Covered Now',
-    ctaDesc: 'Included free with MSME Basic & Standard plans',
+    ctaDesc: 'Included free with MSME Basic plan',
     content: `
       <h2 style="color:#2d6a4f">Comprehensive Healthcare for You & Your Family</h2>
       <p>The <strong>Practo Health + Protection Plan</strong> gives MSME members and their families access to quality healthcare combined with accident and hospitalization financial protection — all at a highly subsidized rate through MSME Bharat Manch.</p>
@@ -165,7 +174,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       </ul>
       <h2 style="color:#2d6a4f">What You Get — Accident & Hospitalization Cover</h2>
       <ul class="offering-checklist">
-        <li>Accidental Death Benefit: ₹10 Lakh (Basic/Standard/Premium) or ₹15 Lakh (Pro)</li>
+        <li>Accidental Death Benefit: ₹10 Lakh (Basic/Premium) or ₹15 Lakh (Pro)</li>
         <li>Permanent Partial Disability (PPD) coverage</li>
         <li>Permanent Total Disability (PTD) coverage</li>
         <li>Daily Hospital Cash: ₹500/day for normal hospitalization</li>
@@ -180,7 +189,7 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
     gradient: 'linear-gradient(135deg,#e63946,#c1121f)',
     tagline: 'Know your CIBIL score and full credit history — free with every MSME Bharat Manch plan',
     tags: ['CIBIL Score', 'Credit Health', 'Financial Insights', 'Free with All Plans'],
-    plans: ['MSME Basic', 'MSME Standard', 'MSME Premium', 'MSME Pro'],
+    plans: ['MSME Basic', 'MSME Premium', 'MSME Pro'],
     highlights: ['📊 Instant credit report access', '🔄 Monthly updates included', '💳 Full account history', '🔍 Detailed credit analysis'],
     ctaTitle: 'Check Your Credit Score',
     ctaDesc: 'Free with every plan — check yours today',

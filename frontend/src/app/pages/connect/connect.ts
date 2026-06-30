@@ -12,6 +12,7 @@ import {
   type ConnectStats,
 } from '../../core/services/connect.service';
 import { ToastService } from '../../core/services/toast.service';
+import { MembershipPlanCheckoutService } from '../../core/services/membership-plan-checkout.service';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 
 @Component({
@@ -26,6 +27,7 @@ export class Connect {
   private readonly connectApi = inject(ConnectService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly planCheckout = inject(MembershipPlanCheckoutService);
 
   readonly search = signal('');
   readonly sector = signal('');
@@ -113,11 +115,8 @@ export class Connect {
   }
 
   proceedToUpgrade() {
-    try {
-      window.localStorage.setItem('mbm_pending_plan', this.selectedUpgradePlan());
-    } catch {}
     this.closeUpgrade();
-    this.router.navigateByUrl('/membership');
+    void this.planCheckout.choosePlan(this.selectedUpgradePlan());
   }
 
   async openProfile(card: ConnectProfileCard) {

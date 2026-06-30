@@ -7,7 +7,7 @@ public sealed class ConnectSettings
     /// <summary>When false, Connect APIs return 503 and public page can fall back gracefully.</summary>
     public bool Enabled { get; set; } = true;
 
-    /// <summary>Lifetime contact unlock limit for basic/standard plans.</summary>
+    /// <summary>Lifetime contact unlock limit for basic plan.</summary>
     public int BasicStandardContactLimit { get; set; } = 5;
 }
 
@@ -24,7 +24,7 @@ public static class ConnectAccessRules
     {
         var code = (planCode ?? "").Trim().ToLowerInvariant();
         if (code is "premium" or "pro") return ConnectAccessTier.Unlimited;
-        if (code is "basic" or "standard") return ConnectAccessTier.Limited;
+        if (code is "basic") return ConnectAccessTier.Limited;
         return ConnectAccessTier.None;
     }
 }

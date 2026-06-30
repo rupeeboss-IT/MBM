@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { MembershipCheckoutModals } from './core/components/membership-checkout-modals/membership-checkout-modals';
 import { SchemeDiscoveryModals } from './core/components/scheme-discovery-modals/scheme-discovery-modals';
 import { MsmeSaathiChat } from './core/components/msme-saathi-chat/msme-saathi-chat';
 import { ToastContainer } from './core/components/toast-container/toast-container';
@@ -15,7 +16,7 @@ import { Footer } from "./footer/footer";
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MsmeSaathiChat]
+  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MembershipCheckoutModals, MsmeSaathiChat]
 })
 export class App implements OnInit {
   constructor(private readonly router: Router) {}

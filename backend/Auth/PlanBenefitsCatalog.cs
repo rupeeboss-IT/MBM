@@ -16,19 +16,6 @@ public static class PlanBenefitsCatalog
             "Practo Insurance Basic",
             "Free credit report",
         ],
-        ["standard"] =
-        [
-            "Website development (Business / Service / Portfolio / E-commerce)",
-            "Hosting + server + database included",
-            "Free subdomain on qobo.dev",
-            "Domain mapping FREE",
-            "Mobile-friendly site with WhatsApp and call button",
-            "FAQ automation and basic routing",
-            "Setup + yearly hosting/maintenance",
-            "Knowledge and events access",
-            "Practo Insurance Basic",
-            "Free credit report",
-        ],
         ["premium"] =
         [
             "Infomerics verified trust score report",

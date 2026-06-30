@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { firstValueFrom, timeout } from 'rxjs';
 import { AuthService, type MeRes } from '../../core/services/auth.service';
@@ -9,12 +9,50 @@ import {
   type ActivePlan,
   type PaymentHistoryItem,
 } from '../../core/services/payment.service';
+import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
 import { ToastService } from '../../core/services/toast.service';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
 import { MembershipCard } from '../../core/components/membership-card/membership-card';
+import { isOneTimeSchemeReportPlanCode } from '../../core/utils/scheme-discovery-journey.util';
 
 type Benefit = { title: string; desc: string };
+
+type ReportStep = { title: string; desc: string };
+
+const ONE_TIME_REPORT_STEPS: ReportStep[] = [
+  {
+    title: 'Start generation',
+    desc: 'Click Generate Report — we verify your one-time purchase is active.',
+  },
+  {
+    title: 'Confirm Udyam details',
+    desc: 'Enter or confirm your Udyam Aadhaar number linked to your MSME profile.',
+  },
+  {
+    title: 'AI scheme matching',
+    desc: 'We map your business profile against 100+ central and state government schemes.',
+  },
+  {
+    title: 'Download your PDF',
+    desc: 'Get a personalized report with eligibility, benefits, and application guidance.',
+  },
+];
+
+const ONE_TIME_REPORT_INCLUDES: Benefit[] = [
+  {
+    title: 'Personalized scheme list',
+    desc: 'Central and state programmes matched to your Udyam profile.',
+  },
+  {
+    title: 'Eligibility pre-check',
+    desc: 'See which schemes you qualify for before you apply.',
+  },
+  {
+    title: 'Application guidance',
+    desc: 'Documents and next steps for each recommended scheme.',
+  },
+];
 
 const PLAN_BENEFITS: Record<string, Benefit[]> = {
   basic: [
@@ -84,7 +122,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         </div>
       </div>
 
-      <div class="container plan-shell">
+      <div class="container plan-shell" [class.plan-shell--onetime]="isOneTimeReportPlan()">
         <aside class="plan-aside">
           <div class="card plan-card plan-card--membership">
             <div class="card__title">Membership</div>
@@ -96,7 +134,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
             />
           </div>
 
-          <div class="card plan-card">
+          <div class="card plan-card" *ngIf="!isOneTimeReportPlan()">
           <div class="card__title">Current plan</div>
 
           <div *ngIf="loading()" class="muted">Loading your plan…</div>
@@ -148,7 +186,51 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
           </div>
         </aside>
 
-        <div class="card plan-card" *ngIf="!loading() && plan()">
+        <div class="card plan-card plan-card--benefits-onetime" *ngIf="!loading() && plan() && isOneTimeReportPlan()">
+          <div class="card__title">Your report access</div>
+          <div class="onetime-hero" *ngIf="plan() as p">
+            <div class="onetime-hero__icon" aria-hidden="true">🏛️</div>
+            <div class="onetime-hero__body">
+              <span class="pill onetime-hero__pill">{{ p.status }}</span>
+              <h2 class="onetime-hero__title">{{ p.planName }}</h2>
+              <p class="onetime-hero__meta">
+                One-time purchase
+                <span *ngIf="p.activeTo"> · Valid until {{ p.activeTo | localDate:'dd MMM yyyy' }}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="onetime-steps">
+            <h3 class="onetime-steps__heading">How to generate your report</h3>
+            <ol class="onetime-steps__list">
+              <li class="onetime-step" *ngFor="let step of oneTimeReportSteps; let i = index">
+                <div class="onetime-step__num">{{ i + 1 }}</div>
+                <div class="onetime-step__body">
+                  <strong>{{ step.title }}</strong>
+                  <p>{{ step.desc }}</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="onetime-includes">
+            <div class="onetime-include" *ngFor="let item of oneTimeReportIncludes">
+              <div class="onetime-include__title">{{ item.title }}</div>
+              <div class="onetime-include__desc">{{ item.desc }}</div>
+            </div>
+          </div>
+
+          <button
+            class="btn-primary onetime-cta"
+            type="button"
+            (click)="startSchemeReport()"
+            [disabled]="schemeReportBusy()"
+            [attr.aria-busy]="schemeReportBusy() || null">
+            {{ schemeReportBusy() ? 'Loading…' : 'Generate Report' }}
+          </button>
+        </div>
+
+        <div class="card plan-card" *ngIf="!loading() && plan() && !isOneTimeReportPlan()">
           <div class="card__title">Benefits included</div>
           <div class="muted" style="margin-bottom:.8rem">Based on your current plan.</div>
           <app-scheme-discovery-report-access variant="plan-benefit" [plan]="plan()" />
@@ -247,6 +329,135 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         grid-template-columns: 420px 1fr;
         gap: 1rem;
         align-items:start;
+      }
+      .plan-shell--onetime{
+        align-items: stretch;
+      }
+      .plan-shell--onetime .plan-aside{
+        align-self: start;
+      }
+      .plan-card--benefits-onetime{
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        background: linear-gradient(180deg, #fff 0%, #f8fbf9 100%);
+        border-color: rgba(45, 106, 79, 0.22);
+        box-shadow: 0 10px 28px rgba(27, 94, 32, 0.08);
+      }
+      .onetime-hero{
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-top: .35rem;
+        padding: 1rem 1.05rem;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #f1f8f4 0%, #e8f5e9 100%);
+        border: 1px solid rgba(27, 94, 32, 0.14);
+      }
+      .onetime-hero__icon{
+        font-size: 2rem;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .onetime-hero__body{ min-width: 0; }
+      .onetime-hero__pill{ margin: 0 0 .55rem; }
+      .onetime-hero__title{
+        margin: 0 0 .35rem;
+        font-size: 1.15rem;
+        font-weight: 900;
+        color: var(--navy);
+        line-height: 1.35;
+      }
+      .onetime-hero__meta{
+        margin: 0;
+        color: var(--muted);
+        font-size: .88rem;
+        font-weight: 600;
+        line-height: 1.45;
+      }
+      .onetime-steps{
+        margin-top: 1.15rem;
+        padding: 1rem 1.05rem;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,.08);
+        flex: 1;
+      }
+      .onetime-steps__heading{
+        margin: 0 0 .85rem;
+        font-size: .95rem;
+        font-weight: 900;
+        color: var(--navy);
+      }
+      .onetime-steps__list{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: .85rem;
+      }
+      .onetime-step{
+        display: flex;
+        gap: .8rem;
+        align-items: flex-start;
+      }
+      .onetime-step__num{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--red);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .82rem;
+        font-weight: 900;
+        flex-shrink: 0;
+        margin-top: .1rem;
+      }
+      .onetime-step__body strong{
+        display: block;
+        font-size: .9rem;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: .2rem;
+      }
+      .onetime-step__body p{
+        margin: 0;
+        color: var(--muted);
+        font-size: .86rem;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+      .onetime-includes{
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: .75rem;
+        margin-top: 1rem;
+      }
+      .onetime-include{
+        border: 1px solid rgba(0,0,0,.08);
+        border-radius: 12px;
+        padding: .8rem .85rem;
+        background: #fff;
+      }
+      .onetime-include__title{
+        font-weight: 800;
+        color: var(--navy);
+        font-size: .86rem;
+        margin-bottom: .25rem;
+      }
+      .onetime-include__desc{
+        color: var(--muted);
+        font-size: .8rem;
+        font-weight: 600;
+        line-height: 1.45;
+      }
+      .onetime-cta{
+        width: 100%;
+        margin-top: 1.15rem;
+        text-align: center;
+        display: block;
       }
       .plan-aside{
         display:flex;
@@ -390,6 +601,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
       }
       @media (max-width: 720px){
         .benefits{ grid-template-columns: 1fr; }
+        .onetime-includes{ grid-template-columns: 1fr; }
         .plan-card{ padding: 1.25rem; }
         .plan-hero__actions .btn-outline,
         .plan-hero__actions .btn-primary{
@@ -410,12 +622,20 @@ export class MyPlan {
   private readonly api = inject(AuthService);
   private readonly payments = inject(PaymentService);
   private readonly toast = inject(ToastService);
+  private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
 
   readonly loading = signal(false);
   readonly cancelling = signal(false);
   readonly plan = signal<ActivePlan | null>(null);
   readonly profile = signal<MeRes | null>(null);
   readonly history = signal<PaymentHistoryItem[]>([]);
+
+  readonly isOneTimeReportPlan = computed(() =>
+    isOneTimeSchemeReportPlanCode(this.plan()?.planCode),
+  );
+  readonly schemeReportBusy = this.schemeDiscovery.reportCtaBusy;
+  readonly oneTimeReportSteps = ONE_TIME_REPORT_STEPS;
+  readonly oneTimeReportIncludes = ONE_TIME_REPORT_INCLUDES;
 
   constructor() {
     effect(() => {
@@ -427,6 +647,10 @@ export class MyPlan {
   get benefits(): Benefit[] {
     const code = (this.plan()?.planCode || '').toLowerCase();
     return PLAN_BENEFITS[code] ?? [];
+  }
+
+  startSchemeReport(): void {
+    void this.schemeDiscovery.startFlow();
   }
 
   inr(paise: number): string {

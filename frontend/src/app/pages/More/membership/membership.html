@@ -51,55 +51,15 @@
                   class="pfl-info">ℹ Learn more</span></a></li>
           </ul>
           <button class="btn-outline" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('basic')" [disabled]="busyPlan() === 'basic' || referralModalOpen() || checkingPlan()">
-            {{ busyPlan() === 'basic' ? 'Processing…' : 'Get MSME Basic' }}
-          </button>
-        </div>
-        <div class="home-plan-card" id="plan-standard">
-          <div class="hp-card-head">
-            <div class="hp-icon">🌐</div>
-            <div class="hp-badge silver">₹4,999</div>
-          </div>
-          <p class="hp-gst-note">/ year + 18% GST</p>
-          <h3>MSME Standard</h3>
-          <p class="hp-desc">Manage your website, automate WhatsApp replies, capture leads.</p>
-          <ul class="hp-features">
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development (Business /
-                  Service / Portfolio / E-commerce)</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Hosting + Server + Database
-                  included</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Free subdomain on
-                  qobo.dev</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span>Domain mapping FREE</li>
-            <li><span class="tick">✓</span>Mobile-friendly, fast loading, WhatsApp + Call button</li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">FAQ automation</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span>Basic routing/notifications</li>
-            <li><span class="tick">✓</span>Setup + yearly hosting/maintenance</li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
-                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span>Growth ecosystem access</li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
-                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-          </ul>
-          <button class="btn-outline" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('standard')" [disabled]="busyPlan() === 'standard' || referralModalOpen() || checkingPlan()">
-            {{ busyPlan() === 'standard' ? 'Processing…' : 'Get MSME Standard' }}
+            (click)="choosePlan('basic')" [disabled]="checkout.busyPlan() === 'basic' || checkout.referralModalOpen() || checkout.checkingPlan()">
+            {{ checkout.busyPlan() === 'basic' ? 'Processing…' : 'Get MSME Basic' }}
           </button>
         </div>
         <div
           class="home-plan-card featured-plan"
           id="plan-premium"
           [class.membership-plan--recommended]="sourceGuidance() && isRecommendedPlan('premium', membershipSource())"
-          [class.membership-plan--highlight]="highlightRecommended() && isRecommendedPlan('premium', membershipSource())"
+          [class.membership-plan--highlight]="checkout.highlightRecommended() && isRecommendedPlan('premium', membershipSource())"
         >
           <div class="plan-popular">Most Popular</div>
           @if (planBadge('premium'); as badge) {
@@ -126,7 +86,7 @@
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
@@ -146,15 +106,15 @@
                   Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
           </ul>
           <button class="btn-primary" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('premium')" [disabled]="busyPlan() === 'premium' || referralModalOpen() || checkingPlan()">
-            {{ busyPlan() === 'premium' ? 'Processing…' : 'Get MSME Premium' }}
+            (click)="choosePlan('premium')" [disabled]="checkout.busyPlan() === 'premium' || checkout.referralModalOpen() || checkout.checkingPlan()">
+            {{ checkout.busyPlan() === 'premium' ? 'Processing…' : 'Get MSME Premium' }}
           </button>
         </div>
         <div
           class="home-plan-card"
           id="plan-pro"
           [class.membership-plan--recommended]="sourceGuidance() && isRecommendedPlan('pro', membershipSource())"
-          [class.membership-plan--highlight]="highlightRecommended() && isRecommendedPlan('pro', membershipSource())"
+          [class.membership-plan--highlight]="checkout.highlightRecommended() && isRecommendedPlan('pro', membershipSource())"
         >
           @if (planBadge('pro'); as badge) {
             <div class="membership-plan-rec-badge">{{ badge }}</div>
@@ -182,7 +142,7 @@
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
@@ -202,8 +162,8 @@
                   Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
           </ul>
           <button class="btn-navy" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('pro')" [disabled]="busyPlan() === 'pro' || referralModalOpen() || checkingPlan()">
-            {{ busyPlan() === 'pro' ? 'Processing…' : 'Get MSME Pro' }}
+            (click)="choosePlan('pro')" [disabled]="checkout.busyPlan() === 'pro' || checkout.referralModalOpen() || checkout.checkingPlan()">
+            {{ checkout.busyPlan() === 'pro' ? 'Processing…' : 'Get MSME Pro' }}
           </button>
         </div>
       </div>
@@ -325,146 +285,4 @@
       </ul>
     </div>
   </section>
-
-  <!-- Advisor Code popup (before Razorpay) -->
-  <div
-    class="modal-overlay referral-modal-overlay"
-    [class.open]="referralModalOpen()"
-    (click)="closeReferralModal()"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="referral-modal-title">
-    <div class="modal-box referral-modal-box" (click)="$event.stopPropagation()">
-      <button
-        type="button"
-        class="modal-close"
-        (click)="$event.stopPropagation(); closeReferralModal()"
-        aria-label="Close">&times;</button>
-      <h2 id="referral-modal-title">
-        {{ referralModalMode() === 'confirm' ? 'Confirm Your Advisor' : 'Advisor Code' }}
-      </h2>
-      <p class="sub" *ngIf="referralModalMode() === 'confirm'">
-        Your advisor is linked from registration. Continue to payment or change the code below.
-      </p>
-      <p class="sub" *ngIf="referralModalMode() !== 'confirm'">
-        Optional — have a advisor code? Enter it below or skip to continue to payment.
-      </p>
-
-      <ng-container *ngIf="referralModalMode() === 'confirm' && referralValidationState() === 'valid'">
-        <div class="referral-confirm-card">
-          <p class="referral-confirm-card__label">Advisor code</p>
-          <p class="referral-confirm-card__code">{{ referralCodeInput() }}</p>
-          <p class="referral-modal-employee" *ngIf="referredByName()">
-            Referred by: <strong>{{ referredByName() }}</strong>
-          </p>
-        </div>
-        <div class="referral-modal-actions">
-          <button type="button" class="btn-primary referral-btn-continue" (click)="continueFromReferral()">
-            Continue to Payment
-          </button>
-          <button type="button" class="btn-outline referral-btn-apply" (click)="editReferralCode()">
-            Change Advisor Code
-          </button>
-        </div>
-        <button
-          type="button"
-          class="referral-skip-link"
-          (click)="skipReferral()"
-          [disabled]="referralValidationState() === 'validating'">
-          Skip Advisor Code
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="referralModalMode() !== 'confirm'">
-      <label class="referral-modal-label" for="referral-code-input">Advisor Code</label>
-      <div
-        class="referral-input-wrap"
-        [class.referral-input-wrap--valid]="referralValidationState() === 'valid'"
-        [class.referral-input-wrap--invalid]="referralValidationState() === 'invalid'"
-        [class.referral-input-wrap--inactive]="referralValidationState() === 'inactive'"
-        [class.referral-input-wrap--validating]="referralValidationState() === 'validating'">
-        <input
-          id="referral-code-input"
-          type="text"
-          class="referral-modal-input"
-          [ngModel]="referralCodeInput()"
-          (ngModelChange)="onReferralModelChange($event)"
-          placeholder="Enter Advisor Code"
-          maxlength="50"
-          autocomplete="off" />
-        <span
-          class="referral-input-status referral-input-status--loading"
-          *ngIf="referralValidationState() === 'validating'"
-          aria-hidden="true"></span>
-        <span
-          class="referral-input-status referral-input-status--valid"
-          *ngIf="referralValidationState() === 'valid'"
-          aria-label="Valid advisor code">✓</span>
-        <span
-          class="referral-input-status referral-input-status--invalid"
-          *ngIf="referralValidationState() === 'invalid'"
-          aria-label="Invalid advisor code">✕</span>
-      </div>
-
-      <p class="referral-modal-employee" *ngIf="referralValidationState() === 'valid' && referredByName()">
-        Referred by: <strong>{{ referredByName() }}</strong>
-      </p>
-      <p class="referral-modal-error" *ngIf="referralValidationState() === 'invalid'">
-        {{ referralInvalidMessage }}
-      </p>
-      <p class="referral-modal-inactive" *ngIf="referralValidationState() === 'inactive'">
-        {{ referralInactiveMessage }}
-      </p>
-
-      <div class="referral-modal-actions">
-        <button
-          type="button"
-          class="btn-outline referral-btn-apply"
-          *ngIf="referralValidationState() !== 'valid' && referralValidationState() !== 'inactive'"
-          (click)="applyReferral()"
-          [disabled]="referralValidationState() === 'validating' || !referralCodeInput().trim()">
-          {{ referralValidationState() === 'validating' ? 'Checking…' : 'Apply Advisor Code' }}
-        </button>
-        <button
-          type="button"
-          class="btn-primary referral-btn-continue"
-          *ngIf="referralValidationState() === 'valid' || referralValidationState() === 'inactive'"
-          (click)="continueFromReferral()">
-          {{ referralValidationState() === 'inactive' ? 'Continue with Default Assignment' : 'Continue' }}
-        </button>
-      </div>
-
-      <button
-        type="button"
-        class="referral-skip-link"
-        (click)="skipReferral()"
-        [disabled]="referralValidationState() === 'validating'">
-        Skip Advisor Code
-      </button>
-
-      <small class="referral-modal-disclaimer" style="color: #888; font-size: 0.8em; font-style: italic; margin-top: 1rem; display: block;">
-        Note: You can get your Advisor code from your referring Advisor. Advisor codes are optional and do not affect your plan benefits.
-      </small>
-      </ng-container>
-    </div>
-  </div>
-
-  @if (basicConfirmOpen() && sourceGuidance(); as guidance) {
-    <div
-      class="modal-overlay referral-modal-overlay open membership-basic-confirm-overlay"
-      (click)="dismissBasicConfirm()"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="membership-basic-confirm-title">
-      <div class="modal-box referral-modal-box membership-basic-confirm" (click)="$event.stopPropagation()">
-        <button type="button" class="modal-close" (click)="dismissBasicConfirm()" aria-label="Close">&times;</button>
-        <h2 id="membership-basic-confirm-title">Confirm Plan Selection</h2>
-        <p class="membership-basic-confirm__message">{{ confirmPlanMessage() }}</p>
-        <div class="membership-basic-confirm__actions">
-          <button type="button" class="btn-outline" (click)="confirmBasicPlan()">{{ confirmPlanContinueLabel() }}</button>
-          <button type="button" class="btn-primary" (click)="scrollToRecommendedPlans()">View Recommended Plans</button>
-        </div>
-      </div>
-    </div>
-  }
 </div><!-- /membership -->

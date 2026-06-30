@@ -45,6 +45,12 @@ export function isPremiumOrProPlanCode(planCode: string | null | undefined): boo
   return code === 'premium' || code === 'pro';
 }
 
+export const SCHEME_REPORT_ONE_TIME_PLAN_CODE = 'scheme-report-onetime';
+
+export function isOneTimeSchemeReportPlanCode(planCode: string | null | undefined): boolean {
+  return (planCode ?? '').trim().toLowerCase() === SCHEME_REPORT_ONE_TIME_PLAN_CODE;
+}
+
 export function shouldResumeSchemeDiscoveryAfterMembership(
   planCode: string | null | undefined,
   hasIntent: boolean,

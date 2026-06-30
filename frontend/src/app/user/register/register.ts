@@ -8,6 +8,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthSessionService } from '../../core/services/auth-session.service';
 import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
+import {
+  MembershipPlanCheckoutService,
+  type MembershipPlanCode,
+} from '../../core/services/membership-plan-checkout.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { hasSchemeDiscoveryIntent } from '../../core/utils/scheme-discovery-intent';
@@ -63,6 +67,7 @@ export class Register implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly session = inject(AuthSessionService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
+  private readonly planCheckout = inject(MembershipPlanCheckoutService);
   private readonly referrals = inject(ReferralService);
   private readonly host = inject(ElementRef<HTMLElement>);
 
@@ -657,14 +662,8 @@ export class Register implements OnInit {
     void this.router.navigateByUrl('/profile');
   }
 
-  selectMembershipPlan(code: 'basic' | 'standard' | 'premium' | 'pro'): void {
-    try {
-      window.localStorage.setItem('mbm_pending_plan', code);
-    } catch {
-      // ignore
-    }
-    this.toast.success('Opening membership checkout…');
-    void this.router.navigateByUrl('/membership');
+  selectMembershipPlan(code: MembershipPlanCode): void {
+    void this.planCheckout.choosePlan(code);
   }
 
   selectSchemeDiscoveryReport(): void {
@@ -716,6 +715,9 @@ export class Register implements OnInit {
     if (pendingPlan) {
       clearRegistrationMode();
       this.toast.success('Account created. Opening payment for your selected plan…');
+      if (this.planCheckout.processPendingPlanAfterAuth()) {
+        return;
+      }
       await this.router.navigateByUrl('/membership');
       return;
     }

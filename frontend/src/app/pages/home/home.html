@@ -331,42 +331,9 @@
                 [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
           </ul>
-          <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
-            Basic</a>
-        </div>
-        <div class="home-plan-card">
-          <div class="hp-card-head">
-            <div class="hp-icon">🌐</div>
-            <div class="hp-badge silver">₹4,999/yr</div>
-          </div>
-          <h3>MSME Standard</h3>
-          <p class="hp-desc">Manage your website, automate WhatsApp replies, capture leads</p>
-          <ul class="hp-features">
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Hosting + Server + DB</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Free subdomain on
-                  qobo.dev</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp automation &amp;
-                  FAQ</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><span class="pfl-text">Mobile-friendly + fast loading</span></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
-                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
-                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-          </ul>
-          <a class="btn-outline" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
-            Standard</a>
+          <button class="btn-outline" style="width:100%;text-align:center;display:block" type="button"
+            (click)="choosePlan('basic')">Get MSME
+            Basic</button>
         </div>
         <div class="home-plan-card featured-plan">
           <div class="plan-popular">Most Popular</div>
@@ -387,7 +354,7 @@
                 [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
                   Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Website Development</span><span
+                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
@@ -406,8 +373,9 @@
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
             class="pfl-text">2 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
           </ul>
-          <a class="btn-primary" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
-            Premium</a>
+          <button class="btn-primary" style="width:100%;text-align:center;display:block" type="button"
+            (click)="choosePlan('premium')">Get MSME
+            Premium</button>
         </div>
         <div class="home-plan-card">
           <div class="hp-card-head">
@@ -446,8 +414,9 @@
               <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
               class="pfl-text">4 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
           </ul>
-          <a class="btn-navy" style="width:100%;text-align:center;display:block" routerLink="/membership">Get MSME
-            Pro</a>
+          <button class="btn-navy" style="width:100%;text-align:center;display:block" type="button"
+            (click)="choosePlan('pro')">Get MSME
+            Pro</button>
         </div>
       </div>
       <div class="text-left mt-3">

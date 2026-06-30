@@ -320,18 +320,12 @@
         </button>
       </div>
       <p class="reg-plan-divider">Or choose an annual membership plan</p>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem" id="reg-plan-grid">
+      <div class="reg-plan-grid" id="reg-plan-grid">
         <div class="home-plan-card" id="rplan-MSME Basic" style="cursor:pointer" (click)="selectMembershipPlan('basic')">
           <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌱</div><h3 style="font-size:1rem">MSME Basic</h3></div><div class="hp-badge free">₹999/yr</div></div>
           <p class="hp-desc">Udyam Aadhaar + credibility profile + WhatsApp + Basic Website</p>
           <ul class="hp-features"><li><span class="tick">✓</span>Join with Udyam Aadhaar</li><li><span class="tick">✓</span>WhatsApp Platform</li><li><span class="tick">✓</span>Basic Website</li><li><span class="tick">✓</span>Practo Insurance + Credit Report</li></ul>
           <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--green);font-size:.9rem">Select Basic — ₹999/yr</div>
-        </div>
-        <div class="home-plan-card" id="rplan-MSME Standard" style="cursor:pointer" (click)="selectMembershipPlan('standard')">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="hp-icon">🌐</div><h3 style="font-size:1rem">MSME Standard</h3></div><div class="hp-badge silver">₹4,999/yr</div></div>
-          <p class="hp-desc">Website + WhatsApp automation + hosting + lead capture</p>
-          <ul class="hp-features"><li><span class="tick">✓</span>Website Development + Hosting</li><li><span class="tick">✓</span>Free subdomain on qobo.dev</li><li><span class="tick">✓</span>WhatsApp FAQ automation</li><li><span class="tick">✓</span>Mobile-friendly + fast loading</li></ul>
-          <div style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:#555;font-size:.9rem">Select Standard — ₹4,999/yr</div>
         </div>
         <div class="home-plan-card featured-plan" id="rplan-MSME Premium" style="cursor:pointer" (click)="selectMembershipPlan('premium')">
           <div class="plan-popular" style="top:-10px">Most Popular</div>

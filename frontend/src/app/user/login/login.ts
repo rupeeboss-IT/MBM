@@ -10,7 +10,8 @@ import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
-import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.util';
+import { MembershipPlanCheckoutService } from '../../core/services/membership-plan-checkout.service';
+import { getLoginRegisterCta, type LoginRegisterCta } from '../../core/utils/registration-mode.util';
 
 @Component({
   selector: 'app-login',
@@ -20,16 +21,19 @@ import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.u
   styleUrl: './login.css',
 })
 export class Login {
-  readonly freeRegisterQueryParams = FREE_REGISTER_QUERY_PARAMS;
-
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly session = inject(AuthSessionService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
+  private readonly planCheckout = inject(MembershipPlanCheckoutService);
 
   readonly submitting = signal(false);
+
+  get registerCta(): LoginRegisterCta {
+    return getLoginRegisterCta();
+  }
 
   readonly form = this.fb.nonNullable.group({
     identifier: this.fb.nonNullable.control('', { validators: [Validators.required, Validators.maxLength(508)] }),
@@ -62,13 +66,12 @@ export class Login {
         return;
       }
 
-      // If user came here from a plan selection on /membership, send them back so checkout opens.
-      const pendingPlan = (typeof window !== 'undefined') ? window.localStorage.getItem('mbm_pending_plan') : null;
-      if (pendingPlan) {
-        this.router.navigateByUrl('/membership');
-      } else {
-        this.router.navigateByUrl('/profile');
+      // If user came from a plan selection, start checkout directly (no /membership stop).
+      if (this.planCheckout.processPendingPlanAfterAuth()) {
+        return;
       }
+
+      this.router.navigateByUrl('/profile');
     } catch (e: unknown) {
       this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.login));
     } finally {

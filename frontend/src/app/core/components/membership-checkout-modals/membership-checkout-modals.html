@@ -1,0 +1,141 @@
+<!-- Advisor Code popup (before Razorpay) -->
+<div
+  class="modal-overlay referral-modal-overlay"
+  [class.open]="checkout.referralModalOpen()"
+  (click)="checkout.closeReferralModal()"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="referral-modal-title">
+  <div class="modal-box referral-modal-box" (click)="$event.stopPropagation()">
+    <button
+      type="button"
+      class="modal-close"
+      (click)="$event.stopPropagation(); checkout.closeReferralModal()"
+      aria-label="Close">&times;</button>
+    <h2 id="referral-modal-title">
+      {{ checkout.referralModalMode() === 'confirm' ? 'Confirm Your Advisor' : 'Advisor Code' }}
+    </h2>
+    <p class="sub" *ngIf="checkout.referralModalMode() === 'confirm'">
+      Your advisor is linked from registration. Continue to payment or change the code below.
+    </p>
+    <p class="sub" *ngIf="checkout.referralModalMode() !== 'confirm'">
+      Optional — have a advisor code? Enter it below or skip to continue to payment.
+    </p>
+
+    <ng-container *ngIf="checkout.referralModalMode() === 'confirm' && checkout.referralValidationState() === 'valid'">
+      <div class="referral-confirm-card">
+        <p class="referral-confirm-card__label">Advisor code</p>
+        <p class="referral-confirm-card__code">{{ checkout.referralCodeInput() }}</p>
+        <p class="referral-modal-employee" *ngIf="checkout.referredByName()">
+          Referred by: <strong>{{ checkout.referredByName() }}</strong>
+        </p>
+      </div>
+      <div class="referral-modal-actions">
+        <button type="button" class="btn-primary referral-btn-continue" (click)="checkout.continueFromReferral()">
+          Continue to Payment
+        </button>
+        <button type="button" class="btn-outline referral-btn-apply" (click)="checkout.editReferralCode()">
+          Change Advisor Code
+        </button>
+      </div>
+      <button
+        type="button"
+        class="referral-skip-link"
+        (click)="checkout.skipReferral()"
+        [disabled]="checkout.referralValidationState() === 'validating'">
+        Skip Advisor Code
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="checkout.referralModalMode() !== 'confirm'">
+      <label class="referral-modal-label" for="referral-code-input">Advisor Code</label>
+      <div
+        class="referral-input-wrap"
+        [class.referral-input-wrap--valid]="checkout.referralValidationState() === 'valid'"
+        [class.referral-input-wrap--invalid]="checkout.referralValidationState() === 'invalid'"
+        [class.referral-input-wrap--inactive]="checkout.referralValidationState() === 'inactive'"
+        [class.referral-input-wrap--validating]="checkout.referralValidationState() === 'validating'">
+        <input
+          id="referral-code-input"
+          type="text"
+          class="referral-modal-input"
+          [ngModel]="checkout.referralCodeInput()"
+          (ngModelChange)="checkout.onReferralModelChange($event)"
+          placeholder="Enter Advisor Code"
+          maxlength="50"
+          autocomplete="off" />
+        <span
+          class="referral-input-status referral-input-status--loading"
+          *ngIf="checkout.referralValidationState() === 'validating'"
+          aria-hidden="true"></span>
+        <span
+          class="referral-input-status referral-input-status--valid"
+          *ngIf="checkout.referralValidationState() === 'valid'"
+          aria-label="Valid advisor code">✓</span>
+        <span
+          class="referral-input-status referral-input-status--invalid"
+          *ngIf="checkout.referralValidationState() === 'invalid'"
+          aria-label="Invalid advisor code">✕</span>
+      </div>
+
+      <p class="referral-modal-employee" *ngIf="checkout.referralValidationState() === 'valid' && checkout.referredByName()">
+        Referred by: <strong>{{ checkout.referredByName() }}</strong>
+      </p>
+      <p class="referral-modal-error" *ngIf="checkout.referralValidationState() === 'invalid'">
+        {{ checkout.referralInvalidMessage }}
+      </p>
+      <p class="referral-modal-inactive" *ngIf="checkout.referralValidationState() === 'inactive'">
+        {{ checkout.referralInactiveMessage }}
+      </p>
+
+      <div class="referral-modal-actions">
+        <button
+          type="button"
+          class="btn-outline referral-btn-apply"
+          *ngIf="checkout.referralValidationState() !== 'valid' && checkout.referralValidationState() !== 'inactive'"
+          (click)="checkout.applyReferral()"
+          [disabled]="checkout.referralValidationState() === 'validating' || !checkout.referralCodeInput().trim()">
+          {{ checkout.referralValidationState() === 'validating' ? 'Checking…' : 'Apply Advisor Code' }}
+        </button>
+        <button
+          type="button"
+          class="btn-primary referral-btn-continue"
+          *ngIf="checkout.referralValidationState() === 'valid' || checkout.referralValidationState() === 'inactive'"
+          (click)="checkout.continueFromReferral()">
+          {{ checkout.referralValidationState() === 'inactive' ? 'Continue with Default Assignment' : 'Continue' }}
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="referral-skip-link"
+        (click)="checkout.skipReferral()"
+        [disabled]="checkout.referralValidationState() === 'validating'">
+        Skip Advisor Code
+      </button>
+
+      <small class="referral-modal-disclaimer">
+        Note: You can get your Advisor code from your referring Advisor. Advisor codes are optional and do not affect your plan benefits.
+      </small>
+    </ng-container>
+  </div>
+</div>
+
+@if (checkout.basicConfirmOpen() && checkout.sourceGuidance(); as guidance) {
+  <div
+    class="modal-overlay referral-modal-overlay open membership-basic-confirm-overlay"
+    (click)="checkout.dismissBasicConfirm()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="membership-basic-confirm-title">
+    <div class="modal-box referral-modal-box membership-basic-confirm" (click)="$event.stopPropagation()">
+      <button type="button" class="modal-close" (click)="checkout.dismissBasicConfirm()" aria-label="Close">&times;</button>
+      <h2 id="membership-basic-confirm-title">Confirm Plan Selection</h2>
+      <p class="membership-basic-confirm__message">{{ checkout.confirmPlanMessage() }}</p>
+      <div class="membership-basic-confirm__actions">
+        <button type="button" class="btn-outline" (click)="checkout.confirmBasicPlan()">{{ checkout.confirmPlanContinueLabel() }}</button>
+        <button type="button" class="btn-primary" (click)="checkout.scrollToRecommendedPlans()">View Recommended Plans</button>
+      </div>
+    </div>
+  </div>
+}
