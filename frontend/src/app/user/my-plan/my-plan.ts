@@ -75,7 +75,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
     { title: 'Free credit report', desc: 'Credit visibility to support growth planning.' },
   ],
   premium: [
-    { title: 'Infomerics verified report', desc: 'Verified business verification / trust score report.' },
+    { title: 'Infomerics IVerified Report', desc: 'Infomerics IVerified Report.' },
     { title: 'Scheme discovery report', desc: 'Personalized government scheme discovery.' },
     { title: 'Bank statement analyzer', desc: 'Analyzer for financial insights.' },
     { title: 'Free credit report', desc: 'Credit visibility to support growth planning.' },
@@ -88,7 +88,7 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
     { title: 'Events access', desc: 'MSME events access included.' },
   ],
   pro: [
-    { title: 'Business assessment report', desc: 'Infomerics business assessment report.' },
+    { title: 'Infomerics TrustScore Report', desc: 'Infomerics TrustScore Report.' },
     { title: 'Scheme discovery report', desc: 'Personalized government scheme discovery.' },
     { title: 'GeM portal registration', desc: 'Registration & support for GeM portal.' },
     { title: 'Bank statement analyzer', desc: 'Analyzer for financial insights.' },
@@ -469,7 +469,8 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
         min-width:0;
       }
       .plan-card--membership{
-        overflow:hidden;
+        overflow:visible;
+        min-width:0;
       }
       .plan-card{
         background:#fff; border:1px solid var(--border); border-radius: 16px;

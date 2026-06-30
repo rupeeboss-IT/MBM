@@ -476,13 +476,13 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
       </div>`
   },
   'trust-score': {
-    title: 'Infomerics Trust Score & Business Verification',
+    title: 'Infomerics IVerified & TrustScore Reports',
     crumb: 'Trust Score',
     icon: '⭐',
     iconImage: INFOMERICS_RATINGS_LOGO_SRC,
     gradient: 'linear-gradient(135deg,#7b1fa2,#4a148c)',
     tagline: 'Get your business credibility verified by SEBI-registered Infomerics — build trust with banks and partners',
-    tags: ['Infomerics Verified', 'SEBI Registered', 'Credit Rating Agency', 'Business Credibility'],
+    tags: ['Infomerics IVerified', 'Infomerics TrustScore', 'SEBI Registered', 'Credit Rating Agency', 'Business Credibility'],
     plans: ['MSME Premium', 'MSME Pro'],
     highlights: ['⭐ SEBI-registered agency', '🏦 Banks trust Infomerics', '📊 Full business analysis', '🤝 Partner confidence boost'],
     ctaTitle: 'Get Verified by Infomerics',

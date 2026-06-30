@@ -19,7 +19,7 @@ public static class PlanBenefitsCatalog
         ],
         ["premium"] =
         [
-            "Infomerics verified trust score report",
+            "Infomerics IVerified Report",
             "Company scheme discovery report",
             "Bank statement analyzer",
             "Free credit report",
@@ -34,7 +34,7 @@ public static class PlanBenefitsCatalog
         ],
         ["pro"] =
         [
-            "Infomerics business assessment report",
+            "Infomerics TrustScore Report",
             "Company scheme discovery report",
             "GeM portal registration and support",
             "Bank statement analyzer",

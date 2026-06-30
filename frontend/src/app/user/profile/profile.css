@@ -148,7 +148,8 @@
 .profile-aside__card--membership{
   grid-column: 1;
   grid-row: 1;
-  overflow: hidden;
+  overflow: visible;
+  min-width: 0;
 }
 .profile-aside__card--quick{ grid-column: 1; grid-row: 2; }
 .profile-main{ grid-column: 2; grid-row: 1 / span 3; }
