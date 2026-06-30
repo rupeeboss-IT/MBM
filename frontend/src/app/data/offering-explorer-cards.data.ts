@@ -23,6 +23,16 @@ const CARD_BY_SLUG: Record<OfferingSlug, OfferingExplorerCard> = {
     badgeBg: '#fff3e0',
     badgeColor: '#e65100',
   },
+  'business-diagnostic': {
+    slug: 'business-diagnostic',
+    icon: '📈',
+    iconBg: 'linear-gradient(135deg,#ED751C,#c45a10)',
+    title: 'Business Diagnostic + Coach Session',
+    description: 'Business health assessment + free 30-min growth strategy session',
+    badge: 'All Plans',
+    badgeBg: '#fde8d8',
+    badgeColor: '#ED751C',
+  },
   'scheme-discovery': {
     slug: 'scheme-discovery',
     icon: '🏛️',

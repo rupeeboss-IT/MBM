@@ -12,7 +12,8 @@ export type OfferingSlug =
   | 'scheme-discovery'
   | 'gem-registration'
   | 'trust-score'
-  | 'msme-events';
+  | 'msme-events'
+  | 'business-diagnostic';
 
 export interface OfferingModel {
   title: string;
@@ -558,6 +559,58 @@ export const OFFERINGS_DATA: Record<OfferingSlug, OfferingModel> = {
         <li>Additional event passes available at member-discounted rates</li>
         <li>Online events and webinars included for all members</li>
       </ul>`
+  },
+  'business-diagnostic': {
+    title: 'Business Diagnostic + 30-Min Coach Session',
+    crumb: 'Business Diagnostic',
+    icon: '📈',
+    gradient: 'linear-gradient(135deg,#ED751C,#c45a10)',
+    tagline: 'Assess Your Business. Discover Your Next Growth Opportunity.',
+    tags: ['Business Assessment', 'Growth Strategy', 'Coaching', 'MSME Diagnostic'],
+    plans: ['MSME Basic', 'MSME Premium', 'MSME Pro'],
+    highlights: [
+      '📋 Comprehensive business health assessment',
+      '🎯 Top growth opportunities identified',
+      '🤖 AI & fund readiness review',
+      '💬 Free 30-min strategy session'
+    ],
+    ctaTitle: 'Take the Business Diagnostic',
+    ctaDesc: 'Included in all MSME Bharat Manch membership plans',
+    content: `
+      <p>Every successful business reaches a point where working harder no longer guarantees better results. Sustainable growth comes from identifying what's holding your business back and taking focused action.</p>
+      <p>The Business Diagnostic Questionnaire is a comprehensive assessment designed to evaluate the key drivers of business performance, including leadership, sales, marketing, operations, finance, systems, people, customer experience, and scalability.</p>
+      <p>In just 10–15 minutes, you'll gain valuable insights into your business strengths, uncover hidden growth opportunities, and identify the priorities that will have the greatest impact on your growth.</p>
+      <h2 style="color:#ED751C">What's Included?</h2>
+      <ul class="offering-checklist">
+        <li>Comprehensive Business Health Assessment</li>
+        <li>Identification of your top growth opportunities</li>
+        <li>Insights into key business risks and bottlenecks</li>
+        <li>AI Readiness and Digital Transformation review</li>
+        <li>Fund Readiness assessment for future financing and investment</li>
+        <li>Practical recommendations to improve profitability, productivity, and scalability</li>
+      </ul>
+      <h2 style="color:#ED751C">Complimentary 30-Minute Growth Strategy Session</h2>
+      <p>After completing the Business Diagnostic Questionnaire, you'll receive a FREE 30-minute one-on-one Growth Strategy Session with Business Coach Anshul Verma.</p>
+      <p><strong>During this personalised consultation, you will:</strong></p>
+      <ul class="offering-checklist">
+        <li>Review your Business Diagnostic results</li>
+        <li>Identify your top three business priorities</li>
+        <li>Discuss practical strategies to increase revenue and profitability</li>
+        <li>Explore ways to reduce founder dependency through systems and leadership</li>
+        <li>Learn how to become AI-ready and fund-ready</li>
+        <li>Receive a customised 90-day growth action plan</li>
+      </ul>
+      <h2 style="color:#ED751C">Who Should Take This Assessment?</h2>
+      <div class="offering-benefit-grid">
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fde8d8">🏭</div><div class="ob-text"><strong>MSME Owners</strong></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fde8d8">🚀</div><div class="ob-text"><strong>Startup Founders</strong></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fde8d8">👨‍👩‍👧‍👦</div><div class="ob-text"><strong>Family Business Owners</strong></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fde8d8">💡</div><div class="ob-text"><strong>Entrepreneurs</strong></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fde8d8">👔</div><div class="ob-text"><strong>CEOs &amp; Managing Directors</strong></div></div>
+        <div class="offering-benefit"><div class="ob-icon" style="background:#fde8d8">🤝</div><div class="ob-text"><strong>Business Partners looking to scale sustainably</strong></div></div>
+      </div>
+      <h2 style="color:#ED751C">Why It Matters</h2>
+      <p>You can't improve what you don't measure. This diagnostic helps you move beyond guesswork by providing a clear picture of where your business stands today—and what it will take to achieve sustainable, profitable growth.</p>`
   }
 };
 

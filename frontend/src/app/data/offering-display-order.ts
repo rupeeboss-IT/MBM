@@ -3,6 +3,7 @@ import type { OfferingSlug } from './offerings.data';
 /** Canonical display order for core membership offerings (Plans / Services / Benefits). */
 export const OFFERING_DISPLAY_ORDER: readonly OfferingSlug[] = [
   'trust-score',
+  'business-diagnostic',
   'scheme-discovery',
   'gem-registration',
   'bank-statement-analyzer',
