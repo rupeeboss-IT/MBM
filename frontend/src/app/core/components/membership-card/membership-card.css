@@ -1,8 +1,7 @@
-/* ── Vertical portrait card tokens (ISO ID-1 portrait) ── */
+/* ── Landscape credit-card tokens (ISO 7810 ID-1 ≈ 1.586 : 1) ── */
 :host {
-  --card-max-w: clamp(15.5rem, 78vw, 22.5rem);
-  --card-ratio: 54 / 71;
-  --card-ratio-elite: 54 / 80;
+  --card-max-w: clamp(17.5rem, 92vw, 26.875rem);
+  --card-ratio: 1.586 / 1;
   display: block;
   width: 100%;
 }
@@ -32,7 +31,7 @@
   width: 100%;
   max-width: var(--card-max-w);
   aspect-ratio: var(--card-ratio);
-  border-radius: clamp(1rem, 5cqw, 1.35rem);
+  border-radius: clamp(1.125rem, 4.5cqw, 1.375rem);
   background: linear-gradient(90deg, rgba(0, 0, 0, 0.05) 25%, rgba(0, 0, 0, 0.09) 37%, rgba(0, 0, 0, 0.05) 63%);
   background-size: 400% 100%;
   animation: mbm-card-shimmer 1.2s ease infinite;
@@ -53,12 +52,8 @@
   container-type: inline-size;
   container-name: mbm-card;
   min-width: 0;
-  border-radius: clamp(1rem, 5cqw, 1.35rem);
+  border-radius: clamp(1.125rem, 4.5cqw, 1.375rem);
   transition: transform 0.35s ease, filter 0.35s ease;
-}
-
-.scene.scene--elite {
-  aspect-ratio: var(--card-ratio-elite);
 }
 
 .scene:focus-visible {
@@ -95,7 +90,7 @@
 .face {
   position: absolute;
   inset: 0;
-  border-radius: clamp(1rem, 5cqw, 1.35rem);
+  border-radius: clamp(1.125rem, 4.5cqw, 1.375rem);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   overflow: hidden;
@@ -111,14 +106,15 @@
 
 /* ── Card face shell ── */
 .cardwrap {
-  --type-base: clamp(0.75rem, 4.2cqw, 0.875rem);
-  --type-brand: clamp(0.9375rem, 5.5cqw, 1.125rem);
-  --type-name: clamp(1.0625rem, 6.2cqw, 1.375rem);
-  --type-body: clamp(0.75rem, 4cqw, 0.875rem);
-  --type-label: clamp(0.6875rem, 3.6cqw, 0.75rem);
-  --type-micro: clamp(0.6875rem, 3.4cqw, 0.75rem);
-  --pad-x: clamp(1rem, 6cqw, 1.5rem);
-  --pad-y: clamp(1rem, 5.5cqw, 1.4rem);
+  --type-base: clamp(0.6875rem, 3.2cqw, 0.8125rem);
+  --type-brand: clamp(0.8125rem, 3.8cqw, 0.9375rem);
+  --type-name: clamp(1rem, 5.2cqw, 1.25rem);
+  --type-body: clamp(0.6875rem, 3.1cqw, 0.8125rem);
+  --type-label: clamp(0.5625rem, 2.6cqw, 0.6875rem);
+  --type-micro: clamp(0.5625rem, 2.5cqw, 0.6875rem);
+  --type-badge: clamp(0.5625rem, 2.7cqw, 0.6875rem);
+  --pad-x: clamp(0.9rem, 4.8cqw, 1.25rem);
+  --pad-y: clamp(0.75rem, 4cqw, 1rem);
 
   position: absolute;
   inset: 0;
@@ -141,12 +137,16 @@
   box-shadow: inset 0 0 0 1px var(--c-inset, rgba(255, 255, 255, 0.14));
 }
 
+/* Glass highlight + metallic sheen layer */
 .cardwrap::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: var(--c-brush);
+  background:
+    var(--c-brush),
+    radial-gradient(ellipse 80% 55% at 12% 0%, rgba(255, 255, 255, 0.22), transparent 58%),
+    radial-gradient(ellipse 60% 40% at 88% 100%, rgba(255, 255, 255, 0.08), transparent 55%);
   opacity: var(--c-brush-op, 0.1);
   z-index: 1;
 }
@@ -188,71 +188,112 @@
   to { left: 120%; }
 }
 
-/* ── Front face (vertical pass layout) ── */
+/* ── Front face (landscape bank card) ── */
 .cardwrap--front {
   justify-content: flex-start;
-  gap: clamp(0.5rem, 3cqw, 0.85rem);
-  text-align: center;
+  gap: clamp(0.35rem, 2cqw, 0.55rem);
 }
 
 .fc-head {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(0.45rem, 2.5cqw, 0.65rem);
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.65rem;
   position: relative;
   z-index: 2;
   min-width: 0;
   flex-shrink: 0;
-  padding-bottom: clamp(0.35rem, 2cqw, 0.55rem);
-  border-bottom: 1px solid var(--c-rule);
-}
-
-.fc-brand {
-  min-width: 0;
-  width: 100%;
 }
 
 .fc-mark {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-shrink: 0;
 }
 
-.fc-mid {
+.fc-plan-badge {
+  flex-shrink: 0;
+  max-width: 52%;
+  padding: 0.35em 0.65em;
+  border-radius: 999px;
+  font-size: var(--type-badge);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-align: right;
+  color: var(--c-fg);
+  background: var(--c-badge-bg, rgba(255, 255, 255, 0.14));
+  border: 1px solid var(--c-rule);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fc-body {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  gap: clamp(0.5rem, 2.5cqw, 0.75rem);
+  flex: 1;
+  min-height: 0;
   position: relative;
   z-index: 2;
-  flex: 0 0 auto;
+}
+
+.fc-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
 }
 
-.fc-foot {
-  position: relative;
-  z-index: 2;
-  margin-top: auto;
+.fc-brand {
   min-width: 0;
   flex-shrink: 0;
+}
+
+.fc-chip-row {
   display: flex;
-  flex-direction: column;
-  gap: clamp(0.55rem, 3cqw, 0.85rem);
-  width: 100%;
+  align-items: center;
+  margin-top: clamp(0.25rem, 1.5cqw, 0.45rem);
+  flex-shrink: 0;
 }
 
 .fc-member {
-  text-align: center;
+  margin-top: clamp(0.2rem, 1.2cqw, 0.35rem);
   min-width: 0;
+  flex-shrink: 0;
+}
+
+.fc-accent {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding-bottom: 0.15rem;
+}
+
+.fc-contactless {
+  display: block;
+  width: clamp(1.35rem, 6.5cqw, 1.75rem);
+  height: clamp(1.35rem, 6.5cqw, 1.75rem);
+  opacity: 0.72;
+  background:
+  radial-gradient(circle at 50% 50%, transparent 38%, currentColor 39% 41%, transparent 42%) 0 0 / 100% 33% no-repeat,
+  radial-gradient(circle at 50% 50%, transparent 38%, currentColor 39% 41%, transparent 42%) 0 50% / 78% 33% no-repeat,
+  radial-gradient(circle at 50% 50%, transparent 38%, currentColor 39% 41%, transparent 42%) 0 100% / 56% 33% no-repeat;
+  color: var(--c-accent);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
 
 .c-word {
   font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: var(--type-brand);
-  letter-spacing: 0.04em;
-  line-height: 1.15;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
   color: var(--c-fg);
   text-shadow: var(--c-text-shadow, none);
 }
@@ -262,14 +303,14 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-label);
-  margin-top: 0.3em;
+  margin-top: 0.2em;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .c-logo {
-  width: clamp(3.25rem, 18cqw, 4.25rem);
-  height: clamp(3.25rem, 18cqw, 4.25rem);
+  width: clamp(2rem, 9.5cqw, 2.5rem);
+  height: clamp(2rem, 9.5cqw, 2.5rem);
   border-radius: 50%;
   overflow: hidden;
   background: #fff;
@@ -277,24 +318,26 @@
   place-items: center;
   flex-shrink: 0;
   box-shadow:
-    0 0.15em 0.5em rgba(0, 0, 0, 0.16),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.35);
+    0 0.12em 0.45em rgba(0, 0, 0, 0.18),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
 .c-logo img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 0.25em;
+  padding: 0.22em;
 }
 
 .chip {
-  width: clamp(2.5rem, 14cqw, 3.25rem);
-  height: clamp(1.85rem, 10cqw, 2.4rem);
-  border-radius: 0.45em;
+  width: clamp(2.1rem, 10cqw, 2.65rem);
+  height: clamp(1.55rem, 7.2cqw, 1.95rem);
+  border-radius: 0.4em;
   flex-shrink: 0;
   background: linear-gradient(135deg, #e6c878, #b8902f 45%, #f2dd95 60%, #a87f1c);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.22),
+    0 0.1em 0.25em rgba(0, 0, 0, 0.18);
   position: relative;
   overflow: hidden;
 }
@@ -313,10 +356,10 @@
 
 .c-name {
   font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: var(--type-name);
-  line-height: 1.15;
-  letter-spacing: 0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   color: var(--c-fg);
   text-shadow: var(--c-text-shadow, none);
   overflow: hidden;
@@ -327,10 +370,10 @@
 
 .c-company {
   font-size: var(--type-body);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--c-sub);
-  margin-top: 0.2em;
-  line-height: 1.35;
+  margin-top: 0.15em;
+  line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -339,49 +382,40 @@
 
 .c-fields {
   display: flex;
-  flex-direction: column;
-  gap: clamp(0.4rem, 2.2cqw, 0.55rem);
-  padding: clamp(0.55rem, 3cqw, 0.75rem);
-  border-radius: 0.65rem;
-  background: var(--c-fields-bg, rgba(0, 0, 0, 0.08));
-  border: 1px solid var(--c-rule);
+  flex-wrap: wrap;
+  gap: clamp(0.65rem, 3.5cqw, 1rem);
+  margin-top: auto;
+  padding-top: clamp(0.35rem, 2cqw, 0.5rem);
   min-width: 0;
-  text-align: left;
+  flex-shrink: 0;
 }
 
 .c-field {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.12em;
   min-width: 0;
-}
-
-.c-field + .c-field {
-  padding-top: clamp(0.35rem, 2cqw, 0.45rem);
-  border-top: 1px solid var(--c-rule);
+  flex: 1 1 auto;
 }
 
 .c-field .k {
   font-size: var(--type-label);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--c-label);
   font-weight: 700;
-  line-height: 1.25;
-  flex-shrink: 0;
+  line-height: 1.2;
 }
 
 .c-field .v {
   font-size: var(--type-body);
   font-weight: 600;
   color: var(--c-fg);
-  line-height: 1.3;
+  line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
-  text-align: right;
 }
 
 .c-field .v--mono {
@@ -389,22 +423,21 @@
   letter-spacing: 0.03em;
 }
 
-/* ── Back face (vertical) ── */
+/* ── Back face (landscape) ── */
 .cardwrap--back {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: clamp(0.45rem, 2.5cqw, 0.65rem);
+  gap: clamp(0.35rem, 2cqw, 0.5rem);
   min-height: 0;
-  --type-body: clamp(0.75rem, 4cqw, 0.875rem);
-  --type-micro: clamp(0.6875rem, 3.6cqw, 0.75rem);
-  text-align: center;
+  --type-body: clamp(0.625rem, 2.9cqw, 0.75rem);
+  --type-micro: clamp(0.5625rem, 2.6cqw, 0.6875rem);
 }
 
 .cardwrap--back.is-elite {
-  --type-body: clamp(0.6875rem, 3.8cqw, 0.8125rem);
-  --type-brand: clamp(0.875rem, 5cqw, 1rem);
-  --type-micro: clamp(0.625rem, 3.4cqw, 0.6875rem);
-  --type-label: clamp(0.625rem, 3.4cqw, 0.6875rem);
+  --type-body: clamp(0.5625rem, 2.7cqw, 0.6875rem);
+  --type-brand: clamp(0.75rem, 3.5cqw, 0.875rem);
+  --type-micro: clamp(0.5rem, 2.4cqw, 0.625rem);
+  --type-label: clamp(0.5rem, 2.4cqw, 0.625rem);
 }
 
 .bc-head {
@@ -412,8 +445,12 @@
   z-index: 2;
   flex-shrink: 0;
   min-width: 0;
-  padding-bottom: clamp(0.35rem, 2cqw, 0.5rem);
+  padding-bottom: clamp(0.25rem, 1.5cqw, 0.4rem);
   border-bottom: 1px solid var(--c-rule);
+}
+
+.bc-head__brand {
+  min-width: 0;
 }
 
 .bc-body {
@@ -421,24 +458,23 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: clamp(0.35rem, 2cqw, 0.5rem);
+  gap: clamp(0.25rem, 1.5cqw, 0.4rem);
   position: relative;
   z-index: 2;
-  text-align: left;
 }
 
 .b-tag {
   font-size: var(--type-body);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--c-sub);
-  margin-top: 0.2em;
-  line-height: 1.3;
+  margin-top: 0.15em;
+  line-height: 1.25;
 }
 
 .b-services {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(0.25rem, 1.5cqw, 0.4rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.15rem, 1cqw, 0.25rem) clamp(0.5rem, 2.5cqw, 0.85rem);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -450,25 +486,25 @@
   font-weight: 500;
   color: var(--c-fg);
   display: flex;
-  gap: 0.45em;
+  gap: 0.4em;
   align-items: flex-start;
-  line-height: 1.3;
+  line-height: 1.25;
   min-width: 0;
 }
 
 .b-services li::before {
   content: '';
-  width: 0.35em;
-  height: 0.35em;
+  width: 0.3em;
+  height: 0.3em;
   border-radius: 50%;
   background: var(--c-accent);
   flex: 0 0 auto;
-  margin-top: 0.45em;
+  margin-top: 0.42em;
 }
 
 .b-elite-block {
   border-top: 1px solid var(--c-rule);
-  padding-top: clamp(0.35rem, 2cqw, 0.5rem);
+  padding-top: clamp(0.25rem, 1.5cqw, 0.4rem);
   flex-shrink: 0;
   min-width: 0;
 }
@@ -480,14 +516,13 @@
   text-transform: uppercase;
   color: var(--c-label);
   line-height: 1.2;
-  margin-bottom: 0.25em;
-  text-align: center;
+  margin-bottom: 0.2em;
 }
 
 .b-elite-list {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(0.2rem, 1.2cqw, 0.35rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.15rem, 1cqw, 0.25rem) clamp(0.5rem, 2.5cqw, 0.85rem);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -498,15 +533,15 @@
   font-weight: 600;
   color: var(--c-fg);
   display: flex;
-  gap: 0.4em;
+  gap: 0.35em;
   align-items: flex-start;
-  line-height: 1.3;
+  line-height: 1.25;
   min-width: 0;
 }
 
 .b-elite-list li::before {
   content: '★';
-  font-size: 0.75em;
+  font-size: 0.7em;
   color: var(--c-accent);
   flex: 0 0 auto;
   line-height: 1.6;
@@ -514,24 +549,24 @@
 
 .b-foot {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: clamp(0.5rem, 3cqw, 0.75rem);
   position: relative;
   z-index: 2;
   border-top: 1px solid var(--c-rule);
-  padding-top: clamp(0.5rem, 3cqw, 0.75rem);
+  padding-top: clamp(0.35rem, 2cqw, 0.5rem);
   flex-shrink: 0;
   min-width: 0;
 }
 
 .b-contact {
   font-size: var(--type-micro);
-  line-height: 1.45;
+  line-height: 1.4;
   color: var(--c-sub);
   font-weight: 500;
   min-width: 0;
-  text-align: center;
+  flex: 1;
 }
 
 .b-contact b {
@@ -540,8 +575,8 @@
   display: block;
   font-size: var(--type-body);
   font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-  margin-bottom: 0.15em;
-  line-height: 1.3;
+  margin-bottom: 0.1em;
+  line-height: 1.25;
 }
 
 .b-verify {
@@ -552,29 +587,29 @@
 
 .b-verify .vl {
   font-size: var(--type-label);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--c-label);
   font-weight: 700;
-  margin-bottom: 0.35em;
-  line-height: 1.2;
+  margin-bottom: 0.25em;
+  line-height: 1.15;
 }
 
 .b-qr {
-  width: clamp(4.5rem, 26cqw, 5.5rem);
-  height: clamp(4.5rem, 26cqw, 5.5rem);
-  border-radius: 0.5rem;
+  width: clamp(2.75rem, 13cqw, 3.5rem);
+  height: clamp(2.75rem, 13cqw, 3.5rem);
+  border-radius: 0.4rem;
   background: #fff;
-  padding: 0.3em;
+  padding: 0.2em;
   margin: 0 auto;
   flex-shrink: 0;
   overflow: hidden;
-  box-shadow: 0 0.15em 0.45em rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0.12em 0.4em rgba(0, 0, 0, 0.2);
 }
 
 .cardwrap--back.is-elite .b-qr {
-  width: clamp(4rem, 23cqw, 5rem);
-  height: clamp(4rem, 23cqw, 5rem);
+  width: clamp(2.5rem, 12cqw, 3.15rem);
+  height: clamp(2.5rem, 12cqw, 3.15rem);
 }
 
 .b-qr img {
@@ -584,94 +619,79 @@
   object-fit: contain;
 }
 
-.elite-ribbon {
-  position: absolute;
-  top: clamp(0.85rem, 4.5cqw, 1.15rem);
-  right: clamp(-2rem, -10cqw, -2.4rem);
-  transform: rotate(45deg);
-  z-index: 5;
-  background: linear-gradient(90deg, #caa237, #f4dd8c, #caa237);
-  color: #2a2105;
-  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: var(--type-label);
-  letter-spacing: 0.1em;
-  padding: 0.35em 2.75em;
-  box-shadow: 0 0.1em 0.35em rgba(0, 0, 0, 0.3);
-  display: none;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.cardwrap.is-elite .elite-ribbon {
-  display: block;
-}
-
-/* ── Plan themes ── */
+/* ── Plan themes (premium multi-stop gradients) ── */
 .t-red {
-  --c-bg: linear-gradient(180deg, #9b1520 0%, var(--red, #e63946) 38%, #7a1018 100%);
-  --c-fg: #ffffff;
-  --c-sub: rgba(255, 255, 255, 0.88);
+  --c-bg: linear-gradient(
+    135deg,
+    #6b0d14 0%,
+    var(--red-dark, #c1121f) 26%,
+    var(--red, #e63946) 48%,
+    #f04d59 62%,
+    var(--red-dark, #c1121f) 78%,
+    #7a1018 100%
+  );
+  --c-fg: #fff9f9;
+  --c-sub: rgba(255, 212, 216, 0.92);
   --c-label: rgba(255, 255, 255, 0.92);
   --c-accent: #ffc2c8;
-  --c-rule: rgba(255, 255, 255, 0.28);
-  --c-fields-bg: rgba(0, 0, 0, 0.12);
-  --c-brush: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 5px);
-  --c-brush-op: 0.12;
+  --c-rule: rgba(255, 255, 255, 0.24);
+  --c-badge-bg: rgba(0, 0, 0, 0.14);
+  --c-brush: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 5px);
+  --c-brush-op: 0.45;
   --c-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
   --c-inset: rgba(255, 255, 255, 0.18);
 }
 
 .t-blue {
-  --c-bg: linear-gradient(180deg, #1f5fb0 0%, #0d3a6b 55%, #0a2a4a 100%);
-  --c-fg: #ffffff;
-  --c-sub: rgba(255, 255, 255, 0.86);
+  --c-bg: linear-gradient(135deg, #0a2a4a 0%, #15457e 45%, #1f5fb0 72%, #0d3a6b 100%);
+  --c-fg: #f1f6ff;
+  --c-sub: rgba(185, 210, 242, 0.92);
   --c-label: rgba(255, 255, 255, 0.94);
   --c-accent: #8fc0ff;
-  --c-rule: rgba(255, 255, 255, 0.24);
-  --c-fields-bg: rgba(0, 0, 0, 0.14);
+  --c-rule: rgba(255, 255, 255, 0.22);
+  --c-badge-bg: rgba(0, 0, 0, 0.14);
   --c-brush: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 5px);
-  --c-brush-op: 0.1;
+  --c-brush-op: 0.4;
   --c-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
   --c-inset: rgba(255, 255, 255, 0.16);
 }
 
 .t-silver {
-  --c-bg: linear-gradient(180deg, #f4f5f7 0%, #c8ccd3 45%, #e4e7eb 100%);
-  --c-fg: #12151a;
-  --c-sub: #3d434b;
+  --c-bg: linear-gradient(135deg, #f0f1f3 0%, #c4c8ce 24%, #eef0f2 50%, #aab0b8 74%, #dfe2e6 100%);
+  --c-fg: #1c1f25;
+  --c-sub: #4b515b;
   --c-label: #2a3038;
-  --c-accent: #5c6370;
+  --c-accent: #6b7280;
   --c-rule: rgba(0, 0, 0, 0.12);
-  --c-fields-bg: rgba(255, 255, 255, 0.45);
+  --c-badge-bg: rgba(255, 255, 255, 0.5);
   --c-brush: repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 4px);
-  --c-brush-op: 0.08;
+  --c-brush-op: 0.35;
   --c-inset: rgba(255, 255, 255, 0.55);
 }
 
 .t-gold {
-  --c-bg: linear-gradient(180deg, #e4c040 0%, #b89228 50%, #9c7820 100%);
-  --c-fg: #1f1804;
-  --c-sub: #3a2e08;
-  --c-label: #2a2005;
-  --c-accent: #4a3a0a;
+  --c-bg: linear-gradient(135deg, #8a6a17 0%, #d4af37 24%, #f7e79a 48%, #c9a227 72%, #9c7a1a 100%);
+  --c-fg: #2e2304;
+  --c-sub: #5a4710;
+  --c-label: #3a2e08;
+  --c-accent: #6b5310;
   --c-rule: rgba(0, 0, 0, 0.14);
-  --c-fields-bg: rgba(255, 255, 255, 0.22);
+  --c-badge-bg: rgba(255, 255, 255, 0.28);
   --c-brush: repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 4px);
-  --c-brush-op: 0.08;
+  --c-brush-op: 0.35;
   --c-inset: rgba(255, 255, 255, 0.22);
 }
 
 .t-blackgold {
-  --c-bg: linear-gradient(180deg, #1f180c 0%, #0a0a0a 50%, #1a160e 100%);
-  --c-fg: #faf0d0;
-  --c-sub: #d4c08a;
+  --c-bg: linear-gradient(135deg, #1c1810 0%, #0a0a0a 46%, #141009 78%, #221b0e 100%);
+  --c-fg: #f3e2b0;
+  --c-sub: #c7b582;
   --c-label: #f0e0a8;
   --c-accent: #e8c66a;
   --c-rule: rgba(232, 198, 106, 0.28);
-  --c-fields-bg: rgba(0, 0, 0, 0.22);
-  --c-brush: repeating-linear-gradient(115deg, rgba(232, 198, 106, 0.04) 0 2px, transparent 2px 6px);
-  --c-brush-op: 0.1;
+  --c-badge-bg: rgba(0, 0, 0, 0.28);
+  --c-brush: repeating-linear-gradient(115deg, rgba(232, 198, 106, 0.06) 0 2px, transparent 2px 6px);
+  --c-brush-op: 0.45;
   --c-text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
   --c-inset: rgba(232, 198, 106, 0.2);
 }
@@ -701,15 +721,239 @@
   font-size: clamp(0.8rem, 2.2vw, 0.86rem);
 }
 
-/* Tablet — slightly wider vertical card in sidebar */
+/*
+ * Mobile only (< 48rem) — desktop, laptop, and tablet (≥ 48rem) are unchanged.
+ * Scales typography/spacing so all card content fits; keeps landscape proportions.
+ */
+@media (max-width: 47.9375rem) {
+  .cardwrap {
+    --type-base: 0.625rem;
+    --type-brand: 0.6875rem;
+    --type-name: 0.8125rem;
+    --type-body: 0.5625rem;
+    --type-label: 0.5rem;
+    --type-micro: 0.5rem;
+    --type-badge: 0.5rem;
+    --pad-x: 0.625rem;
+    --pad-y: 0.4375rem;
+    line-height: 1.25;
+  }
+
+  .cardwrap--front {
+    gap: 0.15rem;
+  }
+
+  .fc-head {
+    gap: 0.35rem;
+  }
+
+  .fc-body {
+    gap: 0.3rem;
+    min-height: 0;
+  }
+
+  .fc-main {
+    gap: 0;
+    justify-content: space-between;
+  }
+
+  .fc-chip-row {
+    margin-top: 0.1rem;
+  }
+
+  .fc-member {
+    margin-top: 0.08rem;
+  }
+
+  .fc-plan-badge {
+    max-width: 46%;
+    padding: 0.2em 0.4em;
+    letter-spacing: 0.03em;
+  }
+
+  .c-word {
+    line-height: 1.05;
+  }
+
+  .c-power {
+    margin-top: 0.08em;
+    line-height: 1.15;
+  }
+
+  .c-logo {
+    width: 1.625rem;
+    height: 1.625rem;
+  }
+
+  .chip {
+    width: 1.65rem;
+    height: 1.2rem;
+    border-radius: 0.32em;
+  }
+
+  .c-name {
+    line-height: 1.05;
+  }
+
+  .c-company {
+    margin-top: 0.08em;
+    line-height: 1.2;
+  }
+
+  .c-fields {
+    gap: 0.35rem;
+    padding-top: 0.15rem;
+    flex-wrap: nowrap;
+  }
+
+  .c-field {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 0.06em;
+  }
+
+  .c-field .k {
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+  }
+
+  .c-field .v {
+    line-height: 1.15;
+  }
+
+  .fc-accent {
+    padding-bottom: 0.05rem;
+  }
+
+  .fc-contactless {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Back face — compact so footer + QR stay visible */
+  .cardwrap--back {
+    --type-body: 0.5rem;
+    --type-micro: 0.46875rem;
+    gap: 0.15rem;
+  }
+
+  .cardwrap--back.is-elite {
+    --type-body: 0.46875rem;
+    --type-brand: 0.6875rem;
+    --type-micro: 0.4375rem;
+    --type-label: 0.4375rem;
+  }
+
+  .bc-head {
+    padding-bottom: 0.15rem;
+  }
+
+  .b-tag {
+    margin-top: 0.08em;
+    line-height: 1.15;
+  }
+
+  .bc-body {
+    gap: 0.12rem;
+    overflow: hidden;
+  }
+
+  .b-services {
+    gap: 0.08rem 0.3rem;
+  }
+
+  .b-services li {
+    line-height: 1.15;
+    gap: 0.3em;
+  }
+
+  .b-services li::before {
+    width: 0.25em;
+    height: 0.25em;
+    margin-top: 0.35em;
+  }
+
+  .b-elite-block {
+    padding-top: 0.12rem;
+  }
+
+  .b-elite-label {
+    margin-bottom: 0.1em;
+    line-height: 1.1;
+  }
+
+  .b-elite-list {
+    gap: 0.08rem 0.3rem;
+  }
+
+  .b-elite-list li {
+    line-height: 1.15;
+  }
+
+  .b-foot {
+    gap: 0.3rem;
+    padding-top: 0.2rem;
+  }
+
+  .b-contact {
+    line-height: 1.3;
+  }
+
+  .b-contact b {
+    margin-bottom: 0.06em;
+    line-height: 1.15;
+  }
+
+  .b-verify .vl {
+    margin-bottom: 0.12em;
+    line-height: 1.1;
+  }
+
+  .b-qr {
+    width: 2.125rem;
+    height: 2.125rem;
+    padding: 0.15em;
+    border-radius: 0.3rem;
+  }
+
+  .cardwrap--back.is-elite .b-qr {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .cardwrap--back.is-elite .bc-body {
+    transform: scale(0.96);
+    transform-origin: top center;
+  }
+}
+
+/* Extra-tight fit for 320px-class viewports */
+@media (max-width: 22.5rem) {
+  .cardwrap {
+    --type-name: 0.75rem;
+    --pad-x: 0.5625rem;
+    --pad-y: 0.375rem;
+  }
+
+  .fc-plan-badge {
+    max-width: 44%;
+    padding: 0.18em 0.35em;
+  }
+
+  .c-fields {
+    gap: 0.28rem;
+  }
+}
+
+/* Tablet sidebar */
 @media (min-width: 48rem) and (max-width: 63.9375rem) {
   :host {
-    --card-max-w: clamp(16.5rem, 36vw, 21rem);
+    --card-max-w: clamp(18rem, 42vw, 24rem);
   }
 }
 
 @media (min-width: 90rem) {
   :host {
-    --card-max-w: 22.5rem;
+    --card-max-w: 26.875rem;
   }
 }

@@ -39,60 +39,69 @@
 
 <ng-template #frontFace>
   <div class="cardwrap cardwrap--front" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
-    <div class="elite-ribbon">ELITE</div>
-
     <header class="fc-head">
       <div class="fc-mark">
         <div class="c-logo">
           <img [src]="logoSrc" alt="MSME Bharat Manch" />
         </div>
       </div>
-      <div class="fc-brand">
-        <div class="c-word">MSME BHARAT MANCH</div>
-        <div class="c-power">Powered by RupeeBoss</div>
-      </div>
+      <div class="fc-plan-badge">{{ planCfg().tier }}</div>
     </header>
 
-    <div class="fc-mid">
-      <div class="chip"></div>
-    </div>
+    <div class="fc-body">
+      <div class="fc-main">
+        <div class="fc-brand">
+          <div class="c-word">MSME BHARAT MANCH</div>
+          <div class="c-power">Powered by RupeeBoss</div>
+        </div>
 
-    <footer class="fc-foot">
-      <div class="fc-member">
-        <div class="c-name">{{ profile()?.fullName || 'Member Name' }}</div>
-        <div class="c-company">{{ profile()?.companyName || 'Company Name' }}</div>
-      </div>
-      <div class="c-fields">
-        <div class="c-field">
-          <div class="k">Plan</div>
-          <div class="v">{{ planCfg().tier }}</div>
+        <div class="fc-chip-row">
+          <div class="chip"></div>
         </div>
-        <div class="c-field">
-          <div class="k">Member No</div>
-          <div class="v v--mono">{{ memberNo() }}</div>
+
+        <div class="fc-member">
+          <div class="c-name">{{ profile()?.fullName || 'Member Name' }}</div>
+          <div class="c-company">{{ profile()?.companyName || 'Company Name' }}</div>
         </div>
-        <div class="c-field">
-          <div class="k">Valid Till</div>
-          <div class="v">
-            @if (plan()?.activeTo; as till) {
-              {{ till | localDate:'dd MMM yyyy' }}
-            } @else {
-              —
-            }
+
+        <div class="c-fields">
+          <div class="c-field">
+            <div class="k">Plan</div>
+            <div class="v">{{ planCfg().tier }}</div>
+          </div>
+          <div class="c-field">
+            <div class="k">Member No</div>
+            <div class="v v--mono">{{ memberNo() }}</div>
+          </div>
+          <div class="c-field">
+            <div class="k">Valid Till</div>
+            <div class="v">
+              @if (plan()?.activeTo; as till) {
+                {{ till | localDate:'dd MMM yyyy' }}
+              } @else {
+                —
+              }
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+
+      <div class="fc-accent" aria-hidden="true">
+        <span class="fc-contactless"></span>
+      </div>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #backFace>
   <div class="cardwrap cardwrap--back" [ngClass]="[themeClass(), isElite() ? 'is-elite' : '']">
     <header class="bc-head">
-      <div class="c-word">MSME BHARAT MANCH</div>
-      @if (!isElite()) {
-        <div class="b-tag">India's MSME Business Network</div>
-      }
+      <div class="bc-head__brand">
+        <div class="c-word">MSME BHARAT MANCH</div>
+        @if (!isElite()) {
+          <div class="b-tag">India's MSME Business Network</div>
+        }
+      </div>
     </header>
 
     <div class="bc-body">
