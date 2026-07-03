@@ -47,8 +47,11 @@ public sealed class HttpSmsSender : ISmsSender
             });
 
         var client = _httpFactory.CreateClient(HttpClientName);
-        using var response = await client.GetAsync(url, ct);
-        var body = await response.Content.ReadAsStringAsync(ct);
+        // Do not tie gateway delivery to the HTTP request token; slow gateways can outlive the browser call.
+        ct.ThrowIfCancellationRequested();
+        using var smsCts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        using var response = await client.GetAsync(url, smsCts.Token);
+        var body = (await response.Content.ReadAsStringAsync(smsCts.Token)).Trim();
 
         if (!response.IsSuccessStatusCode)
         {
@@ -57,9 +60,39 @@ public sealed class HttpSmsSender : ISmsSender
                 (int)response.StatusCode,
                 dest,
                 body);
-            throw new InvalidOperationException($"SMS gateway returned {(int)response.StatusCode}.");
+            throw new InvalidOperationException("Unable to send the verification code via SMS. Please try again.");
+        }
+
+        if (LooksLikeGatewayFailure(body))
+        {
+            _logger.LogError(
+                "SMS gateway rejected message for {Dest}. Body: {Body}",
+                dest,
+                body);
+            throw new InvalidOperationException("Unable to send the verification code via SMS. Please try again.");
         }
 
         _logger.LogInformation("SMS gateway response for {Dest}: {Body}", dest, body);
+    }
+
+    private static bool LooksLikeGatewayFailure(string body)
+    {
+        if (string.IsNullOrWhiteSpace(body)) return false;
+
+        var text = body.Trim();
+        if (text.Equals("success", StringComparison.OrdinalIgnoreCase)
+            || text.Equals("ok", StringComparison.OrdinalIgnoreCase)
+            || text.StartsWith("success", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("submitted", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("sent", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        return text.Contains("fail", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("error", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("invalid", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("reject", StringComparison.OrdinalIgnoreCase)
+               || text.Contains("denied", StringComparison.OrdinalIgnoreCase);
     }
 }

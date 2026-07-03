@@ -25,6 +25,7 @@ namespace RB_Website_API.Data
         public DbSet<Models.ReportChangeRequest> ReportChangeRequests => Set<Models.ReportChangeRequest>();
         public DbSet<Models.ApiExceptionLog> ApiExceptionLogs => Set<Models.ApiExceptionLog>();
         public DbSet<Models.LoanApplication> LoanApplications => Set<Models.LoanApplication>();
+        public DbSet<Models.CreditRebuildEnquiry> CreditRebuildEnquiries => Set<Models.CreditRebuildEnquiry>();
         public DbSet<Models.ContactSubmission> ContactSubmissions => Set<Models.ContactSubmission>();
         public DbSet<Models.SchemeDiscoveryRequest> SchemeDiscoveryRequests => Set<Models.SchemeDiscoveryRequest>();
         public DbSet<Models.Vendor> Vendors => Set<Models.Vendor>();
@@ -65,6 +66,18 @@ namespace RB_Website_API.Data
                 e.Property(x => x.Pincode).HasMaxLength(6).IsRequired();
                 e.Property(x => x.LoanTypeId).IsRequired();
                 e.Property(x => x.LoanAmount).IsRequired();
+                e.Property(x => x.ConsentAccepted).IsRequired();
+                e.Property(x => x.CreatedAt).IsRequired();
+            });
+
+            modelBuilder.Entity<Models.CreditRebuildEnquiry>(e =>
+            {
+                e.ToTable("CreditRebuildEnquiries", "dbo");
+                e.Property(x => x.Id).ValueGeneratedNever();
+                e.Property(x => x.FullName).HasMaxLength(160).IsRequired();
+                e.Property(x => x.Phone).HasMaxLength(10).IsRequired();
+                e.Property(x => x.Email).HasMaxLength(508).IsRequired();
+                e.Property(x => x.AdvisorCode).HasMaxLength(50);
                 e.Property(x => x.ConsentAccepted).IsRequired();
                 e.Property(x => x.CreatedAt).IsRequired();
             });

@@ -5,7 +5,7 @@ namespace RB_Website_API.Auth;
 /// <summary>Shared paging, search, date-range, and sort normalization for admin list APIs.</summary>
 public static class AdminListQuery
 {
-    public const int DefaultPageSize = 25;
+    public const int DefaultPageSize = 100;
     public const int MaxPageSize = 100;
     public const int MaxExportSize = 10_000;
 

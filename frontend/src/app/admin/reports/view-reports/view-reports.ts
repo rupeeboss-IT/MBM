@@ -16,7 +16,7 @@ import { AdminSessionService } from '../../../core/services/admin-session.servic
 import { ToastService } from '../../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../../core/utils/api-user-messages';
 import { exportToExcel } from '../../../core/utils/admin-excel-export';
-import { sortIndicator, toggleColumnSort } from '../../../core/utils/admin-list-params';
+import { ADMIN_DEFAULT_PAGE_SIZE, sortIndicator, toggleColumnSort } from '../../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../../core/pipes/local-date.pipe';
 
@@ -40,7 +40,7 @@ export class AdminViewReports {
 
   readonly search = signal('');
   readonly page = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize = ADMIN_DEFAULT_PAGE_SIZE;
   readonly loading = signal(false);
   readonly exporting = signal(false);
   readonly items = signal<ReportHistoryItem[]>([]);
@@ -56,7 +56,7 @@ export class AdminViewReports {
   readonly queueItems = signal<ReportChangeRequestItem[]>([]);
   readonly queueTotal = signal(0);
   readonly queuePage = signal(1);
-  readonly queuePageSize = 10;
+  readonly queuePageSize = ADMIN_DEFAULT_PAGE_SIZE;
 
   readonly requestModalOpen = signal(false);
   readonly requestModalMode = signal<RequestModalMode>(null);

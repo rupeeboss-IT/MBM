@@ -31,6 +31,18 @@
   outline: none;
 }
 
+:host ::ng-deep .form-group .pwd-input-wrap__field {
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+:host ::ng-deep .form-group .pwd-input-wrap__field:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--admin-accent-ring, rgba(230, 57, 70, 0.14));
+  outline: none;
+}
+
 :host .btn-submit {
   background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
   border: 1px solid var(--red-dark);

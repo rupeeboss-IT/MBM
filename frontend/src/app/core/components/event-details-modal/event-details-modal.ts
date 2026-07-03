@@ -28,12 +28,6 @@ export class EventDetailsModal {
     this.closed.emit();
   }
 
-  onBackdropClick(ev: MouseEvent) {
-    if ((ev.target as HTMLElement).dataset['modalBackdrop'] === 'true') {
-      this.close();
-    }
-  }
-
   openPoster() {
     const ev = this.event();
     if (ev) this.viewPoster.emit(ev);

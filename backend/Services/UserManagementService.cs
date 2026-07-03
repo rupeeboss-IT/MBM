@@ -115,6 +115,66 @@ public sealed class UserManagementService : IUserManagementService
         return await CreateUserInternalAsync(actorId, UserRoles.Member, req, ct);
     }
 
+    public async Task<ImportedMemberCreateResponse> CreateImportedMemberAsync(
+        Guid actorId, string actorRole, CreateImportedMemberRequest req, CancellationToken ct)
+    {
+        if (!UserRoles.IsSuperAdmin(actorRole))
+            return new ImportedMemberCreateResponse(false, "Only Super Admin can import members.");
+
+        if (string.IsNullOrWhiteSpace(req.FullName))
+            return new ImportedMemberCreateResponse(false, "Full name is required.");
+
+        var email = NormalizeImportEmail(req.Email);
+        var phone = NormalizeImportPhone(req.Phone);
+        if (email is null && phone is null)
+            return new ImportedMemberCreateResponse(false, "At least one valid email or mobile number is required.");
+
+        if (email is not null && await _repo.EmailExistsAsync(email, null, ct))
+            return new ImportedMemberCreateResponse(false, "Duplicate Member");
+        if (phone is not null && await _repo.PhoneExistsAsync(phone, null, ct))
+            return new ImportedMemberCreateResponse(false, "Duplicate Member");
+
+        var now = DateTime.Now;
+        var createdAt = req.CreatedAt.HasValue && req.CreatedAt.Value <= now
+            ? AppDateTime.Normalize(req.CreatedAt.Value)
+            : now;
+
+        var user = new User
+        {
+            UserId = Guid.NewGuid(),
+            Role = UserRoles.Member,
+            FullName = req.FullName.Trim(),
+            Email = email ?? "",
+            Phone = phone ?? "",
+            CompanyName = null,
+            PasswordHash = Array.Empty<byte>(),
+            PasswordSalt = Array.Empty<byte>(),
+            EmailVerifiedAt = email is not null ? now : null,
+            PhoneVerifiedAt = phone is not null ? now : null,
+            ConsentAccepted = true,
+            ConsentAcceptedAt = now,
+            IsActive = true,
+            IsDeleted = false,
+            CreatedByUserId = actorId,
+            CreatedAt = createdAt,
+            UpdatedAt = now,
+        };
+
+        user.MemberId = await _memberIds.AllocateNextMemberIdAsync(ct);
+
+        await _repo.AddUserAsync(user, ct);
+        await WriteAuditAsync(
+            user,
+            UserAuditActions.Created,
+            actorId,
+            null,
+            SnapshotUser(user),
+            "Created via bulk member import",
+            ct);
+
+        return new ImportedMemberCreateResponse(true, "Member created.", user.UserId, user.MemberId);
+    }
+
     public async Task<UserActionResponse> UpdateUserAsync(
         Guid actorId, string actorRole, Guid userId, UpdateManagedUserRequest req, CancellationToken ct)
     {
@@ -371,6 +431,25 @@ public sealed class UserManagementService : IUserManagementService
         if (requirePassword && string.IsNullOrWhiteSpace(password)) return "Password is required.";
         if (requirePassword && password!.Trim().Length < 8) return "Password must be at least 8 characters.";
         return null;
+    }
+
+    internal static string? NormalizeImportEmail(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+        return UserIdentifier.TryParse(raw.Trim(), out var channel, out var normalized, out _)
+               && channel == "email"
+            ? normalized
+            : null;
+    }
+
+    internal static string? NormalizeImportPhone(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+        var digits = IndianPhone.Digits(raw);
+        return UserIdentifier.TryParse(digits, out var channel, out var normalized, out _)
+               && channel == "sms"
+            ? normalized
+            : null;
     }
 
     private static object SnapshotUser(User u) => new

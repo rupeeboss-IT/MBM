@@ -8,6 +8,7 @@ import { SchemeDetail } from './pages/schemes/scheme-detail/scheme-detail';
 import { Events } from './pages/events/events';
 import { EventDetail } from './pages/events/event-detail/event-detail';
 import { Loans } from './pages/loans/loans';
+import { CreditRebuild } from './pages/credit-rebuild/credit-rebuild';
 // import { Partners } from './pages/partners/partners';
 import { Contact } from './pages/More/contact/contact';
 import { Search } from './pages/More/search/search';
@@ -47,6 +48,8 @@ import { LeadCustomerDetail } from './admin/lead-attribution/lead-customer-detai
 import { EnquiryList } from './admin/enquiry-management/enquiry-list/enquiry-list';
 import { EnquiryDetail } from './admin/enquiry-management/enquiry-detail/enquiry-detail';
 import { ConnectList } from './admin/connect-management/connect-list/connect-list';
+import { BulkMemberImport } from './admin/bulk-member-import/bulk-member-import';
+import { superAdminGuard } from './core/guards/super-admin.guard';
 
 export const routes: Routes = [
     {
@@ -161,6 +164,15 @@ export const routes: Routes = [
         path: 'loans',
         component: Loans,
         pathMatch: 'full'
+    },
+    {
+        path: 'credit-rebuild',
+        component: CreditRebuild,
+        pathMatch: 'full',
+        data: {
+            title: 'Credit Rebuild | MSME Bharat Manch',
+            description: 'RBI-compliant credit bureau correction for individuals and MSMEs — CIBIL, Experian, CRIF & Equifax'
+        }
     },
     {
         path: 'partners',
@@ -406,6 +418,12 @@ export const routes: Routes = [
     {
         path: 'admin/connect-management',
         redirectTo: 'admin/connect-management/listings',
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/bulk-member-import',
+        component: BulkMemberImport,
+        canActivate: [adminGuard, superAdminGuard],
         pathMatch: 'full'
     },
     {

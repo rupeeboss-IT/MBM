@@ -13,6 +13,7 @@ import {
   type VendorFormBody,
   type VendorPlan,
 } from '../../../core/services/vendor-management.service';
+import { ADMIN_DEFAULT_PAGE_SIZE } from '../../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../../core/pipes/local-date.pipe';
 
@@ -37,7 +38,7 @@ export class VendorDetail {
   readonly auditItems = signal<VendorAuditItem[]>([]);
   readonly auditTotal = signal(0);
   readonly auditPage = signal(1);
-  readonly auditPageSize = 10;
+  readonly auditPageSize = ADMIN_DEFAULT_PAGE_SIZE;
 
   readonly editOpen = signal(false);
   readonly editSubmitting = signal(false);

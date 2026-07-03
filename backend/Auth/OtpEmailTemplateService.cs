@@ -8,11 +8,13 @@ namespace RB_Website_API.Auth;
 public interface IOtpEmailTemplateService
 {
     string BuildRegistrationOtpEmail(string otp);
+    string BuildPasswordResetOtpEmail(string otp, string customerName);
 }
 
 public sealed class OtpEmailTemplateService : IOtpEmailTemplateService
 {
     private const string RegistrationTemplateFile = "RegistrationOtpEmail.html";
+    private const string PasswordResetTemplateFile = "PasswordResetOtpEmail.html";
 
     private readonly IWebHostEnvironment _env;
     private readonly ApplicationUrlsSettings _urls;
@@ -41,6 +43,18 @@ public sealed class OtpEmailTemplateService : IOtpEmailTemplateService
         return template
             .Replace("{{Otp}}", Encode(otp))
             .Replace("{{RegisterUrl}}", Encode(registerUrl))
+            .Replace("{{SupportEmail}}", Encode(_contact.FromEmail))
+            .Replace("{{SupportPhone}}", Encode(_contact.SupportPhone))
+            .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
+    }
+
+    public string BuildPasswordResetOtpEmail(string otp, string customerName)
+    {
+        var template = LoadTemplate(PasswordResetTemplateFile);
+
+        return template
+            .Replace("{{Otp}}", Encode(otp))
+            .Replace("{{CustomerName}}", Encode(string.IsNullOrWhiteSpace(customerName) ? "Customer" : customerName.Trim()))
             .Replace("{{SupportEmail}}", Encode(_contact.FromEmail))
             .Replace("{{SupportPhone}}", Encode(_contact.SupportPhone))
             .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));

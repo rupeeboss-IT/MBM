@@ -11,7 +11,7 @@ import {
   type EnquiryListItem,
 } from '../../../core/services/enquiry-management.service';
 import { exportToExcel } from '../../../core/utils/admin-excel-export';
-import { sortIndicator, toggleColumnSort } from '../../../core/utils/admin-list-params';
+import { ADMIN_DEFAULT_PAGE_SIZE, sortIndicator, toggleColumnSort } from '../../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../../core/pipes/local-date.pipe';
 
@@ -37,7 +37,7 @@ export class EnquiryList {
   readonly sources = signal<string[]>([]);
   readonly total = signal(0);
   readonly page = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize = ADMIN_DEFAULT_PAGE_SIZE;
   readonly search = signal('');
   readonly statusFilter = signal('');
   readonly sourceFilter = signal('');

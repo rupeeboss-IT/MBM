@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiUrl } from '../utils/api-url';
-import { appendAdminListParams, type AdminListQueryOpts } from '../utils/admin-list-params';
+import { ADMIN_DEFAULT_PAGE_SIZE, appendAdminListParams, type AdminListQueryOpts } from '../utils/admin-list-params';
 
 export type VendorPlan = {
   planId: number;
@@ -178,7 +178,7 @@ export class VendorManagementService {
   audit(
     vendorId: string,
     page = 1,
-    pageSize = 10,
+    pageSize = ADMIN_DEFAULT_PAGE_SIZE,
   ): Observable<{ success: boolean; message?: string; items?: VendorAuditItem[]; total?: number }> {
     return this.http.get<{ success: boolean; message?: string; items?: VendorAuditItem[]; total?: number }>(
       apiUrl(`/api/admin/vendor-management/vendors/${vendorId}/audit`),

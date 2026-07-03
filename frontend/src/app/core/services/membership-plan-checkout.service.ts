@@ -84,6 +84,12 @@ export class MembershipPlanCheckoutService {
     this.membershipSource.set(source);
   }
 
+  hasPendingMembershipPlan(): boolean {
+    if (typeof window === 'undefined') return false;
+    const pending = window.localStorage.getItem(PENDING_MEMBERSHIP_PLAN_KEY);
+    return !!pending && isMembershipPlanCode(pending);
+  }
+
   /** Resume checkout when a plan was stashed before login/registration. */
   processPendingPlanAfterAuth(): boolean {
     if (typeof window === 'undefined' || !this.session.isLoggedIn()) return false;
@@ -184,6 +190,15 @@ export class MembershipPlanCheckoutService {
     this.referralModalMode.set('entry');
     this.referralModalOpen.set(false);
     this.pendingPlanCode.set(null);
+    this.navigateOffAuthPageAfterCheckoutDismiss();
+  }
+
+  /** Avoid leaving users on login/register after they dismiss checkout modals. */
+  private navigateOffAuthPageAfterCheckoutDismiss(): void {
+    const path = this.router.url.split('?')[0].split('#')[0];
+    if (path === '/login' || path === '/register') {
+      void this.router.navigateByUrl('/membership');
+    }
   }
 
   onReferralModelChange(value: string): void {

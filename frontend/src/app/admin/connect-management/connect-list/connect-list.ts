@@ -11,6 +11,7 @@ import {
   type ConnectUserSearchItem,
 } from '../../../core/services/connect-management.service';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
+import { ADMIN_DEFAULT_PAGE_SIZE } from '../../../core/utils/admin-list-params';
 
 @Component({
   selector: 'app-connect-list',
@@ -27,7 +28,7 @@ export class ConnectList {
   readonly listings = signal<ConnectAdminListItem[]>([]);
   readonly total = signal(0);
   readonly page = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize = ADMIN_DEFAULT_PAGE_SIZE;
   readonly search = signal('');
   readonly roleFilter = signal('');
   readonly statusFilter = signal('');

@@ -13,6 +13,7 @@ import {
   type UserManagementRole,
   type UserStatusHistoryItem,
 } from '../../core/services/user-management.service';
+import { ADMIN_DEFAULT_PAGE_SIZE } from '../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
@@ -39,7 +40,7 @@ export class UserManagementDetail {
   readonly statusItems = signal<UserStatusHistoryItem[]>([]);
   readonly auditTotal = signal(0);
   readonly auditPage = signal(1);
-  readonly auditPageSize = 10;
+  readonly auditPageSize = ADMIN_DEFAULT_PAGE_SIZE;
   readonly auditTab = signal<'audit' | 'status'>('audit');
 
   readonly editOpen = signal(false);

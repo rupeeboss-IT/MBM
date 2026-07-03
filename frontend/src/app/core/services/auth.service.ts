@@ -21,9 +21,11 @@ type LoginReq = { identifier: string; password: string };
 type LoginRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
 type AdminLoginReq = { identifier: string; password: string };
 type AdminLoginRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
-type ForgotPasswordReq = { email: string };
-type ForgotPasswordRes = { success: boolean; message?: string };
-type ResetPasswordReq = { email: string; code: string; newPassword: string };
+type ForgotPasswordReq = { identifier: string };
+type ForgotPasswordRes = { success: boolean; message?: string; channel?: 'email' | 'sms'; reason?: string };
+type VerifyPasswordResetOtpReq = { identifier: string; code: string };
+type VerifyPasswordResetOtpRes = { success: boolean; message?: string };
+type ResetPasswordReq = { identifier: string; newPassword: string; confirmPassword: string };
 type ResetPasswordRes = { success: boolean; message?: string };
 export type MeRes = {
   success: boolean;
@@ -113,13 +115,18 @@ export class AuthService {
     return this.http.delete(apiUrl(`/api/admin/users/${encodeURIComponent(userId)}`));
   }
 
-  forgotPassword(email: string): Observable<ForgotPasswordRes> {
-    const req: ForgotPasswordReq = { email };
+  forgotPassword(identifier: string): Observable<ForgotPasswordRes> {
+    const req: ForgotPasswordReq = { identifier: identifier.trim() };
     return this.http.post<ForgotPasswordRes>(apiUrl('/api/user/password/forgot'), req);
   }
 
-  resetPassword(email: string, code: string, newPassword: string): Observable<ResetPasswordRes> {
-    const req: ResetPasswordReq = { email, code, newPassword };
+  verifyPasswordResetOtp(identifier: string, code: string): Observable<VerifyPasswordResetOtpRes> {
+    const req: VerifyPasswordResetOtpReq = { identifier: identifier.trim(), code: code.trim() };
+    return this.http.post<VerifyPasswordResetOtpRes>(apiUrl('/api/user/password/otp/verify'), req);
+  }
+
+  resetPassword(identifier: string, newPassword: string, confirmPassword: string): Observable<ResetPasswordRes> {
+    const req: ResetPasswordReq = { identifier: identifier.trim(), newPassword, confirmPassword };
     return this.http.post<ResetPasswordRes>(apiUrl('/api/user/password/reset'), req);
   }
 

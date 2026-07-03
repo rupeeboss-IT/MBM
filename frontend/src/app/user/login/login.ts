@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -20,7 +20,7 @@ import { getLoginRegisterCta, type LoginRegisterCta } from '../../core/utils/reg
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly session = inject(AuthSessionService);
@@ -39,6 +39,13 @@ export class Login {
     identifier: this.fb.nonNullable.control('', { validators: [Validators.required, Validators.maxLength(508)] }),
     password: this.fb.nonNullable.control('', { validators: [Validators.required, Validators.maxLength(128)] }),
   });
+
+  ngOnInit(): void {
+    this.session.refreshFromStorage();
+    if (this.session.isLoggedIn() && this.planCheckout.hasPendingMembershipPlan()) {
+      void this.router.navigateByUrl('/membership');
+    }
+  }
 
   async submit() {
     this.form.markAllAsTouched();
@@ -66,12 +73,13 @@ export class Login {
         return;
       }
 
-      // If user came from a plan selection, start checkout directly (no /membership stop).
-      if (this.planCheckout.processPendingPlanAfterAuth()) {
+      // Resume plan checkout on the membership page (not over the login form).
+      if (this.planCheckout.hasPendingMembershipPlan()) {
+        await this.router.navigateByUrl('/membership');
         return;
       }
 
-      this.router.navigateByUrl('/profile');
+      await this.router.navigateByUrl('/profile');
     } catch (e: unknown) {
       this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.login));
     } finally {

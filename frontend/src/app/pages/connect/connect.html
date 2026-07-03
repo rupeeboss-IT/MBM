@@ -177,7 +177,7 @@
     </div>
   </section>
 
-  <div class="connect-upgrade-modal" *ngIf="upgradeOpen()" (click)="closeUpgrade()">
+  <div class="connect-upgrade-modal" *ngIf="upgradeOpen()">
     <div class="cum-box" (click)="$event.stopPropagation()">
       <button class="cum-close" type="button" (click)="closeUpgrade()">✕</button>
       <div class="cum-icon">🔓</div>
@@ -214,7 +214,7 @@
     </div>
   </div>
 
-  <div class="profile-modal-overlay" *ngIf="profileOpen()" (click)="closeProfile()">
+  <div class="profile-modal-overlay" *ngIf="profileOpen()">
     <div class="profile-modal" (click)="$event.stopPropagation()">
       <div class="pm-banner" *ngIf="currentProfile() as m">
         <div class="pm-banner-pattern"></div>

@@ -65,6 +65,7 @@ export class Header implements OnDestroy {
   readonly adminPartnersOpen = signal(false);
   readonly adminContentOpen = signal(false);
   readonly adminConnectOpen = signal(false);
+  readonly adminAdministrationOpen = signal(false);
   readonly adminAccountOpen = signal(false);
   readonly adminUrl = signal(this.router.url);
   readonly adminMenuGroups = ADMIN_MENU_GROUPS;
@@ -84,6 +85,7 @@ export class Header implements OnDestroy {
     partners: this.adminPartnersOpen,
     content: this.adminContentOpen,
     connect: this.adminConnectOpen,
+    administration: this.adminAdministrationOpen,
     account: this.adminAccountOpen,
   };
 

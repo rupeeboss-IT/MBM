@@ -12,7 +12,7 @@ import { SchemesService } from '../../core/services/schemes.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { exportToExcel, type ExportColumn } from '../../core/utils/admin-excel-export';
-import { sortIndicator, toggleColumnSort } from '../../core/utils/admin-list-params';
+import { ADMIN_DEFAULT_PAGE_SIZE, sortIndicator, toggleColumnSort } from '../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 
@@ -121,7 +121,7 @@ export class AdminDashboardDetail {
   readonly data = signal<DashboardDetailRes | null>(null);
   readonly search = signal('');
   readonly page = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize = ADMIN_DEFAULT_PAGE_SIZE;
   readonly total = signal(0);
   readonly category = signal('');
   readonly dateFrom = signal('');

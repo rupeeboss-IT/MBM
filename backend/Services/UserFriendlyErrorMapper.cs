@@ -126,7 +126,7 @@ public static partial class UserFriendlyErrorMapper
         "forgot_password" => "Unable to process your password reset request. Please try again.",
         "reset_password" => "Unable to reset your password. Please try again.",
         "send_email_otp" or "send_sms_otp" => "Unable to send the verification code. Please try again.",
-        "verify_email_otp" or "verify_sms_otp" => "Unable to verify the code. Please try again.",
+        "verify_email_otp" or "verify_sms_otp" or "verify_password_reset_otp" => "Unable to verify the code. Please try again.",
         "report_history" => "Unable to load report history. Please try again later.",
         "report_upload" => "Unable to upload the report. Please try again.",
         "report_download" => "Unable to download the report. Please try again.",

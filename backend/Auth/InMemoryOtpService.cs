@@ -97,9 +97,23 @@ public sealed class InMemoryOtpService : IOtpService
         _rate.ThrowIfPhoneRateLimited(phone);
         var key = Key("sms", phone);
         var otp = NewOtp();
-        var smsBody =
-            $"Dear Customer,\nYour mobile verification code is {otp}\nPlease use this code to verify your account. Regard Team RupeeBoss.";
-        await _sms.SendAsync(phone, smsBody, ct);
+        var normalizedPhone = IndianPhone.Digits(phone);
+        var smsBody = SmsOtpMessages.VerificationCode(otp);
+
+        _logger.LogInformation("Registration SMS OTP generated for {Phone}", normalizedPhone);
+
+        try
+        {
+            ct.ThrowIfCancellationRequested();
+            await _sms.SendAsync(normalizedPhone, smsBody, ct);
+            _logger.LogInformation("Registration SMS OTP sent for {Phone}", normalizedPhone);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Registration SMS OTP send failed for {Phone}", normalizedPhone);
+            throw;
+        }
+
         _rate.RecordSuccessfulSmsOtpSend(phone);
         _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false);
     }
@@ -126,6 +140,122 @@ public sealed class InMemoryOtpService : IOtpService
             throw new InvalidOperationException("Mobile not verified. Please verify via OTP.");
         return Task.CompletedTask;
     }
+
+    public async Task SendPasswordResetEmailOtpAsync(string email, string customerName, CancellationToken ct)
+    {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+
+        _rate.ThrowIfEmailRateLimited(email);
+
+        var key = PasswordResetKey("email", email);
+        var otp = NewOtp();
+        _logger.LogInformation("Password reset OTP generated for {Email} Channel={Channel}", normalizedEmail, "email");
+
+        var sw = Stopwatch.StartNew();
+        try
+        {
+            var htmlBody = _otpEmail.BuildPasswordResetOtpEmail(otp, customerName);
+            await _email.SendAsync(
+                email,
+                "MSME Bharat Manch — Password Reset Verification",
+                htmlBody,
+                isHtml: true,
+                attachments: null,
+                ct);
+            _logger.LogInformation(
+                "Password reset email sent for {Email} ElapsedMs={ElapsedMs}",
+                normalizedEmail,
+                sw.ElapsedMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Password reset email send failure for {Email} ElapsedMs={ElapsedMs}",
+                normalizedEmail,
+                sw.ElapsedMilliseconds);
+            throw;
+        }
+
+        _rate.RecordSuccessfulEmailOtpSend(email);
+        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false, AttemptsLeft: 5);
+    }
+
+    public Task VerifyPasswordResetEmailOtpAsync(string email, string code, CancellationToken ct)
+        => VerifyPasswordResetOtpAsync(PasswordResetKey("email", email), code);
+
+    public Task EnsurePasswordResetEmailVerifiedAsync(string email, CancellationToken ct)
+        => EnsurePasswordResetVerifiedAsync(PasswordResetKey("email", email), "Email");
+
+    public void InvalidatePasswordResetEmailOtp(string email)
+        => _store.TryRemove(PasswordResetKey("email", email), out _);
+
+    public async Task SendPasswordResetSmsOtpAsync(string phone, CancellationToken ct)
+    {
+        _rate.ThrowIfPhoneRateLimited(phone);
+        var key = PasswordResetKey("sms", phone);
+        var otp = NewOtp();
+        var normalizedPhone = IndianPhone.Digits(phone);
+        var smsBody = SmsOtpMessages.VerificationCode(otp);
+
+        _logger.LogInformation("Password reset SMS OTP generated for {Phone}", normalizedPhone);
+
+        try
+        {
+            ct.ThrowIfCancellationRequested();
+            await _sms.SendAsync(normalizedPhone, smsBody, ct);
+            _logger.LogInformation("Password reset SMS OTP sent for {Phone}", normalizedPhone);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Password reset SMS OTP send failed for {Phone}", normalizedPhone);
+            throw;
+        }
+
+        _rate.RecordSuccessfulSmsOtpSend(phone);
+        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false, AttemptsLeft: 5);
+    }
+
+    public Task VerifyPasswordResetSmsOtpAsync(string phone, string code, CancellationToken ct)
+        => VerifyPasswordResetOtpAsync(PasswordResetKey("sms", phone), code);
+
+    public Task EnsurePasswordResetSmsVerifiedAsync(string phone, CancellationToken ct)
+        => EnsurePasswordResetVerifiedAsync(PasswordResetKey("sms", phone), "Mobile");
+
+    public void InvalidatePasswordResetSmsOtp(string phone)
+        => _store.TryRemove(PasswordResetKey("sms", phone), out _);
+
+    private Task VerifyPasswordResetOtpAsync(string key, string code)
+    {
+        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+            throw new InvalidOperationException("OTP expired. Please resend OTP.");
+
+        if (rec.AttemptsLeft <= 0)
+            throw new InvalidOperationException("Too many attempts. Please request a new OTP.");
+
+        if (!SlowEquals(rec.CodeHash, Hash(code)))
+        {
+            _store[key] = rec with { AttemptsLeft = rec.AttemptsLeft - 1 };
+            throw new InvalidOperationException("Invalid OTP.");
+        }
+
+        _store[key] = rec with { Verified = true };
+        return Task.CompletedTask;
+    }
+
+    private Task EnsurePasswordResetVerifiedAsync(string key, string channelLabel)
+    {
+        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+            throw new InvalidOperationException($"{channelLabel} OTP expired. Please verify again.");
+        if (!rec.Verified)
+            throw new InvalidOperationException($"{channelLabel} not verified. Please verify via OTP.");
+        return Task.CompletedTask;
+    }
+
+    private static string PasswordResetKey(string kind, string id) =>
+        kind == "sms"
+            ? $"pwdreset:sms:{IndianPhone.Digits(id)}"
+            : $"pwdreset:email:{id.Trim().ToLowerInvariant()}";
 
     private static string Key(string kind, string id) =>
         kind == "sms"
@@ -154,5 +284,5 @@ public sealed class InMemoryOtpService : IOtpService
         return diff == 0;
     }
 
-    private sealed record OtpRecord(byte[] CodeHash, DateTimeOffset ExpiresAt, bool Verified);
+    private sealed record OtpRecord(byte[] CodeHash, DateTimeOffset ExpiresAt, bool Verified, int AttemptsLeft = int.MaxValue);
 }

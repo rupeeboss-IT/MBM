@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
     o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    o.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     o.JsonSerializerOptions.Converters.Add(new RB_Website_API.Auth.LocalDateTimeJsonConverter());
     o.JsonSerializerOptions.Converters.Add(new RB_Website_API.Auth.NullableLocalDateTimeJsonConverter());
 });
@@ -195,6 +196,7 @@ builder.Services.AddScoped<RB_Website_API.Services.IReportEmailService, RB_Websi
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IMemberIdSequenceRepository, RB_Website_API.Services.Repository.MemberIdSequenceRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IMemberIdGeneratorService, RB_Website_API.Services.MemberIdGeneratorService>();
 builder.Services.AddScoped<RB_Website_API.Services.ILoanApplicationService, RB_Website_API.Services.LoanApplicationService>();
+builder.Services.AddScoped<RB_Website_API.Services.ICreditRebuildService, RB_Website_API.Services.CreditRebuildService>();
 builder.Services.AddScoped<RB_Website_API.Services.IContactEmailService, RB_Website_API.Services.ContactEmailService>();
 builder.Services.AddScoped<RB_Website_API.Services.IContactService, RB_Website_API.Services.ContactService>();
 builder.Services.AddScoped<RB_Website_API.Services.ISchemeDiscoveryService, RB_Website_API.Services.SchemeDiscoveryService>();
@@ -203,6 +205,8 @@ builder.Services.AddScoped<RB_Website_API.Services.ISaarthiApiClient, RB_Website
 builder.Services.AddScoped<RB_Website_API.Services.ISdrReportService, RB_Website_API.Services.SdrReportService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IUserManagementRepository, RB_Website_API.Services.Repository.UserManagementRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IUserManagementService, RB_Website_API.Services.UserManagementService>();
+builder.Services.AddScoped<RB_Website_API.Services.BulkImportWelcomeEmailService>();
+builder.Services.AddScoped<RB_Website_API.Services.IBulkMemberImportService, RB_Website_API.Services.BulkMemberImportService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IVendorManagementRepository, RB_Website_API.Services.Repository.VendorManagementRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IVendorManagementService, RB_Website_API.Services.VendorManagementService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.ILeadAttributionRepository, RB_Website_API.Services.Repository.LeadAttributionRepository>();

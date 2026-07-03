@@ -1,0 +1,491 @@
+/* Header + layout now reuses global .page-header / .loan-layout styles */
+
+#page-credit-rebuild .page-header.red-header {
+  position: relative;
+  overflow: hidden;
+  padding: 3.25rem 1.5rem;
+}
+
+#page-credit-rebuild .page-header.red-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 78% 22%, rgba(255, 255, 255, 0.35) 0%, transparent 55%),
+    radial-gradient(circle at 12% 78%, rgba(255, 255, 255, 0.22) 0%, transparent 52%);
+}
+
+#page-credit-rebuild .page-header.red-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 70px 70px;
+}
+
+#page-credit-rebuild .page-header.red-header > .container {
+  position: relative;
+  z-index: 1;
+}
+
+#page-credit-rebuild .page-header.red-header p {
+  max-width: 56ch;
+}
+
+#page-credit-rebuild .crb-audience-toggle {
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
+  margin-top: 1.15rem;
+}
+
+#page-credit-rebuild .crb-audience-btn {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+#page-credit-rebuild .crb-audience-btn.is-active {
+  background: #fff;
+  color: var(--red);
+}
+
+#page-credit-rebuild .crb-audience-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#page-credit-rebuild .crb-intro-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+#page-credit-rebuild .crb-intro-card {
+  background: #fff;
+  border: 1px solid #e8ecf3;
+  border-radius: 16px;
+  padding: 1.35rem 1.35rem;
+  box-shadow: 0 10px 28px rgba(26, 26, 46, 0.06);
+}
+
+#page-credit-rebuild .crb-intro-copy h2 {
+  margin-bottom: 0.85rem;
+  font-size: clamp(1.35rem, 1.9vw, 1.65rem);
+  line-height: 1.25;
+}
+
+#page-credit-rebuild .crb-intro-copy p {
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 0.95rem;
+  max-width: 62ch;
+}
+
+#page-credit-rebuild .crb-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+#page-credit-rebuild .crb-intro-actions .btn-primary,
+#page-credit-rebuild .crb-intro-actions .btn-outline {
+  min-height: var(--touch-min, 44px);
+  padding: 0.85rem 1.15rem;
+  border-radius: 10px;
+}
+#page-credit-rebuild .crb-why-box {
+  border-left: 4px solid var(--red);
+}
+
+#page-credit-rebuild .crb-why-box li::marker {
+  color: var(--green, #2d6a4f);
+}
+#page-credit-rebuild .crb-why-box ul li + li {
+  margin-top: 0.55rem;
+}
+
+#page-credit-rebuild .crb-why-box h3 {
+  color: var(--navy, #1a1a2e);
+  margin-bottom: 0.85rem;
+}
+
+#page-credit-rebuild .crb-why-box ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Premium split-card intro (same content, stronger hierarchy) */
+#page-credit-rebuild .crb-split-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 0;
+  background: #fff;
+  border: 1px solid #e8ecf3;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(26, 26, 46, 0.06);
+}
+
+#page-credit-rebuild .crb-split-left {
+  padding: 1.6rem 1.6rem;
+}
+
+#page-credit-rebuild .crb-split-left h2 {
+  margin-bottom: 0.85rem;
+  font-size: clamp(1.25rem, 1.55vw, 1.5rem);
+  line-height: 1.28;
+  color: var(--navy, #1a1a2e);
+}
+
+#page-credit-rebuild .crb-split-left p {
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 1.1rem;
+  max-width: 62ch;
+  font-size: 0.95rem;
+}
+
+#page-credit-rebuild .crb-split-right {
+  padding: 1.6rem 1.6rem;
+  background: linear-gradient(135deg, #fff5f5, #f8f9fc);
+  border-left: 1px solid #e8ecf3;
+}
+
+#page-credit-rebuild .crb-split-right h3 {
+  margin-bottom: 0.85rem;
+  color: var(--navy, #1a1a2e);
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+#page-credit-rebuild .crb-split-right ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  line-height: 1.7;
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+#page-credit-rebuild .crb-split-right ul li + li {
+  margin-top: 0.55rem;
+}
+
+#page-credit-rebuild .crb-split-right li::marker {
+  color: var(--green, #2d6a4f);
+}
+
+@media (max-width: 960px) {
+  #page-credit-rebuild .crb-split-card {
+    grid-template-columns: 1fr;
+  }
+
+  #page-credit-rebuild .crb-split-right {
+    border-left: none;
+    border-top: 1px solid #e8ecf3;
+  }
+}
+
+#page-credit-rebuild .crb-how {
+  margin-top: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+#page-credit-rebuild .crb-how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+#page-credit-rebuild .crb-how-card {
+  background: #fff;
+  border: 1px solid #e8ecf3;
+  border-radius: 16px;
+  padding: 1.1rem 1.1rem;
+  box-shadow: 0 10px 28px rgba(26, 26, 46, 0.06);
+  position: relative;
+}
+
+#page-credit-rebuild .crb-how-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+
+#page-credit-rebuild .crb-how-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+#page-credit-rebuild .crb-how-num {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #fff5f5;
+  border: 1px solid rgba(230, 57, 70, 0.22);
+  color: var(--red);
+  font-weight: 900;
+}
+
+#page-credit-rebuild .crb-how-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: #f8f9fc;
+  border: 1px solid #eef2f8;
+  font-size: 1.1rem;
+}
+
+#page-credit-rebuild .crb-how-card h3 {
+  font-size: 0.98rem;
+  margin-bottom: 0.45rem;
+  color: var(--navy, #1a1a2e);
+  line-height: 1.35;
+}
+
+#page-credit-rebuild .crb-how-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+#page-credit-rebuild .crb-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+#page-credit-rebuild .crb-trust-strip span::before {
+  content: '✓';
+  color: var(--green);
+  margin-right: 0.4rem;
+}
+
+#page-credit-rebuild .crb-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+#page-credit-rebuild .crb-plan-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e9f2;
+  border-radius: 16px;
+  padding: 1.15rem 1.1rem 1.05rem;
+  box-shadow: 0 10px 28px rgba(26, 26, 46, 0.06);
+}
+
+#page-credit-rebuild .crb-plan-card--featured {
+  border-color: #f5c2c7;
+  box-shadow: 0 12px 30px rgba(230, 57, 70, 0.12);
+}
+
+#page-credit-rebuild .crb-plan-card__badge {
+  position: absolute;
+  top: -0.65rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--red);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+}
+
+#page-credit-rebuild .crb-plan-card__price {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--navy2), var(--navy));
+  color: #fff;
+  font-weight: 800;
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+}
+
+#page-credit-rebuild .crb-plan-card h3 {
+  margin-bottom: 0.75rem;
+}
+
+#page-credit-rebuild .crb-plan-card ul {
+  margin: 0 0 1rem;
+  padding-left: 1rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+#page-credit-rebuild .crb-plan-card__cta {
+  width: 100%;
+  text-align: center;
+}
+
+#page-credit-rebuild .crb-gst-note {
+  margin-top: 0.85rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+#page-credit-rebuild .crb-monitoring {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  background: linear-gradient(135deg, #fff5f5, #f8f9fc);
+  color: var(--navy, #1a1a2e);
+  border-radius: 16px;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid #e8ecf3;
+}
+
+#page-credit-rebuild .crb-monitoring h3 {
+  color: var(--navy, #1a1a2e);
+  margin-bottom: 0.5rem;
+}
+
+#page-credit-rebuild .crb-monitoring p {
+  margin: 0;
+  line-height: 1.65;
+}
+
+#page-credit-rebuild .crb-monitoring__inclusion {
+  margin-top: 0.65rem !important;
+  color: var(--green, #2d6a4f);
+  font-weight: 800;
+}
+
+#page-credit-rebuild .crb-monitoring__price {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+#page-credit-rebuild .crb-monitoring__amount {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+#page-credit-rebuild .crb-monitoring__gst {
+  font-size: 0.82rem;
+  opacity: 0.9;
+}
+
+#page-credit-rebuild .crb-enquiry-layout {
+  grid-template-columns: 1fr;
+}
+
+#page-credit-rebuild .crb-quote {
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.1rem;
+  border-left: 4px solid var(--red);
+  background: #fff;
+  border-radius: 0 12px 12px 0;
+  color: var(--navy);
+  font-style: italic;
+}
+
+/* Form uses existing .loan-form-box styles */
+
+#page-credit-rebuild .form-sub {
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+#page-credit-rebuild .crb-submit-error {
+  margin-bottom: 1rem;
+}
+
+/* Form fields already styled by global + Loans page css */
+
+#page-credit-rebuild .field-error {
+  display: block;
+  color: var(--red);
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+}
+
+#page-credit-rebuild .form-group--consent {
+  margin-top: 0.25rem;
+}
+
+#page-credit-rebuild .consent-label {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+#page-credit-rebuild .consent-label input {
+  margin-top: 0.2rem;
+}
+
+#page-credit-rebuild .btn-submit {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Removed: mini-trust, alerts, spinner, FAQ, testimonials, final CTA (not in flyer) */
+
+@media (max-width: 960px) {
+  #page-credit-rebuild .crb-intro-grid,
+  #page-credit-rebuild .crb-enquiry-layout,
+  #page-credit-rebuild .crb-plans-grid,
+  #page-credit-rebuild .crb-how-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #page-credit-rebuild .crb-monitoring {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #page-credit-rebuild .crb-monitoring__price {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #page-credit-rebuild * {
+    scroll-behavior: auto !important;
+  }
+
+  #page-credit-rebuild .crb-plan-card {
+    transition: none !important;
+  }
+}

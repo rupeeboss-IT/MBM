@@ -5,6 +5,7 @@ export type AdminDropdown =
   | 'partners'
   | 'content'
   | 'connect'
+  | 'administration'
   | 'account';
 
 export type AdminNavLink = {
@@ -175,6 +176,23 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
         label: 'Network management',
         children: [
           { label: 'Connect listings', route: '/admin/connect-management/listings' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'administration',
+    label: 'Administration',
+    prefixes: ['/admin/bulk-member-import'],
+    sections: [
+      {
+        label: 'Data migration',
+        children: [
+          {
+            label: 'Bulk Member Import',
+            route: '/admin/bulk-member-import',
+            superAdminOnly: true,
+          },
         ],
       },
     ],

@@ -3055,6 +3055,16 @@ select.status-select {
   flex-shrink: 0
 }
 
+.hp-features li.hp-features-includes {
+  font-weight: 600;
+  color: #333;
+  border-bottom-color: #eee
+}
+
+.hp-features li.hp-features-includes .tick {
+  color: var(--navy, #1a237e)
+}
+
 /* Plan grids — card width matches original 4-col layout; fewer plans stay centered */
 @media (max-width: 991px) {
   .plans-grid {

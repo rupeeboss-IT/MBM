@@ -710,14 +710,9 @@ export class Register implements OnInit {
       return;
     }
 
-    const pendingPlan =
-      typeof window !== 'undefined' ? window.localStorage.getItem('mbm_pending_plan') : null;
-    if (pendingPlan) {
+    if (this.planCheckout.hasPendingMembershipPlan()) {
       clearRegistrationMode();
-      this.toast.success('Account created. Opening payment for your selected plan…');
-      if (this.planCheckout.processPendingPlanAfterAuth()) {
-        return;
-      }
+      this.toast.success('Account created. Continue with your selected plan.');
       await this.router.navigateByUrl('/membership');
       return;
     }

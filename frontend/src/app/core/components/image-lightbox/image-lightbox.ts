@@ -66,12 +66,6 @@ export class ImageLightbox {
     this.closed.emit();
   }
 
-  onBackdropClick(ev: MouseEvent) {
-    if ((ev.target as HTMLElement).dataset['lightboxBackdrop'] === 'true') {
-      this.close();
-    }
-  }
-
   zoomIn() {
     this.setScale(this.scale() + 0.25);
   }

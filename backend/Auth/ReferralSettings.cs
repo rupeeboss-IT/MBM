@@ -16,6 +16,9 @@ public sealed class ReferralSettings
 
     public string CampaignName { get; set; } = "Online Leads";
 
+    /// <summary>lead_data.campaignName for credit rebuild enquiries.</summary>
+    public string CreditRebuildCampaignName { get; set; } = "MSME credit rebuild";
+
     public int LeadStatusId { get; set; } = 46;
 
     public string LeadType { get; set; } = "Telecalling";

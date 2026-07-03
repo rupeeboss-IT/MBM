@@ -7,11 +7,10 @@ public static class PlanBenefitsCatalog
         ["basic"] =
         [
             "Udyam Aadhaar onboarding",
-            "Credibility profile",
             "National MSME network access",
             "Knowledge and events access",
             "Growth ecosystem access",
-            "WhatsApp platform (basic)",
+            "WhatsApp Business platform",
             "Basic website",
             "Business Diagnostic + 30-Min Coach Session",
             "Practo Insurance Basic",
@@ -25,7 +24,6 @@ public static class PlanBenefitsCatalog
             "Free credit report",
             "Basic website",
             "Business Diagnostic + 30-Min Coach Session",
-            "WhatsApp Business platform",
             "Free relationship manager",
             "Loan audit",
             "Insurance audit",
@@ -41,7 +39,6 @@ public static class PlanBenefitsCatalog
             "Free credit report",
             "Basic website",
             "Business Diagnostic + 30-Min Coach Session",
-            "WhatsApp Business platform",
             "Free relationship manager",
             "Loan audit",
             "Insurance audit",

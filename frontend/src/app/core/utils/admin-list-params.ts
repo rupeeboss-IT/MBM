@@ -1,3 +1,6 @@
+/** Default page size for all admin paginated data grids. */
+export const ADMIN_DEFAULT_PAGE_SIZE = 100;
+
 export type AdminListQueryOpts = {
   days?: number;
   page?: number;

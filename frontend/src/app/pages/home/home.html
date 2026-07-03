@@ -208,7 +208,6 @@
   <div
     class="modal-overlay scheme-callback-overlay"
     [class.open]="callbackModalOpen()"
-    (click)="closeCallbackModal()"
     role="dialog"
     aria-modal="true"
     aria-labelledby="scheme-callback-title">
@@ -312,14 +311,12 @@
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">Join with Udyam
                   Aadhaar</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
-                  class="pfl-text">Build credibility profile</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><span class="pfl-text">National MSME network</span></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
                   class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a>
             </li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Platform</span><span
+                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business Platform</span><span
                   class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
@@ -347,6 +344,7 @@
           <h3>MSME Premium</h3>
           <p class="hp-desc">Perfect for MSMEs ready to build financial credibility</p>
           <ul class="hp-features">
+            <li class="hp-features-includes"><span class="tick">✓</span><span class="pfl-text">Includes all Basic Plan benefits</span></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
                   class="pfl-text">Infomerics IVerified Report</span><span class="pfl-info">ℹ Learn more</span></a>
             </li>
@@ -357,12 +355,6 @@
                 [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
                   Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
-                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
                   Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
@@ -371,9 +363,6 @@
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','insurance-audit']"><span
                   class="pfl-text">Free Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a>
             </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','business-diagnostic']"><span class="pfl-text">Business Diagnostic + 30-Min Coach Session</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span
                   class="pfl-text">10L Insurance Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
@@ -391,36 +380,13 @@
           <h3>MSME Pro</h3>
           <p class="hp-desc">For MSMEs seeking deeper insights and GeM access</p>
           <ul class="hp-features">
+            <li class="hp-features-includes"><span class="tick">✓</span><span class="pfl-text">Includes all Premium Plan benefits</span></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
                   class="pfl-text">Infomerics TrustScore Report</span><span class="pfl-info">ℹ Learn more</span></a>
             </li>
             <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme
-                  Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
                 [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal
                   Registration</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
-                  Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business
-                  Platform</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
-                  Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
-                  class="pfl-text">Free Loan Audit</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','insurance-audit']"><span
-                  class="pfl-text">Free Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','business-diagnostic']"><span class="pfl-text">Business Diagnostic + 30-Min Coach Session</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
             <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span
                   class="pfl-text">15L Insurance Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
               <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
@@ -515,6 +481,62 @@
       <div class="loan-action">
         <a class="btn-white-lg" routerLink="/loans">Apply Now — Free</a>
         <p class="loan-note">📞 Call: 90059 00921</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-light credit-rebuild-home" id="credit-rebuild-home">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Credit Rebuild</div>
+        <h2>Fix Your Credit Profile the Right Way</h2>
+        <p>RBI-compliant bureau correction across CIBIL, Experian, CRIF &amp; Equifax — without exposing any vendor brand</p>
+      </div>
+
+      <div class="crh-grid">
+        <a class="crh-card" routerLink="/credit-rebuild">
+          <div class="crh-head">
+            <div class="crh-icon">👤</div>
+            <div class="crh-price">From ₹9,999</div>
+          </div>
+          <h3>Individual</h3>
+          <p>Correct wrong entries, overdue flags, and mismatches — improve loan eligibility across bureaus.</p>
+          <div class="crh-foot">
+            <span class="crh-chip">1–4 bureaus</span>
+            <span class="crh-link">View Plans →</span>
+          </div>
+        </a>
+
+        <a class="crh-card" routerLink="/credit-rebuild">
+          <div class="crh-head">
+            <div class="crh-icon">🏢</div>
+            <div class="crh-price">From ₹34,999</div>
+          </div>
+          <h3>Business (MSME)</h3>
+          <p>Strengthen commercial credit &amp; improve CMR rank for bank funding, tenders, and expansion readiness.</p>
+          <div class="crh-foot">
+            <span class="crh-chip">MSME-focused</span>
+            <span class="crh-link">View Plans →</span>
+          </div>
+        </a>
+
+        <a class="crh-card crh-card--pro" routerLink="/credit-rebuild">
+          <div class="crh-head">
+            <div class="crh-icon">🏆</div>
+            <div class="crh-price">Pro Care</div>
+          </div>
+          <h3>Credit Rebuild Pro</h3>
+          <p>All-bureau correction + year-round monitoring to keep your profile accurate, updated, and loan-ready.</p>
+          <div class="crh-foot">
+            <span class="crh-chip">Ongoing tracking</span>
+            <span class="crh-link">Explore →</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="crh-cta">
+        <a class="btn-primary" routerLink="/credit-rebuild">Get Started</a>
+        <a class="btn-outline" routerLink="/contact">Talk to an Expert</a>
       </div>
     </div>
   </section>

@@ -54,6 +54,12 @@ public interface IUserManagementService
     Task<UserActionResponse> CreatePartnerAsync(Guid actorId, string actorRole, CreateManagedUserRequest req, CancellationToken ct);
     Task<UserActionResponse> CreateMemberAsync(Guid actorId, string actorRole, CreateManagedUserRequest req, CancellationToken ct);
 
+    Task<ImportedMemberCreateResponse> CreateImportedMemberAsync(
+        Guid actorId,
+        string actorRole,
+        CreateImportedMemberRequest req,
+        CancellationToken ct);
+
     Task<UserActionResponse> UpdateUserAsync(Guid actorId, string actorRole, Guid userId, UpdateManagedUserRequest req, CancellationToken ct);
     Task<UserActionResponse> SetActiveAsync(Guid actorId, string actorRole, Guid userId, SetManagedUserActiveRequest req, CancellationToken ct);
     Task<UserActionResponse> SoftDeleteAsync(Guid actorId, string actorRole, Guid userId, DeleteManagedUserRequest req, CancellationToken ct);

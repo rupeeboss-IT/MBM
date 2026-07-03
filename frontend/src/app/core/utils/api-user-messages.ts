@@ -7,6 +7,7 @@ export const API_USER_MESSAGES = {
   register: 'Unable to complete registration. Please try again.',
   forgotPassword: 'Unable to process your password reset request. Please try again.',
   resetPassword: 'Unable to reset your password. Please try again.',
+  verifyPasswordResetOtp: 'Unable to verify the code. Please try again.',
   profile: 'Unable to load your profile. Please try again.',
   myPlan: 'Unable to load your plan details. Please try again.',
   membership: 'Unable to load membership options. Please try again.',
@@ -23,6 +24,7 @@ export const API_USER_MESSAGES = {
   delete: 'Unable to delete the record. Please try again.',
   search: 'Unable to retrieve results. Please try again.',
   loanApplication: 'Unable to submit your loan application. Please try again.',
+  creditRebuildEnquiry: 'Unable to submit your credit rebuild enquiry. Please try again.',
   contact: 'Unable to send your message. Please try again.',
   schemeDiscovery: 'Unable to load scheme discovery status. Please try again later.',
   unauthorized: 'Your session has expired. Please sign in again.',
@@ -44,11 +46,13 @@ export function resolveApiFallback(url: string, method: string): string {
   if (path.includes('/payment') && path.includes('/invoices')) return API_USER_MESSAGES.invoiceList;
   if (path.includes('/payment') && m === 'POST') return API_USER_MESSAGES.payment;
   if (path.includes('/loans/apply')) return API_USER_MESSAGES.loanApplication;
+  if (path.includes('/credit-rebuild/enquire')) return API_USER_MESSAGES.creditRebuildEnquiry;
   if (path.includes('/contact/submit')) return API_USER_MESSAGES.contact;
   if (path.includes('/scheme-discovery')) return API_USER_MESSAGES.schemeDiscovery;
   if (path.includes('/user/login')) return API_USER_MESSAGES.login;
   if (path.includes('/user/register')) return API_USER_MESSAGES.register;
   if (path.includes('/password/forgot')) return API_USER_MESSAGES.forgotPassword;
+  if (path.includes('/password/otp/verify')) return API_USER_MESSAGES.verifyPasswordResetOtp;
   if (path.includes('/password/reset')) return API_USER_MESSAGES.resetPassword;
   if (path.includes('/user/me')) return API_USER_MESSAGES.profile;
   if (path.includes('/my-plan')) return API_USER_MESSAGES.myPlan;

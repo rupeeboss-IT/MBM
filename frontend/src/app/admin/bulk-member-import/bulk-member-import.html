@@ -1,0 +1,148 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Administration</span>
+      <h2>Bulk Member Import</h2>
+      <div class="muted">
+        Import existing customers as member accounts. Members receive their Member ID by email and set their password via Forgot Password.
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" href="/home">Go to Website</a>
+      <a class="btn btn-outline" routerLink="/admin-dashboard">← Dashboard</a>
+      <button class="btn btn-outline" type="button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="section bmi-instructions">
+    <div class="section-head">
+      <h3>Instructions</h3>
+    </div>
+    <ul class="bmi-instruction-list">
+      <li>Download the sample Excel, fill in customer details, and upload the completed file.</li>
+      <li>Required column: <strong>Name</strong>. At least one of <strong>Email</strong> or <strong>Mobile Number</strong> is required per row.</li>
+      <li><strong>Created At</strong> preserves the original registration date when provided (e.g. <em>01 Feb 2025, 08:28 AM</em>).</li>
+      <li>Passwords are not created or emailed. Members use <strong>Forgot Password</strong> on first login.</li>
+      <li>Duplicate members (existing email or mobile) are skipped automatically.</li>
+      <li>After import, download the error report to correct and re-upload failed rows only.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <h3>Upload Excel</h3>
+      <button class="btn btn-outline" type="button" (click)="downloadSample()" [disabled]="importing()">
+        Download Sample Excel
+      </button>
+    </div>
+
+    <div
+      class="bmi-upload-zone"
+      [class.bmi-upload-zone--busy]="importing()"
+    >
+      <input
+        id="bulk-import-file"
+        type="file"
+        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        (change)="onFileChange($event)"
+        [disabled]="importing()"
+      />
+      <div class="bmi-upload-copy">
+        <p class="bmi-upload-title">Choose an Excel file (.xlsx)</p>
+        <p class="muted" *ngIf="selectedFileName() as fileName">Selected: {{ fileName }}</p>
+        <p class="muted" *ngIf="!selectedFileName()">Columns: Name, Mobile Number, Email, Created At</p>
+      </div>
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="startImport()"
+        [disabled]="importing() || !selectedFileName()"
+      >
+        {{ importing() ? 'Import in progress…' : 'Start Import' }}
+      </button>
+      <button
+        class="btn btn-outline"
+        type="button"
+        (click)="sendEmailsFromFile()"
+        [disabled]="importing() || !selectedFileName()"
+        title="Send welcome emails to members already imported (uses email/mobile from Excel to find accounts)"
+      >
+        Send welcome emails only
+      </button>
+    </div>
+  </div>
+
+  @if (phase() !== 'idle') {
+    <div class="section bmi-progress-section">
+      <div class="section-head">
+        <h3>Progress</h3>
+        <span class="bmi-phase-badge" [class.bmi-phase-badge--done]="phase() === 'completed'" [class.bmi-phase-badge--fail]="phase() === 'failed'" [class.bmi-phase-badge--warn]="partialFailure()">
+          {{ phaseLabel() }}
+        </span>
+      </div>
+      <div class="bmi-progress-track" aria-hidden="true">
+        <div class="bmi-progress-bar" [style.width.%]="progressPct()"></div>
+      </div>
+      <p class="muted bmi-progress-caption">{{ progressLabel() || phaseLabel() }}</p>
+    </div>
+  }
+
+  @if (summary(); as s) {
+    <div class="section bmi-summary-section">
+      <div class="section-head">
+        <h3>{{ partialFailure() ? 'Import Partially Completed' : 'Import Completed' }}</h3>
+        <div class="bmi-summary-actions">
+          @if (canResendEmails()) {
+            <button class="btn btn-primary" type="button" (click)="resendPendingEmails()">
+              Send welcome emails ({{ pendingEmailRows().length }})
+            </button>
+          }
+          @if (errorRows().length > 0) {
+            <button class="btn btn-outline" type="button" (click)="downloadErrorReport()">
+              Download Error Report
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="bmi-summary-grid">
+        <div class="bmi-stat-card">
+          <span class="bmi-stat-label">Total Records</span>
+          <strong class="bmi-stat-value">{{ totalRecords() }}</strong>
+        </div>
+        <div class="bmi-stat-card bmi-stat-card--ok">
+          <span class="bmi-stat-label">Successfully Imported</span>
+          <strong class="bmi-stat-value">{{ s.imported }}</strong>
+        </div>
+        <div class="bmi-stat-card">
+          <span class="bmi-stat-label">Skipped</span>
+          <strong class="bmi-stat-value">{{ s.skipped }}</strong>
+        </div>
+        <div class="bmi-stat-card bmi-stat-card--ok">
+          <span class="bmi-stat-label">Emails Sent Successfully</span>
+          <strong class="bmi-stat-value">{{ s.emailsSent }}</strong>
+        </div>
+        <div class="bmi-stat-card bmi-stat-card--warn">
+          <span class="bmi-stat-label">Email Failed</span>
+          <strong class="bmi-stat-value">{{ s.emailFailed }}</strong>
+        </div>
+        <div class="bmi-stat-card">
+          <span class="bmi-stat-label">Records Without Email</span>
+          <strong class="bmi-stat-value">{{ s.withoutEmail }}</strong>
+        </div>
+        <div class="bmi-stat-card">
+          <span class="bmi-stat-label">Records Without Mobile</span>
+          <strong class="bmi-stat-value">{{ s.withoutMobile }}</strong>
+        </div>
+        <div class="bmi-stat-card">
+          <span class="bmi-stat-label">Duplicate Members</span>
+          <strong class="bmi-stat-value">{{ s.duplicateMembers }}</strong>
+        </div>
+        <div class="bmi-stat-card bmi-stat-card--warn">
+          <span class="bmi-stat-label">Invalid Rows</span>
+          <strong class="bmi-stat-value">{{ s.invalidRows }}</strong>
+        </div>
+      </div>
+    </div>
+  }
+</div>

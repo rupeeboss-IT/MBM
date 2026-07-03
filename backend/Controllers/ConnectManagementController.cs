@@ -18,7 +18,7 @@ public sealed class ConnectManagementController : ControllerBase
     [HttpGet("listings")]
     public Task<ConnectAdminListingListResponse> List(
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 10,
+        [FromQuery] int pageSize = AdminListQuery.DefaultPageSize,
         [FromQuery] string? search = null,
         [FromQuery] string? role = null,
         [FromQuery] string? status = null,

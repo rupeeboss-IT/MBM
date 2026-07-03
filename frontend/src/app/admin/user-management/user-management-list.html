@@ -111,7 +111,7 @@
 </div>
 
 @if (createOpen()) {
-  <div class="um-modal-backdrop" (click)="closeCreate()"></div>
+  <div class="um-modal-backdrop"></div>
   <div class="um-modal" role="dialog" aria-modal="true">
     <h3>{{ config().createLabel }}</h3>
     <label>Full name *<input type="text" [ngModel]="formFullName()" (ngModelChange)="formFullName.set($event)" /></label>
@@ -129,7 +129,7 @@
 }
 
 @if (deactivateOpen()) {
-  <div class="um-modal-backdrop" (click)="closeDeactivate()"></div>
+  <div class="um-modal-backdrop"></div>
   <div class="um-modal" role="dialog" aria-modal="true">
     <h3>Deactivate user</h3>
     <p class="muted">Remarks are required. Inactive users cannot log in or access protected features.</p>

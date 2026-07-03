@@ -120,7 +120,7 @@
 </div>
 
 @if (editOpen()) {
-  <div class="um-modal-backdrop" (click)="closeEdit()"></div>
+  <div class="um-modal-backdrop"></div>
   <div class="um-modal" role="dialog" aria-modal="true">
     <h3>Edit user</h3>
     <label>Full name *<input type="text" [ngModel]="formFullName()" (ngModelChange)="formFullName.set($event)" /></label>
@@ -136,7 +136,7 @@
 }
 
 @if (deactivateOpen()) {
-  <div class="um-modal-backdrop" (click)="closeDeactivate()"></div>
+  <div class="um-modal-backdrop"></div>
   <div class="um-modal" role="dialog" aria-modal="true">
     <h3>Deactivate user</h3>
     <label>Remarks *
@@ -150,7 +150,7 @@
 }
 
 @if (deleteOpen()) {
-  <div class="um-modal-backdrop" (click)="closeDelete()"></div>
+  <div class="um-modal-backdrop"></div>
   <div class="um-modal" role="dialog" aria-modal="true">
     <h3>Soft delete user</h3>
     <p class="muted">This marks the user as deleted. Audit logs are preserved.</p>

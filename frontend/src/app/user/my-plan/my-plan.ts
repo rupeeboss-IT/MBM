@@ -57,10 +57,9 @@ const ONE_TIME_REPORT_INCLUDES: Benefit[] = [
 const PLAN_BENEFITS: Record<string, Benefit[]> = {
   basic: [
     { title: 'Udyam Aadhaar onboarding', desc: 'Join as an MSME member and start your growth journey.' },
-    { title: 'Credibility profile', desc: 'Build your MSME credibility and visibility.' },
     { title: 'Network access', desc: 'Connect with the national MSME ecosystem.' },
     { title: 'Knowledge & events', desc: 'Access MSME learning resources and events.' },
-    { title: 'WhatsApp platform (basic)', desc: 'Start customer engagement and communication.' },
+    { title: 'WhatsApp Business platform', desc: 'Start customer engagement and communication.' },
     { title: 'Basic website', desc: 'Get a simple web presence to represent your business online.' },
     { title: 'Business Diagnostic + 30-Min Coach Session', desc: 'A business health check with a 30-minute coaching session.' },
     { title: 'Free credit report', desc: 'Basic credit visibility to support financial planning.' },
@@ -81,7 +80,6 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
     { title: 'Free credit report', desc: 'Credit visibility to support growth planning.' },
     { title: 'Basic website', desc: 'Get a simple web presence to represent your business online.' },
     { title: 'Business Diagnostic + 30-Min Coach Session', desc: 'A business health check with a 30-minute coaching session.' },
-    { title: 'WhatsApp Business platform', desc: 'Advanced WhatsApp platform benefits.' },
     { title: 'Relationship manager', desc: 'Dedicated support (as per plan offering).' },
     { title: 'Loan audit', desc: 'Audit support to optimize loan outcomes.' },
     { title: 'Insurance audit', desc: 'Audit support to optimize insurance outcomes.' },
@@ -95,7 +93,6 @@ const PLAN_BENEFITS: Record<string, Benefit[]> = {
     { title: 'Free credit report', desc: 'Credit visibility to support growth planning.' },
     { title: 'Basic website', desc: 'Get a simple web presence to represent your business online.' },
     { title: 'Business Diagnostic + 30-Min Coach Session', desc: 'A business health check with a 30-minute coaching session.' },
-    { title: 'WhatsApp Business platform', desc: 'Advanced WhatsApp platform benefits.' },
     { title: 'Relationship manager', desc: 'Dedicated support (as per plan offering).' },
     { title: 'Loan audit', desc: 'Audit support to optimize loan outcomes.' },
     { title: 'Insurance audit', desc: 'Audit support to optimize insurance outcomes.' },

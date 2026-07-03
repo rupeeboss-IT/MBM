@@ -15,7 +15,6 @@ public sealed class UserController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly IOtpService _otp;
-    private readonly IPasswordResetService _pwReset;
     private readonly IJwtTokenService _jwt;
     private readonly IMemberIdGeneratorService _memberIds;
     private readonly ILeadPushService _leadPush;
@@ -26,7 +25,6 @@ public sealed class UserController : ControllerBase
     public UserController(
         AppDbContext db,
         IOtpService otp,
-        IPasswordResetService pwReset,
         IJwtTokenService jwt,
         IMemberIdGeneratorService memberIds,
         ILeadPushService leadPush,
@@ -36,7 +34,6 @@ public sealed class UserController : ControllerBase
     {
         _db = db;
         _otp = otp;
-        _pwReset = pwReset;
         _jwt = jwt;
         _memberIds = memberIds;
         _leadPush = leadPush;
@@ -67,9 +64,11 @@ public sealed class UserController : ControllerBase
 
     public sealed record LoginRequest(string Identifier, string Password);
     public sealed record LoginResponse(bool Success, string? Message = null, Guid? UserId = null, string? Role = null, string? Token = null);
-    public sealed record ForgotPasswordRequest(string Email);
-    public sealed record ForgotPasswordResponse(bool Success, string? Message = null);
-    public sealed record ResetPasswordRequest(string Email, string Code, string NewPassword);
+    public sealed record ForgotPasswordRequest(string? Identifier);
+    public sealed record ForgotPasswordResponse(bool Success, string? Message = null, string? Channel = null, string? Reason = null);
+    public sealed record VerifyPasswordResetOtpRequest(string? Identifier, string? Code);
+    public sealed record VerifyPasswordResetOtpResponse(bool Success, string? Message = null);
+    public sealed record ResetPasswordRequest(string? Identifier, string? NewPassword, string? ConfirmPassword);
     public sealed record ResetPasswordResponse(bool Success, string? Message = null);
     public sealed record MeResponse(
         bool Success,
@@ -360,19 +359,28 @@ public sealed class UserController : ControllerBase
     [HttpPost("password/forgot")]
     public async Task<ActionResult<ForgotPasswordResponse>> ForgotPassword([FromBody] ForgotPasswordRequest? req, CancellationToken ct)
     {
-        if (req is null || string.IsNullOrWhiteSpace(req.Email))
-            return BadRequest(new ForgotPasswordResponse(false, "Email is required."));
+        if (req is null || string.IsNullOrWhiteSpace(req.Identifier))
+            return BadRequest(new ForgotPasswordResponse(false, "Please enter your email address or mobile number."));
 
-        var email = req.Email.Trim().ToLowerInvariant();
+        if (!UserIdentifier.TryParse(req.Identifier, out var channel, out var normalized, out var validationError))
+            return BadRequest(new ForgotPasswordResponse(false, validationError));
 
-        // Do not reveal whether user exists.
+        var user = await FindEligiblePasswordResetUserAsync(channel, normalized, ct);
+        if (user is null)
+        {
+            return Ok(new ForgotPasswordResponse(
+                false,
+                PasswordResetMessages.AccountNotFound(channel),
+                channel,
+                PasswordResetMessages.AccountNotFoundReason));
+        }
+
         try
         {
-            var exists = await _db.Users.AsNoTracking().AnyAsync(u => u.Email == email, ct);
-            if (exists)
-            {
-                await _pwReset.RequestResetAsync(email, ct);
-            }
+            if (channel == "email")
+                await _otp.SendPasswordResetEmailOtpAsync(user.Email, user.FullName ?? "Customer", ct);
+            else
+                await _otp.SendPasswordResetSmsOtpAsync(normalized, ct);
         }
         catch (OtpRateLimitExceededException ex)
         {
@@ -381,34 +389,96 @@ public sealed class UserController : ControllerBase
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Forgot password OTP send failed for {Channel} lookup", channel);
             return StatusCode(StatusCodes.Status502BadGateway,
                 new ForgotPasswordResponse(false, UserFriendlyErrorMapper.GetUserMessage(ex, "forgot_password")));
         }
 
-        return Ok(new ForgotPasswordResponse(true, "If this email is registered, an OTP has been sent."));
+        var message = channel == "email"
+            ? "We've sent a verification code to your registered email address. Please check your inbox."
+            : "We've sent a verification code to your registered mobile number. Delivery may take up to 1–2 minutes.";
+
+        return Ok(new ForgotPasswordResponse(true, message, channel));
+    }
+
+    [HttpPost("password/otp/verify")]
+    public async Task<ActionResult<VerifyPasswordResetOtpResponse>> VerifyPasswordResetOtp(
+        [FromBody] VerifyPasswordResetOtpRequest? req,
+        CancellationToken ct)
+    {
+        if (req is null || string.IsNullOrWhiteSpace(req.Identifier))
+            return BadRequest(new VerifyPasswordResetOtpResponse(false, "Please enter your email address or mobile number."));
+        if (string.IsNullOrWhiteSpace(req.Code))
+            return BadRequest(new VerifyPasswordResetOtpResponse(false, "OTP code is required."));
+
+        if (!UserIdentifier.TryParse(req.Identifier, out var channel, out var normalized, out var validationError))
+            return BadRequest(new VerifyPasswordResetOtpResponse(false, validationError));
+
+        var user = await FindEligiblePasswordResetUserAsync(channel, normalized, ct);
+        if (user is null)
+        {
+            return BadRequest(new VerifyPasswordResetOtpResponse(
+                false,
+                PasswordResetMessages.AccountNotFound(channel)));
+        }
+
+        try
+        {
+            if (channel == "email")
+                await _otp.VerifyPasswordResetEmailOtpAsync(user.Email, req.Code.Trim(), ct);
+            else
+                await _otp.VerifyPasswordResetSmsOtpAsync(user.Phone, req.Code.Trim(), ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Password reset OTP verify failed for {Channel}", channel);
+            return BadRequest(new VerifyPasswordResetOtpResponse(false, UserFriendlyErrorMapper.GetUserMessage(ex, "verify_password_reset_otp")));
+        }
+
+        return Ok(new VerifyPasswordResetOtpResponse(true, "Verification successful."));
     }
 
     [HttpPost("password/reset")]
     public async Task<ActionResult<ResetPasswordResponse>> ResetPassword([FromBody] ResetPasswordRequest? req, CancellationToken ct)
     {
-        if (req is null) return BadRequest(new ResetPasswordResponse(false, "Request is required."));
-        if (string.IsNullOrWhiteSpace(req.Email)) return BadRequest(new ResetPasswordResponse(false, "Email is required."));
-        if (string.IsNullOrWhiteSpace(req.Code)) return BadRequest(new ResetPasswordResponse(false, "OTP is required."));
-        if (string.IsNullOrWhiteSpace(req.NewPassword)) return BadRequest(new ResetPasswordResponse(false, "New password is required."));
-        if (req.NewPassword.Length < 8) return BadRequest(new ResetPasswordResponse(false, "Password must be at least 8 characters."));
+        if (req is null)
+            return BadRequest(new ResetPasswordResponse(false, "Request is required."));
+        if (string.IsNullOrWhiteSpace(req.Identifier))
+            return BadRequest(new ResetPasswordResponse(false, "Please enter your email address or mobile number."));
+        if (string.IsNullOrWhiteSpace(req.NewPassword))
+            return BadRequest(new ResetPasswordResponse(false, "New password is required."));
+        if (string.IsNullOrWhiteSpace(req.ConfirmPassword))
+            return BadRequest(new ResetPasswordResponse(false, "Confirm password is required."));
+        if (!string.Equals(req.NewPassword, req.ConfirmPassword, StringComparison.Ordinal))
+            return BadRequest(new ResetPasswordResponse(false, "Passwords do not match."));
 
-        var email = req.Email.Trim().ToLowerInvariant();
+        if (!UserIdentifier.TryParse(req.Identifier, out var channel, out var normalized, out var validationError))
+            return BadRequest(new ResetPasswordResponse(false, validationError));
 
-        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email, ct);
-        if (user is null)
-            return Ok(new ResetPasswordResponse(true, "Password updated.")); // do not reveal
+        var passwordError = PasswordPolicy.Validate(req.NewPassword);
+        if (passwordError is not null)
+            return BadRequest(new ResetPasswordResponse(false, passwordError));
+
+        var user = await _db.Users.FirstOrDefaultAsync(
+            u => channel == "email" ? u.Email == normalized : u.Phone == normalized,
+            ct);
+        if (user is null || user.IsDeleted)
+            return BadRequest(new ResetPasswordResponse(false, "Unable to reset your password. Please try again."));
+
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+        if (role is not ("member" or "partner") || user.IsActive != true)
+            return BadRequest(new ResetPasswordResponse(false, "Unable to reset your password. Please try again."));
 
         try
         {
-            await _pwReset.ResetAsync(email, req.Code.Trim(), req.NewPassword, ct);
+            if (channel == "email")
+                await _otp.EnsurePasswordResetEmailVerifiedAsync(user.Email, ct);
+            else
+                await _otp.EnsurePasswordResetSmsVerifiedAsync(user.Phone, ct);
         }
         catch (Exception ex)
         {
+            _logger.LogWarning(ex, "Password reset blocked: OTP not verified for user {UserId}", user.UserId);
             return BadRequest(new ResetPasswordResponse(false, UserFriendlyErrorMapper.GetUserMessage(ex, "reset_password")));
         }
 
@@ -418,7 +488,31 @@ public sealed class UserController : ControllerBase
         user.UpdatedAt = DateTime.Now;
 
         await _db.SaveChangesAsync(ct);
-        return Ok(new ResetPasswordResponse(true, "Password updated."));
+
+        if (channel == "email")
+            _otp.InvalidatePasswordResetEmailOtp(user.Email);
+        else
+            _otp.InvalidatePasswordResetSmsOtp(user.Phone);
+
+        return Ok(new ResetPasswordResponse(true, "Your password has been updated successfully. You can now sign in using your new password."));
+    }
+
+    private async Task<User?> FindEligiblePasswordResetUserAsync(string channel, string normalized, CancellationToken ct)
+    {
+        var user = channel == "email"
+            ? await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == normalized, ct)
+            : await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Phone == normalized, ct);
+
+        if (user is null || user.IsDeleted)
+            return null;
+
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+        if (role is not ("member" or "partner"))
+            return null;
+        if (user.IsActive != true)
+            return null;
+
+        return user;
     }
 }
 

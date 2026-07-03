@@ -280,7 +280,7 @@
 </div>
 
 @if (requestModalOpen()) {
-  <div class="admin-modal-overlay" data-modal-backdrop="true" (click)="closeRequestModal()" role="dialog" aria-modal="true">
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
     <div class="admin-modal" (click)="$event.stopPropagation()">
       <button type="button" class="admin-modal__close" (click)="closeRequestModal()" aria-label="Close">&times;</button>
       <h3 class="admin-modal__title">
@@ -320,7 +320,7 @@
 }
 
 @if (detailModalOpen()) {
-  <div class="admin-modal-overlay" data-modal-backdrop="true" (click)="closeDetailModal()" role="dialog" aria-modal="true">
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
     <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
       <button type="button" class="admin-modal__close" (click)="closeDetailModal()" aria-label="Close">&times;</button>
       <h3 class="admin-modal__title">Request details</h3>
@@ -365,7 +365,7 @@
 }
 
 @if (superModalOpen()) {
-  <div class="admin-modal-overlay" data-modal-backdrop="true" (click)="closeSuperModal()" role="dialog" aria-modal="true">
+  <div class="admin-modal-overlay" role="dialog" aria-modal="true">
     <div class="admin-modal" [class.admin-modal--wide]="superModalMode() === 'audit'" (click)="$event.stopPropagation()">
       <button type="button" class="admin-modal__close" (click)="closeSuperModal()" aria-label="Close">&times;</button>
       <h3 class="admin-modal__title">

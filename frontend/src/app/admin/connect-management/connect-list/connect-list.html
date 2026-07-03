@@ -78,7 +78,7 @@
   </div>
 </div>
 
-<div class="admin-modal-overlay" *ngIf="formOpen()" (click)="closeForm()">
+<div class="admin-modal-overlay" *ngIf="formOpen()">
   <div class="admin-modal admin-modal--wide" (click)="$event.stopPropagation()">
     <div class="admin-modal__head">
       <h3>{{ formMode() === 'create' ? 'Add Connect Listing' : 'Manage Connect Listing' }}</h3>

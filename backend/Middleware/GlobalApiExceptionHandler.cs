@@ -65,6 +65,7 @@ public sealed class GlobalApiExceptionHandler : IExceptionHandler
         if (path.Contains("/payment") && method == "POST") return "payment_create";
         if (path.Contains("/user/login")) return "login";
         if (path.Contains("/user/register")) return "register";
+        if (path.Contains("/password/otp/verify")) return "verify_password_reset_otp";
         if (path.Contains("/password/reset")) return "reset_password";
         if (path.Contains("/password/forgot")) return "forgot_password";
         if (path.Contains("/otp/email/send")) return "send_email_otp";

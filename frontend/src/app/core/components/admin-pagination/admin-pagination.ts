@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
+import { ADMIN_DEFAULT_PAGE_SIZE } from '../../utils/admin-list-params';
 
 @Component({
   selector: 'app-admin-pagination',
@@ -10,7 +11,7 @@ import { Component, computed, input, output } from '@angular/core';
 })
 export class AdminPagination {
   readonly page = input(1);
-  readonly pageSize = input(10);
+  readonly pageSize = input(ADMIN_DEFAULT_PAGE_SIZE);
   readonly total = input(0);
   readonly disabled = input(false);
 

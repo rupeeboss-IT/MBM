@@ -14,7 +14,7 @@ import {
   type VendorPlan,
 } from '../../../core/services/vendor-management.service';
 import { exportToExcel } from '../../../core/utils/admin-excel-export';
-import { sortIndicator, toggleColumnSort } from '../../../core/utils/admin-list-params';
+import { ADMIN_DEFAULT_PAGE_SIZE, sortIndicator, toggleColumnSort } from '../../../core/utils/admin-list-params';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
 
 @Component({
@@ -37,7 +37,7 @@ export class VendorList {
   readonly plans = signal<VendorPlan[]>([]);
   readonly total = signal(0);
   readonly page = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize = ADMIN_DEFAULT_PAGE_SIZE;
   readonly search = signal('');
   readonly statusFilter = signal('');
   readonly dateFrom = signal('');

@@ -1,7 +1,6 @@
 <div
   class="sd-modal-overlay"
   [class.sd-modal-overlay--open]="flow.modal() !== 'none'"
-  (click)="flow.modal() === 'referral' ? flow.cancelReferralStep() : flow.closeAll()"
   role="presentation">
   <div
     class="sd-modal"

@@ -203,7 +203,7 @@ public sealed class AdminReportsController : ControllerBase
     public async Task<ActionResult<HistoryResponse>> History(
         [FromQuery] string? search,
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20,
+        [FromQuery] int pageSize = AdminListQuery.DefaultPageSize,
         [FromQuery] string? dateFrom = null,
         [FromQuery] string? dateTo = null,
         [FromQuery] string? sortBy = null,
@@ -268,7 +268,7 @@ public sealed class AdminReportsController : ControllerBase
     public async Task<ActionResult<ChangeRequestListResponse>> ListChangeRequests(
         [FromQuery] string? status,
         [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20,
+        [FromQuery] int pageSize = AdminListQuery.DefaultPageSize,
         CancellationToken ct = default)
     {
         var userId = CurrentUser.RequireUserId(User);
