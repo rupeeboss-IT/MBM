@@ -557,6 +557,10 @@ textarea {
   background: linear-gradient(135deg, var(--red), var(--red-dark))
 }
 
+.page-header.rebuild-header {
+  background: linear-gradient(78deg, #2F6BA3 0%, #B4D488 100%) !important
+}
+
 /* ===== HERO ===== */
 /* ── HOME: HERO ── */
 .hero-wrap {

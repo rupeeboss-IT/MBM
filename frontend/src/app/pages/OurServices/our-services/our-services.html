@@ -3,7 +3,7 @@
   <div class="page-header">
     <div class="container">
       <h1>Our 360° Services</h1>
-      <p>12 comprehensive service categories covering every aspect of your MSME journey</p>
+      <p>13 comprehensive service categories covering every aspect of your MSME journey</p>
     </div>
   </div>
   <section class="section">
@@ -25,6 +25,14 @@
           <h3>MSME Loans & Finance</h3>
           <p>Business loans, working capital, machinery finance from 100+ banks and NBFCs. Collateral-free loans
             available. Free doorstep service.</p><span class="service-link">Learn More →</span>
+        </a>
+        <a class="service-card" data-cat="finance" [style.display]="show('finance') ? 'block' : 'none'"
+          routerLink="/credit-rebuild"
+          [queryParams]="{ audience: 'individual', section: 'plans' }">
+          <div class="service-icon">💳</div>
+          <h3>Credit Repair</h3>
+          <p>RBI-compliant bureau correction across CIBIL, Experian, CRIF &amp; Equifax — fix errors, improve scores, and
+            get loan-ready for individuals and MSMEs.</p><span class="service-link">View Plans →</span>
         </a>
         <a class="service-card" data-cat="legal" [style.display]="show('legal') ? 'block' : 'none'"
           [routerLink]="['/service','company-formation']">

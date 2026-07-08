@@ -1,5 +1,5 @@
 <div class="page active" id="page-credit-rebuild">
-  <div class="page-header red-header" role="banner">
+  <div class="page-header rebuild-header" role="banner">
     <div class="container">
       <h1>Fix Your Credit Profile the Right Way</h1>
       <p>RBI-compliant bureau correction across CIBIL, Experian, CRIF &amp; Equifax.</p>
@@ -66,99 +66,107 @@
     </div>
   </section>
 
-  <section class="section bg-light">
+  <section class="section crb-pricing-section" id="credit-rebuild-pricing">
     <div class="container">
-      <div class="section-header">
-        <div class="section-tag">How It Works</div>
-        <h2>A Proven 3-Step Process</h2>
-      </div>
-      <div class="crb-how">
-        <div class="crb-how-grid">
-          <div class="crb-how-card">
-            <div class="crb-how-top">
-              <div class="crb-how-num">1</div>
-              <div class="crb-how-icon" aria-hidden="true">📄</div>
-            </div>
-            <h3>Credit Report Audit (All 4 Bureaus)</h3>
-            <p>CIBIL, CRIF, Experian, Equifax.</p>
-          </div>
-          <div class="crb-how-card">
-            <div class="crb-how-top">
-              <div class="crb-how-num">2</div>
-              <div class="crb-how-icon" aria-hidden="true">🔎</div>
-            </div>
-            <h3>Error Identification</h3>
-            <p>Find wrong entries, overdue accounts, or data mismatches.</p>
-          </div>
-          <div class="crb-how-card">
-            <div class="crb-how-top">
-              <div class="crb-how-num">3</div>
-              <div class="crb-how-icon" aria-hidden="true">🤝</div>
-            </div>
-            <h3>Bank &amp; Bureau Coordination</h3>
-            <p>Raise RBI-compliant disputes and follow up with lenders.</p>
+      <div class="crb-pricing-panel">
+        <div class="section-header crb-pricing-header">
+          <div class="section-tag">Pricing</div>
+          <h2>{{ audience() === 'individual' ? 'Individual' : 'Business' }} Credit Rebuild Plans</h2>
+          <p class="crb-pricing-subtitle">We don&rsquo;t just dispute errors &mdash; we rectify them with documentary proof, ensuring your credit report stays intact.</p>
+        </div>
+        <div class="crb-plans-grid">
+          <div
+            class="crb-plan-card"
+            *ngFor="let plan of activePlans()"
+            [class.crb-plan-card--featured]="plan.featured">
+            <div class="crb-plan-card__badge" *ngIf="plan.featured">Most Popular</div>
+            <div class="crb-plan-card__price">{{ plan.price }}</div>
+            <h3>{{ plan.tier }}</h3>
+            <ul>
+              <li *ngFor="let feature of plan.features">{{ feature }}</li>
+            </ul>
+            <button type="button" class="btn-outline crb-plan-card__cta" (click)="scrollToEnquiry()">Enquire Now</button>
           </div>
         </div>
-      </div>
-      <div class="crb-trust-strip">
-        <span>RBI &amp; bureau compliant process</span>
-        <span>Dedicated credit consultants</span>
-        <span>Money-back guarantee if no result achieved</span>
-      </div>
-    </div>
-  </section>
+        <p class="crb-gst-note">All prices exclusive of 18% GST</p>
 
-  <section class="section" id="credit-rebuild-pricing">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Pricing</div>
-        <h2>{{ audience() === 'individual' ? 'Individual' : 'Business' }} Credit Rebuild Plans</h2>
-        <p>We don&rsquo;t just dispute errors &mdash; we rectify them with documentary proof, ensuring your credit report stays intact.</p>
-      </div>
-      <div class="crb-plans-grid">
-        <div
-          class="crb-plan-card"
-          *ngFor="let plan of activePlans()"
-          [class.crb-plan-card--featured]="plan.featured">
-          <div class="crb-plan-card__badge" *ngIf="plan.featured">Most Popular</div>
-          <div class="crb-plan-card__price">{{ plan.price }}</div>
-          <h3>{{ plan.tier }}</h3>
-          <ul>
-            <li *ngFor="let feature of plan.features">{{ feature }}</li>
-          </ul>
-          <button type="button" class="btn-outline crb-plan-card__cta" (click)="scrollToEnquiry()">Enquire Now</button>
-        </div>
-      </div>
-      <p class="crb-gst-note">All prices exclusive of 18% GST</p>
-
-      <div class="crb-monitoring" *ngIf="audience() === 'business'">
-        <div class="crb-monitoring__copy">
-          <h3>Your Credit Data Deserves Regular Care &mdash; Not Just Repair</h3>
-          <p>
-            Keep your business credit report accurate, updated, and loan-ready year-round with monthly reviews,
-            CMR insights, and ad-hoc corrections.
-          </p>
-          <p class="crb-monitoring__inclusion">Includes CIBIL subscription charges (₹12,000 / year)</p>
-        </div>
-        <div class="crb-monitoring__price">
-          <span class="crb-monitoring__amount">₹36,000 / Year</span>
-          <span class="crb-monitoring__gst">Exclusive of 18% GST</span>
+        <div class="crb-monitoring" id="credit-rebuild-pro" *ngIf="audience() === 'business'">
+          <div class="crb-monitoring__copy">
+            <h3>Your Credit Data Deserves Regular Care &mdash; Not Just Repair</h3>
+            <p class="crb-monitoring__desc">
+              Keep your business credit report accurate, updated, and loan-ready year-round with monthly reviews,
+              CMR insights, and ad-hoc corrections.
+            </p>
+            <p class="crb-monitoring__inclusion">Includes CIBIL subscription charges (₹12,000 / year)</p>
+          </div>
+          <div class="crb-monitoring__price">
+            <span class="crb-monitoring__amount">₹36,000 / Year</span>
+            <span class="crb-monitoring__gst">Exclusive of 18% GST</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section bg-light" id="credit-rebuild-enquiry">
+  <section class="section crb-bottom-section" id="credit-rebuild-enquiry">
     <div class="container">
-      <div class="crb-enquiry-layout loan-layout">
-        <div class="loan-form-main">
-          <div class="loan-form-box mb-4">
-            <h2>Credit Rebuild Enquiry</h2>
-            <p class="form-sub">Free consultation • Response within 24 hours</p>
-            <div class="error-msg crb-submit-error" *ngIf="submitError()" role="alert">{{ submitError() }}</div>
+      <div class="crb-bottom-panel">
+        <div class="crb-bottom-grid">
+          <div class="crb-how-section">
+            <div class="crb-panel-card crb-how-card">
+              <header class="section-header crb-how-head">
+                <div class="section-tag">How It Works</div>
+                <h2>Our 3-Step Process</h2>
+                <p class="crb-how-sub">RBI-compliant bureau correction across CIBIL, Experian, CRIF &amp; Equifax.</p>
+              </header>
 
-            <form (ngSubmit)="onSubmit()">
-              <div class="form-row">
+              <ol class="crb-process" aria-label="Credit rebuild process">
+              <li class="crb-process-step">
+                <article class="crb-process-card">
+                  <span class="crb-process-badge" aria-hidden="true">01</span>
+                  <div class="crb-process-body">
+                    <h3 class="crb-process-title">Credit Report Audit</h3>
+                    <p class="crb-process-desc">Full review across CIBIL, CRIF, Experian &amp; Equifax.</p>
+                  </div>
+                </article>
+              </li>
+              <li class="crb-process-step">
+                <article class="crb-process-card">
+                  <span class="crb-process-badge" aria-hidden="true">02</span>
+                  <div class="crb-process-body">
+                    <h3 class="crb-process-title">Error Identification</h3>
+                    <p class="crb-process-desc">Find wrong entries, overdue accounts, or data mismatches.</p>
+                  </div>
+                </article>
+              </li>
+              <li class="crb-process-step">
+                <article class="crb-process-card">
+                  <span class="crb-process-badge" aria-hidden="true">03</span>
+                  <div class="crb-process-body">
+                    <h3 class="crb-process-title">Bank &amp; Bureau Coordination</h3>
+                    <p class="crb-process-desc">RBI-compliant disputes raised and followed up with lenders.</p>
+                  </div>
+                </article>
+              </li>
+            </ol>
+            </div>
+          </div>
+
+          <aside class="crb-form-panel">
+            <div class="crb-panel-card crb-enquiry-form loan-form-box">
+              <div class="crb-form-intro">
+                <h2>Credit Rebuild Enquiry</h2>
+                <p class="form-sub">Free consultation &bull; Response within 24 hours</p>
+                <p class="crb-form-hints" aria-label="Your data is safe">
+                  <span>Secure &amp; confidential</span>
+                  <span>RBI-compliant</span>
+                  <span>24hr response</span>
+                </p>
+              </div>
+
+              <div class="error-msg crb-submit-error" *ngIf="submitError()" role="alert">{{ submitError() }}</div>
+
+              <form class="crb-form" (ngSubmit)="onSubmit()">
                 <div class="form-group" [class.form-group--invalid]="showError('fullName')">
                   <label for="crbName">Full Name *</label>
                   <input
@@ -174,6 +182,7 @@
                     [attr.aria-invalid]="showError('fullName')">
                   <span class="field-error" *ngIf="showError('fullName')" role="alert">{{ errors()['fullName'] }}</span>
                 </div>
+
                 <div class="form-group" [class.form-group--invalid]="showError('mobile')">
                   <label for="crbMobile">Mobile Number *</label>
                   <input
@@ -193,9 +202,7 @@
                     [attr.aria-invalid]="showError('mobile')">
                   <span class="field-error" *ngIf="showError('mobile')" role="alert">{{ errors()['mobile'] }}</span>
                 </div>
-              </div>
 
-              <div class="form-row">
                 <div class="form-group" [class.form-group--invalid]="showError('email')">
                   <label for="crbEmail">Email Address *</label>
                   <input
@@ -211,33 +218,35 @@
                     [attr.aria-invalid]="showError('email')">
                   <span class="field-error" *ngIf="showError('email')" role="alert">{{ errors()['email'] }}</span>
                 </div>
-              </div>
 
-              <div class="form-group form-group--consent" [class.form-group--invalid]="showError('consent')">
-                <label class="consent-label" for="crbConsent">
-                  <input
-                    type="checkbox"
-                    id="crbConsent"
-                    name="consent"
-                    [(ngModel)]="form.consent"
-                    (ngModelChange)="revalidate()"
-                    (blur)="markTouched('consent')"
-                    required
-                    [attr.aria-invalid]="showError('consent')">
-                  <span>
-                    By submitting this form, I consent to being contacted by <strong>MSME Bharat Manch</strong> via call,
-                    SMS, WhatsApp, and email regarding my credit rebuild enquiry, per the
-                    <a routerLink="/privacy-policy">Privacy Policy</a>.
-                  </span>
-                </label>
-                <span class="field-error" *ngIf="showError('consent')" role="alert">{{ errors()['consent'] }}</span>
-              </div>
+                <div class="form-group form-group--consent" [class.form-group--invalid]="showError('consent')">
+                  <label class="consent-label" for="crbConsent">
+                    <input
+                      type="checkbox"
+                      id="crbConsent"
+                      name="consent"
+                      [(ngModel)]="form.consent"
+                      (ngModelChange)="revalidate()"
+                      (blur)="markTouched('consent')"
+                      required
+                      [attr.aria-invalid]="showError('consent')">
+                    <span>
+                      By submitting this form, I consent to being contacted by <strong>MSME Bharat Manch</strong> via call,
+                      SMS, WhatsApp, and email regarding my credit rebuild enquiry, per the
+                      <a routerLink="/privacy-policy">Privacy Policy</a>.
+                    </span>
+                  </label>
+                  <span class="field-error" *ngIf="showError('consent')" role="alert">{{ errors()['consent'] }}</span>
+                </div>
 
-              <button type="submit" class="btn-submit" [disabled]="submitting() || !isFormValid()">
-                {{ submitting() ? 'Submitting…' : 'Submit Enquiry' }}
-              </button>
-            </form>
-          </div>
+                <button type="submit" class="btn-submit crb-form-submit" [disabled]="submitting() || !isFormValid()">
+                  {{ submitting() ? 'Submitting…' : 'Submit Enquiry' }}
+                </button>
+
+                <p class="crb-form-safe-note">Your details are used only for your enquiry.</p>
+              </form>
+            </div>
+          </aside>
         </div>
       </div>
     </div>

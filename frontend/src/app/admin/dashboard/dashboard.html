@@ -267,6 +267,48 @@
     </section>
   }
 
+  @if (!loading() && creditRepairStats(); as crs) {
+    @if (crs.unlinkedLeads > 0) {
+      <section class="section em-notify-card">
+        <div class="em-notify-content">
+          <h3>Credit repair leads need CRM sync</h3>
+          <p class="em-notify-count">{{ crs.unlinkedLeads }} lead(s) not yet linked to CRM (lead_data)</p>
+          <a
+            class="btn btn-primary"
+            routerLink="/admin/credit-repair/leads"
+            [queryParams]="{ linkStatus: 'unlinked' }"
+          >View pending leads</a>
+        </div>
+      </section>
+    }
+
+    <section class="section section--kpi">
+      <p class="kpi-section-title">Credit repair (Credit Rebuild page)</p>
+      <div class="kpi-grid">
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/credit-repair/leads" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Total enquiries</div>
+          <p class="kpi-value">{{ crs.totalLeads }}</p>
+          <div class="kpi-hint">View all credit repair leads →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/credit-repair/leads" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Submitted today</div>
+          <p class="kpi-value">{{ crs.todayLeads }}</p>
+          <div class="kpi-hint">Today's submissions</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/credit-repair/leads" [queryParams]="{ linkStatus: 'linked' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Synced to CRM</div>
+          <p class="kpi-value">{{ crs.linkedToLeadData }}</p>
+          <div class="kpi-hint">Has CRM lead_data ID →</div>
+        </a>
+        <a class="kpi-card kpi-card-clickable" routerLink="/admin/credit-repair/leads" [queryParams]="{ linkStatus: 'unlinked' }" style="text-decoration:none;color:inherit">
+          <div class="kpi-label">Pending CRM sync</div>
+          <p class="kpi-value">{{ crs.unlinkedLeads }}</p>
+          <div class="kpi-hint">Missing lead_data ID →</div>
+        </a>
+      </div>
+    </section>
+  }
+
   <section class="admin-section" style="margin-top:2rem">
     <div class="admin-section__head">
       <div>

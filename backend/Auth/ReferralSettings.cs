@@ -19,6 +19,15 @@ public sealed class ReferralSettings
     /// <summary>lead_data.campaignName for credit rebuild enquiries.</summary>
     public string CreditRebuildCampaignName { get; set; } = "MSME credit rebuild";
 
+    /// <summary>lead_data.productid for credit repair / rebuild enquiries (override).</summary>
+    public int CreditRepairProductId { get; set; } = 1102;
+
+    /// <summary>lead_data.lead_source for credit repair / rebuild enquiries (override).</summary>
+    public string CreditRepairLeadSource { get; set; } = "mbmwebsite";
+
+    /// <summary>lead_data.campaignName for credit repair / rebuild enquiries (override).</summary>
+    public string CreditRepairCampaignName { get; set; } = "creditrepair";
+
     public int LeadStatusId { get; set; } = 46;
 
     public string LeadType { get; set; } = "Telecalling";

@@ -231,12 +231,17 @@ public sealed class SdrReportService : ISdrReportService
 
         var normalizedUdyam = udyamNumber.Trim().ToUpperInvariant();
         var now = DateTime.Now;
+
+        try
+        {
         var request = new SchemeDiscoveryRequest
         {
             Id = Guid.NewGuid(),
             UserId = customerId,
             MemberId = _memberIds.GetDisplayMemberId(user),
-            UserPlanId = await ResolveOptionalSubscriptionIdAsync(customerId, ct),
+            // Unique per admin run — UX_SchemeDiscoveryRequests_UserPlan is (UserId, UserPlanId).
+            // Member one-time flows use the real plan id; admin must not reuse it.
+            UserPlanId = Guid.NewGuid(),
             UdyamNumber = normalizedUdyam,
             PaymentId = null,
             EntitlementType = SchemeDiscoveryCatalog.EntitlementAdmin,
@@ -348,6 +353,23 @@ public sealed class SdrReportService : ISdrReportService
                 null,
                 request.Status);
         }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogError(
+                ex,
+                "[SDR Service] Admin generation UNHANDLED AdminId={AdminId} UserId={UserId}",
+                adminUserId,
+                customerId);
+
+            return new SdrGenerationResult(
+                false,
+                SdrReportCatalog.OutcomeFailed,
+                "Report generation failed. Please try again.",
+                null,
+                null,
+                null);
+        }
     }
 
     private async Task LinkRequestToReportAsync(
@@ -418,13 +440,11 @@ public sealed class SdrReportService : ISdrReportService
         var now = DateTime.Now;
         var expiry = now.Date.AddDays(Math.Max(1, _settings.ValidityDays));
 
-        var subscriptionId = request.UserPlanId;
-        if (subscriptionId == Guid.Empty)
-        {
-            subscriptionId = string.Equals(request.EntitlementType, SchemeDiscoveryCatalog.EntitlementAdmin, StringComparison.OrdinalIgnoreCase)
-                ? Guid.Empty
-                : await ResolveSubscriptionIdAsync(userId, ct);
-        }
+        var subscriptionId = string.Equals(request.EntitlementType, SchemeDiscoveryCatalog.EntitlementAdmin, StringComparison.OrdinalIgnoreCase)
+            ? Guid.Empty
+            : request.UserPlanId == Guid.Empty
+                ? await ResolveSubscriptionIdAsync(userId, ct)
+                : request.UserPlanId;
 
         var report = new CustomerReport
         {
@@ -471,20 +491,6 @@ public sealed class SdrReportService : ISdrReportService
         return plan == Guid.Empty
             ? throw new InvalidOperationException("Active one-time subscription not found for report.")
             : plan;
-    }
-
-    private async Task<Guid> ResolveOptionalSubscriptionIdAsync(Guid userId, CancellationToken ct)
-    {
-        var now = DateTime.Now;
-        var plan = await _db.UserPlans.AsNoTracking()
-            .Where(up => up.UserId == userId
-                         && up.Status == "Active"
-                         && (up.ActiveTo == null || up.ActiveTo > now))
-            .OrderByDescending(up => up.ActiveFrom)
-            .Select(up => up.UserPlanId)
-            .FirstOrDefaultAsync(ct);
-
-        return plan;
     }
 
     private static string? ValidateUdyam(string? raw)

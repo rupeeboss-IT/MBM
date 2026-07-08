@@ -1,0 +1,84 @@
+2026-07-08 11:41:47 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-08 11:41:51 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-08 11:41:51 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-08 11:41:52 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-08 11:41:52 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=46
+
+2026-07-08 11:41:52 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=271
+
+2026-07-08 11:41:52 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-08 15:30:36 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-08 15:30:39 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-08 15:30:40 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-08 15:30:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-08 15:30:41 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=52
+
+2026-07-08 15:30:41 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=252
+
+2026-07-08 15:30:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-08 17:48:48 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-08 17:48:54 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-08 17:48:54 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-08 17:48:55 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-08 17:48:55 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=31
+
+2026-07-08 17:48:55 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=217
+
+2026-07-08 17:48:55 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+

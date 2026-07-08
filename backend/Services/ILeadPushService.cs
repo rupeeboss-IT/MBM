@@ -30,4 +30,22 @@ public interface ILeadPushService
         string? leadSource,
         string? remark,
         CancellationToken ct);
+
+    /// <summary>
+    /// Inserts lead into RBMain lead_data after a credit repair submission.
+    /// Uses the same mapping logic as other lead inserts, but with explicit overrides
+    /// for productid / lead_source / campaignName.
+    /// </summary>
+    Task<(bool Success, int? LeadId)> CreateLeadAfterCreditRepairSubmissionAsync(
+        string fullName,
+        string mobile,
+        string? email,
+        int productIdOverride,
+        string leadSourceOverride,
+        string campaignNameOverride,
+        string? remark,
+        string empCode,
+        string leadType,
+        int? brokerId,
+        CancellationToken ct);
 }

@@ -47,6 +47,7 @@ import { LeadCustomerList } from './admin/lead-attribution/lead-customer-list/le
 import { LeadCustomerDetail } from './admin/lead-attribution/lead-customer-detail/lead-customer-detail';
 import { EnquiryList } from './admin/enquiry-management/enquiry-list/enquiry-list';
 import { EnquiryDetail } from './admin/enquiry-management/enquiry-detail/enquiry-detail';
+import { CreditRepairList } from './admin/credit-repair/credit-repair-list/credit-repair-list';
 import { ConnectList } from './admin/connect-management/connect-list/connect-list';
 import { BulkMemberImport } from './admin/bulk-member-import/bulk-member-import';
 import { superAdminGuard } from './core/guards/super-admin.guard';
@@ -409,6 +410,16 @@ export const routes: Routes = [
         path: 'admin/enquiry-management',
         redirectTo: 'admin/enquiry-management/enquiries',
         pathMatch: 'full'
+    },
+    {
+        path: 'admin/credit-repair/leads',
+        component: CreditRepairList,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/credit-repair',
+        redirectTo: 'admin/credit-repair/leads',
+        pathMatch: 'full',
     },
     {
         path: 'admin/connect-management/listings',

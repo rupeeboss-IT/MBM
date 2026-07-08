@@ -1,0 +1,1335 @@
+2026-07-07 13:54:51 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 13:54:55 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 13:54:55 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 13:54:56 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 13:54:56 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=43
+
+2026-07-07 13:54:57 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=248
+
+2026-07-07 13:54:57 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 15:22:39 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 15:22:41 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 15:22:42 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 15:22:43 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 15:22:43 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=78
+
+2026-07-07 15:22:43 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=262
+
+2026-07-07 15:22:43 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 15:27:30 [WARN]
+Transaction()
+Savepoints are disabled because Multiple Active Result Sets (MARS) is enabled. If 'SaveChanges' fails, then the transaction cannot be automatically rolled back to a known clean state. Instead, the transaction should be rolled back by the application before retrying 'SaveChanges'. See https://go.microsoft.com/fwlink/?linkid=2149338 for more information and examples. To identify the code which triggers this warning, call 'ConfigureWarnings(w => w.Throw(SqlServerEventId.SavepointsDisabledBecauseOfMARS))'.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 0HNMS1LUPE697:00000001
+
+2026-07-07 15:27:30 [WARN]
+Transaction()
+Savepoints are disabled because Multiple Active Result Sets (MARS) is enabled. If 'SaveChanges' fails, then the transaction cannot be automatically rolled back to a known clean state. Instead, the transaction should be rolled back by the application before retrying 'SaveChanges'. See https://go.microsoft.com/fwlink/?linkid=2149338 for more information and examples. To identify the code which triggers this warning, call 'ConfigureWarnings(w => w.Throw(SqlServerEventId.SavepointsDisabledBecauseOfMARS))'.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 0HNMS1LUPE697:00000001
+
+2026-07-07 15:27:30 [INFO]
+CreditRebuildService()
+Credit rebuild enquiry saved: Lead_id 4055221, campaign "MSME credit rebuild", emp_code "RB600000251", phone "8898445796"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 0HNMS1LUPE697:00000001
+
+2026-07-07 15:38:42 [WARN]
+Transaction()
+Savepoints are disabled because Multiple Active Result Sets (MARS) is enabled. If 'SaveChanges' fails, then the transaction cannot be automatically rolled back to a known clean state. Instead, the transaction should be rolled back by the application before retrying 'SaveChanges'. See https://go.microsoft.com/fwlink/?linkid=2149338 for more information and examples. To identify the code which triggers this warning, call 'ConfigureWarnings(w => w.Throw(SqlServerEventId.SavepointsDisabledBecauseOfMARS))'.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 0HNMS1LUPE69A:00000001
+
+2026-07-07 15:38:43 [WARN]
+Transaction()
+Savepoints are disabled because Multiple Active Result Sets (MARS) is enabled. If 'SaveChanges' fails, then the transaction cannot be automatically rolled back to a known clean state. Instead, the transaction should be rolled back by the application before retrying 'SaveChanges'. See https://go.microsoft.com/fwlink/?linkid=2149338 for more information and examples. To identify the code which triggers this warning, call 'ConfigureWarnings(w => w.Throw(SqlServerEventId.SavepointsDisabledBecauseOfMARS))'.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 0HNMS1LUPE69A:00000001
+
+2026-07-07 15:38:43 [INFO]
+CreditRebuildService()
+Credit rebuild enquiry saved: Lead_id 4055224, campaign "MSME credit rebuild", emp_code "RB600000251", phone "8898445796"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 0HNMS1LUPE69A:00000001
+
+2026-07-07 15:40:54 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 15:40:56 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 15:40:56 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 15:40:57 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 15:40:57 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=30
+
+2026-07-07 15:40:57 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=220
+
+2026-07-07 15:40:57 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 15:42:43 [INFO]
+CreditRepairLeadService()
+Validation successful. Preparing webhook request.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [INFO]
+ZohoFlowWebhookClient()
+Preparing Zoho Flow webhook request. Url "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=***&zapikey=***" Payload "{\"name\":\"Sharad Elikapeli\",\"email\":\"kumartesty@gmail.com\",\"phone\":\"8898445796\",\"customer_type\":\"new\",\"source\":\"RupeeBOSS\"}"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=false&zapikey=CHANGE_ME"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=false&zapikey=CHANGE_ME"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [INFO]
+ClientHandler()
+Received HTTP response headers after 288.2986ms - 410
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [INFO]
+LogicalHandler()
+End processing HTTP request after 310.9133ms - 410
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [INFO]
+ZohoFlowWebhookClient()
+Zoho Flow webhook completed. Url "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=***&zapikey=***" Status 410 ElapsedMs 337 Body "{\"type\":\"security\",\"status\":\"error\",\"info\":{\"category\":\"auth\",\"message\":\"Invalid Oauth Token\"}}
+"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:42:43 [WARN]
+CreditRepairLeadService()
+Webhook failed. StatusCode 410 ElapsedMs 337 Error null Body "{\"type\":\"security\",\"status\":\"error\",\"info\":{\"category\":\"auth\",\"message\":\"Invalid Oauth Token\"}}
+"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: 1d40d0c7baee44ff9557c69eac18455b
+
+2026-07-07 15:52:06 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 15:52:08 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 15:52:09 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 15:52:09 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 15:52:09 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=38
+
+2026-07-07 15:52:10 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=227
+
+2026-07-07 15:52:10 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 15:52:40 [INFO]
+CreditRepairLeadService()
+Validation successful. Preparing webhook request.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:40 [INFO]
+ZohoFlowWebhookClient()
+Preparing Zoho Flow webhook request. Url "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=***&zapikey=***" Payload "{\"name\":\"Sharad Elikapeli\",\"email\":\"kumartesty@gmail.com\",\"phone\":\"8898445796\",\"customer_type\":\"new\",\"source\":\"RupeeBOSS\"}"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:40 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=false&zapikey=1001.4480bad47c48abf0c09d512aef3f5a6f.f4ae2309742ccbbcc3ceb46ff8bb13dc"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:40 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=false&zapikey=1001.4480bad47c48abf0c09d512aef3f5a6f.f4ae2309742ccbbcc3ceb46ff8bb13dc"
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+ClientHandler()
+Received HTTP response headers after 515.935ms - 200
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+LogicalHandler()
+End processing HTTP request after 533.3189ms - 200
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+ZohoFlowWebhookClient()
+Zoho Flow webhook completed. Url "https://flow.zoho.in/60027456406/flow/webhook/incoming?isdebug=***&zapikey=***" Status 200 ElapsedMs 553 Body ""
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+CreditRepairLeadService()
+Webhook success. Saving CreditRepair_Lead.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+CreditRepairLeadService()
+Credit repair lead_data overrides: productid 1102, lead_source "mbmwebsite", campaign "creditrepair".
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+CreditRepairLeadRepository()
+CreditRepair_Lead saved: Id 1, phone "8898445796", campaign "creditrepair", source "mbmwebsite".
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:41 [INFO]
+CreditRepairLeadService()
+Saving Lead_Data (RBMAIN lead_data) with productid 1102, lead_source "mbmwebsite", campaign "creditrepair".
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:42 [INFO]
+LeadPushService()
+Lead inserted into lead_data for credit repair submission, Lead_id 4055229, productid 1102, emp_code "RB600000251", lead_source "mbmwebsite", campaign "creditrepair".
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:42 [INFO]
+CreditRepairLeadRepository()
+CreditRepair_Lead linked to lead_data. Id 1, lead_id 4055229.
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 15:52:42 [INFO]
+CreditRepairLeadService()
+Completed successfully. Lead_id 4055229
+Request URL: POST /api/credit-rebuild/enquire
+IP Address: ::1
+Correlation ID: bb3611d88e964814a026833d8738ca38
+
+2026-07-07 16:54:13 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNMS26D96GOR:00000001
+
+2026-07-07 16:55:32 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 16:55:36 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 16:55:37 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 16:55:38 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 16:55:38 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=95
+
+2026-07-07 16:55:38 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=286
+
+2026-07-07 16:55:38 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 16:56:01 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B90:00000001
+
+2026-07-07 16:56:01 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B90:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 16:56:01 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B90:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 16:56:06 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B95:00000001
+
+2026-07-07 16:56:52 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B98:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 16:56:52 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B98:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 16:57:21 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B9B:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 16:57:21 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS39SA7B9B:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:00:01 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS39SA7BA3:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:00:01 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS39SA7BA3:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method128(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:00:26 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 17:00:28 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 17:00:28 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 17:00:29 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 17:00:29 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=129
+
+2026-07-07 17:00:29 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=363
+
+2026-07-07 17:00:29 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 17:05:45 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGTT:00000001
+
+2026-07-07 17:05:45 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGTU:00000001
+
+2026-07-07 17:05:45 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGTU:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:05:45 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGTU:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:06:31 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGUS:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:06:31 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGUS:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:07:19 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGV9:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:07:19 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGV9:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:50:22 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGVG:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:50:22 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGVG:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:57:28 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGVN:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:57:28 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BGVN:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:59:22 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BH00:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 17:59:22 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/admin/credit-repair/stats" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="Something went wrong. Please try again later."
+Request URL: GET /api/admin/credit-repair/stats
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNMS3CJ1BH00:00000001
+Exception:
+System.InvalidOperationException: The LINQ expression 'DbSet<CreditRepairLead>()
+    .GroupBy(c => c.Source)
+    .Select(g => new CreditRepairSourceBreakdownDto(
+        g.Key, 
+        g
+            .AsQueryable()
+            .Count()
+    ))
+    .OrderByDescending(e0 => e0.Count)' could not be translated. Either rewrite the query in a form that can be translated, or switch to client evaluation explicitly by inserting a call to 'AsEnumerable', 'AsAsyncEnumerable', 'ToList', or 'ToListAsync'. See https://go.microsoft.com/fwlink/?linkid=2101038 for more information.
+   at Microsoft.EntityFrameworkCore.Query.QueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.RelationalQueryableMethodTranslatingExpressionVisitor.Translate(Expression expression)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass12_0`1.<ExecuteAsync>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryable`1.GetAsyncEnumerator(CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.ConfiguredCancelableAsyncEnumerable`1.GetAsyncEnumerator()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Services.Repository.CreditRepairManagementRepository.GetSourceBreakdownAsync(Nullable`1 dateFrom, Nullable`1 dateToExclusive, CancellationToken ct) in D:\MBM\backend\Services\Repository\CreditRepairManagementRepository.cs:line 55
+   at RB_Website_API.Services.CreditRepairManagementService.GetStatsAsync(String actorRole, String dateFrom, String dateTo, CancellationToken ct) in D:\MBM\backend\Services\CreditRepairManagementService.cs:line 26
+   at lambda_method196(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-07 18:28:37 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 18:28:39 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 18:28:39 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 18:28:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 18:28:41 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=33
+
+2026-07-07 18:28:41 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=236
+
+2026-07-07 18:28:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-07 18:44:37 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-07 18:44:38 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-07 18:44:38 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-07 18:44:39 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-07 18:44:39 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=23
+
+2026-07-07 18:44:39 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=209
+
+2026-07-07 18:44:39 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+

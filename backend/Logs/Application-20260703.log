@@ -1,0 +1,516 @@
+2026-07-03 17:23:34 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-03 17:23:36 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-03 17:23:36 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-03 17:23:37 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-03 17:23:37 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=16
+
+2026-07-03 17:23:37 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=144
+
+2026-07-03 17:23:37 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-03 17:38:04 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-03 17:38:06 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-03 17:38:06 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-03 17:38:07 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-03 17:38:07 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=28
+
+2026-07-03 17:38:07 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=166
+
+2026-07-03 17:38:07 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-03 17:42:53 [INFO]
+AuthController()
+Registration OTP request received for "kumartesty@gmail.com"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:42:53 [INFO]
+AuthController()
+Registration OTP email validation passed for "kumartesty@gmail.com"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:42:55 [INFO]
+InMemoryOtpService()
+OTP generated for "kumartesty@gmail.com" Channel="email"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:42:55 [INFO]
+SmtpEmailSender()
+Email send started To="kumartesty@gmail.com" Host="smtpout.secureserver.net" Port=587 Subject="Your MSME Bharat Manch verification code"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:43:02 [INFO]
+SmtpEmailSender()
+Email send success To="kumartesty@gmail.com" Host="smtpout.secureserver.net" Port=587 ElapsedMs=6722
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:43:02 [INFO]
+InMemoryOtpService()
+Email provider response success for "kumartesty@gmail.com" ElapsedMs=6775
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:43:02 [INFO]
+InMemoryOtpService()
+OTP saved for "kumartesty@gmail.com" Channel="email"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:43:02 [INFO]
+AuthController()
+Registration OTP send completed for "kumartesty@gmail.com" ElapsedMs=8533
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPJ:00000001
+
+2026-07-03 17:43:23 [INFO]
+InMemoryOtpService()
+Registration SMS OTP generated for "8898445796"
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:43:23 [INFO]
+LogicalHandler()
+Start processing HTTP request "GET" "http://164.52.195.161/API/SendMsg.aspx?uname=20240002&pass=999799qU&send=RUPBOS&dest=8898445796&msg=Dear%20Customer,%0AYour%20mobile%20verification%20code%20is%20434785%0APlease%20use%20this%20code%20to%20verify%20your%20account.%20Regard%20Team%20RupeeBoss."
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:43:23 [INFO]
+ClientHandler()
+Sending HTTP request "GET" "http://164.52.195.161/API/SendMsg.aspx?uname=20240002&pass=999799qU&send=RUPBOS&dest=8898445796&msg=Dear%20Customer,%0AYour%20mobile%20verification%20code%20is%20434785%0APlease%20use%20this%20code%20to%20verify%20your%20account.%20Regard%20Team%20RupeeBoss."
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:43:24 [INFO]
+ClientHandler()
+Received HTTP response headers after 1257.6724ms - 200
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:43:24 [INFO]
+LogicalHandler()
+End processing HTTP request after 1288.8709ms - 200
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:43:24 [INFO]
+HttpSmsSender()
+SMS gateway response for "8898445796": "8898445796-223764245973000001"
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:43:24 [INFO]
+InMemoryOtpService()
+Registration SMS OTP sent for "8898445796"
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPK:00000001
+
+2026-07-03 17:44:10 [INFO]
+UserController()
+Registration idempotent retry for existing email "kumartesty@gmail.com" (UserId=7f1abd1b-f22a-49dc-9a02-fd6653f9f05f)
+Request URL: POST /api/user/register
+User ID: 7f1abd1b-f22a-49dc-9a02-fd6653f9f05f
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPN:00000001
+
+2026-07-03 17:44:10 [INFO]
+LeadPushService()
+Registration lead already pushed for user 7f1abd1b-f22a-49dc-9a02-fd6653f9f05f.
+Request URL: POST /api/user/register
+User ID: 7f1abd1b-f22a-49dc-9a02-fd6653f9f05f
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJPN:00000001
+
+2026-07-03 17:47:36 [INFO]
+AuthController()
+Registration OTP request received for "rupeeboss12@gmail.com"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:36 [INFO]
+AuthController()
+Registration OTP email validation passed for "rupeeboss12@gmail.com"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:36 [INFO]
+InMemoryOtpService()
+OTP generated for "rupeeboss12@gmail.com" Channel="email"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:36 [INFO]
+SmtpEmailSender()
+Email send started To="rupeeboss12@gmail.com" Host="smtpout.secureserver.net" Port=587 Subject="Your MSME Bharat Manch verification code"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:42 [INFO]
+SmtpEmailSender()
+Email send success To="rupeeboss12@gmail.com" Host="smtpout.secureserver.net" Port=587 ElapsedMs=6460
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:42 [INFO]
+InMemoryOtpService()
+Email provider response success for "rupeeboss12@gmail.com" ElapsedMs=6467
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:42 [INFO]
+InMemoryOtpService()
+OTP saved for "rupeeboss12@gmail.com" Channel="email"
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:47:42 [INFO]
+AuthController()
+Registration OTP send completed for "rupeeboss12@gmail.com" ElapsedMs=6470
+Request URL: POST /api/auth/otp/email/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ0:00000001
+
+2026-07-03 17:48:21 [INFO]
+InMemoryOtpService()
+Registration SMS OTP generated for "8879160983"
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:48:21 [INFO]
+LogicalHandler()
+Start processing HTTP request "GET" "http://164.52.195.161/API/SendMsg.aspx?uname=20240002&pass=999799qU&send=RUPBOS&dest=8879160983&msg=Dear%20Customer,%0AYour%20mobile%20verification%20code%20is%20199804%0APlease%20use%20this%20code%20to%20verify%20your%20account.%20Regard%20Team%20RupeeBoss."
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:48:21 [INFO]
+ClientHandler()
+Sending HTTP request "GET" "http://164.52.195.161/API/SendMsg.aspx?uname=20240002&pass=999799qU&send=RUPBOS&dest=8879160983&msg=Dear%20Customer,%0AYour%20mobile%20verification%20code%20is%20199804%0APlease%20use%20this%20code%20to%20verify%20your%20account.%20Regard%20Team%20RupeeBoss."
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:48:22 [INFO]
+ClientHandler()
+Received HTTP response headers after 1072.8328ms - 200
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:48:22 [INFO]
+LogicalHandler()
+End processing HTTP request after 1075.2813ms - 200
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:48:22 [INFO]
+HttpSmsSender()
+SMS gateway response for "8879160983": "8879160983-223764219178000001"
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:48:22 [INFO]
+InMemoryOtpService()
+Registration SMS OTP sent for "8879160983"
+Request URL: POST /api/auth/otp/sms/send
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ2:00000001
+
+2026-07-03 17:49:23 [WARN]
+Transaction()
+Savepoints are disabled because Multiple Active Result Sets (MARS) is enabled. If 'SaveChanges' fails, then the transaction cannot be automatically rolled back to a known clean state. Instead, the transaction should be rolled back by the application before retrying 'SaveChanges'. See https://go.microsoft.com/fwlink/?linkid=2149338 for more information and examples. To identify the code which triggers this warning, call 'ConfigureWarnings(w => w.Throw(SqlServerEventId.SavepointsDisabledBecauseOfMARS))'.
+Request URL: POST /api/user/register
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ4:00000001
+
+2026-07-03 17:49:24 [INFO]
+LeadPushService()
+Lead inserted into lead_data for "registration user 9448ec1c-c26e-4826-9d05-048635e86731", Lead_id 4054897, emp_code "RB600000251", lead_source "MSMEREGISTRATION", lead_type "Telecalling".
+Request URL: POST /api/user/register
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ4:00000001
+
+2026-07-03 17:49:24 [INFO]
+SmtpEmailSender()
+Email send started To="rupeeboss12@gmail.com" Host="smtpout.secureserver.net" Port=587 Subject="Welcome to MSME Bharat Manch — your account is ready"
+Request URL: POST /api/user/register
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ4:00000001
+
+2026-07-03 17:49:30 [INFO]
+SmtpEmailSender()
+Email send success To="rupeeboss12@gmail.com" Host="smtpout.secureserver.net" Port=587 ElapsedMs=6089
+Request URL: POST /api/user/register
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ4:00000001
+
+2026-07-03 17:49:30 [INFO]
+RegistrationWelcomeEmailService()
+Unpaid registration welcome email sent to "rupeeboss12@gmail.com".
+Request URL: POST /api/user/register
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ4:00000001
+
+2026-07-03 17:49:30 [INFO]
+UserController()
+User registered successfully 9448ec1c-c26e-4826-9d05-048635e86731 ("rupeeboss12@gmail.com")
+Request URL: POST /api/user/register
+User ID: 9448ec1c-c26e-4826-9d05-048635e86731
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJQ4:00000001
+
+2026-07-03 18:24:59 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://api.razorpay.com/v1/orders"
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJRK:00000001
+
+2026-07-03 18:24:59 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://api.razorpay.com/v1/orders"
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJRK:00000001
+
+2026-07-03 18:24:59 [INFO]
+ClientHandler()
+Received HTTP response headers after 130.7179ms - 200
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJRK:00000001
+
+2026-07-03 18:24:59 [INFO]
+LogicalHandler()
+End processing HTTP request after 132.7551ms - 200
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMOVEV8NJRK:00000001
+
+2026-07-03 18:25:18 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-03 18:25:23 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-03 18:25:23 [INFO]
+DateTimeDefaultsSchemaHostedService()
+DateTime column defaults verified (GETDATE()).
+
+2026-07-03 18:25:24 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-03 18:25:24 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=33
+
+2026-07-03 18:25:24 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=167
+
+2026-07-03 18:25:24 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-03 18:25:33 [ERROR]
+Connection()
+An error occurred using the connection to database '"MBM"' on server '"103.195.186.215,1433"'.
+Request URL: GET /api/user/me
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VG:00000001
+
+2026-07-03 18:25:33 [ERROR]
+Connection()
+An error occurred using the connection to database '"MBM"' on server '"103.195.186.215,1433"'.
+Request URL: GET /api/payment/my-plan
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VF:00000001
+
+2026-07-03 18:25:40 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://api.razorpay.com/v1/orders"
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VR:00000001
+
+2026-07-03 18:25:40 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://api.razorpay.com/v1/orders"
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VR:00000001
+
+2026-07-03 18:25:41 [INFO]
+ClientHandler()
+Received HTTP response headers after 197.1154ms - 200
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VR:00000001
+
+2026-07-03 18:25:41 [INFO]
+LogicalHandler()
+End processing HTTP request after 207.4913ms - 200
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VR:00000001
+
+2026-07-03 18:26:14 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://api.razorpay.com/v1/orders"
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VU:00000001
+
+2026-07-03 18:26:14 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://api.razorpay.com/v1/orders"
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VU:00000001
+
+2026-07-03 18:26:14 [INFO]
+ClientHandler()
+Received HTTP response headers after 64.4838ms - 200
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VU:00000001
+
+2026-07-03 18:26:14 [INFO]
+LogicalHandler()
+End processing HTTP request after 65.4874ms - 200
+Request URL: POST /api/payment/razorpay/order
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VU:00000001
+
+2026-07-03 18:26:53 [WARN]
+Transaction()
+Savepoints are disabled because Multiple Active Result Sets (MARS) is enabled. If 'SaveChanges' fails, then the transaction cannot be automatically rolled back to a known clean state. Instead, the transaction should be rolled back by the application before retrying 'SaveChanges'. See https://go.microsoft.com/fwlink/?linkid=2149338 for more information and examples. To identify the code which triggers this warning, call 'ConfigureWarnings(w => w.Throw(SqlServerEventId.SavepointsDisabledBecauseOfMARS))'.
+Request URL: POST /api/payment/razorpay/verify
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VV:00000001
+
+2026-07-03 18:26:54 [INFO]
+SmtpEmailSender()
+Email send started To="consult.pragya@gmail.com" Host="smtpout.secureserver.net" Port=587 Subject="Welcome to MSME Bharat Manch — MSME Premium activated"
+Request URL: POST /api/payment/razorpay/verify
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VV:00000001
+
+2026-07-03 18:27:01 [INFO]
+SmtpEmailSender()
+Email send success To="consult.pragya@gmail.com" Host="smtpout.secureserver.net" Port=587 ElapsedMs=6969
+Request URL: POST /api/payment/razorpay/verify
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VV:00000001
+
+2026-07-03 18:27:01 [INFO]
+RegistrationWelcomeEmailService()
+Paid registration welcome email sent to "consult.pragya@gmail.com" for user 90ce3039-c76e-45c6-8cb0-635d0dc8ab0c.
+Request URL: POST /api/payment/razorpay/verify
+User ID: 90ce3039-c76e-45c6-8cb0-635d0dc8ab0c
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VV:00000001
+
+2026-07-03 18:27:02 [INFO]
+LeadPushService()
+Payment lead push skipped: registration lead already exists for user 90ce3039-c76e-45c6-8cb0-635d0dc8ab0c (order 90d014f0-8dca-489d-80d0-44962baae23c).
+Request URL: POST /api/payment/razorpay/verify
+User ID: 90ce3039-c76e-45c6-8cb0-635d0dc8ab0c
+IP Address: ::1
+Correlation ID: 0HNMP09CLN1VV:00000001
+
+2026-07-03 18:27:24 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNMP09CLN209:00000001
+
+2026-07-03 18:29:24 [INFO]
+SmtpEmailSender()
+Email send started To="consult.pragya@gmail.com" Host="smtpout.secureserver.net" Port=587 Subject="Your Reports Are Ready"
+Request URL: POST /api/admin/reports/upload
+IP Address: ::1
+Correlation ID: 0HNMP09CLN20E:00000001
+
+2026-07-03 18:29:30 [INFO]
+SmtpEmailSender()
+Email send success To="consult.pragya@gmail.com" Host="smtpout.secureserver.net" Port=587 ElapsedMs=6298
+Request URL: POST /api/admin/reports/upload
+IP Address: ::1
+Correlation ID: 0HNMP09CLN20E:00000001
+
+2026-07-03 18:29:30 [INFO]
+ReportEmailService()
+Report ready email sent to "consult.pragya@gmail.com" for report fc8de4ca-a2fc-4215-b0d3-2fd351b1b389.
+Request URL: POST /api/admin/reports/upload
+IP Address: ::1
+Correlation ID: 0HNMP09CLN20E:00000001
+

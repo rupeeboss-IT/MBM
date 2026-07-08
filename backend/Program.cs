@@ -2,10 +2,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RB_Website_API.Logging;
 using RB_Website_API.Middleware;
+using Serilog;
 using System.Text;
 
+MbmFileLogging.CreateBootstrapLogger();
+
+try
+{
 var builder = WebApplication.CreateBuilder(args);
+
+MbmFileLogging.Configure(builder);
 
 // Add services to the container.
 
@@ -160,6 +168,8 @@ builder.Services.Configure<RB_Website_API.Auth.RazorpaySettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.RazorpaySettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.ReferralSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.ReferralSettings.SectionName));
+builder.Services.Configure<RB_Website_API.Auth.ZohoFlowSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.ZohoFlowSettings.SectionName));
 builder.Services.AddHttpClient(
     RB_Website_API.Auth.HttpSmsSender.HttpClientName,
     client => client.Timeout = TimeSpan.FromSeconds(30));
@@ -170,6 +180,15 @@ builder.Services.AddHttpClient("Razorpay", client =>
 builder.Services.AddHttpClient("Saarthi", client =>
 {
     client.Timeout = TimeSpan.FromSeconds(120);
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+    client.DefaultRequestHeaders.UserAgent.Add(
+        new System.Net.Http.Headers.ProductInfoHeaderValue("MSME-Bharat-Manch", "1.0"));
+});
+builder.Services.AddHttpClient(RB_Website_API.Services.Webhooks.ZohoFlowWebhookClient.HttpClientName, client =>
+{
+    var timeoutSeconds = builder.Configuration.GetValue<int?>($"{RB_Website_API.Auth.ZohoFlowSettings.SectionName}:TimeoutSeconds") ?? 15;
+    client.Timeout = TimeSpan.FromSeconds(Math.Clamp(timeoutSeconds, 5, 60));
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
     client.DefaultRequestHeaders.UserAgent.Add(
@@ -205,6 +224,10 @@ builder.Services.AddScoped<RB_Website_API.Services.ISaarthiApiClient, RB_Website
 builder.Services.AddScoped<RB_Website_API.Services.ISdrReportService, RB_Website_API.Services.SdrReportService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IUserManagementRepository, RB_Website_API.Services.Repository.UserManagementRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IUserManagementService, RB_Website_API.Services.UserManagementService>();
+builder.Services.AddScoped<RB_Website_API.Services.Webhooks.IZohoFlowWebhookClient, RB_Website_API.Services.Webhooks.ZohoFlowWebhookClient>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.ICreditRepairLeadRepository, RB_Website_API.Services.Repository.CreditRepairLeadRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.ICreditRepairLeadService, RB_Website_API.Services.CreditRepairLeadService>();
+builder.Services.AddScoped<RB_Website_API.Features.CreditRepair.ISubmitCreditRepairLeadHandler, RB_Website_API.Features.CreditRepair.SubmitCreditRepairLeadHandler>();
 builder.Services.AddScoped<RB_Website_API.Services.BulkImportWelcomeEmailService>();
 builder.Services.AddScoped<RB_Website_API.Services.IBulkMemberImportService, RB_Website_API.Services.BulkMemberImportService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IVendorManagementRepository, RB_Website_API.Services.Repository.VendorManagementRepository>();
@@ -217,13 +240,16 @@ builder.Services.Configure<RB_Website_API.Auth.ConnectSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.ConnectSettings.SectionName));
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IEnquiryManagementRepository, RB_Website_API.Services.Repository.EnquiryManagementRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.IEnquiryManagementService, RB_Website_API.Services.EnquiryManagementService>();
+builder.Services.AddScoped<RB_Website_API.Services.IRepository.ICreditRepairManagementRepository, RB_Website_API.Services.Repository.CreditRepairManagementRepository>();
+builder.Services.AddScoped<RB_Website_API.Services.ICreditRepairManagementService, RB_Website_API.Services.CreditRepairManagementService>();
 
 var app = builder.Build();
 
 app.Logger.LogInformation(
-    "MBM API started Environment={Environment} Urls={Urls}",
+    "MBM API started Environment={Environment} Urls={Urls} LogFolder={LogFolder}",
     app.Environment.EnvironmentName,
-    string.Join(", ", app.Urls));
+    string.Join(", ", app.Urls),
+    MbmFileLogging.LogFolder);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -241,6 +267,8 @@ if (app.Environment.IsProduction())
 
 if (corsOrigins.Length > 0)
     app.UseCors("Frontend");
+
+app.UseMiddleware<HttpContextLogEnrichmentMiddleware>();
 
 // In Development, the Angular proxy uses http://localhost:5228. HTTPS redirection would 307 to another
 // port and can break POST bodies / proxy handling for /api calls.
@@ -263,3 +291,14 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "MBM API terminated unexpectedly");
+    throw;
+}
+finally
+{
+    Log.Information("MBM API shutting down");
+    Log.CloseAndFlush();
+}

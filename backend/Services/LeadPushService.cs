@@ -240,6 +240,80 @@ public sealed class LeadPushService : ILeadPushService
         }
     }
 
+    public async Task<(bool Success, int? LeadId)> CreateLeadAfterCreditRepairSubmissionAsync(
+        string fullName,
+        string mobile,
+        string? email,
+        int productIdOverride,
+        string leadSourceOverride,
+        string campaignNameOverride,
+        string? remark,
+        string empCode,
+        string leadType,
+        int? brokerId,
+        CancellationToken ct)
+    {
+        var now = DateTime.Now;
+
+        var lead = new LeadData
+        {
+            name = Truncate(fullName, 100),
+            mobile = Truncate(mobile, 50),
+            email = Truncate(email, 300),
+            productid = productIdOverride,
+            Pincode = null,
+            profession = _settings.DefaultProfession,
+            source_id = _settings.SourceId,
+            lead_source = Truncate(leadSourceOverride, 500),
+            lead_type = Truncate(leadType, 50),
+            campaignName = Truncate(campaignNameOverride, 200),
+            emp_code = Truncate(empCode, 20),
+            broker_id = brokerId,
+            Lead_Status_id = _settings.LeadStatusId,
+            sysdate = now,
+            lead_date = now,
+            Created_Datetime = now,
+            remark = Truncate(remark, 4000),
+        };
+
+        try
+        {
+            _referralDb.LeadData.Add(lead);
+            await _referralDb.SaveChangesAsync(ct);
+
+            var leadId = await ResolveLeadIdAfterInsertAsync(lead, ct);
+
+            if (leadId > 0)
+            {
+                // lead_data has INSERT triggers; re-apply credit-repair overrides after insert.
+                await _referralDb.Database.ExecuteSqlInterpolatedAsync(
+                    $"""
+                     UPDATE lead_data
+                     SET productid = {productIdOverride},
+                         lead_source = {Truncate(leadSourceOverride, 500)},
+                         campaignName = {Truncate(campaignNameOverride, 200)}
+                     WHERE Lead_id = {leadId}
+                     """,
+                    ct);
+            }
+
+            _logger.LogInformation(
+                "Lead inserted into lead_data for credit repair submission, Lead_id {LeadId}, productid {ProductId}, emp_code {EmpCode}, lead_source {LeadSource}, campaign {Campaign}.",
+                leadId,
+                productIdOverride,
+                empCode,
+                leadSourceOverride,
+                campaignNameOverride);
+
+            return (true, leadId > 0 ? leadId : null);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to insert lead_data for credit repair submission.");
+            return (false, null);
+        }
+    }
+
     /// <summary>
     /// Re-validates advisor code at payment time. Active codes map to the advisor bucket;
     /// inactive or invalid codes fall back to the default employee bucket in CRM.

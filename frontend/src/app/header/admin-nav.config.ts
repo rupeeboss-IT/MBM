@@ -72,7 +72,7 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
   {
     id: 'crm',
     label: 'CRM & Enquiries',
-    prefixes: ['/admin/enquiry-management', '/admin/lead-attribution'],
+    prefixes: ['/admin/enquiry-management', '/admin/lead-attribution', '/admin/credit-repair'],
     sections: [
       {
         label: 'Enquiry management',
@@ -85,6 +85,12 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
           { label: 'New enquiries', route: '/admin/enquiry-management/new' },
           { label: 'Resolved enquiries', route: '/admin/enquiry-management/resolved' },
           { label: 'Closed enquiries', route: '/admin/enquiry-management/closed' },
+        ],
+      },
+      {
+        label: 'Credit repair',
+        children: [
+          { label: 'Credit repair leads', route: '/admin/credit-repair/leads' },
         ],
       },
       {

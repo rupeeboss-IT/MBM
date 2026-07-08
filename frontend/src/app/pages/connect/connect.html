@@ -161,14 +161,16 @@
 
       <ng-template #gridState>
         <div class="no-results" *ngIf="!loading()">
-          <div class="nr-ico">🔎</div>
-          <div class="nr-title">No MSMEs Found</div>
+          <div class="nr-ico">{{ total() === 0 ? '🤝' : '🔎' }}</div>
+          <div class="nr-title">{{ total() === 0 ? 'Our network is growing' : 'No matches found' }}</div>
           <div class="nr-sub" *ngIf="total() === 0">
-            No members are listed on Connect yet. Users in the database must be added to
-            <strong>Connect Admin Listings</strong> first (Admin → Manage Connect), or run
-            <code>database/connect-seed-from-users.sql</code> to import existing members/partners.
+            MSME Connect helps you discover verified members across India — suppliers, partners, buyers, and
+            collaborators. Listings will appear here as members join the network. Check back soon!
           </div>
-          <div class="nr-sub" *ngIf="total() > 0">Try adjusting your search or filters.</div>
+          <div class="nr-sub" *ngIf="total() > 0">
+            We couldn't find any MSMEs matching your search or filters. Try broadening your criteria or clearing
+            filters to explore more members.
+          </div>
         </div>
         <div class="no-results" *ngIf="loading()">
           <div class="nr-sub">Loading network...</div>

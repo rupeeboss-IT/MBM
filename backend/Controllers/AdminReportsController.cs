@@ -15,17 +15,20 @@ public sealed class AdminReportsController : ControllerBase
     private readonly IReportChangeRequestService _changeRequests;
     private readonly ISdrReportService _sdrReports;
     private readonly IReportAuditService _audit;
+    private readonly ILogger<AdminReportsController> _logger;
 
     public AdminReportsController(
         ICustomerReportService reports,
         IReportChangeRequestService changeRequests,
         ISdrReportService sdrReports,
-        IReportAuditService audit)
+        IReportAuditService audit,
+        ILogger<AdminReportsController> logger)
     {
         _reports = reports;
         _changeRequests = changeRequests;
         _sdrReports = sdrReports;
         _audit = audit;
+        _logger = logger;
     }
 
     public sealed record SearchCustomersResponse(bool Success, string? Message, List<CustomerSearchResultDto>? Customers);
@@ -86,13 +89,20 @@ public sealed class AdminReportsController : ControllerBase
 
         if (result.ReportId is Guid reportId)
         {
-            await _audit.LogAsync(
-                ReportAuditService.ActionSdrAdminGenerate,
-                adminId,
-                reportId,
-                body.CustomerId,
-                ip,
-                ct);
+            try
+            {
+                await _audit.LogAsync(
+                    ReportAuditService.ActionSdrAdminGenerate,
+                    adminId,
+                    reportId,
+                    body.CustomerId,
+                    ip,
+                    ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "SDR admin audit log failed ReportId={ReportId}", reportId);
+            }
         }
 
         if (!result.Success || result.Outcome == SdrReportCatalog.OutcomeFailed)

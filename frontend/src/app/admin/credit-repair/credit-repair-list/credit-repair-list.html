@@ -1,0 +1,120 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Credit repair</span>
+      <h2>Credit Repair Leads</h2>
+      <div class="muted">
+        Enquiries from the Credit Rebuild page. Each row should have a CRM Lead ID after successful submission.
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-outline" routerLink="/admin-dashboard">← Admin dashboard</a>
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+    </div>
+  </div>
+
+  <app-admin-list-toolbar
+    panelTitle="Filters"
+    [dateFrom]="dateFrom()"
+    [dateTo]="dateTo()"
+    [sortPreset]="sortPreset()"
+    [showSearch]="false"
+    [disabled]="loading() || exporting()"
+    (dateFromChange)="dateFrom.set($event)"
+    (dateToChange)="dateTo.set($event)"
+    (sortPresetChange)="sortPreset.set($event); applyFilters()"
+    (applyFilters)="applyFilters()"
+    (exportClick)="exportExcel()"
+  />
+
+  <div class="section">
+    <div class="cr-filters">
+      <input
+        type="search"
+        class="cr-search"
+        placeholder="Search name, mobile, email, CRM lead id…"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applyFilters()"
+      />
+      <select class="cr-select" [ngModel]="sourceFilter()" (ngModelChange)="sourceFilter.set($event)">
+        <option value="">All sources</option>
+        @for (s of sources(); track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+      <select class="cr-select" [ngModel]="campaignFilter()" (ngModelChange)="campaignFilter.set($event)">
+        <option value="">All campaigns</option>
+        @for (c of campaigns(); track c) {
+          <option [value]="c">{{ c }}</option>
+        }
+      </select>
+      <select class="cr-select" [ngModel]="linkStatusFilter()" (ngModelChange)="linkStatusFilter.set($event)">
+        <option value="">All CRM status</option>
+        <option value="linked">Synced to CRM</option>
+        <option value="unlinked">Pending CRM sync</option>
+      </select>
+      <button class="btn btn-outline" type="button" (click)="applyFilters()" [disabled]="loading()">Apply</button>
+    </div>
+
+    @if (loading()) {
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading credit repair leads…</span>
+      </div>
+    } @else if (leads().length === 0) {
+      <div class="admin-empty">No credit repair leads found for the selected filters.</div>
+    } @else {
+      <div class="admin-table-wrap cr-table-wrap">
+        <div class="table">
+          <div class="row header row-cr-leads">
+            <button type="button" class="sortable" (click)="onSortColumn('created')">
+              Submitted {{ sortIndicator(sortBy(), sortDir(), 'created') }}
+            </button>
+            <button type="button" class="sortable" (click)="onSortColumn('name')">
+              Name {{ sortIndicator(sortBy(), sortDir(), 'name') }}
+            </button>
+            <button type="button" class="sortable" (click)="onSortColumn('phone')">
+              Mobile {{ sortIndicator(sortBy(), sortDir(), 'phone') }}
+            </button>
+            <div>Email</div>
+            <button type="button" class="sortable" (click)="onSortColumn('source')">
+              Source {{ sortIndicator(sortBy(), sortDir(), 'source') }}
+            </button>
+            <button type="button" class="sortable" (click)="onSortColumn('campaign')">
+              Campaign {{ sortIndicator(sortBy(), sortDir(), 'campaign') }}
+            </button>
+            <button type="button" class="sortable" (click)="onSortColumn('lead_id')">
+              CRM Lead ID {{ sortIndicator(sortBy(), sortDir(), 'lead_id') }}
+            </button>
+          </div>
+
+          @for (item of leads(); track item.id) {
+            <div class="row row-cr-leads">
+              <div>{{ item.createdAt | localDate:'medium' }}</div>
+              <div class="cr-name">{{ display(item.fullName) }}</div>
+              <div>{{ display(item.phone) }}</div>
+              <div class="cr-email">{{ display(item.email) }}</div>
+              <div>{{ display(item.source) }}</div>
+              <div>{{ display(item.campaignName) }}</div>
+              <div>
+                @if (item.leadId) {
+                  <span class="cr-badge cr-badge--ok" title="Synced to CRM lead_data">{{ item.leadId }}</span>
+                } @else {
+                  <span class="cr-badge cr-badge--warn" title="Not yet linked to CRM lead_data">Pending</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <app-admin-pagination
+        [page]="page()"
+        [total]="total()"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)"
+      />
+    }
+  </div>
+</div>

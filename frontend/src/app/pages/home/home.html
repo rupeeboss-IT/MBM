@@ -403,6 +403,89 @@
     </div>
   </section>
 
+    <section class="crh-standout" id="credit-rebuild-home" aria-labelledby="crh-standout-heading">
+    <div class="crh-standout-bg" aria-hidden="true">
+      <div class="crh-standout-orb crh-standout-orb--1"></div>
+      <div class="crh-standout-orb crh-standout-orb--2"></div>
+      <div class="crh-standout-grid-pattern"></div>
+    </div>
+
+    <div class="container crh-standout-inner">
+      <header class="crh-standout-head">
+        <span class="crh-standout-eyebrow">Credit Rebuild</span>
+        <h2 id="crh-standout-heading">Fix Your Credit Profile the Right Way</h2>
+        <p class="crh-standout-lead">
+          RBI-compliant bureau correction across <strong>CIBIL, Experian, CRIF &amp; Equifax</strong> —
+          improve loan eligibility without exposing any vendor brand.
+        </p>
+        <div class="crh-standout-tags" role="list">
+          <span role="listitem">Bureau correction</span>
+          <span role="listitem">Individual &amp; MSME</span>
+          <span role="listitem">Loan-ready profile</span>
+          <span role="listitem">Pro monitoring</span>
+        </div>
+      </header>
+
+      <div class="crh-grid">
+        <a
+          class="crh-card"
+          routerLink="/credit-rebuild"
+          [queryParams]="{ audience: 'individual', section: 'plans' }"
+        >
+          <div class="crh-head">
+            <div class="crh-icon" aria-hidden="true">👤</div>
+            <div class="crh-price">From ₹9,999</div>
+          </div>
+          <h3>Individual</h3>
+          <p>Correct wrong entries, overdue flags, and mismatches — improve loan eligibility across bureaus.</p>
+          <div class="crh-foot">
+            <span class="crh-chip">1–4 bureaus</span>
+            <span class="crh-link">View Plans →</span>
+          </div>
+        </a>
+
+        <a
+          class="crh-card"
+          routerLink="/credit-rebuild"
+          [queryParams]="{ audience: 'business', section: 'plans' }"
+        >
+          <div class="crh-head">
+            <div class="crh-icon" aria-hidden="true">🏢</div>
+            <div class="crh-price">From ₹34,999</div>
+          </div>
+          <h3>Business (MSME)</h3>
+          <p>Strengthen commercial credit &amp; improve CMR rank for bank funding, tenders, and expansion readiness.</p>
+          <div class="crh-foot">
+            <span class="crh-chip">MSME-focused</span>
+            <span class="crh-link">View Plans →</span>
+          </div>
+        </a>
+
+        <a
+          class="crh-card crh-card--pro"
+          routerLink="/credit-rebuild"
+          [queryParams]="{ audience: 'business', section: 'pro' }"
+        >
+          <div class="crh-head">
+            <div class="crh-icon" aria-hidden="true">🏆</div>
+            <div class="crh-price">Pro Care</div>
+          </div>
+          <h3>Credit Rebuild Pro</h3>
+          <p>All-bureau correction + year-round monitoring to keep your profile accurate, updated, and loan-ready.</p>
+          <div class="crh-foot">
+            <span class="crh-chip">Ongoing tracking</span>
+            <span class="crh-link">Explore →</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="crh-cta">
+        <a class="btn-primary-lg" routerLink="/credit-rebuild" [queryParams]="{ audience: 'individual', section: 'plans' }">Get Started — Credit Rebuild</a>
+        <a class="crh-btn-secondary" routerLink="/contact">Talk to an Expert</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section services-section">
     <div class="container">
       <div class="section-header">
@@ -485,61 +568,7 @@
     </div>
   </section>
 
-  <section class="section bg-light credit-rebuild-home" id="credit-rebuild-home">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Credit Rebuild</div>
-        <h2>Fix Your Credit Profile the Right Way</h2>
-        <p>RBI-compliant bureau correction across CIBIL, Experian, CRIF &amp; Equifax — without exposing any vendor brand</p>
-      </div>
 
-      <div class="crh-grid">
-        <a class="crh-card" routerLink="/credit-rebuild">
-          <div class="crh-head">
-            <div class="crh-icon">👤</div>
-            <div class="crh-price">From ₹9,999</div>
-          </div>
-          <h3>Individual</h3>
-          <p>Correct wrong entries, overdue flags, and mismatches — improve loan eligibility across bureaus.</p>
-          <div class="crh-foot">
-            <span class="crh-chip">1–4 bureaus</span>
-            <span class="crh-link">View Plans →</span>
-          </div>
-        </a>
-
-        <a class="crh-card" routerLink="/credit-rebuild">
-          <div class="crh-head">
-            <div class="crh-icon">🏢</div>
-            <div class="crh-price">From ₹34,999</div>
-          </div>
-          <h3>Business (MSME)</h3>
-          <p>Strengthen commercial credit &amp; improve CMR rank for bank funding, tenders, and expansion readiness.</p>
-          <div class="crh-foot">
-            <span class="crh-chip">MSME-focused</span>
-            <span class="crh-link">View Plans →</span>
-          </div>
-        </a>
-
-        <a class="crh-card crh-card--pro" routerLink="/credit-rebuild">
-          <div class="crh-head">
-            <div class="crh-icon">🏆</div>
-            <div class="crh-price">Pro Care</div>
-          </div>
-          <h3>Credit Rebuild Pro</h3>
-          <p>All-bureau correction + year-round monitoring to keep your profile accurate, updated, and loan-ready.</p>
-          <div class="crh-foot">
-            <span class="crh-chip">Ongoing tracking</span>
-            <span class="crh-link">Explore →</span>
-          </div>
-        </a>
-      </div>
-
-      <div class="crh-cta">
-        <a class="btn-primary" routerLink="/credit-rebuild">Get Started</a>
-        <a class="btn-outline" routerLink="/contact">Talk to an Expert</a>
-      </div>
-    </div>
-  </section>
 
   <section class="section bg-light">
     <div class="container">

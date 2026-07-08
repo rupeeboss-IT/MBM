@@ -1,11 +1,26 @@
-/* Header + layout now reuses global .page-header / .loan-layout styles */
+/* Header + layout — uses global .page-header / .loan-layout styles */
 
+#page-credit-rebuild {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+#page-credit-rebuild .container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  box-sizing: border-box;
+}
+
+#page-credit-rebuild .page-header.rebuild-header,
 #page-credit-rebuild .page-header.red-header {
   position: relative;
   overflow: hidden;
-  padding: 3.25rem 1.5rem;
+  padding: clamp(2rem, 5vw, 3.25rem) max(var(--page-gutter), var(--safe-left));
 }
 
+#page-credit-rebuild .page-header.rebuild-header::before,
 #page-credit-rebuild .page-header.red-header::before {
   content: '';
   position: absolute;
@@ -17,6 +32,7 @@
     radial-gradient(circle at 12% 78%, rgba(255, 255, 255, 0.22) 0%, transparent 52%);
 }
 
+#page-credit-rebuild .page-header.rebuild-header::after,
 #page-credit-rebuild .page-header.red-header::after {
   content: '';
   position: absolute;
@@ -29,17 +45,31 @@
   background-size: 70px 70px;
 }
 
+#page-credit-rebuild .page-header.rebuild-header > .container,
 #page-credit-rebuild .page-header.red-header > .container {
   position: relative;
   z-index: 1;
 }
 
+#page-credit-rebuild .page-header.rebuild-header h1,
+#page-credit-rebuild .page-header.red-header h1 {
+  font-size: clamp(1.45rem, 3.5vw, 2.4rem);
+  line-height: 1.2;
+  margin-bottom: 0.65rem;
+  word-wrap: break-word;
+}
+
+#page-credit-rebuild .page-header.rebuild-header p,
 #page-credit-rebuild .page-header.red-header p {
   max-width: 56ch;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  line-height: 1.6;
 }
 
 #page-credit-rebuild .crb-audience-toggle {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.35rem;
   border-radius: 999px;
@@ -47,6 +77,7 @@
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14);
   margin-top: 1.15rem;
+  max-width: 100%;
 }
 
 #page-credit-rebuild .crb-audience-btn {
@@ -54,10 +85,13 @@
   background: transparent;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 700;
-  padding: 0.55rem 1.1rem;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  padding: 0.55rem clamp(0.75rem, 2.5vw, 1.1rem);
   border-radius: 999px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  min-height: var(--touch-min, 44px);
+  white-space: nowrap;
 }
 
 #page-credit-rebuild .crb-audience-btn.is-active {
@@ -65,9 +99,15 @@
   color: var(--red);
 }
 
-#page-credit-rebuild .crb-audience-btn:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.08);
+#page-credit-rebuild .crb-audience-btn:hover:not(.is-active) {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+#page-credit-rebuild .crb-audience-btn.is-active:hover {
+  background: #fff;
+  color: var(--red);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
 #page-credit-rebuild .crb-intro-grid {
@@ -193,89 +233,366 @@
   color: var(--green, #2d6a4f);
 }
 
-@media (max-width: 960px) {
-  #page-credit-rebuild .crb-split-card {
-    grid-template-columns: 1fr;
-  }
-
-  #page-credit-rebuild .crb-split-right {
-    border-left: none;
-    border-top: 1px solid #e8ecf3;
-  }
+#page-credit-rebuild .section {
+  padding-block: clamp(2rem, 4vw, 2.5rem);
 }
 
-#page-credit-rebuild .crb-how {
-  margin-top: 1.25rem;
-  margin-bottom: 1rem;
+/* ── Bottom section: How It Works + Enquiry ── */
+#page-credit-rebuild .crb-bottom-section {
+  padding-block: clamp(1.75rem, 3.5vw, 2.5rem);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(230, 57, 70, 0.04) 0%, transparent 42%),
+    radial-gradient(circle at 88% 100%, rgba(45, 106, 79, 0.05) 0%, transparent 40%),
+    linear-gradient(180deg, #eef2f8 0%, #f6f8fb 45%, #eef2f8 100%);
 }
 
-#page-credit-rebuild .crb-how-grid {
+#page-credit-rebuild .crb-bottom-panel {
+  position: relative;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+#page-credit-rebuild .crb-bottom-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.25rem);
+  align-items: stretch;
+  min-width: 0;
+}
+
+/* Shared panel card — equal height, balanced content */
+#page-credit-rebuild .crb-panel-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: clamp(1rem, 2vw, 1.25rem) !important;
+  border: 1px solid #e8ecf3;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(26, 26, 46, 0.05);
+  overflow: visible;
+}
+
+#page-credit-rebuild .crb-how-section > .crb-panel-card,
+#page-credit-rebuild .crb-form-panel > .crb-panel-card {
+  flex: 1;
 }
 
 #page-credit-rebuild .crb-how-card {
-  background: #fff;
-  border: 1px solid #e8ecf3;
-  border-radius: 16px;
-  padding: 1.1rem 1.1rem;
-  box-shadow: 0 10px 28px rgba(26, 26, 46, 0.06);
-  position: relative;
+  border-top: 3px solid var(--navy);
 }
 
-#page-credit-rebuild .crb-how-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  pointer-events: none;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
-}
-
-#page-credit-rebuild .crb-how-top {
+/* ── How It Works: vertical steps beside form ── */
+#page-credit-rebuild .crb-how-section,
+#page-credit-rebuild .crb-form-panel {
   display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+  height: 100%;
+}
+
+#page-credit-rebuild .crb-how-head,
+#page-credit-rebuild .crb-form-intro {
+  flex-shrink: 0;
+  text-align: left;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eef2f8;
+}
+
+#page-credit-rebuild .crb-how-head .section-tag {
+  margin-bottom: 0.5rem;
+  font-size: 0.74rem;
+  padding: 0.24rem 0.75rem;
+}
+
+#page-credit-rebuild .crb-how-head h2,
+#page-credit-rebuild .crb-enquiry-form h2 {
+  font-size: clamp(1.02rem, 1.9vw, 1.15rem);
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+#page-credit-rebuild .crb-how-sub,
+#page-credit-rebuild .crb-form-intro .form-sub {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+#page-credit-rebuild .crb-form-intro .form-sub {
+  margin-bottom: 0.5rem;
+}
+
+#page-credit-rebuild .crb-process {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+  min-height: 0;
+}
+
+#page-credit-rebuild .crb-process-step {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+#page-credit-rebuild .crb-process-card {
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-
-#page-credit-rebuild .crb-how-num {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: #fff5f5;
-  border: 1px solid rgba(230, 57, 70, 0.22);
-  color: var(--red);
-  font-weight: 900;
-}
-
-#page-credit-rebuild .crb-how-icon {
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  background: #f8f9fc;
+  text-align: left;
+  width: 100%;
+  flex: 1;
+  padding: 0.75rem 0.85rem;
+  background: #fafbfc;
   border: 1px solid #eef2f8;
-  font-size: 1.1rem;
+  border-radius: 10px;
+  box-shadow: none;
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease,
+    background 0.28s ease;
 }
 
-#page-credit-rebuild .crb-how-card h3 {
-  font-size: 0.98rem;
-  margin-bottom: 0.45rem;
-  color: var(--navy, #1a1a2e);
+#page-credit-rebuild .crb-process-card:hover {
+  transform: translateY(-1px);
+  border-color: #e0e6ef;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(26, 26, 46, 0.06);
+}
+
+#page-credit-rebuild .crb-process-card:hover .crb-process-badge {
+  box-shadow: 0 6px 16px rgba(230, 57, 70, 0.3);
+}
+
+#page-credit-rebuild .crb-process-badge {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: linear-gradient(145deg, var(--navy2), var(--navy));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  box-shadow: 0 3px 10px rgba(26, 26, 46, 0.18);
+  transition: box-shadow 0.28s ease;
+  flex-shrink: 0;
+}
+
+#page-credit-rebuild .crb-process-step:nth-child(2) .crb-process-badge {
+  background: linear-gradient(145deg, var(--red), #c92a3a);
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.28);
+}
+
+#page-credit-rebuild .crb-process-step:nth-child(3) .crb-process-badge {
+  background: linear-gradient(145deg, #2d6a4f, #1b4332);
+  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.28);
+}
+
+#page-credit-rebuild .crb-process-body {
+  flex: 1;
+  min-width: 0;
+}
+
+#page-credit-rebuild .crb-process-title {
+  margin: 0 0 0.2rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--navy);
   line-height: 1.35;
 }
 
-#page-credit-rebuild .crb-how-card p {
+#page-credit-rebuild .crb-process-desc {
   margin: 0;
+  font-size: 0.8rem;
   color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Form panel */
+@media (min-width: 1024px) {
+  #page-credit-rebuild .crb-form-panel {
+    position: sticky;
+    top: 1rem;
+    align-self: stretch;
+  }
+}
+
+#page-credit-rebuild .crb-enquiry-form {
+  border-top: 3px solid var(--red);
+}
+
+#page-credit-rebuild .crb-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+#page-credit-rebuild .crb-form-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#page-credit-rebuild .crb-form-hints span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #3d4f5f;
+  line-height: 1.3;
+  background: #f4f7fb;
+  border: 1px solid #e8ecf3;
+  border-radius: 999px;
+}
+
+#page-credit-rebuild .crb-form-hints span::before {
+  content: '✓';
+  color: var(--green, #2d6a4f);
+  font-weight: 800;
+  font-size: 0.64rem;
+}
+
+#page-credit-rebuild .crb-submit-error {
+  margin-bottom: 0.65rem;
+  flex-shrink: 0;
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group {
+  margin-bottom: 0.65rem;
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.32rem;
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 0.9rem;
-  line-height: 1.6;
+  background: #fff;
+  min-height: 42px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group input:focus {
+  border-color: var(--red);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group--invalid input {
+  border-color: #dc2626;
+  background: #fffbfb;
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group--invalid input:focus {
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+#page-credit-rebuild .crb-enquiry-form .form-group--consent {
+  margin-top: 0.15rem;
+  margin-bottom: 0.45rem;
+}
+
+#page-credit-rebuild .crb-enquiry-form .consent-label {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text);
+  cursor: pointer;
+}
+
+#page-credit-rebuild .crb-enquiry-form .consent-label input[type='checkbox'] {
+  width: 1rem;
+  height: 1rem;
+  min-height: 1rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  accent-color: var(--red);
+}
+
+#page-credit-rebuild .crb-enquiry-form .consent-label a {
+  color: var(--red);
+  font-weight: 600;
+}
+
+#page-credit-rebuild .crb-form-submit {
+  width: 100%;
+  margin-top: auto;
+  min-height: 44px;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+#page-credit-rebuild .crb-form-safe-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.45;
+  flex-shrink: 0;
+}
+
+#page-credit-rebuild .form-sub {
+  color: var(--muted);
+  margin-bottom: 0;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+#page-credit-rebuild .field-error {
+  display: block;
+  color: var(--red);
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
+  font-weight: 500;
+}
+
+#page-credit-rebuild .crb-monitoring__desc {
+  font-size: 0.9rem;
+  max-width: 85%;
+  line-height: 1.65;
 }
 
 #page-credit-rebuild .crb-trust-strip {
@@ -293,19 +610,74 @@
   margin-right: 0.4rem;
 }
 
+/* ── Pricing (primary focus) ── */
+#page-credit-rebuild .crb-pricing-section {
+  padding: clamp(2.5rem, 5vw, 3.5rem) max(var(--page-gutter), var(--safe-left));
+  background: linear-gradient(180deg, #f4f6fa 0%, #fafbfc 50%, #f4f6fa 100%);
+}
+
+#page-credit-rebuild .crb-pricing-panel {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e0e6ef;
+  border-radius: 20px;
+  padding: 2.75rem 2.25rem 2.5rem;
+  box-shadow:
+    0 4px 6px rgba(26, 26, 46, 0.03),
+    0 18px 48px rgba(26, 26, 46, 0.07);
+}
+
+#page-credit-rebuild .crb-pricing-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 3px;
+  background: var(--red);
+  border-radius: 0 0 4px 4px;
+}
+
+#page-credit-rebuild .crb-pricing-header {
+  margin-bottom: 2.25rem;
+}
+
+#page-credit-rebuild .crb-pricing-header h2 {
+  font-size: clamp(1.65rem, 2.4vw, 2.1rem);
+  letter-spacing: -0.01em;
+}
+
+#page-credit-rebuild .crb-pricing-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 52ch;
+  margin: 0 auto;
+}
+
 #page-credit-rebuild .crb-plans-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.85rem;
+  gap: clamp(0.65rem, 2vw, 0.85rem);
+  min-width: 0;
+  align-items: stretch;
 }
 
 #page-credit-rebuild .crb-plan-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: #fff;
   border: 1px solid #e5e9f2;
   border-radius: 16px;
   padding: 1.15rem 1.1rem 1.05rem;
   box-shadow: 0 10px 28px rgba(26, 26, 46, 0.06);
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  align-items: flex-start;
 }
 
 #page-credit-rebuild .crb-plan-card--featured {
@@ -338,19 +710,30 @@
 
 #page-credit-rebuild .crb-plan-card h3 {
   margin-bottom: 0.75rem;
+  flex-shrink: 0;
 }
 
 #page-credit-rebuild .crb-plan-card ul {
-  margin: 0 0 1rem;
+  margin: 0;
   padding-left: 1rem;
   color: var(--text);
   font-size: 0.9rem;
   line-height: 1.65;
+  flex: 1 1 auto;
+  margin-bottom: 1.25rem;
 }
 
 #page-credit-rebuild .crb-plan-card__cta {
   width: 100%;
   text-align: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min, 44px);
+  box-sizing: border-box;
 }
 
 #page-credit-rebuild .crb-gst-note {
@@ -405,10 +788,6 @@
   opacity: 0.9;
 }
 
-#page-credit-rebuild .crb-enquiry-layout {
-  grid-template-columns: 1fr;
-}
-
 #page-credit-rebuild .crb-quote {
   margin: 1.25rem 0 0;
   padding: 1rem 1.1rem;
@@ -419,73 +798,312 @@
   font-style: italic;
 }
 
-/* Form uses existing .loan-form-box styles */
+/* ── Responsive: all devices ── */
 
-#page-credit-rebuild .form-sub {
-  color: var(--muted);
-  margin-bottom: 1rem;
+/* Large desktop & TV */
+@media (min-width: 1440px) {
+  #page-credit-rebuild .crb-pricing-panel {
+    padding: 3rem 2.75rem 2.75rem;
+  }
+
+  #page-credit-rebuild .crb-bottom-panel {
+    padding: 0;
+  }
+
+  #page-credit-rebuild .crb-process {
+    gap: 2rem;
+  }
+
+  #page-credit-rebuild .crb-plans-grid {
+    gap: 1.15rem;
+  }
 }
 
-#page-credit-rebuild .crb-submit-error {
-  margin-bottom: 1rem;
+/* Laptop / desktop */
+@media (min-width: 1024px) {
+  #page-credit-rebuild .crb-bottom-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #page-credit-rebuild .crb-plans-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #page-credit-rebuild .crb-split-card {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
 }
 
-/* Form fields already styled by global + Loans page css */
-
-#page-credit-rebuild .field-error {
-  display: block;
-  color: var(--red);
-  font-size: 0.82rem;
-  margin-top: 0.35rem;
-}
-
-#page-credit-rebuild .form-group--consent {
-  margin-top: 0.25rem;
-}
-
-#page-credit-rebuild .consent-label {
-  display: flex;
-  gap: 0.65rem;
-  align-items: flex-start;
-  font-size: 0.88rem;
-  line-height: 1.55;
-}
-
-#page-credit-rebuild .consent-label input {
-  margin-top: 0.2rem;
-}
-
-#page-credit-rebuild .btn-submit {
-  width: 100%;
-  margin-top: 0.5rem;
-}
-
-/* Removed: mini-trust, alerts, spinner, FAQ, testimonials, final CTA (not in flyer) */
-
-@media (max-width: 960px) {
-  #page-credit-rebuild .crb-intro-grid,
-  #page-credit-rebuild .crb-enquiry-layout,
-  #page-credit-rebuild .crb-plans-grid,
-  #page-credit-rebuild .crb-how-grid {
+/* Tablet — 2 + 1 layout when width is tight */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #page-credit-rebuild .crb-split-card {
     grid-template-columns: 1fr;
+  }
+
+  #page-credit-rebuild .crb-split-right {
+    border-left: none;
+    border-top: 1px solid #e8ecf3;
+  }
+
+  #page-credit-rebuild .crb-plans-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #page-credit-rebuild .crb-plans-grid .crb-plan-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  #page-credit-rebuild .crb-bottom-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  #page-credit-rebuild .crb-form-panel {
+    position: static;
+  }
+
+  #page-credit-rebuild .crb-pricing-panel {
+    padding: 2.25rem 1.75rem 2rem;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 767px) {
+  #page-credit-rebuild .crb-split-card {
+    grid-template-columns: 1fr;
+    border-radius: 14px;
+  }
+
+  #page-credit-rebuild .crb-split-left,
+  #page-credit-rebuild .crb-split-right {
+    padding: 1.25rem 1.15rem;
+  }
+
+  #page-credit-rebuild .crb-split-right {
+    border-left: none;
+    border-top: 1px solid #e8ecf3;
+  }
+
+  #page-credit-rebuild .crb-intro-actions {
+    flex-direction: column;
+  }
+
+  #page-credit-rebuild .crb-intro-actions .btn-primary,
+  #page-credit-rebuild .crb-intro-actions .btn-outline {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #page-credit-rebuild .crb-plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #page-credit-rebuild .crb-plans-grid .crb-plan-card:last-child:nth-child(odd) {
+    grid-column: auto;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  #page-credit-rebuild .crb-pricing-panel {
+    padding: 1.75rem 1.15rem 1.5rem;
+    border-radius: 16px;
+  }
+
+  #page-credit-rebuild .crb-pricing-header {
+    margin-bottom: 1.5rem;
+  }
+
+  #page-credit-rebuild .crb-pricing-header h2 {
+    font-size: clamp(1.35rem, 5vw, 1.65rem);
+  }
+
+  #page-credit-rebuild .crb-bottom-panel {
+    padding: 0;
+  }
+
+  #page-credit-rebuild .crb-bottom-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  #page-credit-rebuild .crb-process-step {
+    flex: none;
+  }
+
+  #page-credit-rebuild .crb-process-card {
+    align-items: flex-start;
+  }
+
+  #page-credit-rebuild .crb-how-head {
+    margin-bottom: 1rem;
+  }
+
+  #page-credit-rebuild .crb-form-panel {
+    position: static;
+  }
+
+  #page-credit-rebuild .crb-form-hints {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  #page-credit-rebuild .crb-monitoring__desc {
+    max-width: 100%;
   }
 
   #page-credit-rebuild .crb-monitoring {
     flex-direction: column;
     align-items: flex-start;
+    padding: 1.15rem 1.1rem;
   }
 
   #page-credit-rebuild .crb-monitoring__price {
     text-align: left;
+    width: 100%;
+  }
+
+  #page-credit-rebuild .crb-monitoring__amount {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
   }
 }
+
+/* Small phones */
+@media (max-width: 399px) {
+  #page-credit-rebuild .page-header.rebuild-header,
+  #page-credit-rebuild .page-header.red-header {
+    padding-block: 1.75rem;
+  }
+
+  #page-credit-rebuild .crb-audience-toggle {
+    width: 100%;
+    border-radius: 14px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #page-credit-rebuild .crb-audience-btn {
+    width: 100%;
+    text-align: center;
+    white-space: normal;
+  }
+
+  #page-credit-rebuild .crb-plan-card {
+    padding: 1rem 0.95rem;
+  }
+
+  #page-credit-rebuild .crb-bottom-panel {
+    padding: 1rem 0.85rem;
+  }
+}
+
+/* Mobile landscape */
+@media (max-width: 1023px) and (orientation: landscape) and (min-width: 568px) {
+  #page-credit-rebuild .crb-bottom-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  #page-credit-rebuild .crb-plans-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #page-credit-rebuild .page-header.rebuild-header,
+  #page-credit-rebuild .page-header.red-header {
+    padding-block: 1.5rem;
+  }
+}
+
+/* Short landscape */
+@media (max-height: 500px) and (orientation: landscape) {
+  #page-credit-rebuild .page-header.rebuild-header,
+  #page-credit-rebuild .page-header.red-header {
+    padding-block: 1.25rem;
+  }
+
+  #page-credit-rebuild .page-header.rebuild-header h1,
+  #page-credit-rebuild .page-header.red-header h1 {
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    margin-bottom: 0.35rem;
+  }
+
+  #page-credit-rebuild .crb-audience-toggle {
+    margin-top: 0.75rem;
+  }
+
+  #page-credit-rebuild .section {
+    padding-block: 1.5rem;
+  }
+
+  #page-credit-rebuild .crb-pricing-section {
+    padding-block: 1.75rem;
+  }
+
+  #page-credit-rebuild .crb-bottom-section {
+    padding-block: 1.5rem;
+  }
+}
+
+/* Very wide TV */
+@media (min-width: 1920px) {
+  #page-credit-rebuild .crb-split-left p,
+  #page-credit-rebuild .crb-pricing-subtitle {
+    max-width: 60ch;
+  }
+
+  #page-credit-rebuild .crb-pricing-header h2 {
+    font-size: 2.15rem;
+  }
+
+  #page-credit-rebuild .crb-how-head h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+  #page-credit-rebuild .crb-process-card:hover {
+    transform: none;
+    box-shadow: 0 8px 24px rgba(26, 26, 46, 0.05);
+    border-color: #e8ecf3;
+  }
+
+  #page-credit-rebuild .crb-plan-card__cta,
+  #page-credit-rebuild .crb-form-submit,
+  #page-credit-rebuild .crb-intro-actions .btn-primary,
+  #page-credit-rebuild .crb-intro-actions .btn-outline {
+    min-height: var(--touch-min, 48px);
+  }
+
+  #page-credit-rebuild .crb-enquiry-form .form-group input {
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+}
+
+/* Removed: mini-trust, alerts, spinner, FAQ, testimonials, final CTA (not in flyer) */
 
 @media (prefers-reduced-motion: reduce) {
   #page-credit-rebuild * {
     scroll-behavior: auto !important;
   }
 
-  #page-credit-rebuild .crb-plan-card {
+  #page-credit-rebuild .crb-plan-card,
+  #page-credit-rebuild .crb-process-card,
+  #page-credit-rebuild .crb-process-badge {
     transition: none !important;
+  }
+
+  #page-credit-rebuild .crb-process-card:hover {
+    transform: none;
+  }
+
+  #page-credit-rebuild .crb-form-submit:hover:not(:disabled) {
+    transform: none;
   }
 }

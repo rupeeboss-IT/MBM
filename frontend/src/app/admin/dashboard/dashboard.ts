@@ -8,6 +8,10 @@ import { UserManagementService, type UserManagementStats } from '../../core/serv
 import { VendorManagementService, type VendorManagementStats } from '../../core/services/vendor-management.service';
 import { LeadAttributionService, type LeadAttributionStats } from '../../core/services/lead-attribution.service';
 import { EnquiryManagementService, type EnquiryManagementStats } from '../../core/services/enquiry-management.service';
+import {
+  CreditRepairManagementService,
+  type CreditRepairManagementStats,
+} from '../../core/services/credit-repair-management.service';
 import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
@@ -47,6 +51,7 @@ export class AdminDashboard {
   private readonly vendorMgmt = inject(VendorManagementService);
   private readonly leadMgmt = inject(LeadAttributionService);
   private readonly enquiryMgmt = inject(EnquiryManagementService);
+  private readonly creditRepairMgmt = inject(CreditRepairManagementService);
   private readonly session = inject(AdminSessionService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
@@ -57,6 +62,7 @@ export class AdminDashboard {
   readonly vendorStats = signal<VendorManagementStats | null>(null);
   readonly leadStats = signal<LeadAttributionStats | null>(null);
   readonly enquiryStats = signal<EnquiryManagementStats | null>(null);
+  readonly creditRepairStats = signal<CreditRepairManagementStats | null>(null);
   readonly isSuperAdmin = this.session.isSuperAdmin;
   readonly dateFrom = signal('');
   readonly dateTo = signal('');
@@ -108,6 +114,17 @@ export class AdminDashboard {
         if (em?.success && em.stats) this.enquiryStats.set(em.stats);
       } catch {
         this.enquiryStats.set(null);
+      }
+      try {
+        const cr = await firstValueFrom(
+          this.creditRepairMgmt.stats({
+            dateFrom: this.dateFrom() || undefined,
+            dateTo: this.dateTo() || undefined,
+          }),
+        );
+        if (cr?.success && cr.stats) this.creditRepairStats.set(cr.stats);
+      } catch {
+        this.creditRepairStats.set(null);
       }
     } catch (e: unknown) {
       this.toast.error(getHttpErrorMessage(e, API_USER_MESSAGES.dashboard));

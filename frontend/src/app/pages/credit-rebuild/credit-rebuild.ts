@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CreditRebuildService } from '../../core/services/credit-rebuild.service';
 import { ToastService } from '../../core/services/toast.service';
@@ -28,6 +28,7 @@ interface PricingPlan {
 export class CreditRebuild {
   private readonly creditRebuildApi = inject(CreditRebuildService);
   private readonly toast = inject(ToastService);
+  private readonly route = inject(ActivatedRoute);
 
   readonly audience = signal<AudienceTab>('individual');
   readonly submitting = signal(false);
@@ -120,12 +121,42 @@ export class CreditRebuild {
     this.audience() === 'individual' ? this.individualPlans : this.businessPlans,
   );
 
+  constructor() {
+    this.route.queryParamMap.subscribe((params) => {
+      const audience = params.get('audience');
+      if (audience === 'individual' || audience === 'business') {
+        this.audience.set(audience);
+      }
+
+      const section = params.get('section');
+      if (section) {
+        window.setTimeout(() => this.scrollToSection(section), 200);
+      }
+    });
+  }
+
   setAudience(tab: AudienceTab): void {
     this.audience.set(tab);
   }
 
+  scrollToSection(section: string): void {
+    const normalized = section.trim().toLowerCase();
+    const id =
+      normalized === 'plans'
+        ? 'credit-rebuild-pricing'
+        : normalized === 'pro'
+          ? 'credit-rebuild-pro'
+          : normalized === 'enquiry'
+            ? 'credit-rebuild-enquiry'
+            : null;
+
+    if (!id) return;
+
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   scrollToEnquiry(): void {
-    document.getElementById('credit-rebuild-enquiry')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.scrollToSection('enquiry');
   }
 
   showError(field: string): boolean {
