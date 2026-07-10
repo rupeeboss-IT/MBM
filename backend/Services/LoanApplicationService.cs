@@ -90,16 +90,6 @@ public sealed class LoanApplicationService : ILoanApplicationService
         if (consentAccepted != true)
             return (false, "Consent is required to submit this enquiry.", null);
 
-        try
-        {
-            await LoanApplicationSchemaBootstrap.EnsureAsync(_db, _log, ct);
-        }
-        catch (Exception ex)
-        {
-            _log.LogError(ex, "LoanApplications table is not available in MBM.");
-            return (false, "Unable to submit your loan application. Please try again.", null);
-        }
-
         // Resolve before sharing the RBMAIN connection with AppDbContext (GetConnectionString() is unreliable after SetDbConnection).
         var mbmCatalog = GetDatabaseName(_db.Database.GetConnectionString()) ?? "MBM";
 

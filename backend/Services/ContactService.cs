@@ -56,16 +56,6 @@ public sealed class ContactService : IContactService
         if (consentAccepted != true)
             return (false, "Consent is required to send your message.", null);
 
-        try
-        {
-            await ContactSchemaBootstrap.EnsureAsync(_db, _log, ct);
-        }
-        catch (Exception ex)
-        {
-            _log.LogError(ex, "ContactSubmissions table is not available.");
-            return (false, "Unable to send your message right now. Please try again.", null);
-        }
-
         var now = DateTime.Now;
         var entity = new ContactSubmission
         {
@@ -149,16 +139,6 @@ public sealed class ContactService : IContactService
 
         if (consentAccepted != true)
             return (false, "Consent is required to request a callback.", null);
-
-        try
-        {
-            await ContactSchemaBootstrap.EnsureAsync(_db, _log, ct);
-        }
-        catch (Exception ex)
-        {
-            _log.LogError(ex, "ContactSubmissions table is not available.");
-            return (false, "Unable to send your message right now. Please try again.", null);
-        }
 
         var now = DateTime.Now;
         var entity = new ContactSubmission

@@ -11,12 +11,13 @@ import { captureRegistrationLeadSourceFromUrl } from './core/utils/registration-
 import { captureRegistrationModeFromUrl } from './core/utils/registration-mode.util';
 import { Header } from "./header/header";
 import { Footer } from "./footer/footer";
+import { CookieConsentBanner } from './core/components/cookie-consent-banner/cookie-consent-banner';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MembershipCheckoutModals, MsmeSaathiChat]
+  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MembershipCheckoutModals, MsmeSaathiChat, CookieConsentBanner]
 })
 export class App implements OnInit {
   constructor(private readonly router: Router) {}

@@ -1,0 +1,24 @@
+2026-07-10 11:25:18 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 11:25:21 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 11:25:21 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 11:25:21 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=25
+
+2026-07-10 11:25:21 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=210
+
+2026-07-10 11:25:21 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+

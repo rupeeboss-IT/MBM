@@ -129,15 +129,6 @@ builder.Services.Configure<RB_Website_API.Auth.SdrReportSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.SdrReportSettings.SectionName));
 builder.Services.Configure<RB_Website_API.Auth.ContactSettings>(
     builder.Configuration.GetSection(RB_Website_API.Auth.ContactSettings.SectionName));
-builder.Services.AddHostedService<RB_Website_API.Auth.DateTimeDefaultsSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.UserPlanSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.ReferralSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.CustomerReportSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.ApiExceptionLogSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.MemberIdSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.LoanApplicationSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.ContactSchemaHostedService>();
-builder.Services.AddHostedService<RB_Website_API.Auth.SchemeDiscoveryBootstrapHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionExpiryHostedService>();
 builder.Services.AddHostedService<RB_Website_API.Services.SubscriptionReminderHostedService>();
 
@@ -228,6 +219,7 @@ builder.Services.AddScoped<RB_Website_API.Services.Webhooks.IZohoFlowWebhookClie
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.ICreditRepairLeadRepository, RB_Website_API.Services.Repository.CreditRepairLeadRepository>();
 builder.Services.AddScoped<RB_Website_API.Services.ICreditRepairLeadService, RB_Website_API.Services.CreditRepairLeadService>();
 builder.Services.AddScoped<RB_Website_API.Features.CreditRepair.ISubmitCreditRepairLeadHandler, RB_Website_API.Features.CreditRepair.SubmitCreditRepairLeadHandler>();
+builder.Services.AddScoped<RB_Website_API.Services.ICookieConsentService, RB_Website_API.Services.CookieConsentService>();
 builder.Services.AddScoped<RB_Website_API.Services.BulkImportWelcomeEmailService>();
 builder.Services.AddScoped<RB_Website_API.Services.IBulkMemberImportService, RB_Website_API.Services.BulkMemberImportService>();
 builder.Services.AddScoped<RB_Website_API.Services.IRepository.IVendorManagementRepository, RB_Website_API.Services.Repository.VendorManagementRepository>();

@@ -1,0 +1,120 @@
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.07);
+  backdrop-filter: blur(6px);
+  animation: cookie-slide-up 0.3s ease;
+}
+
+@keyframes cookie-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cookie-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.cookie-banner__icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.cookie-banner__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cookie-banner__text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.cookie-banner__link {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cookie-banner__link:hover {
+  color: #1d4ed8;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.cookie-banner__accept {
+  padding: 0.45rem 1.25rem;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+  white-space: nowrap;
+}
+
+.cookie-banner__accept:hover {
+  background: #1d4ed8;
+}
+
+.cookie-banner__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.cookie-banner__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #222;
+}
+
+@media (max-width: 600px) {
+  .cookie-banner__inner {
+    gap: 0.625rem;
+  }
+
+  .cookie-banner__icon {
+    display: none;
+  }
+
+  .cookie-banner__text {
+    font-size: 0.8125rem;
+  }
+}

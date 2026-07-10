@@ -37,6 +37,7 @@ namespace RB_Website_API.Data
         public DbSet<Models.ConnectAdminListing> ConnectAdminListings => Set<Models.ConnectAdminListing>();
         public DbSet<Models.ConnectRequest> ConnectRequests => Set<Models.ConnectRequest>();
         public DbSet<Models.ConnectContactUnlock> ConnectContactUnlocks => Set<Models.ConnectContactUnlock>();
+        public DbSet<Models.CookieConsentLog> CookieConsentLogs => Set<Models.CookieConsentLog>();
 
         public new DbSet<T> Set<T>() where T : class
         {
