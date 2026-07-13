@@ -33,6 +33,8 @@ import {
   clearRegistrationMode,
   isFreeRegistrationMode,
 } from '../../core/utils/registration-mode.util';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 type ClearbitCompany = { name: string; domain: string; logo: string | null };
 
@@ -70,6 +72,8 @@ export class Register implements OnInit {
   private readonly planCheckout = inject(MembershipPlanCheckoutService);
   private readonly referrals = inject(ReferralService);
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly recaptcha = inject(RecaptchaService);
+  private readonly analytics = inject(AnalyticsService);
 
   private advisorDebounceTimer: ReturnType<typeof setTimeout> | null = null;
   private advisorPanelTimer: ReturnType<typeof setTimeout> | null = null;
@@ -611,7 +615,9 @@ export class Register implements OnInit {
 
     try {
       this.submitting.set(true);
+      this.analytics.trackRegistrationStarted(this.form.controls.role.value);
       const registrationSource = getRegistrationLeadSource();
+      const recaptchaToken = await this.recaptcha.execute('register');
       const res = await firstValueFrom(
         this.auth.register({
           role: this.form.controls.role.value,
@@ -623,6 +629,7 @@ export class Register implements OnInit {
           consentAccepted: this.form.controls.consent.value === true,
           ...(registrationSource ? { registrationSource } : {}),
           ...(advisorCode ? { advisorCode } : {}),
+          recaptchaToken,
         })
       );
       if (!res?.success) {
@@ -675,6 +682,7 @@ export class Register implements OnInit {
   }
 
   private async handleRegistrationSuccess(res: RegisterRes): Promise<void> {
+    this.analytics.trackRegistrationCompleted(this.form.controls.role.value);
     clearRegistrationLeadSource();
     // Keep advisor in session for membership checkout pre-fill / payment reconciliation.
     const userId = this.coerceUserId(res.userId);

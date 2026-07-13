@@ -20,6 +20,7 @@ public sealed class UserController : ControllerBase
     private readonly ILeadPushService _leadPush;
     private readonly IEmployeeValidationService _employees;
     private readonly RegistrationWelcomeEmailService _registrationWelcome;
+    private readonly IRecaptchaService _recaptcha;
     private readonly ILogger<UserController> _logger;
 
     public UserController(
@@ -30,6 +31,7 @@ public sealed class UserController : ControllerBase
         ILeadPushService leadPush,
         IEmployeeValidationService employees,
         RegistrationWelcomeEmailService registrationWelcome,
+        IRecaptchaService recaptcha,
         ILogger<UserController> logger)
     {
         _db = db;
@@ -39,6 +41,7 @@ public sealed class UserController : ControllerBase
         _leadPush = leadPush;
         _employees = employees;
         _registrationWelcome = registrationWelcome;
+        _recaptcha = recaptcha;
         _logger = logger;
     }
 
@@ -51,7 +54,8 @@ public sealed class UserController : ControllerBase
         string Password,
         bool ConsentAccepted,
         string? RegistrationSource = null,
-        string? AdvisorCode = null
+        string? AdvisorCode = null,
+        string? RecaptchaToken = null
     );
 
     public sealed record RegisterResponse(
@@ -62,9 +66,9 @@ public sealed class UserController : ControllerBase
         string? Role = null,
         string? Token = null);
 
-    public sealed record LoginRequest(string Identifier, string Password);
+    public sealed record LoginRequest(string Identifier, string Password, string? RecaptchaToken = null);
     public sealed record LoginResponse(bool Success, string? Message = null, Guid? UserId = null, string? Role = null, string? Token = null);
-    public sealed record ForgotPasswordRequest(string? Identifier);
+    public sealed record ForgotPasswordRequest(string? Identifier, string? RecaptchaToken = null);
     public sealed record ForgotPasswordResponse(bool Success, string? Message = null, string? Channel = null, string? Reason = null);
     public sealed record VerifyPasswordResetOtpRequest(string? Identifier, string? Code);
     public sealed record VerifyPasswordResetOtpResponse(bool Success, string? Message = null);
@@ -169,6 +173,9 @@ public sealed class UserController : ControllerBase
         if (string.IsNullOrWhiteSpace(req.Identifier)) return BadRequest(new LoginResponse(false, "Email or phone is required."));
         if (string.IsNullOrWhiteSpace(req.Password)) return BadRequest(new LoginResponse(false, "Password is required."));
 
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "login", ct);
+        if (!rcOk) return BadRequest(new LoginResponse(false, rcReason ?? "reCAPTCHA verification failed."));
+
         var ident = req.Identifier.Trim();
         var email = ident.Contains('@') ? ident.ToLowerInvariant() : null;
         var phone = email is null ? IndianPhone.Digits(ident) : null;
@@ -214,6 +221,9 @@ public sealed class UserController : ControllerBase
         if (string.IsNullOrWhiteSpace(req.Phone)) return BadRequest(new RegisterResponse(false, "Phone is required."));
         if (string.IsNullOrWhiteSpace(req.Password)) return BadRequest(new RegisterResponse(false, "Password is required."));
         if (req.ConsentAccepted != true) return BadRequest(new RegisterResponse(false, "Consent is required."));
+
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "register", ct);
+        if (!rcOk) return BadRequest(new RegisterResponse(false, rcReason ?? "reCAPTCHA verification failed."));
 
         var email = req.Email.Trim().ToLowerInvariant();
         var phoneDigits = IndianPhone.Digits(req.Phone);
@@ -361,6 +371,9 @@ public sealed class UserController : ControllerBase
     {
         if (req is null || string.IsNullOrWhiteSpace(req.Identifier))
             return BadRequest(new ForgotPasswordResponse(false, "Please enter your email address or mobile number."));
+
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "forgot_password", ct);
+        if (!rcOk) return BadRequest(new ForgotPasswordResponse(false, rcReason ?? "reCAPTCHA verification failed."));
 
         if (!UserIdentifier.TryParse(req.Identifier, out var channel, out var normalized, out var validationError))
             return BadRequest(new ForgotPasswordResponse(false, validationError));

@@ -299,6 +299,7 @@
         <button type="submit" class="btn-submit" [disabled]="submitting()">
           {{ submitting() ? 'Creating account…' : (isFreeRegistration() ? 'Create Free Account →' : 'Continue to Plan Selection →') }}
         </button>
+        <p class="recaptcha-notice">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a> apply.</p>
       </form>
       <div class="auth-footer">Already have an account? <a [routerLink]="['/login']">Login here</a></div>
     </div>

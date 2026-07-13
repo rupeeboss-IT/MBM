@@ -9,8 +9,13 @@ namespace RB_Website_API.Controllers;
 public sealed class LoansController : ControllerBase
 {
     private readonly ILoanApplicationService _loans;
+    private readonly IRecaptchaService _recaptcha;
 
-    public LoansController(ILoanApplicationService loans) => _loans = loans;
+    public LoansController(ILoanApplicationService loans, IRecaptchaService recaptcha)
+    {
+        _loans = loans;
+        _recaptcha = recaptcha;
+    }
 
     public sealed record SubmitLoanApplicationRequest(
         string FullName,
@@ -20,7 +25,8 @@ public sealed class LoansController : ControllerBase
         int LoanTypeId,
         string LoanAmount,
         bool ConsentAccepted,
-        string? ReferralCode = null);
+        string? ReferralCode = null,
+        string? RecaptchaToken = null);
 
     public sealed record SubmitLoanApplicationResponse(
         bool Success,
@@ -35,6 +41,9 @@ public sealed class LoansController : ControllerBase
     {
         if (req is null)
             return BadRequest(new SubmitLoanApplicationResponse(false, "Invalid request."));
+
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "loan_apply", ct);
+        if (!rcOk) return BadRequest(new SubmitLoanApplicationResponse(false, rcReason ?? "reCAPTCHA verification failed."));
 
         var (success, message, leadId) = await _loans.SubmitAsync(
             req.FullName,

@@ -15,13 +15,14 @@ type RegisterReq = {
   consentAccepted: boolean;
   registrationSource?: string | null;
   advisorCode?: string | null;
+  recaptchaToken?: string;
 };
 type RegisterRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
-type LoginReq = { identifier: string; password: string };
+type LoginReq = { identifier: string; password: string; recaptchaToken?: string };
 type LoginRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
-type AdminLoginReq = { identifier: string; password: string };
+type AdminLoginReq = { identifier: string; password: string; recaptchaToken?: string };
 type AdminLoginRes = { success: boolean; message?: string; userId?: string; role?: string; token?: string };
-type ForgotPasswordReq = { identifier: string };
+type ForgotPasswordReq = { identifier: string; recaptchaToken?: string };
 type ForgotPasswordRes = { success: boolean; message?: string; channel?: 'email' | 'sms'; reason?: string };
 type VerifyPasswordResetOtpReq = { identifier: string; code: string };
 type VerifyPasswordResetOtpRes = { success: boolean; message?: string };
@@ -115,8 +116,8 @@ export class AuthService {
     return this.http.delete(apiUrl(`/api/admin/users/${encodeURIComponent(userId)}`));
   }
 
-  forgotPassword(identifier: string): Observable<ForgotPasswordRes> {
-    const req: ForgotPasswordReq = { identifier: identifier.trim() };
+  forgotPassword(identifier: string, recaptchaToken?: string): Observable<ForgotPasswordRes> {
+    const req: ForgotPasswordReq = { identifier: identifier.trim(), recaptchaToken };
     return this.http.post<ForgotPasswordRes>(apiUrl('/api/user/password/forgot'), req);
   }
 

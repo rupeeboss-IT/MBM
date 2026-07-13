@@ -168,6 +168,13 @@ builder.Services.AddHttpClient("Razorpay", client =>
 {
     client.Timeout = TimeSpan.FromSeconds(30);
 });
+builder.Services.AddHttpClient("Recaptcha", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
+builder.Services.Configure<RB_Website_API.Auth.RecaptchaSettings>(
+    builder.Configuration.GetSection(RB_Website_API.Auth.RecaptchaSettings.SectionName));
+builder.Services.AddScoped<RB_Website_API.Services.IRecaptchaService, RB_Website_API.Services.RecaptchaService>();
 builder.Services.AddHttpClient("Saarthi", client =>
 {
     client.Timeout = TimeSpan.FromSeconds(120);
@@ -185,6 +192,7 @@ builder.Services.AddHttpClient(RB_Website_API.Services.Webhooks.ZohoFlowWebhookC
     client.DefaultRequestHeaders.UserAgent.Add(
         new System.Net.Http.Headers.ProductInfoHeaderValue("MSME-Bharat-Manch", "1.0"));
 });
+builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpRateLimiter, RB_Website_API.Auth.OtpRateLimiter>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpEmailTemplateService, RB_Website_API.Auth.OtpEmailTemplateService>();
 builder.Services.AddSingleton<RB_Website_API.Auth.IOtpService, RB_Website_API.Auth.InMemoryOtpService>();

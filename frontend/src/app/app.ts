@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { MembershipCheckoutModals } from './core/components/membership-checkout-modals/membership-checkout-modals';
@@ -12,6 +12,8 @@ import { captureRegistrationModeFromUrl } from './core/utils/registration-mode.u
 import { Header } from "./header/header";
 import { Footer } from "./footer/footer";
 import { CookieConsentBanner } from './core/components/cookie-consent-banner/cookie-consent-banner';
+import { AnalyticsService } from './core/services/analytics.service';
+import { CookieConsentService } from './core/services/cookie-consent.service';
 
 @Component({
   selector: 'app-root',
@@ -20,11 +22,21 @@ import { CookieConsentBanner } from './core/components/cookie-consent-banner/coo
   imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MembershipCheckoutModals, MsmeSaathiChat, CookieConsentBanner]
 })
 export class App implements OnInit {
+  private readonly analytics = inject(AnalyticsService);
+  private readonly cookieConsent = inject(CookieConsentService);
+
   constructor(private readonly router: Router) {}
 
   ngOnInit(): void {
     if (typeof window === 'undefined') return;
+
+    // Re-initialize GA if the user already consented in a previous session
+    if (this.cookieConsent.hasConsented()) {
+      this.analytics.initialize();
+    }
+
     this.captureLeadSourcesFromUrl(window.location.search);
+
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe((e) => {
@@ -32,6 +44,7 @@ export class App implements OnInit {
           ? e.urlAfterRedirects.slice(e.urlAfterRedirects.indexOf('?'))
           : '';
         this.captureLeadSourcesFromUrl(query);
+        this.analytics.trackPageView(e.urlAfterRedirects);
       });
   }
 

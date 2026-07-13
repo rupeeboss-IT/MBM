@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicesService } from '../../../core/services/services.service';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-search',
@@ -17,7 +18,8 @@ export class Search {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private services: ServicesService
+    private services: ServicesService,
+    private analytics: AnalyticsService,
   ) {
     this.route.queryParamMap.subscribe((params) => {
       const q = (params.get('q') ?? '').trim();
@@ -28,6 +30,7 @@ export class Search {
 
   submitSearch() {
     const q = this.query.trim();
+    if (q) this.analytics.trackSearch(q);
     this.router.navigate(['/search'], { queryParams: q ? { q } : {} });
     this.performSearch(q);
   }

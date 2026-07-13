@@ -9,6 +9,7 @@ export interface SubmitCreditRebuildEnquiryRequest {
   email: string;
   consentAccepted: boolean;
   advisorCode?: string | null;
+  recaptchaToken?: string;
 }
 
 export interface SubmitCreditRebuildEnquiryResponse {

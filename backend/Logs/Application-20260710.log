@@ -22,3 +22,337 @@ SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=210
 SmtpWarmupHostedService()
 SMTP warmup finished.
 
+2026-07-10 12:46:54 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 12:46:58 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 12:46:58 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 12:46:58 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=38
+
+2026-07-10 12:46:58 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=226
+
+2026-07-10 12:46:58 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-10 12:48:41 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5BP:00000001
+
+2026-07-10 12:48:41 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5BP:00000001
+
+2026-07-10 12:48:41 [INFO]
+ClientHandler()
+Received HTTP response headers after 291.1429ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5BP:00000001
+
+2026-07-10 12:48:41 [INFO]
+LogicalHandler()
+End processing HTTP request after 313.7016ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5BP:00000001
+
+2026-07-10 12:48:43 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5BU:00000001
+
+2026-07-10 12:48:44 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5BV:00000001
+
+2026-07-10 13:05:59 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/payment/invoices/563823E2-14D8-4734-BD9F-F1327FD915FC/download
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5CA:00000001
+
+2026-07-10 14:17:38 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5CJ:00000001
+
+2026-07-10 14:17:38 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5CJ:00000001
+
+2026-07-10 14:17:38 [INFO]
+ClientHandler()
+Received HTTP response headers after 183.0425ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5CJ:00000001
+
+2026-07-10 14:17:38 [INFO]
+LogicalHandler()
+End processing HTTP request after 184.9238ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5CJ:00000001
+
+2026-07-10 14:44:50 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5D4:00000001
+
+2026-07-10 14:44:50 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5D4:00000001
+
+2026-07-10 14:44:50 [INFO]
+ClientHandler()
+Received HTTP response headers after 189.89ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5D4:00000001
+
+2026-07-10 14:44:50 [INFO]
+LogicalHandler()
+End processing HTTP request after 191.1594ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5D4:00000001
+
+2026-07-10 14:45:21 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5DL:00000001
+
+2026-07-10 14:45:21 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5DL:00000001
+
+2026-07-10 14:45:21 [INFO]
+ClientHandler()
+Received HTTP response headers after 157.2399ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5DL:00000001
+
+2026-07-10 14:45:21 [INFO]
+LogicalHandler()
+End processing HTTP request after 158.1224ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUACTJU5DL:00000001
+
+2026-07-10 15:23:49 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 15:23:51 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 15:23:52 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 15:23:52 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=199
+
+2026-07-10 15:23:52 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=388
+
+2026-07-10 15:23:52 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-10 15:29:25 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUD4IUH8FI:00000001
+
+2026-07-10 15:29:25 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUD4IUH8FI:00000001
+
+2026-07-10 15:29:26 [INFO]
+ClientHandler()
+Received HTTP response headers after 302.9799ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUD4IUH8FI:00000001
+
+2026-07-10 15:29:26 [INFO]
+LogicalHandler()
+End processing HTTP request after 318.0108ms - 200
+Request URL: POST /api/user/login
+IP Address: ::1
+Correlation ID: 0HNMUD4IUH8FI:00000001
+
+2026-07-10 16:40:32 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 16:40:34 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 16:40:34 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 16:40:34 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=35
+
+2026-07-10 16:40:35 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=218
+
+2026-07-10 16:40:35 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-10 17:22:54 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 17:22:57 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 17:22:58 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 17:22:58 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=29
+
+2026-07-10 17:22:59 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=1234
+
+2026-07-10 17:22:59 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-10 18:06:11 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 18:06:13 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 18:06:14 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 18:06:14 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=23
+
+2026-07-10 18:06:15 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=1215
+
+2026-07-10 18:06:15 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-10 18:08:04 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-10 18:08:06 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-10 18:08:06 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-10 18:08:06 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=25
+
+2026-07-10 18:08:07 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=209
+
+2026-07-10 18:08:07 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-10 18:11:29 [INFO]
+AuthController()
+Check-user request for "8898445796"
+Request URL: GET /api/auth/check-user?mobileNumber=8898445796
+IP Address: ::1
+Correlation ID: 0HNMUG0BSMMTQ:00000023
+
+2026-07-10 18:11:29 [INFO]
+AuthController()
+Check-user — user found UserId=7f1abd1b-f22a-49dc-9a02-fd6653f9f05f Role="member"
+Request URL: GET /api/auth/check-user?mobileNumber=8898445796
+User ID: 7f1abd1b-f22a-49dc-9a02-fd6653f9f05f
+IP Address: ::1
+Correlation ID: 0HNMUG0BSMMTQ:00000023
+
+2026-07-10 18:11:59 [INFO]
+AuthController()
+Check-user request for "8898445791"
+Request URL: GET /api/auth/check-user?mobileNumber=8898445791
+IP Address: ::1
+Correlation ID: 0HNMUG0BSMMTQ:00000027
+
+2026-07-10 18:11:59 [INFO]
+AuthController()
+Check-user — no active user found for "8898445791"
+Request URL: GET /api/auth/check-user?mobileNumber=8898445791
+IP Address: ::1
+Correlation ID: 0HNMUG0BSMMTQ:00000027
+

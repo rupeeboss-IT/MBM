@@ -9,6 +9,7 @@ public interface IOtpService
     Task SendSmsOtpAsync(string phone, CancellationToken ct);
     Task VerifySmsOtpAsync(string phone, string code, CancellationToken ct);
     Task EnsureSmsVerifiedAsync(string phone, CancellationToken ct);
+    void InvalidateSmsOtp(string phone);
 
     Task SendPasswordResetEmailOtpAsync(string email, string customerName, CancellationToken ct);
     Task VerifyPasswordResetEmailOtpAsync(string email, string code, CancellationToken ct);

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RB_Website_API.Auth;
 using RB_Website_API.Data;
 using RB_Website_API.Models;
+using RB_Website_API.Services;
 using System.Security.Claims;
 
 namespace RB_Website_API.Controllers;
@@ -14,14 +15,16 @@ public sealed class AdminController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly IJwtTokenService _jwt;
+    private readonly IRecaptchaService _recaptcha;
 
-    public AdminController(AppDbContext db, IJwtTokenService jwt)
+    public AdminController(AppDbContext db, IJwtTokenService jwt, IRecaptchaService recaptcha)
     {
         _db = db;
         _jwt = jwt;
+        _recaptcha = recaptcha;
     }
 
-    public sealed record AdminLoginRequest(string Identifier, string Password);
+    public sealed record AdminLoginRequest(string Identifier, string Password, string? RecaptchaToken = null);
 
     public sealed record AdminLoginResponse(
         bool Success,
@@ -188,6 +191,9 @@ public sealed class AdminController : ControllerBase
         if (req is null) return BadRequest(new AdminLoginResponse(false, "Request is required."));
         if (string.IsNullOrWhiteSpace(req.Identifier)) return BadRequest(new AdminLoginResponse(false, "Email or phone is required."));
         if (string.IsNullOrWhiteSpace(req.Password)) return BadRequest(new AdminLoginResponse(false, "Password is required."));
+
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "admin_login", ct);
+        if (!rcOk) return BadRequest(new AdminLoginResponse(false, rcReason ?? "reCAPTCHA verification failed."));
 
         var ident = req.Identifier.Trim();
         var email = ident.Contains('@') ? ident.ToLowerInvariant() : null;

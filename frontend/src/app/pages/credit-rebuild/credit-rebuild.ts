@@ -8,6 +8,8 @@ import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { getRegistrationAdvisorCode } from '../../core/utils/registration-advisor.util';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 type AudienceTab = 'individual' | 'business';
 
@@ -29,6 +31,8 @@ export class CreditRebuild {
   private readonly creditRebuildApi = inject(CreditRebuildService);
   private readonly toast = inject(ToastService);
   private readonly route = inject(ActivatedRoute);
+  private readonly recaptcha = inject(RecaptchaService);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly audience = signal<AudienceTab>('individual');
   readonly submitting = signal(false);
@@ -216,6 +220,7 @@ export class CreditRebuild {
     this.submitting.set(true);
     try {
       const advisorCode = getRegistrationAdvisorCode();
+      const recaptchaToken = await this.recaptcha.execute('credit_rebuild_enquiry');
       const res = await firstValueFrom(
         this.creditRebuildApi.submitEnquiry({
           fullName: this.form.fullName.trim(),
@@ -223,6 +228,7 @@ export class CreditRebuild {
           email: this.form.email.trim(),
           consentAccepted: this.form.consent === true,
           advisorCode,
+          recaptchaToken,
         }),
       );
 
@@ -233,6 +239,7 @@ export class CreditRebuild {
         return;
       }
 
+      this.analytics.trackCreditRebuildEnquiry(this.audience());
       this.toast.success(res.message || this.defaultSuccessMessage);
       this.resetForm();
       this.revalidate();

@@ -8,6 +8,7 @@ import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class Login {
   private readonly session = inject(AdminSessionService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly recaptcha = inject(RecaptchaService);
 
   readonly submitting = signal(false);
 
@@ -39,10 +41,12 @@ export class Login {
 
     try {
       this.submitting.set(true);
+      const recaptchaToken = await this.recaptcha.execute('admin_login');
       const res = await firstValueFrom(
         this.auth.adminLogin({
           identifier: this.form.controls.identifier.value.trim(),
           password: this.form.controls.password.value,
+          recaptchaToken,
         })
       );
       if (!res?.success || !res.userId || !res.token) {

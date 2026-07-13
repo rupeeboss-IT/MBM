@@ -4,6 +4,7 @@ import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SchemesService } from '../../../core/services/schemes.service';
 import type { SchemeModel, SchemeSlug } from '../../../data/schemes.data';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-scheme-detail',
@@ -17,6 +18,7 @@ export class SchemeDetail {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly slug = signal<string>('');
   readonly scheme = signal<SchemeModel | null>(null);
@@ -40,6 +42,7 @@ export class SchemeDetail {
 
       this.scheme.set(sc);
       this.setSeo(slug as SchemeSlug, sc);
+      this.analytics.trackSchemeView(sc.crumb, slug);
     });
   }
 

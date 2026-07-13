@@ -5753,3 +5753,26 @@ button,
 .lightbox-close{
     background: rgb(255 255 255 / 0%)!important;
 }
+
+/* ──────────────────────────────────────────────────────────
+   reCAPTCHA v3 — hide the floating badge; disclosure text is
+   shown manually on forms per Google's policy.
+   https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed
+   ────────────────────────────────────────────────────────── */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.recaptcha-notice {
+  font-size: 0.72rem;
+  color: #888;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+  text-align: center;
+}
+.recaptcha-notice a {
+  color: #888;
+  text-decoration: underline;
+}

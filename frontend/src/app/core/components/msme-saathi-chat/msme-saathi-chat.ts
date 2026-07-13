@@ -13,6 +13,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AuthSessionService } from '../../services/auth-session.service';
 import { captureContactLeadSourceFromUrl } from '../../utils/contact-lead-source.util';
+import { AnalyticsService } from '../../services/analytics.service';
 import {
   CHIPS_MAIN,
   KB,
@@ -49,6 +50,7 @@ interface ChatMessage {
 export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
   private readonly router = inject(Router);
   private readonly session = inject(AuthSessionService);
+  private readonly analytics = inject(AnalyticsService);
   private navSub?: Subscription;
   private shouldScroll = false;
   private typingTimer?: ReturnType<typeof setTimeout>;
@@ -109,6 +111,7 @@ export class MsmeSaathiChat implements OnDestroy, AfterViewChecked {
     this.showRing.set(false);
     if (!this.started()) {
       this.started.set(true);
+      this.analytics.trackChatbotOpen();
       this.showIntent('welcome');
     }
     setTimeout(() => this.inputEl?.nativeElement.focus(), 300);

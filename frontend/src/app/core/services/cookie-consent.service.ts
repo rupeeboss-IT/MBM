@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable, tap } from 'rxjs';
 import { apiUrl } from '../utils/api-url';
+import { AnalyticsService } from './analytics.service';
 
 const CONSENT_KEY = 'mbm_cookie_consent';
 const SESSION_TOKEN_KEY = 'mbm_cookie_session_token';
@@ -9,6 +10,7 @@ const SESSION_TOKEN_KEY = 'mbm_cookie_session_token';
 @Injectable({ providedIn: 'root' })
 export class CookieConsentService {
   private readonly http = inject(HttpClient);
+  private readonly analytics = inject(AnalyticsService);
 
   hasConsented(): boolean {
     if (typeof window === 'undefined') return true;
@@ -18,9 +20,14 @@ export class CookieConsentService {
   accept(): Observable<unknown> {
     const token = this.getOrCreateSessionToken();
     localStorage.setItem(CONSENT_KEY, 'accepted');
+    // Initialize GA as soon as the user accepts cookies
+    this.analytics.initialize();
     return this.http
       .post(apiUrl('/api/cookie-consent/accept'), { sessionToken: token })
-      .pipe(catchError(() => EMPTY));
+      .pipe(
+        tap(() => this.analytics.trackEvent('cookie_consent_accepted')),
+        catchError(() => EMPTY),
+      );
   }
 
   private getOrCreateSessionToken(): string {

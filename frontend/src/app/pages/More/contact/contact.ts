@@ -9,6 +9,8 @@ import { API_USER_MESSAGES } from '../../../core/utils/api-user-messages';
 import { captureContactLeadSourceFromUrl, getContactLeadSource } from '../../../core/utils/contact-lead-source.util';
 import { getHttpErrorMessage } from '../../../core/utils/http-error-message';
 import { MBM_WHATSAPP_DISPLAY, mbmWhatsAppUrl } from '../../../core/brand';
+import { RecaptchaService } from '../../../core/services/recaptcha.service';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-contact',
@@ -22,6 +24,8 @@ export class Contact implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly route = inject(ActivatedRoute);
+  private readonly recaptcha = inject(RecaptchaService);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly whatsAppDisplay = MBM_WHATSAPP_DISPLAY;
   readonly whatsAppUrl = mbmWhatsAppUrl('Hi MSME Bharat Manch team! I have a question.');
@@ -199,6 +203,7 @@ export class Contact implements OnInit {
 
     this.submitting.set(true);
     try {
+      const recaptchaToken = await this.recaptcha.execute('contact_submit');
       const res = await firstValueFrom(
         this.contactApi.submit({
           fullName: this.form.fullName.trim(),
@@ -208,6 +213,7 @@ export class Contact implements OnInit {
           message: this.form.message.trim(),
           consentAccepted: this.form.consent === true,
           leadSource: getContactLeadSource(),
+          recaptchaToken,
         }),
       );
 
@@ -218,6 +224,9 @@ export class Contact implements OnInit {
         return;
       }
 
+      this.analytics.trackContactFormSubmit(
+        this.subjectOptions.find(o => o.value === this.form.subjectId)?.label,
+      );
       this.toast.success(res.message || 'Thank you! We have received your query. Our team will connect with you shortly.');
       this.resetForm();
       this.revalidate();

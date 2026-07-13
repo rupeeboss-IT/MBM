@@ -7,6 +7,8 @@ import { LoansService } from '../../core/services/loans.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 @Component({
   selector: 'app-loans',
@@ -19,6 +21,8 @@ export class Loans {
   private readonly loansApi = inject(LoansService);
   private readonly toast = inject(ToastService);
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly recaptcha = inject(RecaptchaService);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly loanTypeOpen = signal(false);
 
@@ -233,6 +237,7 @@ export class Loans {
 
     this.submitting.set(true);
     try {
+      const recaptchaToken = await this.recaptcha.execute('loan_apply');
       const res = await firstValueFrom(
         this.loansApi.submitApplication({
           fullName: this.form.fullName.trim(),
@@ -242,6 +247,7 @@ export class Loans {
           loanTypeId,
           loanAmount: this.form.loanAmount.trim(),
           consentAccepted: this.form.consent === true,
+          recaptchaToken,
         }),
       );
 
@@ -252,6 +258,9 @@ export class Loans {
         return;
       }
 
+      this.analytics.trackLoanEnquiry(
+        this.loanTypeOptions.find(o => o.value === this.form.loanType)?.label,
+      );
       this.toast.success(res.message || this.defaultSuccessMessage);
       this.resetForm();
       this.revalidate();

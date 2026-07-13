@@ -13,6 +13,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.util';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class Home implements OnInit {
   private readonly router = inject(Router);
   private readonly contactApi = inject(ContactService);
   private readonly toast = inject(ToastService);
+  private readonly recaptcha = inject(RecaptchaService);
   readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly planCheckout = inject(MembershipPlanCheckoutService);
 
@@ -153,6 +155,7 @@ export class Home implements OnInit {
 
     this.callbackSubmitting.set(true);
     try {
+      const recaptchaToken = await this.recaptcha.execute('home_callback');
       const res = await firstValueFrom(
         this.contactApi.submitCallback({
           fullName: this.callbackForm.fullName.trim(),
@@ -160,6 +163,7 @@ export class Home implements OnInit {
           subjectId: 3,
           message: messageParts.join('\n'),
           consentAccepted: this.callbackForm.consent === true,
+          recaptchaToken,
         }),
       );
 

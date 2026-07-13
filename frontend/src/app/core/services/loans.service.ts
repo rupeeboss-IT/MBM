@@ -12,6 +12,7 @@ export interface SubmitLoanApplicationRequest {
   loanAmount: string;
   consentAccepted: boolean;
   referralCode?: string | null;
+  recaptchaToken?: string;
 }
 
 export interface SubmitLoanApplicationResponse {

@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { ToastService } from '../../core/services/toast.service';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
 import { passwordComplexityValidator } from '../../core/validators/password.validators';
 import {
   detectIdentifierChannel,
@@ -39,6 +40,7 @@ export class ForgotPassword {
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly recaptcha = inject(RecaptchaService);
 
   private cooldownTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -113,7 +115,8 @@ export class ForgotPassword {
 
     try {
       this.submitting.set(true);
-      const res = await firstValueFrom(this.auth.forgotPassword(identifier));
+      const recaptchaToken = await this.recaptcha.execute('forgot_password');
+      const res = await firstValueFrom(this.auth.forgotPassword(identifier, recaptchaToken));
       if (isForgotPasswordAccountNotFound(res)) {
         this.showAccountNotFound(identifier, detected, res.message);
         return;

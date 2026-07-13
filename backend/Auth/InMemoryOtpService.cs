@@ -1,13 +1,15 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace RB_Website_API.Auth;
 
 public sealed class InMemoryOtpService : IOtpService
 {
-    private readonly ConcurrentDictionary<string, OtpRecord> _store = new();
+    private static readonly TimeSpan OtpTtl = TimeSpan.FromMinutes(10);
+
+    private readonly IMemoryCache _cache;
     private readonly IEmailSender _email;
     private readonly ISmsSender _sms;
     private readonly IOtpRateLimiter _rate;
@@ -15,12 +17,14 @@ public sealed class InMemoryOtpService : IOtpService
     private readonly ILogger<InMemoryOtpService> _logger;
 
     public InMemoryOtpService(
+        IMemoryCache cache,
         IEmailSender email,
         ISmsSender sms,
         IOtpRateLimiter rate,
         IOtpEmailTemplateService otpEmail,
         ILogger<InMemoryOtpService> logger)
     {
+        _cache = cache;
         _email = email;
         _sms = sms;
         _rate = rate;
@@ -65,27 +69,27 @@ public sealed class InMemoryOtpService : IOtpService
         }
 
         _rate.RecordSuccessfulEmailOtpSend(email);
-        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false);
+        _cache.Set(key, new OtpRecord(Hash(otp), Verified: false), OtpTtl);
         _logger.LogInformation("OTP saved for {Email} Channel={Channel}", normalizedEmail, "email");
     }
 
     public Task VerifyEmailOtpAsync(string email, string code, CancellationToken ct)
     {
         var key = Key("email", email);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+        if (!_cache.TryGetValue(key, out OtpRecord? rec) || rec is null)
             throw new InvalidOperationException("OTP expired. Please resend OTP.");
 
         if (!SlowEquals(rec.CodeHash, Hash(code)))
             throw new InvalidOperationException("Invalid OTP.");
 
-        _store[key] = rec with { Verified = true };
+        _cache.Set(key, rec with { Verified = true }, OtpTtl);
         return Task.CompletedTask;
     }
 
     public Task EnsureEmailVerifiedAsync(string email, CancellationToken ct)
     {
         var key = Key("email", email);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+        if (!_cache.TryGetValue(key, out OtpRecord? rec) || rec is null)
             throw new InvalidOperationException("Email OTP expired. Please verify again.");
         if (!rec.Verified)
             throw new InvalidOperationException("Email not verified. Please verify via OTP.");
@@ -115,26 +119,26 @@ public sealed class InMemoryOtpService : IOtpService
         }
 
         _rate.RecordSuccessfulSmsOtpSend(phone);
-        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false);
+        _cache.Set(key, new OtpRecord(Hash(otp), Verified: false), OtpTtl);
     }
 
     public Task VerifySmsOtpAsync(string phone, string code, CancellationToken ct)
     {
         var key = Key("sms", phone);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+        if (!_cache.TryGetValue(key, out OtpRecord? rec) || rec is null)
             throw new InvalidOperationException("OTP expired. Please resend OTP.");
 
         if (!SlowEquals(rec.CodeHash, Hash(code)))
             throw new InvalidOperationException("Invalid OTP.");
 
-        _store[key] = rec with { Verified = true };
+        _cache.Set(key, rec with { Verified = true }, OtpTtl);
         return Task.CompletedTask;
     }
 
     public Task EnsureSmsVerifiedAsync(string phone, CancellationToken ct)
     {
         var key = Key("sms", phone);
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+        if (!_cache.TryGetValue(key, out OtpRecord? rec) || rec is null)
             throw new InvalidOperationException("Mobile OTP expired. Please verify again.");
         if (!rec.Verified)
             throw new InvalidOperationException("Mobile not verified. Please verify via OTP.");
@@ -178,7 +182,7 @@ public sealed class InMemoryOtpService : IOtpService
         }
 
         _rate.RecordSuccessfulEmailOtpSend(email);
-        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false, AttemptsLeft: 5);
+        _cache.Set(key, new OtpRecord(Hash(otp), Verified: false, AttemptsLeft: 5), OtpTtl);
     }
 
     public Task VerifyPasswordResetEmailOtpAsync(string email, string code, CancellationToken ct)
@@ -188,7 +192,7 @@ public sealed class InMemoryOtpService : IOtpService
         => EnsurePasswordResetVerifiedAsync(PasswordResetKey("email", email), "Email");
 
     public void InvalidatePasswordResetEmailOtp(string email)
-        => _store.TryRemove(PasswordResetKey("email", email), out _);
+        => _cache.Remove(PasswordResetKey("email", email));
 
     public async Task SendPasswordResetSmsOtpAsync(string phone, CancellationToken ct)
     {
@@ -213,7 +217,7 @@ public sealed class InMemoryOtpService : IOtpService
         }
 
         _rate.RecordSuccessfulSmsOtpSend(phone);
-        _store[key] = new OtpRecord(Hash(otp), DateTimeOffset.Now.AddMinutes(10), Verified: false, AttemptsLeft: 5);
+        _cache.Set(key, new OtpRecord(Hash(otp), Verified: false, AttemptsLeft: 5), OtpTtl);
     }
 
     public Task VerifyPasswordResetSmsOtpAsync(string phone, string code, CancellationToken ct)
@@ -223,11 +227,14 @@ public sealed class InMemoryOtpService : IOtpService
         => EnsurePasswordResetVerifiedAsync(PasswordResetKey("sms", phone), "Mobile");
 
     public void InvalidatePasswordResetSmsOtp(string phone)
-        => _store.TryRemove(PasswordResetKey("sms", phone), out _);
+        => _cache.Remove(PasswordResetKey("sms", phone));
+
+    public void InvalidateSmsOtp(string phone)
+        => _cache.Remove(Key("sms", phone));
 
     private Task VerifyPasswordResetOtpAsync(string key, string code)
     {
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+        if (!_cache.TryGetValue(key, out OtpRecord? rec) || rec is null)
             throw new InvalidOperationException("OTP expired. Please resend OTP.");
 
         if (rec.AttemptsLeft <= 0)
@@ -235,17 +242,17 @@ public sealed class InMemoryOtpService : IOtpService
 
         if (!SlowEquals(rec.CodeHash, Hash(code)))
         {
-            _store[key] = rec with { AttemptsLeft = rec.AttemptsLeft - 1 };
+            _cache.Set(key, rec with { AttemptsLeft = rec.AttemptsLeft - 1 }, OtpTtl);
             throw new InvalidOperationException("Invalid OTP.");
         }
 
-        _store[key] = rec with { Verified = true };
+        _cache.Set(key, rec with { Verified = true }, OtpTtl);
         return Task.CompletedTask;
     }
 
     private Task EnsurePasswordResetVerifiedAsync(string key, string channelLabel)
     {
-        if (!_store.TryGetValue(key, out var rec) || rec.ExpiresAt < DateTimeOffset.Now)
+        if (!_cache.TryGetValue(key, out OtpRecord? rec) || rec is null)
             throw new InvalidOperationException($"{channelLabel} OTP expired. Please verify again.");
         if (!rec.Verified)
             throw new InvalidOperationException($"{channelLabel} not verified. Please verify via OTP.");
@@ -284,5 +291,5 @@ public sealed class InMemoryOtpService : IOtpService
         return diff == 0;
     }
 
-    private sealed record OtpRecord(byte[] CodeHash, DateTimeOffset ExpiresAt, bool Verified, int AttemptsLeft = int.MaxValue);
+    private sealed record OtpRecord(byte[] CodeHash, bool Verified, int AttemptsLeft = int.MaxValue);
 }

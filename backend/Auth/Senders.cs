@@ -32,7 +32,7 @@ public interface IEmailSender
 
 public interface ISmsSender
 {
-    Task SendAsync(string toPhone, string message, CancellationToken ct);
+    Task  SendAsync(string toPhone, string message, CancellationToken ct);
 }
 
 public sealed class SmtpEmailSender : IEmailSender

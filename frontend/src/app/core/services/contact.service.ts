@@ -11,6 +11,7 @@ export interface SubmitContactRequest {
   message: string;
   consentAccepted: boolean;
   leadSource?: string | null;
+  recaptchaToken?: string;
 }
 
 export interface SubmitCallbackRequest {
@@ -19,6 +20,7 @@ export interface SubmitCallbackRequest {
   subjectId: number;
   message: string;
   consentAccepted: boolean;
+  recaptchaToken?: string;
 }
 
 export interface SubmitContactResponse {

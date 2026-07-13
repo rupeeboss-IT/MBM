@@ -12,6 +12,8 @@ import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
 import { MembershipPlanCheckoutService } from '../../core/services/membership-plan-checkout.service';
 import { getLoginRegisterCta, type LoginRegisterCta } from '../../core/utils/registration-mode.util';
+import { RecaptchaService } from '../../core/services/recaptcha.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +30,8 @@ export class Login implements OnInit {
   private readonly router = inject(Router);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly planCheckout = inject(MembershipPlanCheckoutService);
+  private readonly recaptcha = inject(RecaptchaService);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly submitting = signal(false);
 
@@ -56,10 +60,12 @@ export class Login implements OnInit {
 
     try {
       this.submitting.set(true);
+      const recaptchaToken = await this.recaptcha.execute('login');
       const res = await firstValueFrom(
         this.auth.login({
           identifier: this.form.controls.identifier.value.trim(),
           password: this.form.controls.password.value,
+          recaptchaToken,
         })
       );
       if (!res?.success || !res.userId || !res.token) {
@@ -67,6 +73,7 @@ export class Login implements OnInit {
         return;
       }
       this.session.setSession(res.userId, res.token, res.role);
+      this.analytics.trackLogin();
       this.toast.success('Login successful.');
 
       if (await this.schemeDiscovery.resumeAfterAuth()) {

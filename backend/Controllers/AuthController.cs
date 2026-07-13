@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RB_Website_API.Auth;
+using RB_Website_API.Data;
 using RB_Website_API.Services;
 
 namespace RB_Website_API.Controllers;
@@ -11,11 +13,121 @@ public sealed class AuthController : ControllerBase
 {
     private readonly IOtpService _otp;
     private readonly ILogger<AuthController> _log;
+    private readonly AppDbContext _db;
+    private readonly IJwtTokenService _jwt;
 
-    public AuthController(IOtpService otp, ILogger<AuthController> log)
+    public AuthController(
+        IOtpService otp,
+        ILogger<AuthController> log,
+        AppDbContext db,
+        IJwtTokenService jwt)
     {
         _otp = otp;
         _log = log;
+        _db  = db;
+        _jwt = jwt;
+    }
+
+    public sealed record OtpLoginRequest(string MobileNumber, string Otp);
+    public sealed record OtpLoginResponse(
+        bool    Success,
+        string? Message = null,
+        Guid?   UserId  = null,
+        string? Role    = null,
+        string? Token   = null);
+
+    public sealed record CheckUserResponse(
+        bool    Success,
+        string? Message      = null,
+        bool    Exists       = false,
+        Guid?   UserId       = null,
+        string? FullName     = null,
+        string? MobileNumber = null,
+        string? Role         = null);
+
+    /// <summary>
+    /// Android OTP login. The client must first request an OTP via
+    /// POST /api/auth/otp/sms/send, then submit it here to obtain a JWT.
+    /// The returned token is identical in claims and validity to the one
+    /// issued by the standard username/password login.
+    /// </summary>
+    [HttpPost("verify-otp")]
+    public async Task<ActionResult<OtpLoginResponse>> VerifyOtpLogin(
+        [FromBody] OtpLoginRequest? req,
+        CancellationToken ct)
+    {
+        if (req is null)
+            return BadRequest(new OtpLoginResponse(false, "Request is required."));
+
+        if (string.IsNullOrWhiteSpace(req.MobileNumber))
+            return BadRequest(new OtpLoginResponse(false, "Mobile number is required."));
+
+        if (string.IsNullOrWhiteSpace(req.Otp))
+            return BadRequest(new OtpLoginResponse(false, "OTP is required."));
+
+        var phone = IndianPhone.Digits(req.MobileNumber.Trim());
+        var sw    = Stopwatch.StartNew();
+
+        _log.LogInformation("OTP login attempt for {Phone}", phone);
+
+        // 1. Validate OTP — fail fast with 401 before touching the DB
+        try
+        {
+            await _otp.VerifySmsOtpAsync(phone, req.Otp.Trim(), ct);
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning(
+                ex,
+                "OTP login failed — invalid/expired OTP for {Phone} ElapsedMs={ElapsedMs}",
+                phone, sw.ElapsedMilliseconds);
+            return Unauthorized(new OtpLoginResponse(false, "Invalid or expired OTP."));
+        }
+
+        // 2. Resolve user
+        var user = await _db.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Phone == phone, ct);
+
+        if (user is null)
+        {
+            _log.LogWarning(
+                "OTP login failed — user not found for {Phone} ElapsedMs={ElapsedMs}",
+                phone, sw.ElapsedMilliseconds);
+            return NotFound(new OtpLoginResponse(false, "No account found for this mobile number."));
+        }
+
+        // 3. Guard checks (mirrors existing /api/user/login)
+        if (user.IsDeleted)
+        {
+            _log.LogWarning("OTP login rejected — deleted account UserId={UserId}", user.UserId);
+            return Unauthorized(new OtpLoginResponse(false, "Account is not available."));
+        }
+
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+        if (role is "admin" or "superadmin")
+        {
+            _log.LogWarning("OTP login rejected — admin account UserId={UserId}", user.UserId);
+            return Unauthorized(new OtpLoginResponse(false, "Admin accounts cannot use OTP login."));
+        }
+
+        if (user.IsActive != true)
+        {
+            _log.LogWarning("OTP login rejected — inactive account UserId={UserId}", user.UserId);
+            return Unauthorized(new OtpLoginResponse(false, "Account is inactive."));
+        }
+
+        // 4. OTP is valid and user is verified — consume the OTP so it cannot be reused
+        _otp.InvalidateSmsOtp(phone);
+
+        // 5. Issue JWT using the same service as the standard login
+        var token = _jwt.CreateToken(user.UserId, role, user.Email);
+
+        _log.LogInformation(
+            "OTP login successful UserId={UserId} Role={Role} ElapsedMs={ElapsedMs}",
+            user.UserId, role, sw.ElapsedMilliseconds);
+
+        return Ok(new OtpLoginResponse(true, "Login successful.", user.UserId, role, token));
     }
 
     [HttpPost("otp/email/send")]
@@ -117,5 +229,48 @@ public sealed class AuthController : ControllerBase
             _log.LogWarning(ex, "Verify SMS OTP failed for {Phone}", req.Phone);
             return BadRequest(new ApiOk(false, UserFriendlyErrorMapper.GetUserMessage(ex, "verify_sms_otp")));
         }
+    }
+
+    /// <summary>
+    /// Checks whether an active user account exists for the given mobile number.
+    /// Returns basic profile information when found; never exposes credentials or sensitive fields.
+    /// </summary>
+    [HttpGet("check-user")]
+    public async Task<ActionResult<CheckUserResponse>> CheckUser(
+        [FromQuery] string? mobileNumber,
+        CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(mobileNumber))
+            return BadRequest(new CheckUserResponse(false, "Mobile number is required."));
+
+        var phone = IndianPhone.Digits(mobileNumber.Trim());
+
+        if (phone.Length != 10 || phone[0] < '6' || phone[0] > '9')
+            return BadRequest(new CheckUserResponse(false, "Invalid mobile number."));
+
+        _log.LogInformation("Check-user request for {Phone}", phone);
+
+        var user = await _db.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Phone == phone && !u.IsDeleted && u.IsActive == true, ct);
+
+        if (user is null)
+        {
+            _log.LogInformation("Check-user — no active user found for {Phone}", phone);
+            return Ok(new CheckUserResponse(true, "User not found.", Exists: false));
+        }
+
+        _log.LogInformation(
+            "Check-user — user found UserId={UserId} Role={Role}",
+            user.UserId, user.Role);
+
+        return Ok(new CheckUserResponse(
+            true,
+            "User found.",
+            Exists: true,
+            UserId: user.UserId,
+            FullName: user.FullName,
+            MobileNumber: user.Phone,
+            Role: user.Role));
     }
 }

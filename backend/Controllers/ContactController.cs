@@ -9,8 +9,13 @@ namespace RB_Website_API.Controllers;
 public sealed class ContactController : ControllerBase
 {
     private readonly IContactService _contact;
+    private readonly IRecaptchaService _recaptcha;
 
-    public ContactController(IContactService contact) => _contact = contact;
+    public ContactController(IContactService contact, IRecaptchaService recaptcha)
+    {
+        _contact = contact;
+        _recaptcha = recaptcha;
+    }
 
     public sealed record SubmitContactRequest(
         string FullName,
@@ -19,7 +24,8 @@ public sealed class ContactController : ControllerBase
         int SubjectId,
         string Message,
         bool ConsentAccepted,
-        string? LeadSource = null);
+        string? LeadSource = null,
+        string? RecaptchaToken = null);
 
     public sealed record SubmitContactResponse(
         bool Success,
@@ -34,6 +40,9 @@ public sealed class ContactController : ControllerBase
     {
         if (req is null)
             return BadRequest(new SubmitContactResponse(false, "Invalid request."));
+
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "contact_submit", ct);
+        if (!rcOk) return BadRequest(new SubmitContactResponse(false, rcReason ?? "reCAPTCHA verification failed."));
 
         var (success, message, submissionId) = await _contact.SubmitAsync(
             req.FullName,
@@ -56,7 +65,8 @@ public sealed class ContactController : ControllerBase
         string Mobile,
         int SubjectId,
         string Message,
-        bool ConsentAccepted);
+        bool ConsentAccepted,
+        string? RecaptchaToken = null);
 
     [AllowAnonymous]
     [HttpPost("callback")]
@@ -66,6 +76,9 @@ public sealed class ContactController : ControllerBase
     {
         if (req is null)
             return BadRequest(new SubmitContactResponse(false, "Invalid request."));
+
+        var (rcOk, rcReason) = await _recaptcha.VerifyAsync(req.RecaptchaToken, "home_callback", ct);
+        if (!rcOk) return BadRequest(new SubmitContactResponse(false, rcReason ?? "reCAPTCHA verification failed."));
 
         var (success, message, submissionId) = await _contact.SubmitCallbackAsync(
             req.FullName,

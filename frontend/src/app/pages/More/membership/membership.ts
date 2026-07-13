@@ -8,6 +8,7 @@ import {
   MembershipPlanCheckoutService,
   type MembershipPlanCode,
 } from '../../../core/services/membership-plan-checkout.service';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 import {
   consumeStashedMembershipSource,
   getMembershipSourceGuidance,
@@ -33,6 +34,7 @@ export class Membership implements OnInit {
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
+  private readonly analytics = inject(AnalyticsService);
 
   openFaqIndex: number | null = null;
   readonly membershipSource = signal<MembershipSource | null>(null);
@@ -75,6 +77,7 @@ export class Membership implements OnInit {
   }
 
   choosePlan(code: MembershipPlanCode): void {
+    this.analytics.trackMembershipCheckoutStarted(code);
     void this.checkout.choosePlan(code, { membershipSource: this.membershipSource() });
   }
 }
