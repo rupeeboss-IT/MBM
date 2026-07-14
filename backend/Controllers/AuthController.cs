@@ -15,17 +15,20 @@ public sealed class AuthController : ControllerBase
     private readonly ILogger<AuthController> _log;
     private readonly AppDbContext _db;
     private readonly IJwtTokenService _jwt;
+    private readonly IConfiguration _config;
 
     public AuthController(
         IOtpService otp,
         ILogger<AuthController> log,
         AppDbContext db,
-        IJwtTokenService jwt)
+        IJwtTokenService jwt,
+        IConfiguration config)
     {
-        _otp = otp;
-        _log = log;
-        _db  = db;
-        _jwt = jwt;
+        _otp    = otp;
+        _log    = log;
+        _db     = db;
+        _jwt    = jwt;
+        _config = config;
     }
 
     public sealed record OtpLoginRequest(string MobileNumber, string Otp);
@@ -43,7 +46,8 @@ public sealed class AuthController : ControllerBase
         Guid?   UserId       = null,
         string? FullName     = null,
         string? MobileNumber = null,
-        string? Role         = null);
+        string? Role         = null,
+        string? Token        = null);
 
     /// <summary>
     /// Android OTP login. The client must first request an OTP via
@@ -234,6 +238,7 @@ public sealed class AuthController : ControllerBase
     /// <summary>
     /// Checks whether an active user account exists for the given mobile number.
     /// Returns basic profile information when found; never exposes credentials or sensitive fields.
+    /// When a valid X-Api-Key header is supplied, also issues a JWT token for the matched user.
     /// </summary>
     [HttpGet("check-user")]
     public async Task<ActionResult<CheckUserResponse>> CheckUser(
@@ -248,7 +253,18 @@ public sealed class AuthController : ControllerBase
         if (phone.Length != 10 || phone[0] < '6' || phone[0] > '9')
             return BadRequest(new CheckUserResponse(false, "Invalid mobile number."));
 
-        _log.LogInformation("Check-user request for {Phone}", phone);
+        // Determine whether the caller wants a token (opt-in via X-Api-Key header)
+        var incomingKey   = Request.Headers["X-Api-Key"].FirstOrDefault();
+        var configuredKey = _config["InternalApi:Key"];
+        var issueToken    = !string.IsNullOrWhiteSpace(incomingKey);
+
+        if (issueToken && incomingKey != configuredKey)
+        {
+            _log.LogWarning("Check-user — invalid X-Api-Key for {Phone}", phone);
+            return Unauthorized(new CheckUserResponse(false, "Invalid API key."));
+        }
+
+        _log.LogInformation("Check-user request for {Phone} IssueToken={IssueToken}", phone, issueToken);
 
         var user = await _db.Users
             .AsNoTracking()
@@ -260,9 +276,28 @@ public sealed class AuthController : ControllerBase
             return Ok(new CheckUserResponse(true, "User not found.", Exists: false));
         }
 
-        _log.LogInformation(
-            "Check-user — user found UserId={UserId} Role={Role}",
-            user.UserId, user.Role);
+        var role = (user.Role ?? "").Trim().ToLowerInvariant();
+
+        string? token = null;
+        if (issueToken)
+        {
+            if (role is "admin" or "superadmin")
+            {
+                _log.LogWarning("Check-user — token denied for admin account UserId={UserId}", user.UserId);
+                return Unauthorized(new CheckUserResponse(false, "Token cannot be issued for admin accounts."));
+            }
+
+            token = _jwt.CreateToken(user.UserId, role, user.Email);
+            _log.LogInformation(
+                "Check-user — token issued UserId={UserId} Role={Role}",
+                user.UserId, role);
+        }
+        else
+        {
+            _log.LogInformation(
+                "Check-user — user found UserId={UserId} Role={Role}",
+                user.UserId, role);
+        }
 
         return Ok(new CheckUserResponse(
             true,
@@ -271,6 +306,7 @@ public sealed class AuthController : ControllerBase
             UserId: user.UserId,
             FullName: user.FullName,
             MobileNumber: user.Phone,
-            Role: user.Role));
+            Role: user.Role,
+            Token: token));
     }
 }

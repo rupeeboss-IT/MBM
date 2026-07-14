@@ -2,13 +2,15 @@ import {
   Component,
   ElementRef,
   HostListener,
+  PLATFORM_ID,
   effect,
+  inject,
   input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-image-lightbox',
@@ -42,8 +44,11 @@ export class ImageLightbox {
   private readonly minScale = 0.5;
   private readonly maxScale = 5;
 
+  private readonly platformId = inject(PLATFORM_ID);
+
   constructor() {
     effect(() => {
+      if (!isPlatformBrowser(this.platformId)) return;
       if (this.isOpen()) {
         document.body.style.overflow = 'hidden';
         this.resetTransform();

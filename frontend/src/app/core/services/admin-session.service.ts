@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 const KEY_USER_ID = 'mbm_admin_userId';
 const KEY_TOKEN = 'mbm_admin_token';
@@ -6,9 +7,17 @@ const KEY_ROLE = 'mbm_admin_role';
 
 @Injectable({ providedIn: 'root' })
 export class AdminSessionService {
-  private readonly _userId = signal<string | null>(localStorage.getItem(KEY_USER_ID));
-  private readonly _token = signal<string | null>(localStorage.getItem(KEY_TOKEN));
-  private readonly _role = signal<string | null>(localStorage.getItem(KEY_ROLE));
+  private readonly platformId = inject(PLATFORM_ID);
+
+  private readonly _userId = signal<string | null>(
+    isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_USER_ID) : null
+  );
+  private readonly _token = signal<string | null>(
+    isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_TOKEN) : null
+  );
+  private readonly _role = signal<string | null>(
+    isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_ROLE) : null
+  );
 
   readonly userId = this._userId.asReadonly();
   readonly token = this._token.asReadonly();

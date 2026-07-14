@@ -629,8 +629,11 @@
       </div>
       <div class="events-grid">
         <div class="event-card" [routerLink]="['/event','bll-business-topline-growth-meet-2026']">
-          <div class="event-img event-img--photo" style="background-image: url('/event/bll-event-1.jpg')"
+          <div class="event-img event-img--photo"
             (click)="openLightbox('/event/bll-event-1.jpg', 'Business Topline Growth Meet — 23rd Edition', $event)">
+            <img src="/event/bll-event-1.jpg"
+                 alt="Business Topline Growth Meet — 23rd Edition, Bombay Stock Exchange Mumbai"
+                 loading="lazy" width="600" height="130">
           </div>
           <div class="event-body">
             <div class="event-meta"><span class="badge badge-red">BLL</span><span
@@ -642,8 +645,12 @@
           </div>
         </div>
         <div class="event-card" [routerLink]="['/event','bll-psu-sme-access-summit-2026']">
-          <div class="event-img event-img--photo" style="background-image: url('/event/bll-event-2.jpg')"
-            (click)="openLightbox('/event/bll-event-2.jpg', 'Procurement Series: PSU SME Access Summit', $event)"></div>
+          <div class="event-img event-img--photo"
+            (click)="openLightbox('/event/bll-event-2.jpg', 'Procurement Series: PSU SME Access Summit', $event)">
+            <img src="/event/bll-event-2.jpg"
+                 alt="Procurement Series: PSU SME Access Summit, Jio World Convention Centre Mumbai"
+                 loading="lazy" width="600" height="130">
+          </div>
           <div class="event-body">
             <div class="event-meta"><span class="badge badge-red">BLL</span><span class="badge badge-blue">Mumbai</span>
             </div>

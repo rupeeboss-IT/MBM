@@ -13,6 +13,60 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="icon" type="image/png" href="assets/mbmlogo.png">
+
+  <!-- Open Graph: site-wide constants (never change per page) -->
+  <meta property="og:site_name" content="MSME Bharat Manch">
+  <meta property="og:locale" content="en_IN">
+  <!-- Default og:image (1200×630px); overridden per page by SeoService -->
+  <meta property="og:image" content="https://msmebharatmanch.com/assets/og-default.jpg">
+
+  <!-- Twitter Card: site-wide constants -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@MSMEBharatManch">
+
+  <!-- Structured Data: Organization + WebSite (global, never changes) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://msmebharatmanch.com/#organization",
+        "name": "MSME Bharat Manch",
+        "url": "https://msmebharatmanch.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://msmebharatmanch.com/assets/mbmlogo.png"
+        },
+        "description": "India's #1 platform for MSMEs — Loans, Government Schemes, Company Formation, Technology, Digital Marketing & IPO Listing. Powered by RupeeBoss.com",
+        "areaServed": "IN",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-90059-00921",
+          "contactType": "customer service",
+          "areaServed": "IN",
+          "availableLanguage": ["English", "Hindi"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://msmebharatmanch.com/#website",
+        "url": "https://msmebharatmanch.com",
+        "name": "MSME Bharat Manch",
+        "description": "India's #1 platform for MSMEs",
+        "publisher": { "@id": "https://msmebharatmanch.com/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://msmebharatmanch.com/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link

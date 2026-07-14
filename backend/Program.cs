@@ -287,8 +287,33 @@ app.UseStaticFiles();
 
 app.MapControllers();
 
-// Angular SPA (published under wwwroot): /login, /profile, etc.
-app.MapFallbackToFile("index.html");
+// Angular SPA fallback.
+// With static prerendering enabled the Angular build emits a per-route
+// index.html (e.g. wwwroot/about/index.html, wwwroot/service/msme-loans-finance/index.html).
+// For routes that were rendered as Client-only (login, register, admin, etc.)
+// no per-route file exists, so we fall back to the root index.html instead.
+app.MapFallback(async (HttpContext context) =>
+{
+    var webRoot = app.Environment.WebRootPath
+                  ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+    var requestSegment = context.Request.Path.Value?.TrimStart('/') ?? string.Empty;
+
+    // Normalise path separators so it works on both Windows and Linux hosts.
+    var relativePath = requestSegment.Replace('/', Path.DirectorySeparatorChar);
+    var prerenderFile  = Path.Combine(webRoot, relativePath, "index.html");
+    var fallbackFile   = Path.Combine(webRoot, "index.html");
+
+    var fileToServe = File.Exists(prerenderFile) ? prerenderFile : fallbackFile;
+
+    context.Response.ContentType = "text/html; charset=utf-8";
+    // Prevent browsers from caching the HTML shell — JS/CSS chunks are
+    // cache-busted via content hashes by the Angular build.
+    context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    context.Response.Headers["Pragma"] = "no-cache";
+
+    await context.Response.SendFileAsync(fileToServe);
+});
 
 app.Run();
 }

@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 const KEY_USER = 'mbm_userId';
 const KEY_TOKEN = 'mbm_token';
@@ -6,14 +7,16 @@ const KEY_ROLE = 'mbm_role';
 
 @Injectable({ providedIn: 'root' })
 export class AuthSessionService {
+  private readonly platformId = inject(PLATFORM_ID);
+
   private readonly _userId = signal<string | null>(
-    typeof localStorage !== 'undefined' ? localStorage.getItem(KEY_USER) : null
+    isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_USER) : null
   );
   private readonly _token = signal<string | null>(
-    typeof localStorage !== 'undefined' ? localStorage.getItem(KEY_TOKEN) : null
+    isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_TOKEN) : null
   );
   private readonly _role = signal<string | null>(
-    typeof localStorage !== 'undefined' ? localStorage.getItem(KEY_ROLE) : null
+    isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_ROLE) : null
   );
 
   readonly userId = this._userId.asReadonly();

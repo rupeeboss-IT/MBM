@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OfferingCtaActions } from '../../core/components/offering-cta-actions/offering-cta-actions';
 import { OfferingsService } from '../../core/services/offerings.service';
+import { SeoService } from '../../core/services/seo.service';
 import type { OfferingModel, OfferingSlug } from '../../data/offerings.data';
 
 @Component({
@@ -20,8 +21,7 @@ export class OfferingDetails implements OnInit {
   private readonly offerings = inject(OfferingsService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly title = inject(Title);
-  private readonly meta = inject(Meta);
+  private readonly seoService = inject(SeoService);
 
   readonly slug = signal<string>('');
   readonly offering = signal<OfferingModel | null>(null);
@@ -80,11 +80,35 @@ export class OfferingDetails implements OnInit {
 
   private setSeo(slug: OfferingSlug, off: OfferingModel) {
     const pageTitle = `${off.title} | MSME Bharat Manch`;
-    this.title.setTitle(pageTitle);
-    this.meta.updateTag({ name: 'description', content: off.tagline });
-    this.meta.updateTag({ property: 'og:type', content: 'website' });
-    this.meta.updateTag({ property: 'og:title', content: pageTitle });
-    this.meta.updateTag({ property: 'og:description', content: off.tagline });
-    this.meta.updateTag({ property: 'og:url', content: `/offering/${slug}` });
+    const canonicalUrl = `https://msmebharatmanch.com/offering/${slug}`;
+    const ogImage = off.iconImage
+      ? `https://msmebharatmanch.com${off.iconImage}`
+      : undefined;
+
+    this.seoService.setPage({
+      title: pageTitle,
+      description: off.tagline,
+      ogUrl: canonicalUrl,
+      ogImage,
+    });
+
+    this.seoService.setJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      'name': off.title,
+      'description': off.tagline,
+      'url': canonicalUrl,
+      'brand': {
+        '@type': 'Organization',
+        'name': 'MSME Bharat Manch',
+        'url': 'https://msmebharatmanch.com',
+      },
+      'offers': {
+        '@type': 'Offer',
+        'priceCurrency': 'INR',
+        'availability': 'https://schema.org/InStock',
+        'seller': { '@type': 'Organization', 'name': 'MSME Bharat Manch' },
+      },
+    });
   }
 }

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import { DomSanitizer, Meta, Title } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { JoinCtaService } from '../../../core/services/join-cta.service';
 import { EventsService } from '../../../core/services/events.service';
+import { SeoService } from '../../../core/services/seo.service';
 import type { EventModel, EventSlug } from '../../../data/events.data';
 
 @Component({
@@ -17,8 +18,7 @@ export class EventDetail {
   private readonly events = inject(EventsService);
   readonly joinCta = inject(JoinCtaService);
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly title = inject(Title);
-  private readonly meta = inject(Meta);
+  private readonly seoService = inject(SeoService);
 
   readonly slug = signal<string>('');
   readonly event = signal<EventModel | null>(null);
@@ -47,12 +47,39 @@ export class EventDetail {
 
   private setSeo(slug: EventSlug, ev: EventModel) {
     const pageTitle = `${ev.title} | MSME Bharat Manch`;
-    this.title.setTitle(pageTitle);
-    this.meta.updateTag({ name: 'description', content: ev.subtitle });
-    this.meta.updateTag({ property: 'og:type', content: 'website' });
-    this.meta.updateTag({ property: 'og:title', content: pageTitle });
-    this.meta.updateTag({ property: 'og:description', content: ev.subtitle });
-    this.meta.updateTag({ property: 'og:url', content: `/event/${slug}` });
+    const canonicalUrl = `https://msmebharatmanch.com/event/${slug}`;
+    const ogImage = ev.imageUrl
+      ? `https://msmebharatmanch.com${ev.imageUrl}`
+      : undefined;
+
+    this.seoService.setPage({
+      title: pageTitle,
+      description: ev.subtitle,
+      ogUrl: canonicalUrl,
+      ogImage,
+    });
+
+    this.seoService.setJsonLd({
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      'name': ev.title,
+      'description': ev.subtitle,
+      'startDate': ev.dateISO,
+      'location': {
+        '@type': 'Place',
+        'name': ev.venue,
+        'address': { '@type': 'PostalAddress', 'addressCountry': 'IN' },
+      },
+      'organizer': {
+        '@type': 'Organization',
+        'name': 'MSME Bharat Manch',
+        'url': 'https://msmebharatmanch.com',
+      },
+      'url': canonicalUrl,
+      'eventStatus': 'https://schema.org/EventScheduled',
+      'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+      ...(ogImage ? { 'image': ogImage } : {}),
+    });
   }
 }
 

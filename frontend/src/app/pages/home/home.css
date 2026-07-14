@@ -1,9 +1,17 @@
 .event-img--photo {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   cursor: zoom-in;
-  font-size: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-img--photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 /* ===== GOVERNMENT SCHEME DISCOVERY BANNER ===== */

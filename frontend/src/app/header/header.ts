@@ -246,7 +246,11 @@ export class Header implements OnDestroy {
   }
 
   private setBodyScrollLock(lock: boolean): void {
-    document.body.classList.toggle('nav-scroll-lock', lock);
+    try {
+      document.body.classList.toggle('nav-scroll-lock', lock);
+    } catch {
+      // Server-side prerendering: document is not a real DOM, ignore
+    }
   }
 
   private async loadUserName(): Promise<void> {

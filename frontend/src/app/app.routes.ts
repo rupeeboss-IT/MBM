@@ -141,7 +141,11 @@ export const routes: Routes = [
     {
         path: 'schemes',
         component: Schemes,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Government Schemes for MSMEs | MSME Bharat Manch',
+            description: 'Explore PMEGP, CGTMSE, MUDRA and other government schemes tailored for Indian MSMEs'
+        }
     },
     {
         path: 'scheme/:slug',
@@ -150,7 +154,11 @@ export const routes: Routes = [
     {
         path: 'events',
         component: Events,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'MSME Events & Summits | MSME Bharat Manch',
+            description: 'Attend exclusive MSME networking events, business summits and knowledge sessions hosted by MSME Bharat Manch'
+        }
     },
     {
         path: 'event/:slug',
@@ -164,7 +172,11 @@ export const routes: Routes = [
     {
         path: 'loans',
         component: Loans,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'MSME Loans & Finance | MSME Bharat Manch',
+            description: 'Get the right business loan for your MSME — term loans, working capital, CGTMSE-backed credit and more'
+        }
     },
     {
         path: 'credit-rebuild',
@@ -188,7 +200,11 @@ export const routes: Routes = [
     {
         path: 'contact',
         component: Contact,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Contact Us | MSME Bharat Manch',
+            description: 'Get in touch with the MSME Bharat Manch team for business solutions, partnerships or support'
+        }
     },
     {
         path: 'search',
@@ -198,12 +214,20 @@ export const routes: Routes = [
     {
         path: 'membership',
         component: Membership,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'MSME Membership Plans | MSME Bharat Manch',
+            description: 'Join MSME Bharat Manch and unlock exclusive benefits — loans, government schemes, technology solutions and expert advisory'
+        }
     },
     {
         path: 'connect',
         component: Connect,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'MSME Connect | Business Networking | MSME Bharat Manch',
+            description: 'Connect with verified MSME vendors, suppliers and business partners across India on MSME Bharat Manch'
+        }
     },
     {
         path: 'offering/:slug',
@@ -222,7 +246,11 @@ export const routes: Routes = [
     {
         path: 'news',
         component: NewsBlog,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'MSME News & Insights | MSME Bharat Manch',
+            description: 'Stay updated with the latest MSME news, government policy updates, business tips and expert insights'
+        }
     },
     {
         path: 'article/:slug',
@@ -231,12 +259,20 @@ export const routes: Routes = [
     {
         path: 'careers',
         component: Careers,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Careers at MSME Bharat Manch | Join Our Team',
+            description: 'Explore career opportunities at MSME Bharat Manch and help empower 7 Crore+ MSMEs across India'
+        }
     },
     {
         path: 'media',
         component: MediaKit,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Media Kit | MSME Bharat Manch',
+            description: 'Download the official MSME Bharat Manch media kit — brand assets, press releases and media contact'
+        }
     },
     {
         path: 'privacy',
@@ -246,17 +282,29 @@ export const routes: Routes = [
     {
         path: 'privacy-policy',
         component: Privacy,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Privacy Policy | MSME Bharat Manch',
+            description: 'Read the MSME Bharat Manch privacy policy to understand how we collect, use and protect your data'
+        }
     },
     {
         path: 'terms',
         component: Terms,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Terms & Conditions | MSME Bharat Manch',
+            description: 'Review the terms and conditions governing your use of the MSME Bharat Manch platform and services'
+        }
     },
     {
         path: 'disclaimer',
         component: Disclaimer,
-        pathMatch: 'full'
+        pathMatch: 'full',
+        data: {
+            title: 'Disclaimer | MSME Bharat Manch',
+            description: 'Read the disclaimer for MSME Bharat Manch regarding information accuracy and advisory limitations'
+        }
     },
     {
         path: 'member/login',
