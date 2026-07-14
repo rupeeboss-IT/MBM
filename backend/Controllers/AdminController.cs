@@ -414,6 +414,8 @@ public sealed class AdminController : ControllerBase
         if (toEx.HasValue) reportsQ = reportsQ.Where(r => r.UploadDate < toEx.Value);
         var reportsGenerated = await reportsQ.CountAsync(ct);
 
+        var blogCount = await _db.Blogs.AsNoTracking().CountAsync(b => b.IsPublished, ct);
+
         var plans = await _db.Plans.AsNoTracking().CountAsync(p => p.IsActive, ct);
 
         var ordersQ = _db.PaymentOrders.AsNoTracking().AsQueryable();
@@ -458,7 +460,7 @@ public sealed class AdminController : ControllerBase
             ExpiringSoon: expiringSoon,
             ExpiredSubscriptions: expiredSubscriptions,
             ReportsGenerated: reportsGenerated,
-            Blogs: ContentCatalog.Blogs,
+            Blogs: blogCount,
             Events: ContentCatalog.Events,
             Schemes: ContentCatalog.Schemes,
             SchemeNews: 0,

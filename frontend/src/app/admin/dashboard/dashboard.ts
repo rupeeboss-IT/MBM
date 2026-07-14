@@ -82,7 +82,7 @@ export class AdminDashboard {
       )) as DashboardCounts;
       this.counts.set({
         ...counts,
-        blogs: CONTENT_COUNTS.blogs,
+        // blogs count now comes from the DB via the API — no override needed
         events: CONTENT_COUNTS.events,
         schemes: CONTENT_COUNTS.schemes,
       });

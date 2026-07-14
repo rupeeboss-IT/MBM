@@ -1,0 +1,214 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content</span>
+      <h2>{{ mode() === 'create' ? 'New article' : 'Edit article' }}</h2>
+      <div class="muted">Write the story. Formatting tools are in the editor toolbar — paste from Word or Google Docs works too.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn btn-outline" type="button" (click)="saveAsDraft()" [disabled]="saving() || loading()">
+        Save draft
+      </button>
+      <button class="btn" type="button" (click)="saveAndPublish()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : (mode() === 'create' ? 'Publish' : 'Save &amp; publish') }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading article…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="bf-layout">
+      <!-- Main writing surface -->
+      <div class="bf-main section">
+        <div class="form-group">
+          <label class="form-label" for="bf-title">Title <span class="req">*</span></label>
+          <input
+            id="bf-title"
+            class="form-control bf-title-input"
+            type="text"
+            placeholder="What is this article about?"
+            [ngModel]="form().title"
+            (ngModelChange)="updateField('title', $event)"
+            (blur)="onTitleBlur()"
+            name="title"
+            required
+          />
+        </div>
+
+        <div class="bf-slug-row">
+          <span class="bf-slug-prefix">/article/</span>
+          <input
+            class="form-control bf-slug-input"
+            type="text"
+            placeholder="url-slug"
+            [ngModel]="form().slug"
+            (ngModelChange)="updateField('slug', $event)"
+            name="slug"
+            [disabled]="mode() === 'edit'"
+            aria-label="URL slug"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bf-summary">Summary</label>
+          <textarea
+            id="bf-summary"
+            class="form-control"
+            rows="2"
+            placeholder="One or two sentences for the listing card"
+            [ngModel]="form().summary"
+            (ngModelChange)="updateField('summary', $event)"
+            name="summary"
+          ></textarea>
+        </div>
+
+        <div class="form-group bf-editor-group">
+          <label class="form-label">Body <span class="req">*</span></label>
+          <app-rich-editor
+            [ngModel]="form().content"
+            (ngModelChange)="updateField('content', $event)"
+            name="content"
+          ></app-rich-editor>
+        </div>
+      </div>
+
+      <!-- Slim settings rail -->
+      <aside class="bf-aside">
+        <div class="bf-aside-card section">
+          <p class="bf-aside-heading">Status</p>
+          <div class="bf-status" [class.bf-status--live]="form().isPublished">
+            <span class="bf-status-dot" aria-hidden="true"></span>
+            <span>{{ form().isPublished ? 'Published' : 'Draft' }}</span>
+          </div>
+          <p class="bf-aside-note">
+            {{ form().isPublished
+              ? 'This article is visible on the website.'
+              : 'Only admins can see this until you publish.' }}
+          </p>
+        </div>
+
+        <div class="bf-aside-card section">
+          <p class="bf-aside-heading">Details</p>
+
+          <div class="form-group">
+            <label class="form-label" for="bf-category">Category</label>
+            <select
+              id="bf-category"
+              class="form-control"
+              [ngModel]="form().category"
+              (ngModelChange)="onCategoryChange($event)"
+              name="category"
+            >
+              <option *ngFor="let c of categories" [value]="c">{{ c | titlecase }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Cover image</label>
+
+            @if (form().imageUrl) {
+              <div class="bf-cover-preview">
+                <img [src]="form().imageUrl" alt="Cover preview" />
+              </div>
+              <div class="bf-cover-actions">
+                <label class="btn btn-outline bf-cover-btn" [class.is-disabled]="uploadingImage()">
+                  {{ uploadingImage() ? 'Uploading…' : 'Change' }}
+                  <input
+                    type="file"
+                    class="bf-file-input"
+                    [accept]="acceptImages"
+                    [disabled]="uploadingImage()"
+                    (change)="onCoverSelected($event)"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="btn btn-outline bf-cover-btn"
+                  (click)="clearCover()"
+                  [disabled]="uploadingImage()"
+                >
+                  Remove
+                </button>
+              </div>
+            } @else {
+              <label class="bf-cover-drop" [class.is-busy]="uploadingImage()">
+                <span class="bf-cover-drop-title">
+                  {{ uploadingImage() ? 'Uploading…' : 'Upload cover image' }}
+                </span>
+                <span class="bf-cover-drop-hint">JPG, PNG, WEBP or GIF · max 5 MB</span>
+                <input
+                  type="file"
+                  class="bf-file-input"
+                  [accept]="acceptImages"
+                  [disabled]="uploadingImage()"
+                  (change)="onCoverSelected($event)"
+                />
+              </label>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bf-badge">Badge</label>
+            <input
+              id="bf-badge"
+              class="form-control"
+              type="text"
+              placeholder="MSME"
+              [ngModel]="form().badgeText"
+              (ngModelChange)="updateField('badgeText', $event)"
+              name="badgeText"
+            />
+          </div>
+        </div>
+
+        <div class="bf-aside-card section">
+          <button
+            type="button"
+            class="bf-seo-toggle"
+            (click)="showSeo.set(!showSeo())"
+            [attr.aria-expanded]="showSeo()"
+          >
+            <span>Search &amp; sharing</span>
+            <span class="bf-seo-chevron" [class.bf-seo-chevron--open]="showSeo()">›</span>
+          </button>
+
+          @if (showSeo()) {
+            <div class="bf-seo-body">
+              <div class="form-group">
+                <label class="form-label" for="bf-seotitle">SEO title</label>
+                <input
+                  id="bf-seotitle"
+                  class="form-control"
+                  type="text"
+                  placeholder="Uses article title if empty"
+                  [ngModel]="form().seoTitle"
+                  (ngModelChange)="updateField('seoTitle', $event)"
+                  name="seoTitle"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bf-metadesc">Meta description</label>
+                <textarea
+                  id="bf-metadesc"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Short description for Google and social previews"
+                  [ngModel]="form().metaDescription"
+                  (ngModelChange)="updateField('metaDescription', $event)"
+                  name="metaDescription"
+                ></textarea>
+              </div>
+            </div>
+          }
+        </div>
+      </aside>
+    </div>
+  }
+</div>

@@ -158,15 +158,21 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
     id: 'content',
     label: 'Content',
     prefixes: [
-      '/admin-dashboard/detail/blogs',
+      '/admin/blog-management',
       '/admin-dashboard/detail/events',
       '/admin-dashboard/detail/schemes',
     ],
     sections: [
       {
-        label: 'Website content',
+        label: 'Blog management',
         children: [
-          { label: 'Blogs & news', route: '/admin-dashboard/detail/blogs' },
+          { label: 'All articles', route: '/admin/blog-management', exact: true },
+          { label: 'New article', route: '/admin/blog-management/new', exact: true },
+        ],
+      },
+      {
+        label: 'Static content',
+        children: [
           { label: 'Events', route: '/admin-dashboard/detail/events' },
           { label: 'Schemes', route: '/admin-dashboard/detail/schemes' },
         ],

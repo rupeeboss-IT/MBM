@@ -11,3 +11,45 @@
   object-fit: cover;
   display: block;
 }
+
+/* Loading skeleton */
+.news-card--skeleton {
+  pointer-events: none;
+}
+
+.skeleton-line {
+  height: 14px;
+  background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 50%, #e8e8e8 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite;
+  border-radius: 4px;
+  margin-bottom: 0.6rem;
+}
+
+.skeleton-line--badge {
+  width: 60px;
+  height: 20px;
+}
+
+.skeleton-line--title {
+  height: 18px;
+  width: 90%;
+}
+
+.skeleton-line--short {
+  width: 40%;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Article skeleton */
+.article-skeleton {
+  height: 400px;
+  background: linear-gradient(90deg, #e8e8e8 25%, #f4f4f4 50%, #e8e8e8 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s infinite;
+  border-radius: 8px;
+}

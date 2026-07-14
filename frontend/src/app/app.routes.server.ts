@@ -45,6 +45,9 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'admin/credit-repair/leads',                       renderMode: RenderMode.Client },
   { path: 'admin/connect-management/listings',               renderMode: RenderMode.Client },
   { path: 'admin/bulk-member-import',                        renderMode: RenderMode.Client },
+  { path: 'admin/blog-management',                           renderMode: RenderMode.Client },
+  { path: 'admin/blog-management/new',                       renderMode: RenderMode.Client },
+  { path: 'admin/blog-management/edit/:blogId',              renderMode: RenderMode.Client },
 
   // ── Legacy redirect with param — keep as Client (redirects to service/:slug) ─
   { path: 'services/:slug', renderMode: RenderMode.Client },
@@ -98,17 +101,9 @@ export const serverRoutes: ServerRoute[] = [
     },
   },
 
-  {
-    path: 'article/:slug',
-    renderMode: RenderMode.Prerender,
-    async getPrerenderParams() {
-      return [
-        { slug: 'biggest-msme-challenges-2026' },
-        { slug: 'latest-msme-schemes-2026' },
-        { slug: 'union-budget-2026-msme' },
-      ];
-    },
-  },
+  // Articles are now dynamic (served from the database).
+  // Client-side rendering lets the page load any slug at runtime.
+  { path: 'article/:slug', renderMode: RenderMode.Client },
 
   {
     path: 'offering/:slug',

@@ -8,26 +8,45 @@
     <button class="filter-btn" [class.active]="active()==='blog'" (click)="setFilter('blog')">Blog</button>
     <!-- <button class="filter-btn" [class.active]="active()==='success'" (click)="setFilter('success')">Success Stories</button> -->
   </div>
-  <div class="news-grid" id="newsGrid">
-    <div
-      class="news-card"
-      *ngFor="let a of filtered()"
-      [attr.data-cat]="a.data.category"
-      [routerLink]="['/article', a.slug]"
-    >
-      <div *ngIf="a.data.imageUrl; else cardIcon" class="news-img news-img--photo">
-        <img [src]="a.data.imageUrl" [alt]="a.data.title" loading="lazy" width="400" height="160" />
-      </div>
-      <ng-template #cardIcon>
-        <div [class]="a.data.cardClass">{{ a.data.cardIcon }}</div>
-      </ng-template>
-      <div class="news-body">
-        <span [class]="a.data.badgeClass">{{ a.data.badgeText }}</span>
-        <h3>{{ a.data.title }}</h3>
-        <p>{{ a.data.summary }}</p>
-        <div class="news-date">{{ a.data.dateLabel }}</div>
+
+  @if (loading()) {
+    <div class="news-grid">
+      <div class="news-card news-card--skeleton" *ngFor="let i of [1,2,3]">
+        <div class="news-img cat-blog"></div>
+        <div class="news-body">
+          <div class="skeleton-line skeleton-line--badge"></div>
+          <div class="skeleton-line skeleton-line--title"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line skeleton-line--short"></div>
+        </div>
       </div>
     </div>
-  </div>
+  } @else {
+    <div class="news-grid" id="newsGrid">
+      <div
+        class="news-card"
+        *ngFor="let a of filtered()"
+        [attr.data-cat]="a.data.category"
+        [routerLink]="['/article', a.slug]"
+      >
+        <div *ngIf="a.data.imageUrl; else cardIcon" class="news-img news-img--photo">
+          <img [src]="a.data.imageUrl" [alt]="a.data.title" loading="lazy" width="400" height="160" />
+        </div>
+        <ng-template #cardIcon>
+          <div [class]="a.data.cardClass">{{ a.data.cardIcon }}</div>
+        </ng-template>
+        <div class="news-body">
+          <span [class]="a.data.badgeClass">{{ a.data.badgeText }}</span>
+          <h3>{{ a.data.title }}</h3>
+          <p>{{ a.data.summary }}</p>
+          <div class="news-date">{{ a.data.dateLabel }}</div>
+        </div>
+      </div>
+
+      @if (filtered().length === 0) {
+        <p class="muted" style="padding: 2rem 0">No articles found.</p>
+      }
+    </div>
+  }
 </div></section>
 </div><!-- /news -->

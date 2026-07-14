@@ -26,6 +26,7 @@
   <ItemGroup>
     <Content Include="Templates\**\*" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Assets\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Data\BlogContent\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Ensure temporary build output folders never become Compile inputs -->

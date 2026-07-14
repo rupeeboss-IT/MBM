@@ -38,6 +38,7 @@ namespace RB_Website_API.Data
         public DbSet<Models.ConnectRequest> ConnectRequests => Set<Models.ConnectRequest>();
         public DbSet<Models.ConnectContactUnlock> ConnectContactUnlocks => Set<Models.ConnectContactUnlock>();
         public DbSet<Models.CookieConsentLog> CookieConsentLogs => Set<Models.CookieConsentLog>();
+        public DbSet<Models.Blog> Blogs => Set<Models.Blog>();
 
         public new DbSet<T> Set<T>() where T : class
         {
@@ -124,6 +125,13 @@ namespace RB_Website_API.Data
             {
                 e.ToTable("ConnectContactUnlocks", "dbo");
                 e.HasKey(x => new { x.ViewerUserId, x.TargetUserId });
+            });
+
+            modelBuilder.Entity<Models.Blog>(e =>
+            {
+                e.ToTable("Blogs", "dbo");
+                e.HasIndex(b => b.Slug).IsUnique();
+                e.Property(b => b.Content).HasColumnType("nvarchar(max)");
             });
         }
     }

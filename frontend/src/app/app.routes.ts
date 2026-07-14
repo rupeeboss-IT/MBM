@@ -51,6 +51,8 @@ import { CreditRepairList } from './admin/credit-repair/credit-repair-list/credi
 import { ConnectList } from './admin/connect-management/connect-list/connect-list';
 import { BulkMemberImport } from './admin/bulk-member-import/bulk-member-import';
 import { superAdminGuard } from './core/guards/super-admin.guard';
+import { BlogList } from './admin/blog-management/blog-list/blog-list';
+import { BlogForm } from './admin/blog-management/blog-form/blog-form';
 
 export const routes: Routes = [
     {
@@ -484,6 +486,23 @@ export const routes: Routes = [
         component: BulkMemberImport,
         canActivate: [adminGuard, superAdminGuard],
         pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-management',
+        component: BlogList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-management/new',
+        component: BlogForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-management/edit/:blogId',
+        component: BlogForm,
+        canActivate: [adminGuard],
     },
     {
         path: 'register',

@@ -1,0 +1,110 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>Blogs &amp; News</h2>
+      <div class="muted">Create, edit, publish, and manage blog articles shown on the website.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+      <a class="btn" routerLink="/admin/blog-management/new">+ New Article</a>
+    </div>
+  </div>
+
+  <div class="bl-filters">
+    <input
+      type="search"
+      class="bl-search"
+      placeholder="Search title, slug, summary…"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+      (keyup.enter)="runSearch()"
+    />
+    <select class="bl-select" [ngModel]="statusFilter()" (ngModelChange)="onStatusChange($event)">
+      <option value="">All statuses</option>
+      <option value="published">Published</option>
+      <option value="draft">Draft</option>
+    </select>
+    <button class="btn btn-outline" type="button" (click)="runSearch()" [disabled]="loading()">Search</button>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading articles…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="section">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Slug</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of pagedBlogs(); track b.blogId) {
+              <tr>
+                <td>
+                  <div class="bl-title">{{ b.title }}</div>
+                  <div class="bl-summary muted">{{ b.summary | slice:0:80 }}{{ b.summary.length > 80 ? '…' : '' }}</div>
+                </td>
+                <td><code class="bl-slug">{{ b.slug }}</code></td>
+                <td><span class="badge badge-neutral">{{ b.category }}</span></td>
+                <td>
+                  <span [class]="'badge ' + publishBadge(b.isPublished)">
+                    {{ publishLabel(b.isPublished) }}
+                  </span>
+                </td>
+                <td>{{ b.createdAt | localDate }}</td>
+                <td>
+                  <div class="bl-actions">
+                    <a [href]="'/article/' + b.slug" target="_blank" class="btn btn-xs btn-outline" title="View on site">View</a>
+                    <button
+                      class="btn btn-xs btn-outline"
+                      type="button"
+                      (click)="goToEdit(b.blogId)"
+                      [disabled]="actionId() === b.blogId"
+                    >Edit</button>
+                    <button
+                      class="btn btn-xs"
+                      [class.btn-outline]="b.isPublished"
+                      type="button"
+                      (click)="togglePublish(b)"
+                      [disabled]="actionId() === b.blogId"
+                    >{{ b.isPublished ? 'Unpublish' : 'Publish' }}</button>
+                    <button
+                      class="btn btn-xs btn-danger"
+                      type="button"
+                      (click)="deleteBlog(b)"
+                      [disabled]="actionId() === b.blogId"
+                    >Delete</button>
+                  </div>
+                </td>
+              </tr>
+            }
+            @empty {
+              <tr>
+                <td colspan="6" class="admin-empty">No blog articles found. <a routerLink="/admin/blog-management/new">Create one →</a></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-admin-pagination
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="total()"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  }
+</div>

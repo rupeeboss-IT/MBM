@@ -138,7 +138,7 @@ export class AdminDashboardDetail {
   readonly title = computed(() => this.data()?.title ?? 'Details');
 
   readonly isStaticContent = computed(() =>
-    ['blogs', 'events', 'schemes'].includes(this.category()),
+    ['events', 'schemes'].includes(this.category()),
   );
 
   readonly filteredContentItems = computed(() => {
@@ -493,19 +493,9 @@ export class AdminDashboardDetail {
 
   private loadStaticContent(cat: string): DashboardDetailRes | null {
     if (cat === 'blogs') {
-      return {
-        success: true,
-        category: cat,
-        title: 'Blogs & News Articles',
-        contentItems: this.articles.getAllArticles().map(({ slug, data }) => ({
-          slug,
-          title: data.title,
-          subtitle: data.summary,
-          meta: data.dateLabel,
-          category: data.category,
-          publicPath: `/article/${slug}`,
-        })),
-      };
+      // Blogs are now managed dynamically — redirect to the blog management page.
+      void this.router.navigateByUrl('/admin/blog-management');
+      return null;
     }
     if (cat === 'events') {
       return {

@@ -108,7 +108,7 @@
 
     <p class="kpi-section-title">Content</p>
     <div class="kpi-grid">
-      <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('blogs')">
+      <a class="kpi-card kpi-card-clickable" routerLink="/admin/blog-management" style="text-decoration:none;color:inherit">
         <div class="kpi-card__top">
           <div class="kpi-card__icon kpi-card__icon--blue">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
@@ -116,8 +116,8 @@
         </div>
         <div class="kpi-label">Blogs &amp; News</div>
         <p class="kpi-value">{{ c.blogs }}</p>
-        <div class="kpi-hint">Content list →</div>
-      </button>
+        <div class="kpi-hint">Manage articles →</div>
+      </a>
 
       <button type="button" class="kpi-card kpi-card-clickable" (click)="openDetail('events')">
         <div class="kpi-card__top">

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ArticlesService } from '../../../../core/services/articles.service';
+import { ArticlesService, type PublicArticle } from '../../../../core/services/articles.service';
 import { SeoService } from '../../../../core/services/seo.service';
-import type { ArticleModel, ArticleSlug } from '../../../../data/articles.data';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-article-detail',
@@ -12,39 +12,46 @@ import type { ArticleModel, ArticleSlug } from '../../../../data/articles.data';
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.css',
 })
-export class ArticleDetail {
+export class ArticleDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly articles = inject(ArticlesService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly seoService = inject(SeoService);
 
+  readonly loading = signal(true);
   readonly slug = signal<string>('');
-  readonly article = signal<ArticleModel | null>(null);
+  readonly article = signal<PublicArticle | null>(null);
 
-  readonly safeHtml = computed(() => {
+  readonly safeHtml = computed<SafeHtml | null>(() => {
     const art = this.article();
-    if (!art) return null;
+    if (!art?.content) return null;
     return this.sanitizer.bypassSecurityTrustHtml(art.content);
   });
 
-  constructor() {
-    this.route.paramMap.subscribe((p) => {
+  async ngOnInit() {
+    this.route.paramMap.subscribe(async (p) => {
       const slug = p.get('slug') ?? '';
       this.slug.set(slug);
+      this.loading.set(true);
 
-      const art = this.articles.getArticleBySlug(slug);
-      if (!art) {
-        void this.router.navigate(['/news']);
-        return;
+      try {
+        const art = await firstValueFrom(this.articles.getPublishedBySlug(slug));
+        if (!art) {
+          await this.router.navigate(['/news']);
+          return;
+        }
+        this.article.set(art);
+        this.setSeo(slug, art);
+      } catch {
+        await this.router.navigate(['/news']);
+      } finally {
+        this.loading.set(false);
       }
-
-      this.article.set(art);
-      this.setSeo(slug as ArticleSlug, art);
     });
   }
 
-  private setSeo(slug: ArticleSlug, art: ArticleModel) {
+  private setSeo(slug: string, art: PublicArticle) {
     const pageTitle = art.seoTitle ?? `${art.title} | MSME Bharat Manch`;
     const description = art.metaDescription ?? art.meta;
     const canonicalUrl = `https://msmebharatmanch.com/article/${slug}`;
@@ -84,4 +91,3 @@ export class ArticleDetail {
     });
   }
 }
-
