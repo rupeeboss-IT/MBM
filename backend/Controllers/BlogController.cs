@@ -36,6 +36,7 @@ public sealed class BlogController : ControllerBase
         string Crumb,
         string Meta,
         string Category,
+        string BadgeSlug,
         string DateLabel,
         string Summary,
         string BadgeText,
@@ -56,6 +57,7 @@ public sealed class BlogController : ControllerBase
         string Crumb,
         string Meta,
         string Category,
+        string BadgeSlug,
         string DateLabel,
         string Summary,
         string BadgeText,
@@ -91,12 +93,9 @@ public sealed class BlogController : ControllerBase
         string Meta,
         string Content,
         string Category,
+        string BadgeSlug,
         string DateLabel,
         string Summary,
-        string BadgeText,
-        string BadgeClass,
-        string CardIcon,
-        string CardClass,
         string? ImageUrl,
         string? SeoTitle,
         string? MetaDescription,
@@ -109,12 +108,9 @@ public sealed class BlogController : ControllerBase
         string Meta,
         string Content,
         string Category,
+        string BadgeSlug,
         string DateLabel,
         string Summary,
-        string BadgeText,
-        string BadgeClass,
-        string CardIcon,
-        string CardClass,
         string? ImageUrl,
         string? SeoTitle,
         string? MetaDescription,
@@ -270,6 +266,12 @@ public sealed class BlogController : ControllerBase
         var exists = await _db.Blogs.AnyAsync(b => b.Slug == slug, ct);
         if (exists) return Conflict(new MutationResponse(false, "A blog with this slug already exists."));
 
+        var (catOk, catErr, category) = await ResolveCategoryAsync(req.Category, ct);
+        if (!catOk) return BadRequest(new MutationResponse(false, catErr));
+
+        var (badgeOk, badgeErr, badge) = await ResolveBadgeAsync(req.BadgeSlug, ct);
+        if (!badgeOk) return BadRequest(new MutationResponse(false, badgeErr));
+
         var actorId = GetActorId();
         var now = DateTime.Now;
 
@@ -280,13 +282,14 @@ public sealed class BlogController : ControllerBase
             Crumb           = (req.Crumb ?? "").Trim(),
             Meta            = (req.Meta ?? "").Trim(),
             Content         = req.Content ?? "",
-            Category        = (req.Category ?? "blog").Trim().ToLowerInvariant(),
+            Category        = category!.Slug,
+            BadgeSlug       = badge?.Slug ?? "",
             DateLabel       = (req.DateLabel ?? "").Trim(),
             Summary         = (req.Summary ?? "").Trim(),
-            BadgeText       = (req.BadgeText ?? "").Trim(),
-            BadgeClass      = (req.BadgeClass ?? "").Trim(),
-            CardIcon        = (req.CardIcon ?? "").Trim(),
-            CardClass       = (req.CardClass ?? "").Trim(),
+            BadgeText       = badge?.BadgeText ?? "",
+            BadgeClass      = badge?.BadgeClass ?? "",
+            CardIcon        = badge?.CardIcon ?? "📰",
+            CardClass       = badge?.CardClass ?? "news-img cat-blog",
             ImageUrl        = string.IsNullOrWhiteSpace(req.ImageUrl) ? null : req.ImageUrl.Trim(),
             SeoTitle        = string.IsNullOrWhiteSpace(req.SeoTitle) ? null : req.SeoTitle.Trim(),
             MetaDescription = string.IsNullOrWhiteSpace(req.MetaDescription) ? null : req.MetaDescription.Trim(),
@@ -316,17 +319,24 @@ public sealed class BlogController : ControllerBase
         var blog = await _db.Blogs.FirstOrDefaultAsync(b => b.BlogId == blogId, ct);
         if (blog is null) return NotFound(new MutationResponse(false, "Blog not found."));
 
+        var (catOk, catErr, category) = await ResolveCategoryAsync(req.Category, ct);
+        if (!catOk) return BadRequest(new MutationResponse(false, catErr));
+
+        var (badgeOk, badgeErr, badge) = await ResolveBadgeAsync(req.BadgeSlug, ct);
+        if (!badgeOk) return BadRequest(new MutationResponse(false, badgeErr));
+
         blog.Title           = req.Title.Trim();
         blog.Crumb           = (req.Crumb ?? "").Trim();
         blog.Meta            = (req.Meta ?? "").Trim();
         blog.Content         = req.Content ?? "";
-        blog.Category        = (req.Category ?? "blog").Trim().ToLowerInvariant();
+        blog.Category        = category!.Slug;
+        blog.BadgeSlug       = badge?.Slug ?? "";
         blog.DateLabel       = (req.DateLabel ?? "").Trim();
         blog.Summary         = (req.Summary ?? "").Trim();
-        blog.BadgeText       = (req.BadgeText ?? "").Trim();
-        blog.BadgeClass      = (req.BadgeClass ?? "").Trim();
-        blog.CardIcon        = (req.CardIcon ?? "").Trim();
-        blog.CardClass       = (req.CardClass ?? "").Trim();
+        blog.BadgeText       = badge?.BadgeText ?? "";
+        blog.BadgeClass      = badge?.BadgeClass ?? "";
+        blog.CardIcon        = badge?.CardIcon ?? blog.CardIcon;
+        blog.CardClass       = badge?.CardClass ?? blog.CardClass;
         blog.ImageUrl        = string.IsNullOrWhiteSpace(req.ImageUrl) ? null : req.ImageUrl.Trim();
         blog.SeoTitle        = string.IsNullOrWhiteSpace(req.SeoTitle) ? null : req.SeoTitle.Trim();
         blog.MetaDescription = string.IsNullOrWhiteSpace(req.MetaDescription) ? null : req.MetaDescription.Trim();
@@ -390,12 +400,12 @@ public sealed class BlogController : ControllerBase
     // ── Helpers ──────────────────────────────────────────────────────────────────
 
     private static BlogListItem ToListItem(Blog b) => new(
-        b.BlogId, b.Slug, b.Title, b.Crumb, b.Meta, b.Category, b.DateLabel,
+        b.BlogId, b.Slug, b.Title, b.Crumb, b.Meta, b.Category, b.BadgeSlug, b.DateLabel,
         b.Summary, b.BadgeText, b.BadgeClass, b.CardIcon, b.CardClass,
         b.ImageUrl, b.SeoTitle, b.MetaDescription, b.IsPublished, b.CreatedAt);
 
     private static BlogDetailItem ToDetailItem(Blog b) => new(
-        b.BlogId, b.Slug, b.Title, b.Crumb, b.Meta, b.Category, b.DateLabel,
+        b.BlogId, b.Slug, b.Title, b.Crumb, b.Meta, b.Category, b.BadgeSlug, b.DateLabel,
         b.Summary, b.BadgeText, b.BadgeClass, b.CardIcon, b.CardClass,
         b.ImageUrl, b.SeoTitle, b.MetaDescription, b.IsPublished, b.CreatedAt, b.UpdatedAt,
         b.Content);
@@ -413,6 +423,41 @@ public sealed class BlogController : ControllerBase
             return (false, "Slug must be 200 characters or fewer.", null);
 
         return (true, null, slug);
+    }
+
+    private async Task<(bool Ok, string? Error, BlogCategory? Category)> ResolveCategoryAsync(
+        string? categorySlug,
+        CancellationToken ct)
+    {
+        var slug = (categorySlug ?? "").Trim().ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(slug))
+            return (false, "Category is required.", null);
+
+        var category = await _db.BlogCategories.AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Slug == slug && c.IsActive, ct);
+
+        if (category is null)
+            return (false, "Please choose a valid active category.", null);
+
+        return (true, null, category);
+    }
+
+    private async Task<(bool Ok, string? Error, BlogBadge? Badge)> ResolveBadgeAsync(
+        string? badgeSlug,
+        CancellationToken ct)
+    {
+        var slug = (badgeSlug ?? "").Trim().ToLowerInvariant();
+        // Card labels/badges are optional and hidden from the UI.
+        if (string.IsNullOrWhiteSpace(slug))
+            return (true, null, null);
+
+        var badge = await _db.BlogBadges.AsNoTracking()
+            .FirstOrDefaultAsync(b => b.Slug == slug && b.IsActive, ct);
+
+        if (badge is null)
+            return (false, "Please choose a valid active card label.", null);
+
+        return (true, null, badge);
     }
 
     private Guid? GetActorId()

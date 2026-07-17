@@ -1,0 +1,2436 @@
+2026-07-17 11:17:26 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/blogs/admin?page=1&pageSize=200
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSD:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:47:26 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:17:26 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:47:26 AM'."
+Request URL: GET /api/blogs/admin?page=1&pageSize=200
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSD:00000001
+
+2026-07-17 11:17:26 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/blogs/admin?page=1&pageSize=200
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSD:00000001
+
+2026-07-17 11:17:43 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSE:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:47:43 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:17:43 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:47:43 AM'."
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSE:00000001
+
+2026-07-17 11:17:43 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSE:00000001
+
+2026-07-17 11:17:54 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=sharad
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSF:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:47:54 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:17:54 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:47:54 AM'."
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=sharad
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSF:00000001
+
+2026-07-17 11:17:54 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=sharad
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSF:00000001
+
+2026-07-17 11:18:00 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=ganesh
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSG:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:00 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:00 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:00 AM'."
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=ganesh
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSG:00000001
+
+2026-07-17 11:18:00 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=ganesh
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSG:00000001
+
+2026-07-17 11:18:06 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=rashif
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSH:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:06 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:06 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:06 AM'."
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=rashif
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSH:00000001
+
+2026-07-17 11:18:06 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=rashif
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSH:00000001
+
+2026-07-17 11:18:07 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=rashid
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSI:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:07 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:07 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:07 AM'."
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=rashid
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSI:00000001
+
+2026-07-17 11:18:07 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/user-management/admins?page=1&pageSize=100&sortBy=latest&search=rashid
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSI:00000001
+
+2026-07-17 11:18:13 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/connect-management/listings?page=1&pageSize=100
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSJ:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:13 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:13 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:13 AM'."
+Request URL: GET /api/admin/connect-management/listings?page=1&pageSize=100
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSJ:00000001
+
+2026-07-17 11:18:13 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/connect-management/listings?page=1&pageSize=100
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSJ:00000001
+
+2026-07-17 11:18:25 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSK:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:25 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:25 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSL:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:25 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:25 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:25 AM'."
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSK:00000001
+
+2026-07-17 11:18:25 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:25 AM'."
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSL:00000001
+
+2026-07-17 11:18:25 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSK:00000001
+
+2026-07-17 11:18:25 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSL:00000001
+
+2026-07-17 11:18:28 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/plan-mappings
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSM:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:28 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:28 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:28 AM'."
+Request URL: GET /api/admin/vendor-management/plan-mappings
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSM:00000001
+
+2026-07-17 11:18:28 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/plan-mappings
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSM:00000001
+
+2026-07-17 11:18:31 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/dashboard/details/payment-orders?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSN:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:31 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:31 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:31 AM'."
+Request URL: GET /api/admin/dashboard/details/payment-orders?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSN:00000001
+
+2026-07-17 11:18:31 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/dashboard/details/payment-orders?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSN:00000001
+
+2026-07-17 11:18:31 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSO:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:31 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:31 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:31 AM'."
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSO:00000001
+
+2026-07-17 11:18:31 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSO:00000001
+
+2026-07-17 11:18:35 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSP:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:35 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:35 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSQ:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:35 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:35 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:35 AM'."
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSP:00000001
+
+2026-07-17 11:18:35 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:35 AM'."
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSQ:00000001
+
+2026-07-17 11:18:35 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSQ:00000001
+
+2026-07-17 11:18:35 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSP:00000001
+
+2026-07-17 11:18:46 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&dateFrom=2026-07-01&dateTo=2026-07-17&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSR:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:46 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:46 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:46 AM'."
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&dateFrom=2026-07-01&dateTo=2026-07-17&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSR:00000001
+
+2026-07-17 11:18:46 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&dateFrom=2026-07-01&dateTo=2026-07-17&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSR:00000001
+
+2026-07-17 11:18:49 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSS:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:49 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:49 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:49 AM'."
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSS:00000001
+
+2026-07-17 11:18:49 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSS:00000001
+
+2026-07-17 11:18:52 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVST:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:52 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:18:52 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:48:52 AM'."
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVST:00000001
+
+2026-07-17 11:18:52 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/dashboard/counts
+IP Address: ::1
+Correlation ID: 0HNN298E2SVST:00000001
+
+2026-07-17 11:21:52 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSU:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:51:52 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:21:52 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSV:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:51:52 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:21:52 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:51:52 AM'."
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSU:00000001
+
+2026-07-17 11:21:52 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSU:00000001
+
+2026-07-17 11:21:52 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 05:51:52 AM'."
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSV:00000001
+
+2026-07-17 11:21:52 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVSV:00000001
+
+2026-07-17 11:38:17 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT1:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 06:08:17 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:38:17 [INFO]
+JwtBearerHandler()
+Failed to validate the token.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT0:00000001
+Exception:
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 06:08:17 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+
+2026-07-17 11:38:17 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 06:08:17 AM'."
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT1:00000001
+
+2026-07-17 11:38:17 [INFO]
+JwtBearerHandler()
+"Bearer" was not authenticated. Failure message: "IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '16-07-2026 11:27:58 AM', Current time (UTC): '17-07-2026 06:08:17 AM'."
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT0:00000001
+
+2026-07-17 11:38:17 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/plans
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT0:00000001
+
+2026-07-17 11:38:17 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/admin/vendor-management/vendors?page=1&pageSize=100&sortBy=latest
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT1:00000001
+
+2026-07-17 11:43:56 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT2:00000001
+
+2026-07-17 11:43:56 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT2:00000001
+
+2026-07-17 11:43:57 [INFO]
+ClientHandler()
+Received HTTP response headers after 259.2264ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT2:00000001
+
+2026-07-17 11:43:57 [INFO]
+LogicalHandler()
+End processing HTTP request after 265.208ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVT2:00000001
+
+2026-07-17 12:03:06 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVVM:00000001
+
+2026-07-17 12:03:06 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVVM:00000001
+
+2026-07-17 12:03:06 [INFO]
+ClientHandler()
+Received HTTP response headers after 223.9148ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVVM:00000001
+
+2026-07-17 12:03:06 [INFO]
+LogicalHandler()
+End processing HTTP request after 242.6869ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN298E2SVVM:00000001
+
+2026-07-17 12:43:00 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/blogs/admin/categories
+IP Address: ::1
+Correlation ID: 0HNN298E2T00E:00000001
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__14>d.MoveNext() in D:\MBM\backend\Program.cs:line 316
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-17 12:43:00 [ERROR]
+ApiExceptionLogService()
+API error 404 "GET" "/api/blogs/admin/categories" UserId=f67b04b2-a54d-4a69-bf49-c9eb5b2268f4 IP="::1" Operation=null UserMessage="The requested file is not available."
+Request URL: GET /api/blogs/admin/categories
+User ID: f67b04b2-a54d-4a69-bf49-c9eb5b2268f4
+IP Address: ::1
+Correlation ID: 0HNN298E2T00E:00000001
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__14>d.MoveNext() in D:\MBM\backend\Program.cs:line 316
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-17 12:43:45 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 12:43:51 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 12:43:51 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 12:43:51 [INFO]
+BlogInitializerService()
+Seeded 3 blog categor(ies).
+
+2026-07-17 12:43:52 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 12:43:52 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=35
+
+2026-07-17 12:43:52 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=221
+
+2026-07-17 12:43:52 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 12:55:05 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 12:55:09 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 12:55:09 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 12:55:10 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 12:55:10 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=81
+
+2026-07-17 12:55:10 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=271
+
+2026-07-17 12:55:10 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 13:00:30 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 13:00:34 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 13:00:34 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 13:00:35 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 13:00:35 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=50
+
+2026-07-17 13:00:35 [ERROR]
+Host()
+Hosting failed to start
+Exception:
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5228: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+
+2026-07-17 13:00:35 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 13:00:35 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 13:00:35 [CRITICAL]
+Application()
+MBM API terminated unexpectedly
+Exception:
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5228: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in D:\MBM\backend\Program.cs:line 319
+
+2026-07-17 13:00:35 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 13:00:35 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 13:00:35 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=270
+
+2026-07-17 13:00:35 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 13:03:26 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 13:03:30 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 13:03:30 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 13:03:31 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 13:03:31 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=30
+
+2026-07-17 13:03:31 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=243
+
+2026-07-17 13:03:31 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:39:21 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:39:23 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:39:24 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:39:24 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:39:24 [ERROR]
+Command()
+Failed executing DbCommand ("16"ms) [Parameters=["@__seed_Slug_0='?' (Size = 50)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[Slug] = @__seed_Slug_0"
+
+2026-07-17 14:39:24 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16"
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:39:24 [ERROR]
+BlogInitializerService()
+Failed to initialise Blogs table.
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at RB_Website_API.Services.BlogInitializerService.SyncSeedCategories(AppDbContext db, CancellationToken ct) in D:\MBM\backend\Services\BlogInitializerService.cs:line 194
+   at RB_Website_API.Services.BlogInitializerService.StartAsync(CancellationToken ct) in D:\MBM\backend\Services\BlogInitializerService.cs:line 94
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:39:24 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:39:24 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=28
+
+2026-07-17 14:39:24 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=216
+
+2026-07-17 14:39:24 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:40:45 [ERROR]
+Command()
+Failed executing DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[IsActive] = CAST(1 AS bit)
+ORDER BY [b].[SortOrder], [b].[Label]"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1G:00000001
+
+2026-07-17 14:40:45 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1G:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:40:45 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1G:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method11(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:40:45 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/blog-categories" UserId=null IP="::1" Operation=null UserMessage="Unable to save changes. Please try again."
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1G:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method11(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:40:59 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:41:01 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:41:01 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:41:01 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:41:01 [ERROR]
+Command()
+Failed executing DbCommand ("15"ms) [Parameters=["@__seed_Slug_0='?' (Size = 50)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[Slug] = @__seed_Slug_0"
+
+2026-07-17 14:41:01 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:21952e4b-ead6-436a-9ce5-a0e8b29a2bae
+Error Number:207,State:1,Class:16"
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:21952e4b-ead6-436a-9ce5-a0e8b29a2bae
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:01 [ERROR]
+BlogInitializerService()
+Failed to initialise Blogs table.
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at RB_Website_API.Services.BlogInitializerService.SyncSeedCategories(AppDbContext db, CancellationToken ct) in D:\MBM\backend\Services\BlogInitializerService.cs:line 194
+   at RB_Website_API.Services.BlogInitializerService.StartAsync(CancellationToken ct) in D:\MBM\backend\Services\BlogInitializerService.cs:line 94
+ClientConnectionId:21952e4b-ead6-436a-9ce5-a0e8b29a2bae
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:01 [ERROR]
+Host()
+Hosting failed to start
+Exception:
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5228: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+
+2026-07-17 14:41:01 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:41:01 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:41:01 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:41:01 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:41:01 [CRITICAL]
+Application()
+MBM API terminated unexpectedly
+Exception:
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5228: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in D:\MBM\backend\Program.cs:line 319
+
+2026-07-17 14:41:01 [WARN]
+SmtpWarmupHostedService()
+SMTP warmup background task failed.
+Exception:
+System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'IServiceProvider'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+   at RB_Website_API.Auth.SmtpWarmupHostedService.WarmupInBackgroundAsync(CancellationToken stoppingToken) in D:\MBM\backend\Auth\SmtpWarmupHostedService.cs:line 30
+
+2026-07-17 14:41:05 [INFO]
+Application()
+MBM API shutting down
+
+2026-07-17 14:41:16 [ERROR]
+Command()
+Failed executing DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[IsActive] = CAST(1 AS bit)
+ORDER BY [b].[SortOrder], [b].[Label]"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1H:00000001
+
+2026-07-17 14:41:16 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1H:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:16 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1H:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method11(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:16 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/blog-categories" UserId=null IP="::1" Operation=null UserMessage="Unable to save changes. Please try again."
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1H:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method11(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:47 [ERROR]
+Command()
+Failed executing DbCommand ("10"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[IsActive] = CAST(1 AS bit)
+ORDER BY [b].[SortOrder], [b].[Label]"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1I:00000001
+
+2026-07-17 14:41:47 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1I:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:47 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1I:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method11(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:41:47 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/blog-categories" UserId=null IP="::1" Operation=null UserMessage="Unable to save changes. Please try again."
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SD48BB1I:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method11(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:fb4889c9-80cf-435e-b458-c41a4cbbe603
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:42:19 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:42:20 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:42:20 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:42:20 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:42:20 [ERROR]
+Command()
+Failed executing DbCommand ("13"ms) [Parameters=["@__seed_Slug_0='?' (Size = 50)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[Slug] = @__seed_Slug_0"
+
+2026-07-17 14:42:20 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16"
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:42:20 [ERROR]
+BlogInitializerService()
+Failed to initialise Blogs table.
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at RB_Website_API.Services.BlogInitializerService.SyncSeedCategories(AppDbContext db, CancellationToken ct) in D:\MBM\backend\Services\BlogInitializerService.cs:line 194
+   at RB_Website_API.Services.BlogInitializerService.StartAsync(CancellationToken ct) in D:\MBM\backend\Services\BlogInitializerService.cs:line 94
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:42:21 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:42:21 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=14
+
+2026-07-17 14:42:21 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=199
+
+2026-07-17 14:42:21 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:42:27 [ERROR]
+Command()
+Failed executing DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [b].[BlogCategoryId], [b].[BadgeClass], [b].[BadgeText], [b].[CardClass], [b].[CardIcon], [b].[CreatedAt], [b].[IsActive], [b].[Label], [b].[ShowInFilter], [b].[Slug], [b].[SortOrder], [b].[UpdatedAt]
+FROM [dbo].[BlogCategories] AS [b]
+WHERE [b].[IsActive] = CAST(1 AS bit)
+ORDER BY [b].[SortOrder], [b].[Label]"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SE2UHGRA:00000001
+
+2026-07-17 14:42:27 [ERROR]
+Query()
+An exception occurred while iterating over the results of a query for context type '"RB_Website_API.Data.AppDbContext"'."
+""Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16"
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SE2UHGRA:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:42:27 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SE2UHGRA:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method9(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:42:27 [ERROR]
+ApiExceptionLogService()
+API error 500 "GET" "/api/blog-categories" UserId=null IP="::1" Operation=null UserMessage="Unable to save changes. Please try again."
+Request URL: GET /api/blog-categories
+IP Address: ::1
+Correlation ID: 0HNN3SE2UHGRA:00000001
+Exception:
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'BlogCategoryId'.
+Invalid column name 'BadgeText'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__211_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at RB_Website_API.Controllers.BlogCategoryController.ListPublic(Boolean filtersOnly, CancellationToken ct) in D:\MBM\backend\Controllers\BlogCategoryController.cs:line 66
+   at lambda_method9(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+ClientConnectionId:abbb9d9c-5154-4f4f-88c3-98d77d019a05
+Error Number:207,State:1,Class:16
+
+2026-07-17 14:43:13 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:43:15 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:43:15 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:43:15 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:43:16 [INFO]
+BlogInitializerService()
+Seeded 3 blog categor(ies).
+
+2026-07-17 14:43:17 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:43:17 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=17
+
+2026-07-17 14:43:17 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=214
+
+2026-07-17 14:43:17 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:44:07 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:44:10 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:44:10 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:44:10 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:44:11 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:44:11 [ERROR]
+Host()
+Hosting failed to start
+Exception:
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5228: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+
+2026-07-17 14:44:11 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:44:11 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:44:11 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=129
+
+2026-07-17 14:44:11 [CRITICAL]
+Application()
+MBM API terminated unexpectedly
+Exception:
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5228: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in D:\MBM\backend\Program.cs:line 319
+
+2026-07-17 14:44:11 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:44:11 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:46:29 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:46:40 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:46:40 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:46:40 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:46:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:46:41 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=34
+
+2026-07-17 14:46:42 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=252
+
+2026-07-17 14:46:42 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:46:43 [ERROR]
+DeveloperExceptionPageMiddleware()
+An unhandled exception has occurred while executing the request.
+Exception:
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - RB_Website_API.Controllers.BlogCategoryController.Create (mbm-api). See inner exception
+ ---> Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate schema for type - RB_Website_API.Controllers.BlogCategoryController+MutationResponse. See inner exception
+ ---> System.InvalidOperationException: Can't use schemaId "$MutationResponse" for type "$RB_Website_API.Controllers.BlogCategoryController+MutationResponse". The same schemaId is already used for type "$RB_Website_API.Controllers.BlogController+MutationResponse"
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaRepository.RegisterType(Type type, String schemaId)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateReferencedSchema(DataContract dataContract, SchemaRepository schemaRepository, Func`1 definitionFactory)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateConcreteSchema(DataContract dataContract, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchemaForType(Type modelType, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchema(Type modelType, SchemaRepository schemaRepository, MemberInfo memberInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreateResponseMediaType(Type modelType, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.<>c__DisplayClass42_0.<GenerateResponse>b__2(String contentType)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateResponse(ApiDescription apiDescription, SchemaRepository schemaRepository, String statusCode, ApiResponseType apiResponseType)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateResponses(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository, Func`3 parametersGenerator, Func`3 bodyGenerator, Func`3 applyFilters)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository, Func`3 parametersGenerator, Func`3 bodyGenerator, Func`3 applyFilters)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+
+2026-07-17 14:47:13 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:47:17 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:47:18 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:47:18 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:47:18 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:47:18 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=51
+
+2026-07-17 14:47:19 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=359
+
+2026-07-17 14:47:19 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:47:20 [ERROR]
+DeveloperExceptionPageMiddleware()
+An unhandled exception has occurred while executing the request.
+Exception:
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate Operation for action - RB_Website_API.Controllers.BlogCategoryController.Create (mbm-api). See inner exception
+ ---> Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Failed to generate schema for type - RB_Website_API.Controllers.BlogCategoryController+MutationResponse. See inner exception
+ ---> System.InvalidOperationException: Can't use schemaId "$MutationResponse" for type "$RB_Website_API.Controllers.BlogCategoryController+MutationResponse". The same schemaId is already used for type "$RB_Website_API.Controllers.BlogController+MutationResponse"
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaRepository.RegisterType(Type type, String schemaId)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateReferencedSchema(DataContract dataContract, SchemaRepository schemaRepository, Func`1 definitionFactory)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateConcreteSchema(DataContract dataContract, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchemaForType(Type modelType, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SchemaGenerator.GenerateSchema(Type modelType, SchemaRepository schemaRepository, MemberInfo memberInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateSchema(Type type, SchemaRepository schemaRepository, PropertyInfo propertyInfo, ParameterInfo parameterInfo, ApiParameterRouteInfo routeInfo)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.CreateResponseMediaType(Type modelType, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.<>c__DisplayClass42_0.<GenerateResponse>b__2(String contentType)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateResponse(ApiDescription apiDescription, SchemaRepository schemaRepository, String statusCode, ApiResponseType apiResponseType)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateResponses(ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository, Func`3 parametersGenerator, Func`3 bodyGenerator, Func`3 applyFilters)
+   --- End of inner exception stack trace ---
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository, Func`3 parametersGenerator, Func`3 bodyGenerator, Func`3 applyFilters)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationAsync(OpenApiDocument document, ApiDescription apiDescription, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`4 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(OpenApiDocument document, IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+
+2026-07-17 14:49:22 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:49:24 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:49:24 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:49:24 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:49:25 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:49:25 [WARN]
+SmtpEmailSender()
+SMTP warmup failed Host="smtpout.secureserver.net" Port=587 ElapsedMs=57
+Exception:
+System.Net.Sockets.SocketException (11001): No such host is known.
+   at System.Net.NameResolutionPal.ProcessResult(SocketError errorCode, GetAddrInfoExContext* context)
+   at System.Net.NameResolutionPal.GetAddressInfoExCallback(Int32 error, Int32 bytes, NativeOverlapped* overlapped)
+--- End of stack trace from previous location ---
+   at RB_Website_API.Auth.SmtpEmailSender.WarmupAsync(CancellationToken ct) in D:\MBM\backend\Auth\Senders.cs:line 176
+
+2026-07-17 14:49:25 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:50:39 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /_vs/browserLink
+IP Address: ::1
+Correlation ID: 0HNN3SI6MAU3G:00000003
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__14>d.MoveNext() in D:\MBM\backend\Program.cs:line 316
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-17 14:50:40 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:50:43 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /_vs/browserLink
+IP Address: ::1
+Correlation ID: 0HNN3SI6MAU3H:00000003
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__14>d.MoveNext() in D:\MBM\backend\Program.cs:line 316
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-17 14:50:44 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:50:45 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:50:45 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:50:45 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:50:45 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=69
+
+2026-07-17 14:50:45 [ERROR]
+Host()
+Hosting failed to start
+Exception:
+System.IO.IOException: Failed to bind to address https://127.0.0.1:7220: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+
+2026-07-17 14:50:46 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:50:46 [ERROR]
+Host()
+BackgroundService failed
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:50:46 [CRITICAL]
+Application()
+MBM API terminated unexpectedly
+Exception:
+System.IO.IOException: Failed to bind to address https://127.0.0.1:7220: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+ ---> System.Net.Sockets.SocketException (10048): Only one usage of each socket address (protocol/network address/port) is normally permitted.
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+   at Microsoft.Extensions.Hosting.Internal.Host.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.RunAsync(IHost host, CancellationToken token)
+   at Microsoft.Extensions.Hosting.HostingAbstractionsHostExtensions.Run(IHost host)
+   at Program.<Main>$(String[] args) in D:\MBM\backend\Program.cs:line 319
+
+2026-07-17 14:50:46 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionExpiryHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionExpiryHostedService.cs:line 23
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:50:46 [CRITICAL]
+Host()
+The HostOptions.BackgroundServiceExceptionBehavior is configured to StopHost. A BackgroundService has thrown an unhandled exception, and the IHost instance is stopping. To avoid this behavior, configure this to Ignore; however the BackgroundService will not be restarted.
+Exception:
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at RB_Website_API.Services.SubscriptionReminderHostedService.ExecuteAsync(CancellationToken stoppingToken) in D:\MBM\backend\Services\SubscriptionReminderHostedService.cs:line 25
+   at Microsoft.Extensions.Hosting.Internal.Host.TryExecuteBackgroundServiceAsync(BackgroundService backgroundService)
+
+2026-07-17 14:50:46 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=285
+
+2026-07-17 14:50:46 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:53:28 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 14:53:33 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 14:53:34 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 14:53:34 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 14:53:34 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 14:53:34 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=35
+
+2026-07-17 14:53:35 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=246
+
+2026-07-17 14:53:35 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 14:57:06 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN3SK9RH1QL:00000001
+
+2026-07-17 14:57:06 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN3SK9RH1QM:00000001
+
+2026-07-17 15:18:57 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 15:19:01 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 15:19:01 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 15:19:01 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 15:19:02 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-17 15:19:02 [INFO]
+BlogInitializerService()
+Seeded 3 blog badge(s).
+
+2026-07-17 15:19:03 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 15:19:03 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=37
+
+2026-07-17 15:19:03 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=355
+
+2026-07-17 15:19:03 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 17:28:26 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN3T2HGLOCN:00000001
+
+2026-07-17 17:28:26 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN3T2HGLOCO:00000001
+
+2026-07-17 17:37:31 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 17:37:39 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 17:37:39 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 17:37:39 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 17:37:39 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-17 17:37:40 [INFO]
+BlogInitializerService()
+Seeded 3 blog badge(s).
+
+2026-07-17 17:37:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 17:37:41 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=73
+
+2026-07-17 17:37:41 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=332
+
+2026-07-17 17:37:41 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-17 17:51:28 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-17 17:51:31 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-17 17:51:31 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-17 17:51:31 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-17 17:51:31 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-17 17:51:33 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-17 17:51:33 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=58
+
+2026-07-17 17:51:33 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=286
+
+2026-07-17 17:51:33 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+

@@ -1,8 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import {
+  BlogCategoryService,
+  type BlogCategoryItem,
+} from '../../../core/services/blog-category.service';
 import {
   BlogManagementService,
   type CreateBlogRequest,
@@ -19,23 +23,14 @@ interface BlogFormData {
   meta: string;
   content: string;
   category: string;
+  badgeSlug: string;
   dateLabel: string;
   summary: string;
-  badgeText: string;
-  badgeClass: string;
-  cardIcon: string;
-  cardClass: string;
   imageUrl: string;
   seoTitle: string;
   metaDescription: string;
   isPublished: boolean;
 }
-
-const CATEGORY_DEFAULTS: Record<string, { badgeClass: string; cardClass: string; cardIcon: string }> = {
-  blog: { badgeClass: 'badge badge-green', cardClass: 'news-img cat-blog', cardIcon: '📰' },
-  news: { badgeClass: 'badge badge-blue', cardClass: 'news-img cat-news', cardIcon: '📢' },
-  success: { badgeClass: 'badge badge-amber', cardClass: 'news-img cat-success', cardIcon: '🌟' },
-};
 
 function emptyForm(): BlogFormData {
   return {
@@ -44,13 +39,10 @@ function emptyForm(): BlogFormData {
     crumb: '',
     meta: '',
     content: '',
-    category: 'blog',
+    category: '',
+    badgeSlug: '',
     dateLabel: '',
     summary: '',
-    badgeText: 'MSME',
-    badgeClass: 'badge badge-green',
-    cardIcon: '📰',
-    cardClass: 'news-img cat-blog',
     imageUrl: '',
     seoTitle: '',
     metaDescription: '',
@@ -72,15 +64,44 @@ function currentMonthLabel(): string {
   return new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 }
 
+function isAutoMeta(meta: string, labels: string[]): boolean {
+  const trimmed = meta.trim();
+  if (!trimmed) return true;
+  if (!/ · [A-Za-z]+ \d{4}$/.test(trimmed)) return false;
+  const prefix = trimmed.split(' · ')[0]?.trim().toLowerCase() ?? '';
+  return labels.some((l) => l.toLowerCase() === prefix);
+}
+
+function metaForCategoryLabel(label: string, dateLabel?: string): string {
+  return `${label} · ${dateLabel?.trim() || currentMonthLabel()}`;
+}
+
+function resolveMeta(meta: string, categoryLabel: string, dateLabel: string, labels: string[]): string {
+  const trimmed = meta.trim();
+  const when = dateLabel.trim() || currentMonthLabel();
+
+  if (!trimmed || isAutoMeta(trimmed, labels)) {
+    return metaForCategoryLabel(categoryLabel, when);
+  }
+
+  const prefixMatch = trimmed.match(/^(.+?)( · .+)$/);
+  if (prefixMatch && isAutoMeta(trimmed, labels)) {
+    return `${categoryLabel}${prefixMatch[2]}`;
+  }
+
+  return trimmed;
+}
+
 @Component({
   selector: 'app-blog-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RichEditor],
+  imports: [CommonModule, FormsModule, RichEditor, RouterLink],
   templateUrl: './blog-form.html',
   styleUrls: ['../../admin-shared.css', './blog-form.css'],
 })
 export class BlogForm implements OnInit {
   private readonly api = inject(BlogManagementService);
+  private readonly categoryApi = inject(BlogCategoryService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -92,17 +113,42 @@ export class BlogForm implements OnInit {
   readonly uploadingImage = signal(false);
   readonly showSeo = signal(false);
   readonly form = signal<BlogFormData>(emptyForm());
+  readonly categories = signal<BlogCategoryItem[]>([]);
 
-  readonly categories = ['blog', 'news', 'success'];
   readonly acceptImages = 'image/jpeg,image/png,image/webp,image/gif,.jpg,.jpeg,.png,.webp,.gif';
 
+  readonly selectedCategory = computed(() => {
+    const slug = this.form().category;
+    return this.categories().find((c) => c.slug === slug) ?? null;
+  });
+
+  readonly categoryLabels = computed(() => this.categories().map((c) => c.label));
+
   async ngOnInit() {
+    await this.loadCategories();
+
     const idParam = this.route.snapshot.paramMap.get('blogId');
     if (idParam) {
       const id = Number(idParam);
       this.mode.set('edit');
       this.blogId.set(id);
       await this.loadExisting(id);
+    } else {
+      const firstCat = this.categories()[0];
+      if (firstCat) this.applyCategory(firstCat.slug, { resetMeta: true });
+    }
+  }
+
+  private async loadCategories() {
+    try {
+      const res = await firstValueFrom(this.categoryApi.listPublic());
+      const items = (res.categories ?? []).filter((c) => c.isActive);
+      this.categories.set(items);
+      if (!items.length) {
+        this.toast.error('No active blog categories. Add categories first.');
+      }
+    } catch (e: unknown) {
+      this.toast.error(getHttpErrorMessage(e, 'Failed to load categories.'));
     }
   }
 
@@ -123,12 +169,9 @@ export class BlogForm implements OnInit {
         meta: b.meta,
         content: b.content,
         category: b.category,
+        badgeSlug: '',
         dateLabel: b.dateLabel,
         summary: b.summary,
-        badgeText: b.badgeText,
-        badgeClass: b.badgeClass,
-        cardIcon: b.cardIcon,
-        cardClass: b.cardClass,
         imageUrl: b.imageUrl ?? '',
         seoTitle: b.seoTitle ?? '',
         metaDescription: b.metaDescription ?? '',
@@ -151,6 +194,9 @@ export class BlogForm implements OnInit {
     const title = this.form().title.trim();
     if (!title) return;
 
+    const cat = this.selectedCategory();
+    const labels = this.categoryLabels();
+
     this.form.update((f) => {
       const next = { ...f };
       if (this.mode() === 'create' && !f.slug.trim()) {
@@ -158,25 +204,29 @@ export class BlogForm implements OnInit {
       }
       if (!f.crumb.trim()) next.crumb = title.slice(0, 80);
       if (!f.dateLabel.trim()) next.dateLabel = currentMonthLabel();
-      if (!f.meta.trim()) {
-        const cat = (f.category || 'blog').replace(/^\w/, (c) => c.toUpperCase());
-        next.meta = `${cat} · ${currentMonthLabel()}`;
+      if (cat && (!f.meta.trim() || isAutoMeta(f.meta, labels))) {
+        next.meta = metaForCategoryLabel(cat.label, next.dateLabel || f.dateLabel);
       }
       return next;
     });
   }
 
-  onCategoryChange(category: string) {
-    const defaults = CATEGORY_DEFAULTS[category] ?? CATEGORY_DEFAULTS['blog'];
+  onCategoryChange(slug: string) {
+    this.applyCategory(slug, { resetMeta: true });
+  }
+
+  private applyCategory(slug: string, opts?: { resetMeta?: boolean }) {
+    const cat = this.categories().find((c) => c.slug === slug);
+    if (!cat) return;
+
+    const labels = this.categoryLabels();
     this.form.update((f) => ({
       ...f,
-      category,
-      badgeClass: defaults.badgeClass,
-      cardClass: defaults.cardClass,
-      cardIcon: defaults.cardIcon,
-      meta: f.meta.trim()
-        ? f.meta
-        : `${category.replace(/^\w/, (c) => c.toUpperCase())} · ${currentMonthLabel()}`,
+      category: cat.slug,
+      meta:
+        opts?.resetMeta || !f.meta.trim() || isAutoMeta(f.meta, labels)
+          ? metaForCategoryLabel(cat.label, f.dateLabel)
+          : f.meta,
     }));
   }
 
@@ -227,25 +277,28 @@ export class BlogForm implements OnInit {
 
   private applyDefaults(f: BlogFormData): BlogFormData {
     const title = f.title.trim();
-    const cat = (f.category || 'blog').trim().toLowerCase();
-    const defaults = CATEGORY_DEFAULTS[cat] ?? CATEGORY_DEFAULTS['blog'];
-    const catLabel = cat.replace(/^\w/, (c) => c.toUpperCase());
+    const cat = this.categories().find((c) => c.slug === f.category);
+    const dateLabel = f.dateLabel.trim() || currentMonthLabel();
+    const labels = this.categoryLabels();
 
     return {
       ...f,
       title,
       slug: f.slug.trim() || toSlug(title),
       crumb: f.crumb.trim() || title.slice(0, 80),
-      dateLabel: f.dateLabel.trim() || currentMonthLabel(),
-      meta: f.meta.trim() || `${catLabel} · ${currentMonthLabel()}`,
-      badgeText: f.badgeText.trim() || 'MSME',
-      badgeClass: f.badgeClass.trim() || defaults.badgeClass,
-      cardClass: f.cardClass.trim() || defaults.cardClass,
-      cardIcon: f.cardIcon.trim() || defaults.cardIcon,
+      dateLabel,
+      category: cat?.slug ?? f.category,
+      badgeSlug: '',
+      meta: cat ? resolveMeta(f.meta, cat.label, dateLabel, labels) : f.meta,
     };
   }
 
   async save() {
+    if (!this.form().category) {
+      this.toast.error('Please choose a category.');
+      return;
+    }
+
     const f = this.applyDefaults(this.form());
     this.form.set(f);
 
@@ -272,12 +325,9 @@ export class BlogForm implements OnInit {
           meta: f.meta,
           content: f.content,
           category: f.category,
+          badgeSlug: f.badgeSlug,
           dateLabel: f.dateLabel,
           summary: f.summary.trim(),
-          badgeText: f.badgeText,
-          badgeClass: f.badgeClass,
-          cardIcon: f.cardIcon,
-          cardClass: f.cardClass,
           imageUrl: f.imageUrl.trim() || null,
           seoTitle: f.seoTitle.trim() || null,
           metaDescription: f.metaDescription.trim() || null,
@@ -298,12 +348,9 @@ export class BlogForm implements OnInit {
           meta: f.meta,
           content: f.content,
           category: f.category,
+          badgeSlug: f.badgeSlug,
           dateLabel: f.dateLabel,
           summary: f.summary.trim(),
-          badgeText: f.badgeText,
-          badgeClass: f.badgeClass,
-          cardIcon: f.cardIcon,
-          cardClass: f.cardClass,
           imageUrl: f.imageUrl.trim() || null,
           seoTitle: f.seoTitle.trim() || null,
           metaDescription: f.metaDescription.trim() || null,

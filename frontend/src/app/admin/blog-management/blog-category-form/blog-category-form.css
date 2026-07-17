@@ -1,0 +1,105 @@
+.bcf-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 24px;
+  padding: 28px 32px;
+}
+
+@media (max-width: 900px) {
+  .bcf-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bcf-main,
+.bcf-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.bcf-aside-heading {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--admin-muted, #6b7280);
+}
+
+.bcf-aside-heading:not(:first-child) {
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--admin-border, #e5e7eb);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.req {
+  color: var(--admin-danger, #e63946);
+}
+
+.bcf-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--admin-muted, #6b7280);
+}
+
+.bcf-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 1.6rem;
+}
+
+.bcf-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+}
+
+.bcf-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.5rem;
+}
+
+.bcf-preview-label {
+  font-size: 0.78rem;
+  color: var(--admin-muted, #6b7280);
+}
+
+.bcf-card-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  border-radius: 10px;
+  font-size: 2rem;
+}

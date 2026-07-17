@@ -53,6 +53,10 @@ import { BulkMemberImport } from './admin/bulk-member-import/bulk-member-import'
 import { superAdminGuard } from './core/guards/super-admin.guard';
 import { BlogList } from './admin/blog-management/blog-list/blog-list';
 import { BlogForm } from './admin/blog-management/blog-form/blog-form';
+import { BlogCategoryList } from './admin/blog-management/blog-category-list/blog-category-list';
+import { BlogCategoryForm } from './admin/blog-management/blog-category-form/blog-category-form';
+import { BlogBadgeList } from './admin/blog-management/blog-badge-list/blog-badge-list';
+import { BlogBadgeForm } from './admin/blog-management/blog-badge-form/blog-badge-form';
 
 export const routes: Routes = [
     {
@@ -502,6 +506,40 @@ export const routes: Routes = [
     {
         path: 'admin/blog-management/edit/:blogId',
         component: BlogForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/blog-categories',
+        component: BlogCategoryList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-categories/new',
+        component: BlogCategoryForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-categories/edit/:categoryId',
+        component: BlogCategoryForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/blog-badges',
+        component: BlogBadgeList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-badges/new',
+        component: BlogBadgeForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/blog-badges/edit/:badgeId',
+        component: BlogBadgeForm,
         canActivate: [adminGuard],
     },
     {

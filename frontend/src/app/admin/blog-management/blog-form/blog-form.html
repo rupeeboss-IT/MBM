@@ -106,8 +106,15 @@
               (ngModelChange)="onCategoryChange($event)"
               name="category"
             >
-              <option *ngFor="let c of categories" [value]="c">{{ c | titlecase }}</option>
+              @if (!categories().length) {
+                <option value="">No categories — add one first</option>
+              }
+              <option *ngFor="let c of categories()" [value]="c.slug">{{ c.label }}</option>
             </select>
+            <p class="bf-category-hint">
+              Groups the article and filters on /news.
+              Manage in <a routerLink="/admin/blog-categories">Article categories</a>.
+            </p>
           </div>
 
           <div class="form-group">
@@ -152,19 +159,6 @@
                 />
               </label>
             }
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="bf-badge">Badge</label>
-            <input
-              id="bf-badge"
-              class="form-control"
-              type="text"
-              placeholder="MSME"
-              [ngModel]="form().badgeText"
-              (ngModelChange)="updateField('badgeText', $event)"
-              name="badgeText"
-            />
           </div>
         </div>
 

@@ -1,0 +1,143 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content</span>
+      <h2>{{ mode() === 'create' ? 'New card label' : 'Edit card label' }}</h2>
+      <div class="muted">
+        Sets the coloured pill text and the fallback card icon when an article has no cover image.
+        This is not an article category.
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn" type="button" (click)="save()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : 'Save card label' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="bbf-layout section">
+      <div class="bbf-main">
+        <div class="form-group">
+          <label class="form-label" for="bbf-label">Dropdown name <span class="req">*</span></label>
+          <input
+            id="bbf-label"
+            class="form-control"
+            type="text"
+            placeholder="MSME (green)"
+            [ngModel]="form().label"
+            (ngModelChange)="updateField('label', $event)"
+            (blur)="onLabelBlur()"
+            name="label"
+          />
+          <p class="bbf-hint">Admin-only name shown in the article form dropdown.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bbf-slug">Slug <span class="req">*</span></label>
+          <input
+            id="bbf-slug"
+            class="form-control"
+            type="text"
+            placeholder="msme-green"
+            [ngModel]="form().slug"
+            (ngModelChange)="updateField('slug', $event)"
+            name="slug"
+            [disabled]="mode() === 'edit'"
+          />
+          <p class="bbf-hint">Internal key stored on articles. Lowercase letters, numbers, and hyphens only.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bbf-badge-text">Pill text <span class="req">*</span></label>
+          <input
+            id="bbf-badge-text"
+            class="form-control"
+            type="text"
+            placeholder="MSME"
+            [ngModel]="form().badgeText"
+            (ngModelChange)="updateField('badgeText', $event)"
+            name="badgeText"
+          />
+          <p class="bbf-hint">Exact text visitors see on the /news card (e.g. MSME).</p>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="bbf-sort">Sort order</label>
+            <input
+              id="bbf-sort"
+              class="form-control"
+              type="number"
+              min="0"
+              [ngModel]="form().sortOrder"
+              (ngModelChange)="updateField('sortOrder', +$event)"
+              name="sortOrder"
+            />
+          </div>
+          <div class="form-group bbf-checks">
+            <label class="bbf-check">
+              <input type="checkbox" [ngModel]="form().isActive" (ngModelChange)="updateField('isActive', $event)" name="isActive" />
+              Active
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <aside class="bbf-aside">
+        <p class="bbf-aside-heading">Card appearance</p>
+        <div class="form-group">
+          <label class="form-label" for="bbf-badge-class">Pill colour</label>
+          <select
+            id="bbf-badge-class"
+            class="form-control"
+            [ngModel]="form().badgeClass"
+            (ngModelChange)="updateField('badgeClass', $event)"
+            name="badgeClass"
+          >
+            <option *ngFor="let o of badgeClassOptions" [value]="o.value">{{ o.label }}</option>
+          </select>
+        </div>
+        <div class="bbf-preview">
+          <span class="bbf-preview-label">Pill preview</span>
+          <span [class]="form().badgeClass">{{ form().badgeText || 'MSME' }}</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bbf-icon">Fallback icon (emoji)</label>
+          <input
+            id="bbf-icon"
+            class="form-control"
+            type="text"
+            maxlength="4"
+            [ngModel]="form().cardIcon"
+            (ngModelChange)="updateField('cardIcon', $event)"
+            name="cardIcon"
+          />
+          <p class="bbf-hint">Used only when the article has no cover image.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="bbf-card-class">Fallback background</label>
+          <select
+            id="bbf-card-class"
+            class="form-control"
+            [ngModel]="form().cardClass"
+            (ngModelChange)="updateField('cardClass', $event)"
+            name="cardClass"
+          >
+            <option *ngFor="let o of cardClassOptions" [value]="o.value">{{ o.label }}</option>
+          </select>
+        </div>
+        <div class="bbf-card-preview" [class]="form().cardClass">{{ form().cardIcon || '📰' }}</div>
+      </aside>
+    </div>
+  }
+</div>

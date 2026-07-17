@@ -10,6 +10,7 @@ export interface BlogListItem {
   crumb: string;
   meta: string;
   category: string;
+  badgeSlug: string;
   dateLabel: string;
   summary: string;
   badgeText: string;
@@ -62,12 +63,9 @@ export interface CreateBlogRequest {
   meta: string;
   content: string;
   category: string;
+  badgeSlug: string;
   dateLabel: string;
   summary: string;
-  badgeText: string;
-  badgeClass: string;
-  cardIcon: string;
-  cardClass: string;
   imageUrl?: string | null;
   seoTitle?: string | null;
   metaDescription?: string | null;

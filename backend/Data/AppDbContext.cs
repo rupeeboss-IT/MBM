@@ -39,6 +39,8 @@ namespace RB_Website_API.Data
         public DbSet<Models.ConnectContactUnlock> ConnectContactUnlocks => Set<Models.ConnectContactUnlock>();
         public DbSet<Models.CookieConsentLog> CookieConsentLogs => Set<Models.CookieConsentLog>();
         public DbSet<Models.Blog> Blogs => Set<Models.Blog>();
+        public DbSet<Models.BlogCategory> BlogCategories => Set<Models.BlogCategory>();
+        public DbSet<Models.BlogBadge> BlogBadges => Set<Models.BlogBadge>();
 
         public new DbSet<T> Set<T>() where T : class
         {

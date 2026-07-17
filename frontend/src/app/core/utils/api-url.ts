@@ -55,5 +55,10 @@ export function isApiRequest(url: string): boolean {
 /** True when the request should carry the admin JWT (admin panel APIs). */
 export function isAdminApiRequest(url: string): boolean {
   const path = getApiPath(url);
-  return path.startsWith('/api/admin') || path.startsWith('/api/blogs/admin');
+  return (
+    path.startsWith('/api/admin') ||
+    path.startsWith('/api/blogs/admin') ||
+    path.startsWith('/api/blog-categories/admin') ||
+    path.startsWith('/api/blog-badges/admin')
+  );
 }

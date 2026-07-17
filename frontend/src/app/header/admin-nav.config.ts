@@ -159,6 +159,7 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
     label: 'Content',
     prefixes: [
       '/admin/blog-management',
+      '/admin/blog-categories',
       '/admin-dashboard/detail/events',
       '/admin-dashboard/detail/schemes',
     ],
@@ -168,6 +169,12 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
         children: [
           { label: 'All articles', route: '/admin/blog-management', exact: true },
           { label: 'New article', route: '/admin/blog-management/new', exact: true },
+        ],
+      },
+      {
+        label: 'Blog settings',
+        children: [
+          { label: 'Article categories', route: '/admin/blog-categories', exact: true },
         ],
       },
       {

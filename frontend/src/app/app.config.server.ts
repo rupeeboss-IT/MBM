@@ -6,6 +6,7 @@ import { provideServerRendering, withRoutes } from '@angular/ssr';
 import { routes } from './app.routes';
 import { serverRoutes } from './app.routes.server';
 import { adminTokenInterceptor } from './core/interceptors/admin-token.interceptor';
+import { authSessionInterceptor } from './core/interceptors/auth-session.interceptor';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { memberTokenInterceptor } from './core/interceptors/member-token.interceptor';
 
@@ -36,7 +37,12 @@ export const AppServerConfig: ApplicationConfig = {
 
     // HTTP client with the same interceptor chain used in the browser
     provideHttpClient(
-      withInterceptors([httpErrorInterceptor, adminTokenInterceptor, memberTokenInterceptor]),
+      withInterceptors([
+        httpErrorInterceptor,
+        adminTokenInterceptor,
+        memberTokenInterceptor,
+        authSessionInterceptor,
+      ]),
     ),
 
     // Hydration transfer state — writes server state that the browser app

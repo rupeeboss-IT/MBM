@@ -9,6 +9,7 @@ import { RazorpayLoaderService } from './razorpay-loader.service';
 import { ReferralService } from './referral.service';
 import { SchemeDiscoveryFlowService } from './scheme-discovery-flow.service';
 import { ToastService } from './toast.service';
+import { SessionExpiryService } from './session-expiry.service';
 import { hasSchemeDiscoveryIntent } from '../utils/scheme-discovery-intent';
 import { shouldResumeSchemeDiscoveryAfterMembership } from '../utils/scheme-discovery-journey.util';
 import {
@@ -48,6 +49,7 @@ function isMembershipPlanCode(value: string): value is MembershipPlanCode {
 @Injectable({ providedIn: 'root' })
 export class MembershipPlanCheckoutService {
   private readonly session = inject(AuthSessionService);
+  private readonly sessionExpiry = inject(SessionExpiryService);
   private readonly auth = inject(AuthService);
   private readonly payments = inject(PaymentService);
   private readonly referrals = inject(ReferralService);
@@ -309,7 +311,8 @@ export class MembershipPlanCheckoutService {
       return 'already_active';
     } catch (e: any) {
       if (e?.status === 401) {
-        this.handleUnauthorized();
+        this.sessionExpiry.handleExpiredSession('member');
+        this.closeReferralModal();
         return 'unauthorized';
       }
       return 'ok';
@@ -325,13 +328,6 @@ export class MembershipPlanCheckoutService {
     this.resetReferralFields();
 
     await this.startCheckout(code, referralCode);
-  }
-
-  private handleUnauthorized(): void {
-    this.toast.warning('Your session has expired. Please login again.');
-    this.session.logout();
-    this.closeReferralModal();
-    void this.router.navigateByUrl('/login');
   }
 
   private ensureLoggedInForPayment(): boolean {
@@ -378,7 +374,8 @@ export class MembershipPlanCheckoutService {
       await this.openRazorpay(order, userId);
     } catch (e: any) {
       if (e?.status === 401) {
-        this.handleUnauthorized();
+        this.sessionExpiry.handleExpiredSession('member');
+        this.closeReferralModal();
         return;
       }
       const msg =

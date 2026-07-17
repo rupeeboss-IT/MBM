@@ -1,5 +1,7 @@
-import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { Injectable, Injector, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { isJwtExpired } from '../utils/token-expiry.util';
+import { SessionExpiryService } from './session-expiry.service';
 
 const KEY_USER = 'mbm_userId';
 const KEY_TOKEN = 'mbm_token';
@@ -8,6 +10,7 @@ const KEY_ROLE = 'mbm_role';
 @Injectable({ providedIn: 'root' })
 export class AuthSessionService {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly injector = inject(Injector);
 
   private readonly _userId = signal<string | null>(
     isPlatformBrowser(this.platformId) ? localStorage.getItem(KEY_USER) : null
@@ -22,7 +25,10 @@ export class AuthSessionService {
   readonly userId = this._userId.asReadonly();
   readonly token = this._token.asReadonly();
   readonly role = this._role.asReadonly();
-  readonly isLoggedIn = computed(() => !!this._userId() && !!this._token());
+  readonly isLoggedIn = computed(() => {
+    const token = this._token();
+    return !!this._userId() && !!token && !isJwtExpired(token);
+  });
 
   /** Re-read localStorage (e.g. before payment API calls after navigation). */
   refreshFromStorage() {
@@ -42,6 +48,7 @@ export class AuthSessionService {
     this._userId.set(id);
     this._token.set(t);
     this._role.set(role?.trim() ?? null);
+    this.injector.get(SessionExpiryService).scheduleMemberExpiry(t);
   }
 
   /** @deprecated Use setSession */
@@ -53,6 +60,7 @@ export class AuthSessionService {
   }
 
   logout() {
+    this.injector.get(SessionExpiryService).clearMemberSchedule();
     localStorage.removeItem(KEY_USER);
     localStorage.removeItem(KEY_TOKEN);
     localStorage.removeItem(KEY_ROLE);

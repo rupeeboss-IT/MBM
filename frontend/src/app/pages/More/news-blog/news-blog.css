@@ -3,6 +3,7 @@
   height: 160px;
   overflow: hidden;
   background: #f0f0f0;
+  flex-shrink: 0;
 }
 
 .news-img--photo img {

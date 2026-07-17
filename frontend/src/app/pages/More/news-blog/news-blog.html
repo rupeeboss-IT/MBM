@@ -4,9 +4,11 @@
 <section class="section"><div class="container">
   <div class="zone-filter">
     <button class="filter-btn" [class.active]="active()==='all'" (click)="setFilter('all')">All</button>
-    <!-- <button class="filter-btn" [class.active]="active()==='news'" (click)="setFilter('news')">News</button> -->
-    <button class="filter-btn" [class.active]="active()==='blog'" (click)="setFilter('blog')">Blog</button>
-    <!-- <button class="filter-btn" [class.active]="active()==='success'" (click)="setFilter('success')">Success Stories</button> -->
+    @for (c of filterCategories(); track c.blogCategoryId) {
+      <button class="filter-btn" [class.active]="active()===c.slug" (click)="setFilter(c.slug)">
+        {{ c.label }}
+      </button>
+    }
   </div>
 
   @if (loading()) {
@@ -36,10 +38,9 @@
           <div [class]="a.data.cardClass">{{ a.data.cardIcon }}</div>
         </ng-template>
         <div class="news-body">
-          <span [class]="a.data.badgeClass">{{ a.data.badgeText }}</span>
           <h3>{{ a.data.title }}</h3>
           <p>{{ a.data.summary }}</p>
-          <div class="news-date">{{ a.data.dateLabel }}</div>
+          <div class="news-date">{{ formatCardDate(a.data.createdAt) }}</div>
         </div>
       </div>
 

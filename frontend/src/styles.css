@@ -188,6 +188,11 @@ textarea {
   color: #1a56db
 }
 
+.badge-amber {
+  background: #fff8e1;
+  color: #b45309
+}
+
 .badge-red {
   background: var(--red-light);
   color: var(--red)
@@ -2348,7 +2353,9 @@ textarea {
   border-radius: var(--radius);
   overflow: hidden;
   transition: all .25s;
-  cursor: pointer
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
 .news-card:hover {
@@ -2361,7 +2368,8 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem
+  font-size: 3rem;
+  flex-shrink: 0;
 }
 
 .news-img.cat-news {
@@ -2377,7 +2385,11 @@ textarea {
 }
 
 .news-body {
-  padding: 1.3rem
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .news-body h3 {
@@ -2392,12 +2404,17 @@ textarea {
   font-size: .83rem;
   color: var(--muted);
   line-height: 1.5;
-  margin-bottom: .6rem
+  margin-bottom: .6rem;
+  flex: 1;
 }
 
 .news-date {
+  margin-top: auto;
+  align-self: flex-end;
+  text-align: right;
   font-size: .8rem;
-  color: var(--muted)
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 .article-content {

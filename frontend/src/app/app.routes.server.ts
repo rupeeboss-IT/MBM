@@ -48,6 +48,12 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'admin/blog-management',                           renderMode: RenderMode.Client },
   { path: 'admin/blog-management/new',                       renderMode: RenderMode.Client },
   { path: 'admin/blog-management/edit/:blogId',              renderMode: RenderMode.Client },
+  { path: 'admin/blog-categories',                           renderMode: RenderMode.Client },
+  { path: 'admin/blog-categories/new',                       renderMode: RenderMode.Client },
+  { path: 'admin/blog-categories/edit/:categoryId',          renderMode: RenderMode.Client },
+  { path: 'admin/blog-badges',                              renderMode: RenderMode.Client },
+  { path: 'admin/blog-badges/new',                          renderMode: RenderMode.Client },
+  { path: 'admin/blog-badges/edit/:badgeId',                renderMode: RenderMode.Client },
 
   // ── Legacy redirect with param — keep as Client (redirects to service/:slug) ─
   { path: 'services/:slug', renderMode: RenderMode.Client },

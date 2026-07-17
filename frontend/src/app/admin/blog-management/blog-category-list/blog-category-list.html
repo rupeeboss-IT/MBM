@@ -1,0 +1,76 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content</span>
+      <h2>Article categories</h2>
+      <div class="muted">
+        Categories group articles and drive the filter tabs on <code>/news</code>
+        (Blog, News, Success Stories).
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+      <a class="btn" routerLink="/admin/blog-categories/new">+ New category</a>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading categories…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="section">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Filter name</th>
+              <th>Slug</th>
+              <th>Shown on /news</th>
+              <th>Status</th>
+              <th>Order</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of categories(); track c.blogCategoryId) {
+              <tr>
+                <td><div class="bcl-label">{{ c.label }}</div></td>
+                <td><code class="bcl-slug">{{ c.slug }}</code></td>
+                <td>{{ c.showInFilter ? 'Yes' : 'No' }}</td>
+                <td>
+                  <span [class]="c.isActive ? 'badge badge-success' : 'badge badge-warning'">
+                    {{ c.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>{{ c.sortOrder }}</td>
+                <td>
+                  <div class="bcl-actions">
+                    <button class="btn btn-outline btn-xs" type="button" (click)="edit(c.blogCategoryId)">Edit</button>
+                    <button
+                      class="btn btn-outline btn-xs btn-danger"
+                      type="button"
+                      (click)="remove(c)"
+                      [disabled]="actionId() === c.blogCategoryId"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="admin-empty">
+                  No categories yet. <a routerLink="/admin/blog-categories/new">Create one →</a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

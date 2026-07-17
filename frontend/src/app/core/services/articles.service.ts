@@ -22,6 +22,8 @@ export interface PublicArticle {
   imageUrl?: string | null;
   seoTitle?: string | null;
   metaDescription?: string | null;
+  /** ISO date from API (CreatedAt). Used for card date display. */
+  createdAt?: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -108,6 +110,7 @@ export class ArticlesService {
       imageUrl: b.imageUrl,
       seoTitle: b.seoTitle,
       metaDescription: b.metaDescription,
+      createdAt: b.createdAt,
     };
   }
 
@@ -128,6 +131,7 @@ export class ArticlesService {
       imageUrl: b.imageUrl,
       seoTitle: b.seoTitle,
       metaDescription: b.metaDescription,
+      createdAt: b.createdAt,
     };
   }
 }

@@ -45,6 +45,7 @@ public sealed class BlogInitializerService : IHostedService
                         [Meta]            NVARCHAR(500)     NOT NULL CONSTRAINT [DF_Blogs_Meta]           DEFAULT '',
                         [Content]         NVARCHAR(MAX)     NOT NULL CONSTRAINT [DF_Blogs_Content]        DEFAULT '',
                         [Category]        NVARCHAR(50)      NOT NULL CONSTRAINT [DF_Blogs_Category]       DEFAULT 'blog',
+                        [BadgeSlug]       NVARCHAR(50)      NOT NULL CONSTRAINT [DF_Blogs_BadgeSlug]      DEFAULT 'msme-green',
                         [DateLabel]       NVARCHAR(100)     NOT NULL CONSTRAINT [DF_Blogs_DateLabel]      DEFAULT '',
                         [Summary]         NVARCHAR(2000)    NOT NULL CONSTRAINT [DF_Blogs_Summary]        DEFAULT '',
                         [BadgeText]       NVARCHAR(100)     NOT NULL CONSTRAINT [DF_Blogs_BadgeText]      DEFAULT '',
@@ -64,6 +65,83 @@ public sealed class BlogInitializerService : IHostedService
                 END", ct);
 
             _log.LogInformation("Blogs table verified.");
+
+            await db.Database.ExecuteSqlRawAsync(@"
+                IF NOT EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Blogs' AND COLUMN_NAME = 'BadgeSlug'
+                )
+                BEGIN
+                    ALTER TABLE [dbo].[Blogs]
+                    ADD [BadgeSlug] NVARCHAR(50) NOT NULL CONSTRAINT [DF_Blogs_BadgeSlug_Alt] DEFAULT 'msme-green'
+                END", ct);
+
+            await db.Database.ExecuteSqlRawAsync(@"
+                IF EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.TABLES
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'BlogCategories'
+                )
+                AND NOT EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'BlogCategories' AND COLUMN_NAME = 'BlogCategoryId'
+                )
+                BEGIN
+                    DROP TABLE [dbo].[BlogCategories]
+                END
+
+                IF NOT EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.TABLES
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'BlogCategories'
+                )
+                BEGIN
+                    CREATE TABLE [dbo].[BlogCategories] (
+                        [BlogCategoryId] INT IDENTITY(1,1) NOT NULL,
+                        [Slug]           NVARCHAR(50)  NOT NULL,
+                        [Label]          NVARCHAR(100) NOT NULL,
+                        [SortOrder]      INT           NOT NULL CONSTRAINT [DF_BlogCategories_SortOrder] DEFAULT 0,
+                        [IsActive]       BIT           NOT NULL CONSTRAINT [DF_BlogCategories_IsActive] DEFAULT 1,
+                        [ShowInFilter]   BIT           NOT NULL CONSTRAINT [DF_BlogCategories_ShowInFilter] DEFAULT 1,
+                        [CreatedAt]      DATETIME      NOT NULL CONSTRAINT [DF_BlogCategories_CreatedAt] DEFAULT GETDATE(),
+                        [UpdatedAt]      DATETIME      NOT NULL CONSTRAINT [DF_BlogCategories_UpdatedAt] DEFAULT GETDATE(),
+                        CONSTRAINT [PK_BlogCategories] PRIMARY KEY ([BlogCategoryId]),
+                        CONSTRAINT [UQ_BlogCategories_Slug] UNIQUE ([Slug])
+                    )
+                END", ct);
+
+            _log.LogInformation("BlogCategories table verified.");
+
+            await db.Database.ExecuteSqlRawAsync(@"
+                IF NOT EXISTS (
+                    SELECT 1 FROM INFORMATION_SCHEMA.TABLES
+                    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'BlogBadges'
+                )
+                BEGIN
+                    CREATE TABLE [dbo].[BlogBadges] (
+                        [BlogBadgeId] INT IDENTITY(1,1) NOT NULL,
+                        [Slug]        NVARCHAR(50)  NOT NULL,
+                        [Label]       NVARCHAR(100) NOT NULL,
+                        [BadgeText]   NVARCHAR(100) NOT NULL,
+                        [BadgeClass]  NVARCHAR(100) NOT NULL,
+                        [CardIcon]    NVARCHAR(50)  NOT NULL,
+                        [CardClass]   NVARCHAR(100) NOT NULL,
+                        [SortOrder]   INT           NOT NULL CONSTRAINT [DF_BlogBadges_SortOrder] DEFAULT 0,
+                        [IsActive]    BIT           NOT NULL CONSTRAINT [DF_BlogBadges_IsActive] DEFAULT 1,
+                        [CreatedAt]   DATETIME      NOT NULL CONSTRAINT [DF_BlogBadges_CreatedAt] DEFAULT GETDATE(),
+                        [UpdatedAt]   DATETIME      NOT NULL CONSTRAINT [DF_BlogBadges_UpdatedAt] DEFAULT GETDATE(),
+                        CONSTRAINT [PK_BlogBadges] PRIMARY KEY ([BlogBadgeId]),
+                        CONSTRAINT [UQ_BlogBadges_Slug] UNIQUE ([Slug])
+                    )
+                END", ct);
+
+            _log.LogInformation("BlogBadges table verified.");
+
+            var seededBadges = await SyncSeedBadges(db, ct);
+            if (seededBadges > 0)
+                _log.LogInformation("Seeded {Count} blog badge(s).", seededBadges);
+
+            var seededCategories = await SyncSeedCategories(db, ct);
+            if (seededCategories > 0)
+                _log.LogInformation("Seeded {Count} blog categor(ies).", seededCategories);
 
             var synced = await SyncSeedArticles(db, ct);
             if (synced > 0)
@@ -109,6 +187,7 @@ public sealed class BlogInitializerService : IHostedService
                     Meta = seed.Meta,
                     Content = content,
                     Category = seed.Category,
+                    BadgeSlug = "msme-green",
                     DateLabel = seed.DateLabel,
                     Summary = seed.Summary,
                     BadgeText = seed.BadgeText,
@@ -152,6 +231,98 @@ public sealed class BlogInitializerService : IHostedService
             await db.SaveChangesAsync(ct);
 
         return synced;
+    }
+
+    private static async Task<int> SyncSeedCategories(AppDbContext db, CancellationToken ct)
+    {
+        var now = DateTime.Now;
+        var seeded = 0;
+
+        foreach (var seed in BlogCategorySeedCatalog.Categories)
+        {
+            var existing = await db.BlogCategories.FirstOrDefaultAsync(c => c.Slug == seed.Slug, ct);
+            if (existing is not null) continue;
+
+            db.BlogCategories.Add(new BlogCategory
+            {
+                Slug = seed.Slug,
+                Label = seed.Label,
+                SortOrder = seed.SortOrder,
+                IsActive = true,
+                ShowInFilter = seed.ShowInFilter,
+                CreatedAt = now,
+                UpdatedAt = now,
+            });
+            seeded++;
+        }
+
+        if (seeded > 0)
+            await db.SaveChangesAsync(ct);
+
+        return seeded;
+    }
+
+    private static async Task<int> SyncSeedBadges(AppDbContext db, CancellationToken ct)
+    {
+        var now = DateTime.Now;
+        var seeded = 0;
+        var updated = 0;
+
+        foreach (var seed in BlogBadgeSeedCatalog.Badges)
+        {
+            var existing = await db.BlogBadges.FirstOrDefaultAsync(b => b.Slug == seed.Slug, ct);
+            if (existing is null)
+            {
+                db.BlogBadges.Add(new BlogBadge
+                {
+                    Slug = seed.Slug,
+                    Label = seed.Label,
+                    BadgeText = seed.BadgeText,
+                    BadgeClass = seed.BadgeClass,
+                    CardIcon = seed.CardIcon,
+                    CardClass = seed.CardClass,
+                    SortOrder = seed.SortOrder,
+                    IsActive = true,
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                });
+                seeded++;
+                continue;
+            }
+
+            // Keep seed naming/appearance aligned without changing custom badges.
+            if (!string.Equals(existing.Label, seed.Label, StringComparison.Ordinal)
+                || !string.Equals(existing.BadgeText, seed.BadgeText, StringComparison.Ordinal)
+                || !string.Equals(existing.BadgeClass, seed.BadgeClass, StringComparison.Ordinal)
+                || !string.Equals(existing.CardIcon, seed.CardIcon, StringComparison.Ordinal)
+                || !string.Equals(existing.CardClass, seed.CardClass, StringComparison.Ordinal)
+                || existing.SortOrder != seed.SortOrder)
+            {
+                existing.Label = seed.Label;
+                existing.BadgeText = seed.BadgeText;
+                existing.BadgeClass = seed.BadgeClass;
+                existing.CardIcon = seed.CardIcon;
+                existing.CardClass = seed.CardClass;
+                existing.SortOrder = seed.SortOrder;
+                existing.UpdatedAt = now;
+                updated++;
+
+                var linkedBlogs = await db.Blogs.Where(b => b.BadgeSlug == seed.Slug).ToListAsync(ct);
+                foreach (var blog in linkedBlogs)
+                {
+                    blog.BadgeText = seed.BadgeText;
+                    blog.BadgeClass = seed.BadgeClass;
+                    blog.CardIcon = seed.CardIcon;
+                    blog.CardClass = seed.CardClass;
+                    blog.UpdatedAt = now;
+                }
+            }
+        }
+
+        if (seeded > 0 || updated > 0)
+            await db.SaveChangesAsync(ct);
+
+        return seeded + updated;
     }
 
     public Task StopAsync(CancellationToken ct) => Task.CompletedTask;

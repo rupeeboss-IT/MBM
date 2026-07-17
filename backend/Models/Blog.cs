@@ -26,6 +26,9 @@ public sealed class Blog
     [MaxLength(50)]
     public string Category { get; set; } = "blog";
 
+    [MaxLength(50)]
+    public string BadgeSlug { get; set; } = "msme-green";
+
     [MaxLength(100)]
     public string DateLabel { get; set; } = "";
 

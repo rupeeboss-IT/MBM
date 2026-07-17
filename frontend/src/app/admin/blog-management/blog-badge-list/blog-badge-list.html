@@ -1,0 +1,79 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content</span>
+      <h2>Card labels</h2>
+      <div class="muted">
+        Card labels control the coloured pill and fallback icon on <code>/news</code> article cards.
+        They are separate from article categories (filter tabs).
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+      <a class="btn" routerLink="/admin/blog-badges/new">+ New card label</a>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading card labels…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="section">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Dropdown name</th>
+              <th>Slug</th>
+              <th>Pill on card</th>
+              <th>Status</th>
+              <th>Order</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (b of badges(); track b.blogBadgeId) {
+              <tr>
+                <td>{{ b.label }}</td>
+                <td><code class="bbl-slug">{{ b.slug }}</code></td>
+                <td>
+                  <span [class]="b.badgeClass">{{ b.badgeText }}</span>
+                  <span class="bbl-card-icon" [class]="b.cardClass">{{ b.cardIcon }}</span>
+                </td>
+                <td>
+                  <span [class]="b.isActive ? 'badge badge-success' : 'badge badge-warning'">
+                    {{ b.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>{{ b.sortOrder }}</td>
+                <td>
+                  <div class="bbl-actions">
+                    <button class="btn btn-outline btn-xs" type="button" (click)="edit(b.blogBadgeId)">Edit</button>
+                    <button
+                      class="btn btn-outline btn-xs btn-danger"
+                      type="button"
+                      (click)="remove(b)"
+                      [disabled]="actionId() === b.blogBadgeId"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="admin-empty">
+                  No card labels yet. <a routerLink="/admin/blog-badges/new">Create one →</a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

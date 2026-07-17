@@ -5,6 +5,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { adminTokenInterceptor } from './core/interceptors/admin-token.interceptor';
+import { authSessionInterceptor } from './core/interceptors/auth-session.interceptor';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { memberTokenInterceptor } from './core/interceptors/member-token.interceptor';
 
@@ -12,7 +13,12 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(
-      withInterceptors([httpErrorInterceptor, adminTokenInterceptor, memberTokenInterceptor])
+      withInterceptors([
+        httpErrorInterceptor,
+        adminTokenInterceptor,
+        memberTokenInterceptor,
+        authSessionInterceptor,
+      ])
     ),
     provideRouter(
       routes,
