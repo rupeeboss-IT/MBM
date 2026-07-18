@@ -160,7 +160,9 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
     prefixes: [
       '/admin/blog-management',
       '/admin/blog-categories',
-      '/admin-dashboard/detail/events',
+      '/admin/event-management',
+      '/admin/event-categories',
+      '/admin/event-cities',
       '/admin-dashboard/detail/schemes',
     ],
     sections: [
@@ -178,9 +180,17 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
         ],
       },
       {
+        label: 'Event management',
+        children: [
+          { label: 'All events', route: '/admin/event-management', exact: true },
+          { label: 'New event', route: '/admin/event-management/new', exact: true },
+          { label: 'Event categories', route: '/admin/event-categories', exact: true },
+          { label: 'Event cities', route: '/admin/event-cities', exact: true },
+        ],
+      },
+      {
         label: 'Static content',
         children: [
-          { label: 'Events', route: '/admin-dashboard/detail/events' },
           { label: 'Schemes', route: '/admin-dashboard/detail/schemes' },
         ],
       },

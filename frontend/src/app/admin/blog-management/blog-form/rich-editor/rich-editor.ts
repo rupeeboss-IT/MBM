@@ -13,7 +13,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 interface ToolbarButton {
-  type: 'cmd' | 'block' | 'link' | 'sep';
+  type: 'cmd' | 'block' | 'link' | 'sep' | 'table' | 'image';
   cmd?: string;
   arg?: string;
   label: string;
@@ -35,6 +35,8 @@ const TOOLBAR: ToolbarButton[] = [
   { type: 'sep', label: '', title: 'sep3' },
   { type: 'block', arg: 'blockquote', label: 'Quote', title: 'Blockquote' },
   { type: 'link', label: 'Link', title: 'Insert link' },
+  { type: 'table', label: 'Table', title: 'Insert table' },
+  { type: 'image', label: 'Image', title: 'Insert image URL' },
   { type: 'sep', label: '', title: 'sep4' },
   { type: 'cmd', cmd: 'removeFormat', label: 'Clear', title: 'Clear formatting' },
 ];
@@ -83,6 +85,22 @@ const TOOLBAR: ToolbarButton[] = [
               [title]="btn.title"
               [attr.aria-label]="btn.title"
               (click)="insertLink()"
+            >{{ btn.label }}</button>
+          } @else if (btn.type === 'table') {
+            <button
+              type="button"
+              class="re-btn"
+              [title]="btn.title"
+              [attr.aria-label]="btn.title"
+              (click)="insertTable()"
+            >{{ btn.label }}</button>
+          } @else if (btn.type === 'image') {
+            <button
+              type="button"
+              class="re-btn"
+              [title]="btn.title"
+              [attr.aria-label]="btn.title"
+              (click)="insertImage()"
             >{{ btn.label }}</button>
           }
         }
@@ -219,6 +237,23 @@ const TOOLBAR: ToolbarButton[] = [
       text-decoration: underline;
       text-underline-offset: 2px;
     }
+    .re-editor img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 0.75rem 0;
+    }
+    .re-editor table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.85rem 0;
+    }
+    .re-editor th,
+    .re-editor td {
+      border: 1px solid #d1d5db;
+      padding: 0.45rem 0.65rem;
+      text-align: left;
+    }
   `],
 })
 export class RichEditor implements AfterViewInit, ControlValueAccessor {
@@ -350,6 +385,24 @@ export class RichEditor implements AfterViewInit, ControlValueAccessor {
     } else {
       document.execCommand('unlink');
     }
+    this.onInput();
+  }
+
+  insertTable() {
+    this.editorRef.nativeElement.focus();
+    const html =
+      '<table><thead><tr><th>Column 1</th><th>Column 2</th></tr></thead>' +
+      '<tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p><br></p>';
+    document.execCommand('insertHTML', false, html);
+    this.onInput();
+  }
+
+  insertImage() {
+    const url = prompt('Image URL (upload via Featured Image first, then paste the path):', '/uploads/');
+    if (url === null || !url.trim()) return;
+    this.editorRef.nativeElement.focus();
+    const src = escapeHtml(url.trim());
+    document.execCommand('insertHTML', false, `<p><img src="${src}" alt="" /></p>`);
     this.onInput();
   }
 }

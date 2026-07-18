@@ -57,6 +57,12 @@ import { BlogCategoryList } from './admin/blog-management/blog-category-list/blo
 import { BlogCategoryForm } from './admin/blog-management/blog-category-form/blog-category-form';
 import { BlogBadgeList } from './admin/blog-management/blog-badge-list/blog-badge-list';
 import { BlogBadgeForm } from './admin/blog-management/blog-badge-form/blog-badge-form';
+import { EventList } from './admin/event-management/event-list/event-list';
+import { EventForm } from './admin/event-management/event-form/event-form';
+import { EventCategoryList } from './admin/event-management/event-category-list/event-category-list';
+import { EventCategoryForm } from './admin/event-management/event-category-form/event-category-form';
+import { EventCityList } from './admin/event-management/event-city-list/event-city-list';
+import { EventCityForm } from './admin/event-management/event-city-form/event-city-form';
 
 export const routes: Routes = [
     {
@@ -540,6 +546,57 @@ export const routes: Routes = [
     {
         path: 'admin/blog-badges/edit/:badgeId',
         component: BlogBadgeForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/event-management',
+        component: EventList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/event-management/new',
+        component: EventForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/event-management/edit/:eventId',
+        component: EventForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/event-categories',
+        component: EventCategoryList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/event-categories/new',
+        component: EventCategoryForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/event-categories/edit/:categoryId',
+        component: EventCategoryForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/event-cities',
+        component: EventCityList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/event-cities/new',
+        component: EventCityForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/event-cities/edit/:cityId',
+        component: EventCityForm,
         canActivate: [adminGuard],
     },
     {

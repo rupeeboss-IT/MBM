@@ -150,7 +150,13 @@ try
     }
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        // Nested controller DTOs (e.g. BlogController.MutationResponse vs EventController.MutationResponse)
+        // share short names; use full names so schema IDs stay unique.
+        options.CustomSchemaIds(type =>
+            (type.FullName ?? type.Name).Replace('+', '.'));
+    });
 
     builder.Services.Configure<RB_Website_API.Auth.EmailSettings>(
         builder.Configuration.GetSection(RB_Website_API.Auth.EmailSettings.SectionName));

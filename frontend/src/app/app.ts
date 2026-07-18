@@ -16,6 +16,7 @@ import { Footer } from "./footer/footer";
 import { CookieConsentBanner } from './core/components/cookie-consent-banner/cookie-consent-banner';
 import { AnalyticsService } from './core/services/analytics.service';
 import { CookieConsentService } from './core/services/cookie-consent.service';
+import { SessionExpiryService } from './core/services/session-expiry.service';
 
 /** Canonical origin — must be absolute and match the production domain. */
 const SITE_ORIGIN = 'https://msmebharatmanch.com';
@@ -30,6 +31,7 @@ export class App implements OnInit {
   private readonly analytics = inject(AnalyticsService);
   private readonly cookieConsent = inject(CookieConsentService);
   private readonly seoService = inject(SeoService);
+  private readonly sessionExpiry = inject(SessionExpiryService);
   private readonly doc = inject(DOCUMENT);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly platformId = inject(PLATFORM_ID);
@@ -43,6 +45,9 @@ export class App implements OnInit {
 
     // Everything below is browser-only (analytics, lead capture, SPA navigation hooks)
     if (!isPlatformBrowser(this.platformId)) return;
+
+    // Start JWT expiry timers + redirect-on-expiry (must run on every browser load)
+    this.sessionExpiry.startWatching();
 
     // Re-initialize GA if the user already consented in a previous session
     if (this.cookieConsent.hasConsented()) {

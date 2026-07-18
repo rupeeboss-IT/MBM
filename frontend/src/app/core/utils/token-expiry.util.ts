@@ -7,7 +7,9 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
 
   try {
     const base64 = segment.replace(/-/g, '+').replace(/_/g, '/');
-    const json = atob(base64);
+    const pad = base64.length % 4;
+    const padded = pad === 0 ? base64 : base64 + '='.repeat(4 - pad);
+    const json = atob(padded);
     const payload = JSON.parse(json) as Record<string, unknown>;
     return payload && typeof payload === 'object' ? payload : null;
   } catch {
@@ -23,7 +25,10 @@ export function getJwtExpiryMs(token: string | null | undefined): number | null 
   return typeof exp === 'number' ? exp * 1000 : null;
 }
 
-/** True when the token is missing, malformed, or past its expiry (with optional skew). */
+/**
+ * True when the token is missing, malformed, or past its expiry.
+ * Always uses the current clock — safe to call outside Angular computed() caches.
+ */
 export function isJwtExpired(
   token: string | null | undefined,
   skewMs: number = DEFAULT_SKEW_MS,

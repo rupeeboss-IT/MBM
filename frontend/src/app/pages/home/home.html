@@ -628,38 +628,39 @@
         <p>Connect, learn and grow with India's MSME community</p>
       </div>
       <div class="events-grid">
-        <div class="event-card" [routerLink]="['/event','bll-business-topline-growth-meet-2026']">
-          <div class="event-img event-img--photo"
-            (click)="openLightbox('/event/bll-event-1.jpg', 'Business Topline Growth Meet — 23rd Edition', $event)">
-            <img src="/event/bll-event-1.jpg"
-                 alt="Business Topline Growth Meet — 23rd Edition, Bombay Stock Exchange Mumbai"
-                 loading="lazy" width="600" height="130">
-          </div>
-          <div class="event-body">
-            <div class="event-meta"><span class="badge badge-red">BLL</span><span
-                class="badge badge-green">Mumbai</span></div>
-            <h3>Business Topline Growth Meet — 23rd Edition</h3>
-            <p>Join business leaders at the Bombay Stock Exchange for BLL's flagship growth meet — keynote sessions,
-              networking, and actionable topline growth strategies.</p>
-            <div class="event-date">📅 27th June 2026 · Bombay Stock Exchange, Mumbai</div>
-          </div>
-        </div>
-        <div class="event-card" [routerLink]="['/event','bll-psu-sme-access-summit-2026']">
-          <div class="event-img event-img--photo"
-            (click)="openLightbox('/event/bll-event-2.jpg', 'Procurement Series: PSU SME Access Summit', $event)">
-            <img src="/event/bll-event-2.jpg"
-                 alt="Procurement Series: PSU SME Access Summit, Jio World Convention Centre Mumbai"
-                 loading="lazy" width="600" height="130">
-          </div>
-          <div class="event-body">
-            <div class="event-meta"><span class="badge badge-red">BLL</span><span class="badge badge-blue">Mumbai</span>
+        @for (ev of homeEvents(); track ev.slug) {
+          <div class="event-card" [routerLink]="['/event', ev.slug]">
+            <div
+              class="event-img event-img--photo"
+              (click)="ev.imageUrl && openLightbox(ev.imageUrl!, ev.title, $event)"
+            >
+              @if (ev.imageUrl) {
+                <img
+                  [src]="ev.imageUrl"
+                  [alt]="ev.title"
+                  loading="lazy"
+                  width="600"
+                  height="130"
+                />
+              }
             </div>
-            <h3>Procurement Series: PSU SME Access Summit</h3>
-            <p>Connect your SME with India's largest PSUs — ONGC, IndianOil, NTPC & more — and unlock procurement
-              opportunities worth thousands of crores.</p>
-            <div class="event-date">📅 9th July 2026 · Jio World Convention Centre, BKC, Mumbai</div>
+            <div class="event-body">
+              <div class="event-meta">
+                @if (ev.categoryName) {
+                  <span class="badge badge-red">{{ ev.categoryName }}</span>
+                }
+                @if (ev.cityName) {
+                  <span class="badge" [ngClass]="ev.cityBadgeClass || 'badge-green'">{{ ev.cityName }}</span>
+                }
+              </div>
+              <h3>{{ ev.title }}</h3>
+              <p>{{ ev.shortDescription }}</p>
+              @if (eventMetaLine(ev)) {
+                <div class="event-date">📅 {{ eventMetaLine(ev) }}</div>
+              }
+            </div>
           </div>
-        </div>
+        }
       </div>
       <div class="text-center mt-3">
         <a class="btn-outline" routerLink="/events">View All Events</a>

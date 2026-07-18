@@ -25,10 +25,21 @@ export class AuthSessionService {
   readonly userId = this._userId.asReadonly();
   readonly token = this._token.asReadonly();
   readonly role = this._role.asReadonly();
+  /**
+   * Note: Angular caches computed() until signal deps change. Time passing alone
+   * does not invalidate this — SessionExpiryService clears the token on expiry.
+   * Prefer SessionExpiryService.ensureMemberSession() for auth decisions.
+   */
   readonly isLoggedIn = computed(() => {
     const token = this._token();
     return !!this._userId() && !!token && !isJwtExpired(token);
   });
+
+  /** Live check that always uses the current clock (not a stale computed cache). */
+  hasValidSession(): boolean {
+    const token = this._token();
+    return !!this._userId() && !!token && !isJwtExpired(token);
+  }
 
   /** Re-read localStorage (e.g. before payment API calls after navigation). */
   refreshFromStorage() {

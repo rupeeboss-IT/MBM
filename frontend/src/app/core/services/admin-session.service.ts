@@ -26,6 +26,11 @@ export class AdminSessionService {
   readonly token = this._token.asReadonly();
   readonly role = this._role.asReadonly();
 
+  /**
+   * Note: Angular caches computed() until signal deps change. Time passing alone
+   * does not invalidate this — SessionExpiryService clears the token on expiry.
+   * Prefer SessionExpiryService.ensureAdminSession() for auth decisions.
+   */
   readonly isLoggedIn = computed(() => {
     const token = this._token();
     return !!this._userId() && !!token && !isJwtExpired(token);
@@ -33,6 +38,12 @@ export class AdminSessionService {
   readonly isAdmin = computed(() => (this._role() ?? '').toLowerCase() === 'admin');
   readonly isSuperAdmin = computed(() => (this._role() ?? '').toLowerCase() === 'superadmin');
   readonly hasAdminAccess = computed(() => this.isAdmin() || this.isSuperAdmin());
+
+  /** Live check that always uses the current clock (not a stale computed cache). */
+  hasValidSession(): boolean {
+    const token = this._token();
+    return !!this._userId() && !!token && !isJwtExpired(token);
+  }
 
   setSession(userId: string, token: string, role?: string) {
     const uid = (userId ?? '').trim();

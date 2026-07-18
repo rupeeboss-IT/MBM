@@ -1,0 +1,66 @@
+.ecyf-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  padding: 28px 32px;
+}
+
+.ecyf-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 640px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--admin-border, #e5e7eb);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.req {
+  color: var(--admin-danger, #e63946);
+}
+
+.ecyf-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--admin-muted, #6b7280);
+}
+
+.ecyf-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 1.6rem;
+}
+
+.ecyf-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+}

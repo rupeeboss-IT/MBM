@@ -4,7 +4,8 @@ import { catchError, throwError } from 'rxjs';
 import { AdminSessionService } from '../services/admin-session.service';
 import { AuthSessionService } from '../services/auth-session.service';
 import { SessionExpiryService } from '../services/session-expiry.service';
-import { getApiPath, isAdminApiRequest } from '../utils/api-url';
+import { getApiPath, isAdminApiRequest, isApiRequest } from '../utils/api-url';
+import { isJwtExpired } from '../utils/token-expiry.util';
 
 function isPublicAuthEndpoint(url: string): boolean {
   const path = getApiPath(url);
@@ -27,14 +28,50 @@ function resolveUnauthorizedScope(
     return adminSession.token() || hadAuthHeader ? 'admin' : null;
   }
 
-  return memberSession.token() || hadAuthHeader ? 'member' : null;
+  // Any authenticated member API failure (Bearer present or member token in storage)
+  if (memberSession.token() || hadAuthHeader) return 'member';
+  return null;
 }
 
-/** Logs out and redirects when an authenticated API returns 401. */
+/** Logs out and redirects when an authenticated API returns 401, or when the JWT is already expired. */
 export const authSessionInterceptor: HttpInterceptorFn = (req, next) => {
   const memberSession = inject(AuthSessionService);
   const adminSession = inject(AdminSessionService);
   const sessionExpiry = inject(SessionExpiryService);
+
+  if (isApiRequest(req.url) && !isPublicAuthEndpoint(req.url)) {
+    memberSession.refreshFromStorage();
+
+    if (isAdminApiRequest(req.url)) {
+      const adminToken = adminSession.token();
+      if (adminToken && isJwtExpired(adminToken)) {
+        sessionExpiry.handleExpiredSession('admin');
+        return throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 401,
+              statusText: 'Unauthorized',
+              url: req.url,
+              error: { success: false, message: 'Your session has expired. Please sign in again.' },
+            }),
+        );
+      }
+    } else {
+      const memberToken = memberSession.token();
+      if (memberToken && isJwtExpired(memberToken)) {
+        sessionExpiry.handleExpiredSession('member');
+        return throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 401,
+              statusText: 'Unauthorized',
+              url: req.url,
+              error: { success: false, message: 'Your session has expired. Please sign in again.' },
+            }),
+        );
+      }
+    }
+  }
 
   return next(req).pipe(
     catchError((err: unknown) => {

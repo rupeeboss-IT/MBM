@@ -14,6 +14,7 @@ import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.util';
 import { RecaptchaService } from '../../core/services/recaptcha.service';
+import { EventsService, type PublicEvent } from '../../core/services/events.service';
 
 @Component({
   selector: 'app-home',
@@ -26,12 +27,14 @@ export class Home implements OnInit {
   private readonly contactApi = inject(ContactService);
   private readonly toast = inject(ToastService);
   private readonly recaptcha = inject(RecaptchaService);
+  private readonly eventsApi = inject(EventsService);
   readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly planCheckout = inject(MembershipPlanCheckoutService);
 
   readonly lightboxOpen = signal(false);
   readonly lightboxSrc = signal<string | null>(null);
   readonly lightboxAlt = signal('');
+  readonly homeEvents = signal<PublicEvent[]>([]);
 
   readonly callbackModalOpen = signal(false);
   readonly callbackSubmitting = signal(false);
@@ -54,6 +57,22 @@ export class Home implements OnInit {
 
   ngOnInit(): void {
     void this.schemeDiscovery.tryResumeOnPageLoad();
+    void this.loadHomeEvents();
+  }
+
+  private async loadHomeEvents() {
+    try {
+      const res = await firstValueFrom(
+        this.eventsApi.getPublished({ page: 1, pageSize: 6 }),
+      );
+      this.homeEvents.set(res.events.slice(0, 3));
+    } catch {
+      this.homeEvents.set([]);
+    }
+  }
+
+  eventMetaLine(ev: PublicEvent): string {
+    return [ev.date, ev.location].filter((p) => !!p?.trim()).join(' · ');
   }
 
   startSchemeDiscovery(): void {

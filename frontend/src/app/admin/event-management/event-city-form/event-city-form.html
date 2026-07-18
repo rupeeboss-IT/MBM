@@ -1,0 +1,94 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>{{ mode() === 'create' ? 'New event city' : 'Edit event city' }}</h2>
+      <div class="muted">
+        Used for location filters and city badges on <code>/events</code>.
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn" type="button" (click)="save()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : 'Save city' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="ecyf-layout section">
+      <div class="ecyf-main">
+        <div class="form-group">
+          <label class="form-label" for="ecyf-name">Name <span class="req">*</span></label>
+          <input
+            id="ecyf-name"
+            class="form-control"
+            type="text"
+            placeholder="Mumbai"
+            [ngModel]="form().name"
+            (ngModelChange)="updateField('name', $event)"
+            (blur)="onNameBlur()"
+            name="name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ecyf-slug">Slug <span class="req">*</span></label>
+          <input
+            id="ecyf-slug"
+            class="form-control"
+            type="text"
+            placeholder="mumbai"
+            [ngModel]="form().slug"
+            (ngModelChange)="updateField('slug', $event)"
+            name="slug"
+            [disabled]="mode() === 'edit'"
+          />
+          <p class="ecyf-hint">Internal key stored on events. Lowercase letters, numbers, and hyphens only.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ecyf-badge">Badge class</label>
+          <input
+            id="ecyf-badge"
+            class="form-control"
+            type="text"
+            placeholder="badge-green"
+            [ngModel]="form().badgeClass"
+            (ngModelChange)="updateField('badgeClass', $event)"
+            name="badgeClass"
+          />
+          <p class="ecyf-hint">Optional CSS class for the city pill (e.g. <code>badge-green</code> / <code>badge-blue</code>).</p>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="ecyf-sort">Sort order</label>
+            <input
+              id="ecyf-sort"
+              class="form-control"
+              type="number"
+              min="0"
+              [ngModel]="form().sortOrder"
+              (ngModelChange)="updateField('sortOrder', +$event)"
+              name="sortOrder"
+            />
+          </div>
+          <div class="form-group ecyf-checks">
+            <label class="ecyf-check">
+              <input type="checkbox" [ngModel]="form().isActive" (ngModelChange)="updateField('isActive', $event)" name="isActive" />
+              Active
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

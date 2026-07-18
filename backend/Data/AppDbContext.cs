@@ -41,6 +41,11 @@ namespace RB_Website_API.Data
         public DbSet<Models.Blog> Blogs => Set<Models.Blog>();
         public DbSet<Models.BlogCategory> BlogCategories => Set<Models.BlogCategory>();
         public DbSet<Models.BlogBadge> BlogBadges => Set<Models.BlogBadge>();
+        public DbSet<Models.EventCategory> EventCategories => Set<Models.EventCategory>();
+        public DbSet<Models.EventCity> EventCities => Set<Models.EventCity>();
+        public DbSet<Models.Event> Events => Set<Models.Event>();
+        public DbSet<Models.EventHighlight> EventHighlights => Set<Models.EventHighlight>();
+        public DbSet<Models.EventPartner> EventPartners => Set<Models.EventPartner>();
 
         public new DbSet<T> Set<T>() where T : class
         {
@@ -134,6 +139,37 @@ namespace RB_Website_API.Data
                 e.ToTable("Blogs", "dbo");
                 e.HasIndex(b => b.Slug).IsUnique();
                 e.Property(b => b.Content).HasColumnType("nvarchar(max)");
+            });
+
+            modelBuilder.Entity<Models.EventCategory>(e =>
+            {
+                e.ToTable("EventCategories", "dbo");
+                e.HasIndex(c => c.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<Models.EventCity>(e =>
+            {
+                e.ToTable("EventCities", "dbo");
+                e.HasIndex(c => c.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<Models.Event>(e =>
+            {
+                e.ToTable("Events", "dbo");
+                e.HasIndex(x => x.Slug).IsUnique();
+                e.Property(x => x.AboutHtml).HasColumnType("nvarchar(max)");
+                e.Property(x => x.HighlightsHtml).HasColumnType("nvarchar(max)");
+                e.Property(x => x.AssociationHtml).HasColumnType("nvarchar(max)");
+                e.Property(x => x.Latitude).HasPrecision(9, 6);
+                e.Property(x => x.Longitude).HasPrecision(9, 6);
+                e.HasMany(x => x.Highlights)
+                    .WithOne(h => h.Event)
+                    .HasForeignKey(h => h.EventId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                e.HasMany(x => x.Partners)
+                    .WithOne(p => p.Event)
+                    .HasForeignKey(p => p.EventId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

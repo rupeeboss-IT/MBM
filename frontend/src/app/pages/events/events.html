@@ -1,17 +1,66 @@
 <!-- ===== EVENTS PAGE ===== -->
 <div class="page active" id="page-events">
-<div class="page-header"><div class="container"><h1>Events, Webinars & Summits</h1><p>Connect with the MSME community and learn from industry experts</p></div></div>
-<section class="section"><div class="container">
-  <div class="zone-filter">
-    <button class="filter-btn" [class.active]="active()==='all'" (click)="setFilter('all')">All Events</button>
-    <button class="filter-btn" [class.active]="active()==='bll'" (click)="setFilter('bll')">BLL</button>
+  <div class="page-header">
+    <div class="container">
+      <h1>Events, Webinars & Summits</h1>
+      <p>Connect with the MSME community and learn from industry experts</p>
+    </div>
   </div>
-  <div class="events-grid-2" id="eventsGrid">
-    <div class="event-list-card" data-cat="bll" [style.display]="show('bll') ? 'grid' : 'none'" [routerLink]="['/event','bll-business-topline-growth-meet-2026']"><div class="event-img-side event-img-side--photo" style="background-image: url('/event/bll-event-1.jpg')" (click)="openLightbox('/event/bll-event-1.jpg', 'Business Topline Growth Meet — 23rd Edition', $event)"></div><div class="event-list-body"><div class="event-meta"><span class="badge badge-red">BLL</span><span class="badge badge-green">Mumbai</span></div><h3>Business Topline Growth Meet — 23rd Edition</h3><p>Join business leaders at the Bombay Stock Exchange for BLL's flagship growth meet — keynote sessions, networking, and actionable topline growth strategies. AAOGE TOH PAAOGE.</p><div class="event-date">📅 27th June 2026 · 2:30 PM onwards · Bombay Stock Exchange, Mumbai</div></div></div>
-    <div class="event-list-card" data-cat="bll" [style.display]="show('bll') ? 'grid' : 'none'" [routerLink]="['/event','bll-psu-sme-access-summit-2026']"><div class="event-img-side event-img-side--photo" style="background-image: url('/event/bll-event-2.jpg')" (click)="openLightbox('/event/bll-event-2.jpg', 'Procurement Series: PSU SME Access Summit', $event)"></div><div class="event-list-body"><div class="event-meta"><span class="badge badge-red">BLL</span><span class="badge badge-blue">Mumbai</span></div><h3>Procurement Series: PSU SME Access Summit</h3><p>Connect your SME with India's largest PSUs — ONGC, IndianOil, NTPC & more — and unlock procurement opportunities worth thousands of crores in PSU tenders.</p><div class="event-date">📅 9th July 2026 · Jio World Convention Centre, BKC, Mumbai</div></div></div>
-  </div>
-</div></section>
-</div><!-- /events -->
+  <section class="section">
+    <div class="container">
+      <div class="zone-filter">
+        <button class="filter-btn" [class.active]="activeCategory()==='all'" (click)="setCategory('all')" type="button">All Events</button>
+        @for (c of categories(); track c.slug) {
+          <button
+            class="filter-btn"
+            [class.active]="activeCategory()===c.slug"
+            (click)="setCategory(c.slug)"
+            type="button"
+          >{{ c.name }}</button>
+        }
+      </div>
+
+      @if (loading()) {
+        <p class="muted" style="padding:2rem 0">Loading events…</p>
+      } @else if (error()) {
+        <p class="muted" style="padding:2rem 0">{{ error() }}</p>
+      } @else {
+        <div class="events-grid-2" id="eventsGrid">
+          @for (ev of events(); track ev.slug) {
+            <div
+              class="event-list-card"
+              [attr.data-cat]="ev.categorySlug"
+              [routerLink]="['/event', ev.slug]"
+            >
+              <div
+                class="event-img-side event-img-side--photo"
+                [style.background-image]="ev.imageUrl ? 'url(' + ev.imageUrl + ')' : null"
+                (click)="ev.imageUrl && openLightbox(ev.imageUrl!, ev.title, $event)"
+              ></div>
+              <div class="event-list-body">
+                <div class="event-meta">
+                  @if (ev.categoryName) {
+                    <span class="badge badge-red">{{ ev.categoryName }}</span>
+                  }
+                  @if (ev.cityName) {
+                    <span class="badge" [ngClass]="ev.cityBadgeClass || 'badge-green'">{{ ev.cityName }}</span>
+                  }
+                </div>
+                <h3>{{ ev.title }}</h3>
+                <p>{{ ev.shortDescription }}</p>
+                @if (metaLine(ev)) {
+                  <div class="event-date">📅 {{ metaLine(ev) }}</div>
+                }
+              </div>
+            </div>
+          } @empty {
+            <p class="muted" style="padding:2rem 0">No events match your filters.</p>
+          }
+        </div>
+      }
+    </div>
+  </section>
+</div>
 
 <app-image-lightbox
   [isOpen]="lightboxOpen()"

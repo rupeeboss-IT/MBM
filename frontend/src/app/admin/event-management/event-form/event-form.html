@@ -1,0 +1,591 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>{{ mode() === 'create' ? 'New event' : 'Edit event' }}</h2>
+      <div class="muted">Fill in the details visitors see on the event page and listing cards.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn btn-outline" type="button" (click)="saveAsDraft()" [disabled]="saving() || loading()">
+        Save draft
+      </button>
+      <button class="btn" type="button" (click)="saveAndPublish()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : (mode() === 'create' ? 'Publish' : 'Save &amp; publish') }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading event…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="ef-layout">
+      <div class="ef-main">
+        <!-- Basic -->
+        <section class="ef-section section">
+          <h3 class="ef-section-title">Basic</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="ef-name">Name <span class="req">*</span></label>
+            <input
+              id="ef-name"
+              class="form-control ef-title-input"
+              type="text"
+              placeholder="Event name"
+              [ngModel]="form().name"
+              (ngModelChange)="updateField('name', $event)"
+              (blur)="onNameBlur()"
+              name="name"
+            />
+          </div>
+
+          <div class="ef-slug-row">
+            <span class="ef-slug-prefix">/event/</span>
+            <input
+              class="form-control ef-slug-input"
+              type="text"
+              placeholder="url-slug"
+              [ngModel]="form().slug"
+              (ngModelChange)="updateField('slug', $event)"
+              name="slug"
+              [disabled]="mode() === 'edit'"
+              aria-label="URL slug"
+            />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="ef-crumb">Crumb</label>
+              <input
+                id="ef-crumb"
+                class="form-control"
+                type="text"
+                placeholder="Breadcrumb label"
+                [ngModel]="form().crumb"
+                (ngModelChange)="updateField('crumb', $event)"
+                name="crumb"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-tagline">Tagline</label>
+              <input
+                id="ef-tagline"
+                class="form-control"
+                type="text"
+                placeholder="Short subtitle"
+                [ngModel]="form().tagline"
+                (ngModelChange)="updateField('tagline', $event)"
+                name="tagline"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ef-short">Short description</label>
+            <textarea
+              id="ef-short"
+              class="form-control"
+              rows="2"
+              placeholder="Listing card copy"
+              [ngModel]="form().shortDescription"
+              (ngModelChange)="updateField('shortDescription', $event)"
+              name="shortDescription"
+            ></textarea>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="ef-category">Category <span class="req">*</span></label>
+              <select
+                id="ef-category"
+                class="form-control"
+                [ngModel]="form().categorySlug"
+                (ngModelChange)="updateField('categorySlug', $event)"
+                name="categorySlug"
+              >
+                @if (!categories().length) {
+                  <option value="">No categories — add one first</option>
+                }
+                @for (c of categories(); track c.slug) {
+                  <option [value]="c.slug">{{ c.name }}</option>
+                }
+              </select>
+              <p class="ef-hint">
+                Manage in <a routerLink="/admin/event-categories">Event categories</a>.
+              </p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-city">City</label>
+              <select
+                id="ef-city"
+                class="form-control"
+                [ngModel]="form().citySlug"
+                (ngModelChange)="onCityChange($event)"
+                name="citySlug"
+              >
+                <option value="">— None —</option>
+                @for (c of cities(); track c.slug) {
+                  <option [value]="c.slug">{{ c.name }}</option>
+                }
+              </select>
+              <p class="ef-hint">
+                Manage in <a routerLink="/admin/event-cities">Event cities</a>.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Featured image</label>
+            @if (form().featuredImageUrl) {
+              <div class="ef-cover-preview">
+                <img [src]="form().featuredImageUrl" alt="Featured preview" />
+              </div>
+              <div class="ef-cover-actions">
+                <label class="btn btn-outline ef-cover-btn" [class.is-disabled]="uploadingImage()">
+                  {{ uploadingImage() ? 'Uploading…' : 'Change' }}
+                  <input
+                    type="file"
+                    class="ef-file-input"
+                    [accept]="acceptImages"
+                    [disabled]="uploadingImage()"
+                    (change)="onFeaturedSelected($event)"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="btn btn-outline ef-cover-btn"
+                  (click)="clearFeatured()"
+                  [disabled]="uploadingImage()"
+                >
+                  Remove
+                </button>
+              </div>
+            } @else {
+              <label class="ef-cover-drop" [class.is-busy]="uploadingImage()">
+                <span class="ef-cover-drop-title">
+                  {{ uploadingImage() ? 'Uploading…' : 'Upload featured image' }}
+                </span>
+                <span class="ef-cover-drop-hint">JPG, PNG, WEBP or GIF · max 5 MB</span>
+                <input
+                  type="file"
+                  class="ef-file-input"
+                  [accept]="acceptImages"
+                  [disabled]="uploadingImage()"
+                  (change)="onFeaturedSelected($event)"
+                />
+              </label>
+            }
+          </div>
+        </section>
+
+        <!-- Schedule -->
+        <section class="ef-section section">
+          <h3 class="ef-section-title">Schedule</h3>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="ef-date-display">Date display text <span class="req">*</span></label>
+              <input
+                id="ef-date-display"
+                class="form-control"
+                type="text"
+                placeholder="15–16 March 2026"
+                [ngModel]="form().dateDisplayText"
+                (ngModelChange)="updateField('dateDisplayText', $event)"
+                name="dateDisplayText"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-time-display">Time display text</label>
+              <input
+                id="ef-time-display"
+                class="form-control"
+                type="text"
+                placeholder="10:00 AM – 5:00 PM"
+                [ngModel]="form().timeDisplayText"
+                (ngModelChange)="updateField('timeDisplayText', $event)"
+                name="timeDisplayText"
+              />
+            </div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="ef-start">Start date</label>
+              <input
+                id="ef-start"
+                class="form-control"
+                type="date"
+                [ngModel]="form().startDate"
+                (ngModelChange)="updateField('startDate', $event)"
+                name="startDate"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-end">End date</label>
+              <input
+                id="ef-end"
+                class="form-control"
+                type="date"
+                [ngModel]="form().endDate"
+                (ngModelChange)="updateField('endDate', $event)"
+                name="endDate"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-date-iso">SEO / Google date (optional)</label>
+              <input
+                id="ef-date-iso"
+                class="form-control"
+                type="text"
+                placeholder="2026-06-27"
+                [ngModel]="form().dateISO"
+                (ngModelChange)="updateField('dateISO', $event)"
+                name="dateISO"
+              />
+              <p class="ef-hint">Format YYYY-MM-DD. Used only in Google/schema.org Event markup — not shown on the page. Usually same as Start date.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ef-attendance">Attendance mode</label>
+            <select
+              id="ef-attendance"
+              class="form-control"
+              [ngModel]="form().attendanceMode"
+              (ngModelChange)="updateField('attendanceMode', $event)"
+              name="attendanceMode"
+            >
+              @for (m of attendanceModes; track m) {
+                <option [value]="m">{{ m || '— None —' }}</option>
+              }
+            </select>
+          </div>
+        </section>
+
+        <!-- Venue -->
+        <section class="ef-section section">
+          <h3 class="ef-section-title">Venue</h3>
+          <div class="form-group">
+            <label class="form-label" for="ef-loc-display">Location display text</label>
+            <input
+              id="ef-loc-display"
+              class="form-control"
+              type="text"
+              placeholder="Card location line"
+              [ngModel]="form().locationDisplayText"
+              (ngModelChange)="updateField('locationDisplayText', $event)"
+              name="locationDisplayText"
+            />
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="ef-venue">Venue name</label>
+              <input
+                id="ef-venue"
+                class="form-control"
+                type="text"
+                [ngModel]="form().venueName"
+                (ngModelChange)="updateField('venueName', $event)"
+                name="venueName"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-landmark">Landmark</label>
+              <input
+                id="ef-landmark"
+                class="form-control"
+                type="text"
+                [ngModel]="form().landmark"
+                (ngModelChange)="updateField('landmark', $event)"
+                name="landmark"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ef-address">Venue address</label>
+            <textarea
+              id="ef-address"
+              class="form-control"
+              rows="2"
+              [ngModel]="form().venueAddress"
+              (ngModelChange)="updateField('venueAddress', $event)"
+              name="venueAddress"
+            ></textarea>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label" for="ef-city-name">City name</label>
+              <input
+                id="ef-city-name"
+                class="form-control"
+                type="text"
+                [ngModel]="form().cityName"
+                (ngModelChange)="updateField('cityName', $event)"
+                name="cityName"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-state">State</label>
+              <input
+                id="ef-state"
+                class="form-control"
+                type="text"
+                [ngModel]="form().state"
+                (ngModelChange)="updateField('state', $event)"
+                name="state"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="ef-country">Country</label>
+              <input
+                id="ef-country"
+                class="form-control"
+                type="text"
+                [ngModel]="form().country"
+                (ngModelChange)="updateField('country', $event)"
+                name="country"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- About -->
+        <section class="ef-section section">
+          <h3 class="ef-section-title">About</h3>
+          <div class="form-group ef-editor-group">
+            <label class="form-label">About content</label>
+            <p class="ef-hint">Write the body only — the page already shows the “About the Event” heading.</p>
+            <app-rich-editor
+              [ngModel]="form().aboutHtml"
+              (ngModelChange)="updateField('aboutHtml', $event)"
+              name="aboutHtml"
+            ></app-rich-editor>
+          </div>
+        </section>
+
+        <!-- Highlights -->
+        <section class="ef-section section">
+          <div class="ef-section-head">
+            <h3 class="ef-section-title">Highlights</h3>
+            <button class="btn btn-outline btn-xs" type="button" (click)="addHighlight()">+ Add</button>
+          </div>
+          <div class="ef-dyn-list">
+            @for (h of highlights(); track $index; let i = $index) {
+              <div class="ef-dyn-row">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Highlight text"
+                  [ngModel]="h.text"
+                  (ngModelChange)="updateHighlight(i, $event)"
+                  [name]="'highlight-' + i"
+                />
+                <div class="ef-dyn-actions">
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveHighlight(i, -1)" [disabled]="i === 0">↑</button>
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveHighlight(i, 1)" [disabled]="i === highlights().length - 1">↓</button>
+                  <button class="btn btn-outline btn-xs btn-danger" type="button" (click)="removeHighlight(i)">Remove</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="ef-hint">No highlights yet. Add bullet items visitors will see.</p>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="ef-collapse-toggle"
+            (click)="showHighlightsHtml.set(!showHighlightsHtml())"
+            [attr.aria-expanded]="showHighlightsHtml()"
+          >
+            <span>Rich highlights HTML (optional)</span>
+            <span class="ef-seo-chevron" [class.ef-seo-chevron--open]="showHighlightsHtml()">›</span>
+          </button>
+          @if (showHighlightsHtml()) {
+            <div class="form-group ef-editor-group" style="margin-top: 12px">
+              <app-rich-editor
+                [ngModel]="form().highlightsHtml"
+                (ngModelChange)="updateField('highlightsHtml', $event)"
+                name="highlightsHtml"
+              ></app-rich-editor>
+            </div>
+          }
+        </section>
+
+        <!-- Partners -->
+        <section class="ef-section section">
+          <div class="ef-section-head">
+            <h3 class="ef-section-title">In Association With</h3>
+            <button class="btn btn-outline btn-xs" type="button" (click)="addPartner()">+ Add partner</button>
+          </div>
+          <div class="ef-dyn-list">
+            @for (p of partners(); track $index; let i = $index) {
+              <div class="ef-partner-card">
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      [ngModel]="p.name"
+                      (ngModelChange)="updatePartner(i, 'name', $event)"
+                      [name]="'partner-name-' + i"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Website URL</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="https://"
+                      [ngModel]="p.websiteUrl"
+                      (ngModelChange)="updatePartner(i, 'websiteUrl', $event)"
+                      [name]="'partner-url-' + i"
+                    />
+                  </div>
+                </div>
+                <div class="ef-partner-logo-row">
+                  @if (p.logoUrl) {
+                    <img class="ef-partner-logo" [src]="p.logoUrl" alt="" />
+                  }
+                  <label class="btn btn-outline btn-xs ef-cover-btn" [class.is-disabled]="uploadingPartnerLogo() === i">
+                    {{ uploadingPartnerLogo() === i ? 'Uploading…' : (p.logoUrl ? 'Change logo' : 'Upload logo') }}
+                    <input
+                      type="file"
+                      class="ef-file-input"
+                      [accept]="acceptImages"
+                      [disabled]="uploadingPartnerLogo() === i"
+                      (change)="onPartnerLogoSelected(i, $event)"
+                    />
+                  </label>
+                  @if (p.logoUrl) {
+                    <button class="btn btn-outline btn-xs" type="button" (click)="updatePartner(i, 'logoUrl', '')">Clear logo</button>
+                  }
+                  <button class="btn btn-outline btn-xs btn-danger" type="button" (click)="removePartner(i)">Remove</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="ef-hint">No partners yet.</p>
+            }
+          </div>
+
+          <button
+            type="button"
+            class="ef-collapse-toggle"
+            (click)="showAssociationHtml.set(!showAssociationHtml())"
+            [attr.aria-expanded]="showAssociationHtml()"
+          >
+            <span>Rich association HTML (optional)</span>
+            <span class="ef-seo-chevron" [class.ef-seo-chevron--open]="showAssociationHtml()">›</span>
+          </button>
+          @if (showAssociationHtml()) {
+            <div class="form-group ef-editor-group" style="margin-top: 12px">
+              <p class="ef-hint">Write body only — the page already shows the “In Association With” heading.</p>
+              <app-rich-editor
+                [ngModel]="form().associationHtml"
+                (ngModelChange)="updateField('associationHtml', $event)"
+                name="associationHtml"
+              ></app-rich-editor>
+            </div>
+          }
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="ef-aside">
+        <div class="ef-aside-card section">
+          <p class="ef-aside-heading">Status</p>
+          <div class="ef-status" [class.ef-status--live]="form().isPublished">
+            <span class="ef-status-dot" aria-hidden="true"></span>
+            <span>{{ form().isPublished ? 'Published' : 'Draft' }}</span>
+          </div>
+          <p class="ef-aside-note">
+            {{ form().isPublished
+              ? 'This event is visible on the website.'
+              : 'Only admins can see this until you publish.' }}
+          </p>
+          <label class="ef-check" style="margin-top: 12px">
+            <input
+              type="checkbox"
+              [ngModel]="form().isFeatured"
+              (ngModelChange)="updateField('isFeatured', $event)"
+              name="isFeatured"
+            />
+            Featured
+          </label>
+        </div>
+
+        <div class="ef-aside-card section">
+          <p class="ef-aside-heading">Listing</p>
+          <p class="ef-aside-note" style="margin-bottom: 12px">Events are listed newest first on the website.</p>
+          <div class="form-group">
+            <label class="form-label" for="ef-price">Price display</label>
+            <input
+              id="ef-price"
+              class="form-control"
+              type="text"
+              placeholder="Free / ₹500"
+              [ngModel]="form().priceDisplay"
+              (ngModelChange)="updateField('priceDisplay', $event)"
+              name="priceDisplay"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ef-reg">Registration note</label>
+            <textarea
+              id="ef-reg"
+              class="form-control"
+              rows="3"
+              placeholder="Sidebar note for registration"
+              [ngModel]="form().regNote"
+              (ngModelChange)="updateField('regNote', $event)"
+              name="regNote"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="ef-aside-card section">
+          <button
+            type="button"
+            class="ef-seo-toggle"
+            (click)="showSeo.set(!showSeo())"
+            [attr.aria-expanded]="showSeo()"
+          >
+            <span>Search &amp; sharing</span>
+            <span class="ef-seo-chevron" [class.ef-seo-chevron--open]="showSeo()">›</span>
+          </button>
+          @if (showSeo()) {
+            <div class="ef-seo-body">
+              <div class="form-group">
+                <label class="form-label" for="ef-seotitle">SEO title</label>
+                <input
+                  id="ef-seotitle"
+                  class="form-control"
+                  type="text"
+                  placeholder="Uses event name if empty"
+                  [ngModel]="form().seoTitle"
+                  (ngModelChange)="updateField('seoTitle', $event)"
+                  name="seoTitle"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="ef-metadesc">Meta description</label>
+                <textarea
+                  id="ef-metadesc"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Short description for Google and social previews"
+                  [ngModel]="form().metaDescription"
+                  (ngModelChange)="updateField('metaDescription', $event)"
+                  name="metaDescription"
+                ></textarea>
+              </div>
+            </div>
+          }
+        </div>
+      </aside>
+    </div>
+  }
+</div>

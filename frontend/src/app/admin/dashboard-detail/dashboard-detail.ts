@@ -498,19 +498,9 @@ export class AdminDashboardDetail {
       return null;
     }
     if (cat === 'events') {
-      return {
-        success: true,
-        category: cat,
-        title: 'Events',
-        contentItems: this.events.getAllEvents().map(({ slug, data }) => ({
-          slug,
-          title: data.title,
-          subtitle: data.subtitle,
-          meta: data.date,
-          category: data.type,
-          publicPath: `/event/${slug}`,
-        })),
-      };
+      // Events are now managed dynamically — redirect to the event management page.
+      void this.router.navigateByUrl('/admin/event-management');
+      return null;
     }
     if (cat === 'schemes') {
       return {

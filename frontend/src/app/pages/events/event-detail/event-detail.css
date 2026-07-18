@@ -1,0 +1,97 @@
+.event-hero-banner {
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  color: #fff;
+  border-radius: 14px;
+  padding: 3rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.event-hero-banner__img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+}
+
+.event-hero-banner h2 {
+  position: relative;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.event-hero-banner p,
+.event-hero-meta {
+  position: relative;
+  opacity: 0.95;
+  color: #ececec;
+}
+
+.event-hero-meta {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.event-section {
+  margin-bottom: 2rem;
+}
+
+.event-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.event-highlights {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.event-highlights li {
+  margin-bottom: 0.4rem;
+}
+
+.event-partners {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.event-partner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 100px;
+}
+
+.event-partner img {
+  max-height: 64px;
+  max-width: 140px;
+  object-fit: contain;
+}
+
+.event-rich :where(img) {
+  max-width: 100%;
+  height: auto;
+}
+
+.event-rich :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
+}
+
+.event-rich :where(td, th) {
+  border: 1px solid #ddd;
+  padding: 0.4rem 0.6rem;
+}

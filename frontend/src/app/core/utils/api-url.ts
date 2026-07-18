@@ -59,6 +59,9 @@ export function isAdminApiRequest(url: string): boolean {
     path.startsWith('/api/admin') ||
     path.startsWith('/api/blogs/admin') ||
     path.startsWith('/api/blog-categories/admin') ||
-    path.startsWith('/api/blog-badges/admin')
+    path.startsWith('/api/blog-badges/admin') ||
+    path.startsWith('/api/events/admin') ||
+    path.startsWith('/api/event-categories/admin') ||
+    path.startsWith('/api/event-cities/admin')
   );
 }
