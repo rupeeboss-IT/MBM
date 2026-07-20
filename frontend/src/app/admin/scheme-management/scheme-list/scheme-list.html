@@ -1,0 +1,119 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>Schemes</h2>
+      <div class="muted">Create, edit, publish, and manage schemes shown on the website.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+      <a class="btn" routerLink="/admin/scheme-management/new">+ New Scheme</a>
+    </div>
+  </div>
+
+  <div class="sl-filters">
+    <input
+      type="search"
+      class="sl-search"
+      placeholder="Search name, slug, description…"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+      (keyup.enter)="runSearch()"
+    />
+    <select class="sl-select" [ngModel]="statusFilter()" (ngModelChange)="onStatusChange($event)">
+      <option value="">All statuses</option>
+      <option value="published">Published</option>
+      <option value="draft">Draft</option>
+    </select>
+    <button class="btn btn-outline" type="button" (click)="runSearch()" [disabled]="loading()">Search</button>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading schemes…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="section">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Featured</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (s of pagedSchemes(); track s.schemeId) {
+              <tr>
+                <td>
+                  <div class="sl-title">{{ s.name }}</div>
+                  <div class="sl-summary muted">
+                    {{ s.shortDescription | slice:0:80 }}{{ s.shortDescription.length > 80 ? '…' : '' }}
+                  </div>
+                </td>
+                <td>
+                  <span class="badge badge-neutral">{{ s.categoryName || s.categorySlug }}</span>
+                </td>
+                <td>{{ s.isFeatured ? 'Yes' : 'No' }}</td>
+                <td>
+                  <span [class]="'badge ' + publishBadge(s.isPublished)">
+                    {{ publishLabel(s.isPublished) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="sl-actions">
+                    <a
+                      [href]="'/scheme/' + s.slug"
+                      target="_blank"
+                      class="btn btn-xs btn-outline"
+                      title="View on site"
+                    >View</a>
+                    <button
+                      class="btn btn-xs btn-outline"
+                      type="button"
+                      (click)="goToEdit(s.schemeId)"
+                      [disabled]="actionId() === s.schemeId"
+                    >Edit</button>
+                    <button
+                      class="btn btn-xs"
+                      [class.btn-outline]="s.isPublished"
+                      type="button"
+                      (click)="togglePublish(s)"
+                      [disabled]="actionId() === s.schemeId"
+                    >{{ s.isPublished ? 'Unpublish' : 'Publish' }}</button>
+                    <button
+                      class="btn btn-xs btn-danger"
+                      type="button"
+                      (click)="deleteScheme(s)"
+                      [disabled]="actionId() === s.schemeId"
+                    >Delete</button>
+                  </div>
+                </td>
+              </tr>
+            }
+            @empty {
+              <tr>
+                <td colspan="5" class="admin-empty">
+                  No schemes found. <a routerLink="/admin/scheme-management/new">Create one →</a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-admin-pagination
+        [page]="page()"
+        [pageSize]="pageSize"
+        [total]="total()"
+        (pageChange)="onPageChange($event)"
+      />
+    </div>
+  }
+</div>

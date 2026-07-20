@@ -163,7 +163,8 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
       '/admin/event-management',
       '/admin/event-categories',
       '/admin/event-cities',
-      '/admin-dashboard/detail/schemes',
+      '/admin/scheme-management',
+      '/admin/scheme-categories',
     ],
     sections: [
       {
@@ -189,9 +190,11 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
         ],
       },
       {
-        label: 'Static content',
+        label: 'Scheme management',
         children: [
-          { label: 'Schemes', route: '/admin-dashboard/detail/schemes' },
+          { label: 'All schemes', route: '/admin/scheme-management', exact: true },
+          { label: 'New scheme', route: '/admin/scheme-management/new', exact: true },
+          { label: 'Scheme categories', route: '/admin/scheme-categories', exact: true },
         ],
       },
     ],

@@ -1,6 +1,6 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideServerRendering, withRoutes } from '@angular/ssr';
 import { routes } from './app.routes';
@@ -37,6 +37,7 @@ export const AppServerConfig: ApplicationConfig = {
 
     // HTTP client with the same interceptor chain used in the browser
     provideHttpClient(
+      withFetch(),
       withInterceptors([
         httpErrorInterceptor,
         adminTokenInterceptor,

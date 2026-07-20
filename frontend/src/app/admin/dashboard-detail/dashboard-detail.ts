@@ -6,9 +6,6 @@ import { combineLatest, firstValueFrom, map } from 'rxjs';
 import { AdminListToolbar } from '../../core/components/admin-list-toolbar/admin-list-toolbar';
 import { AdminPagination } from '../../core/components/admin-pagination/admin-pagination';
 import { AuthService } from '../../core/services/auth.service';
-import { ArticlesService } from '../../core/services/articles.service';
-import { EventsService } from '../../core/services/events.service';
-import { SchemesService } from '../../core/services/schemes.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { exportToExcel, type ExportColumn } from '../../core/utils/admin-excel-export';
@@ -110,9 +107,6 @@ export class AdminDashboardDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
-  private readonly articles = inject(ArticlesService);
-  private readonly events = inject(EventsService);
-  private readonly schemes = inject(SchemesService);
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -137,9 +131,7 @@ export class AdminDashboardDetail {
   readonly sortIndicator = sortIndicator;
   readonly title = computed(() => this.data()?.title ?? 'Details');
 
-  readonly isStaticContent = computed(() =>
-    ['events', 'schemes'].includes(this.category()),
-  );
+  readonly isStaticContent = computed(() => false);
 
   readonly filteredContentItems = computed(() => {
     const items = this.filterList(this.data()?.contentItems ?? [], [
@@ -503,19 +495,9 @@ export class AdminDashboardDetail {
       return null;
     }
     if (cat === 'schemes') {
-      return {
-        success: true,
-        category: cat,
-        title: 'Government Schemes',
-        contentItems: this.schemes.getAllSchemes().map(({ slug, data }) => ({
-          slug,
-          title: data.title,
-          subtitle: data.subtitle,
-          meta: data.crumb,
-          category: 'Scheme',
-          publicPath: `/scheme/${slug}`,
-        })),
-      };
+      // Schemes are now managed dynamically — redirect to the scheme management page.
+      void this.router.navigateByUrl('/admin/scheme-management');
+      return null;
     }
     return null;
   }

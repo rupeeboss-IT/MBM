@@ -1,0 +1,396 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>{{ mode() === 'create' ? 'New scheme' : 'Edit scheme' }}</h2>
+      <div class="muted">Fill in the details visitors see on the scheme page and listing cards.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn btn-outline" type="button" (click)="saveAsDraft()" [disabled]="saving() || loading()">
+        Save draft
+      </button>
+      <button class="btn" type="button" (click)="saveAndPublish()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : (mode() === 'create' ? 'Publish' : 'Save &amp; publish') }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading scheme…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="sf-layout">
+      <div class="sf-main">
+        <!-- Basic -->
+        <section class="sf-section section">
+          <h3 class="sf-section-title">Basic</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="sf-name">Name <span class="req">*</span></label>
+            <input
+              id="sf-name"
+              class="form-control sf-title-input"
+              type="text"
+              placeholder="Scheme name"
+              [ngModel]="form().name"
+              (ngModelChange)="updateField('name', $event)"
+              (blur)="onNameBlur()"
+              name="name"
+            />
+          </div>
+
+          <div class="sf-slug-row">
+            <span class="sf-slug-prefix">/scheme/</span>
+            <input
+              class="form-control sf-slug-input"
+              type="text"
+              placeholder="url-slug"
+              [ngModel]="form().slug"
+              (ngModelChange)="updateField('slug', $event)"
+              name="slug"
+              [disabled]="mode() === 'edit'"
+              aria-label="URL slug"
+            />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="sf-crumb">Crumb</label>
+              <input
+                id="sf-crumb"
+                class="form-control"
+                type="text"
+                placeholder="Breadcrumb label"
+                [ngModel]="form().crumb"
+                (ngModelChange)="updateField('crumb', $event)"
+                name="crumb"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sf-tagline">Tagline</label>
+              <input
+                id="sf-tagline"
+                class="form-control"
+                type="text"
+                placeholder="Short subtitle"
+                [ngModel]="form().tagline"
+                (ngModelChange)="updateField('tagline', $event)"
+                name="tagline"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sf-short">Short description</label>
+            <textarea
+              id="sf-short"
+              class="form-control"
+              rows="2"
+              placeholder="Listing card copy"
+              [ngModel]="form().shortDescription"
+              (ngModelChange)="updateField('shortDescription', $event)"
+              name="shortDescription"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sf-category">Category <span class="req">*</span></label>
+            <select
+              id="sf-category"
+              class="form-control"
+              [ngModel]="form().categorySlug"
+              (ngModelChange)="onCategoryChange($event)"
+              name="categorySlug"
+            >
+              @if (!categories().length) {
+                <option value="">No categories — add one first</option>
+              }
+              @for (c of categories(); track c.slug) {
+                <option [value]="c.slug">{{ c.name }}</option>
+              }
+            </select>
+            <p class="sf-hint">
+              Manage in <a routerLink="/admin/scheme-categories">Scheme categories</a>.
+            </p>
+          </div>
+        </section>
+
+        <!-- Badges -->
+        <section class="sf-section section">
+          <h3 class="sf-section-title">Badges</h3>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="sf-primary-badge">Primary badge text</label>
+              <input
+                id="sf-primary-badge"
+                class="form-control"
+                type="text"
+                [value]="categoryName(form().categorySlug)"
+                readonly
+                tabindex="-1"
+                aria-readonly="true"
+              />
+              <p class="sf-hint">Always matches the selected category name.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sf-primary-class">Primary badge class</label>
+              <select
+                id="sf-primary-class"
+                class="form-control"
+                [ngModel]="form().primaryBadgeClass"
+                (ngModelChange)="updateField('primaryBadgeClass', $event)"
+                name="primaryBadgeClass"
+              >
+                @for (c of badgeClasses; track c) {
+                  <option [value]="c">{{ c }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="sf-secondary-badge">Secondary badge text</label>
+              <input
+                id="sf-secondary-badge"
+                class="form-control"
+                type="text"
+                placeholder="e.g. New"
+                [ngModel]="form().secondaryBadgeText"
+                (ngModelChange)="updateField('secondaryBadgeText', $event)"
+                name="secondaryBadgeText"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sf-secondary-class">Secondary badge class</label>
+              <select
+                id="sf-secondary-class"
+                class="form-control"
+                [ngModel]="form().secondaryBadgeClass"
+                (ngModelChange)="updateField('secondaryBadgeClass', $event)"
+                name="secondaryBadgeClass"
+              >
+                @for (c of badgeClasses; track c) {
+                  <option [value]="c">{{ c }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Home card -->
+        <section class="sf-section section">
+          <h3 class="sf-section-title">Home card</h3>
+          <p class="sf-hint" style="margin-bottom: 1rem">
+            Shown on the homepage in <strong>Central &amp; State Schemes for MSMEs</strong> when the scheme is
+            <strong>Featured</strong>.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="sf-home-title">Home title</label>
+            <input
+              id="sf-home-title"
+              class="form-control"
+              type="text"
+              placeholder="Title shown on homepage card"
+              [ngModel]="form().homeTitle"
+              (ngModelChange)="updateField('homeTitle', $event)"
+              name="homeTitle"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sf-home-desc">Home description</label>
+            <textarea
+              id="sf-home-desc"
+              class="form-control"
+              rows="3"
+              placeholder="Paragraph shown on the homepage scheme card"
+              [ngModel]="form().homeDescription"
+              (ngModelChange)="updateField('homeDescription', $event)"
+              name="homeDescription"
+            ></textarea>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="sf-home-badge">Home badge text</label>
+              <input
+                id="sf-home-badge"
+                class="form-control"
+                type="text"
+                [ngModel]="form().homeBadgeText"
+                (ngModelChange)="updateField('homeBadgeText', $event)"
+                name="homeBadgeText"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sf-home-class">Home badge class</label>
+              <select
+                id="sf-home-class"
+                class="form-control"
+                [ngModel]="form().homeBadgeClass"
+                (ngModelChange)="updateField('homeBadgeClass', $event)"
+                name="homeBadgeClass"
+              >
+                @for (c of badgeClasses; track c) {
+                  <option [value]="c">{{ c }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Content -->
+        <section class="sf-section section">
+          <h3 class="sf-section-title">Content</h3>
+          <div class="form-group sf-editor-group">
+            <label class="form-label">Scheme content</label>
+            <p class="sf-hint">Main body shown on the scheme detail page.</p>
+            <app-rich-editor
+              [ngModel]="form().contentHtml"
+              (ngModelChange)="updateField('contentHtml', $event)"
+              name="contentHtml"
+            ></app-rich-editor>
+          </div>
+        </section>
+
+        <!-- Key Benefits -->
+        <section class="sf-section section">
+          <div class="sf-section-head">
+            <h3 class="sf-section-title">Key Benefits (detail sidebar)</h3>
+            <button class="btn btn-outline btn-xs" type="button" (click)="addBenefit()">+ Add</button>
+          </div>
+          <div class="sf-dyn-list">
+            @for (b of benefits(); track $index; let i = $index) {
+              <div class="sf-dyn-row">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Benefit text"
+                  [ngModel]="b.text"
+                  (ngModelChange)="updateBenefit(i, $event)"
+                  [name]="'benefit-' + i"
+                />
+                <div class="sf-dyn-actions">
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveBenefit(i, -1)" [disabled]="i === 0">↑</button>
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveBenefit(i, 1)" [disabled]="i === benefits().length - 1">↓</button>
+                  <button class="btn btn-outline btn-xs btn-danger" type="button" (click)="removeBenefit(i)">Remove</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="sf-hint">No benefits yet. Add items for the detail sidebar.</p>
+            }
+          </div>
+        </section>
+
+        <!-- Card highlights -->
+        <section class="sf-section section">
+          <div class="sf-section-head">
+            <h3 class="sf-section-title">Listing card bullets</h3>
+            <button class="btn btn-outline btn-xs" type="button" (click)="addCardHighlight()">+ Add</button>
+          </div>
+          <div class="sf-dyn-list">
+            @for (h of cardHighlights(); track $index; let i = $index) {
+              <div class="sf-dyn-row">
+                <input
+                  class="form-control"
+                  type="text"
+                  placeholder="Card bullet text"
+                  [ngModel]="h.text"
+                  (ngModelChange)="updateCardHighlight(i, $event)"
+                  [name]="'card-highlight-' + i"
+                />
+                <div class="sf-dyn-actions">
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveCardHighlight(i, -1)" [disabled]="i === 0">↑</button>
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveCardHighlight(i, 1)" [disabled]="i === cardHighlights().length - 1">↓</button>
+                  <button class="btn btn-outline btn-xs btn-danger" type="button" (click)="removeCardHighlight(i)">Remove</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="sf-hint">No listing bullets yet. Add short points for scheme cards.</p>
+            }
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sf-aside">
+        <div class="sf-aside-card section">
+          <p class="sf-aside-heading">Status</p>
+          <div class="sf-status" [class.sf-status--live]="form().isPublished">
+            <span class="sf-status-dot" aria-hidden="true"></span>
+            <span>{{ form().isPublished ? 'Published' : 'Draft' }}</span>
+          </div>
+          <p class="sf-aside-note">
+            {{ form().isPublished
+              ? 'This scheme is visible on the website.'
+              : 'Only admins can see this until you publish.' }}
+          </p>
+          <label class="sf-check" style="margin-top: 12px">
+            <input
+              type="checkbox"
+              [ngModel]="form().isFeatured"
+              (ngModelChange)="updateField('isFeatured', $event)"
+              name="isFeatured"
+            />
+            Featured
+          </label>
+          <div class="form-group" style="margin-top: 14px; margin-bottom: 0">
+            <label class="form-label" for="sf-sort">Sort order</label>
+            <input
+              id="sf-sort"
+              class="form-control"
+              type="number"
+              min="0"
+              [ngModel]="form().sortOrder"
+              (ngModelChange)="updateField('sortOrder', +$event)"
+              name="sortOrder"
+            />
+          </div>
+        </div>
+
+        <div class="sf-aside-card section">
+          <button
+            type="button"
+            class="sf-seo-toggle"
+            (click)="showSeo.set(!showSeo())"
+            [attr.aria-expanded]="showSeo()"
+          >
+            <span>Search &amp; sharing</span>
+            <span class="sf-seo-chevron" [class.sf-seo-chevron--open]="showSeo()">›</span>
+          </button>
+          @if (showSeo()) {
+            <div class="sf-seo-body">
+              <div class="form-group">
+                <label class="form-label" for="sf-seotitle">SEO title</label>
+                <input
+                  id="sf-seotitle"
+                  class="form-control"
+                  type="text"
+                  placeholder="Uses scheme name if empty"
+                  [ngModel]="form().seoTitle"
+                  (ngModelChange)="updateField('seoTitle', $event)"
+                  name="seoTitle"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="sf-metadesc">Meta description</label>
+                <textarea
+                  id="sf-metadesc"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Short description for Google and social previews"
+                  [ngModel]="form().metaDescription"
+                  (ngModelChange)="updateField('metaDescription', $event)"
+                  name="metaDescription"
+                ></textarea>
+              </div>
+            </div>
+          }
+        </div>
+      </aside>
+    </div>
+  }
+</div>

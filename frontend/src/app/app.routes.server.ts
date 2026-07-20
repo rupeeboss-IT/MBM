@@ -63,6 +63,12 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'admin/event-cities',                             renderMode: RenderMode.Client },
   { path: 'admin/event-cities/new',                         renderMode: RenderMode.Client },
   { path: 'admin/event-cities/edit/:cityId',                renderMode: RenderMode.Client },
+  { path: 'admin/scheme-management',                        renderMode: RenderMode.Client },
+  { path: 'admin/scheme-management/new',                    renderMode: RenderMode.Client },
+  { path: 'admin/scheme-management/edit/:schemeId',         renderMode: RenderMode.Client },
+  { path: 'admin/scheme-categories',                        renderMode: RenderMode.Client },
+  { path: 'admin/scheme-categories/new',                    renderMode: RenderMode.Client },
+  { path: 'admin/scheme-categories/edit/:categoryId',       renderMode: RenderMode.Client },
 
   // ── Legacy redirect with param — keep as Client (redirects to service/:slug) ─
   { path: 'services/:slug', renderMode: RenderMode.Client },
@@ -90,20 +96,8 @@ export const serverRoutes: ServerRoute[] = [
     },
   },
 
-  {
-    path: 'scheme/:slug',
-    renderMode: RenderMode.Prerender,
-    async getPrerenderParams() {
-      return [
-        { slug: 'pmegp' },
-        { slug: 'cgtmse' },
-        { slug: 'mudra' },
-        { slug: 'digital-msme' },
-        { slug: 'trade-fair' },
-        { slug: 'design-clinic' },
-      ];
-    },
-  },
+  // Schemes are dynamic (database-backed). Client render like events/articles.
+  { path: 'scheme/:slug', renderMode: RenderMode.Client },
 
   // Events are dynamic (database-backed). Client render like articles.
   { path: 'event/:slug', renderMode: RenderMode.Client },

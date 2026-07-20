@@ -578,41 +578,13 @@
         <p>Unlock subsidies, grants and government support worth crores for your business</p>
       </div>
       <div class="schemes-grid">
-        <div class="scheme-card" [routerLink]="['/scheme','pmegp']">
-          <div class="scheme-badge badge badge-green">Central</div>
-          <h3>PMEGP Scheme</h3>
-          <p>Prime Minister's Employment Generation Programme — up to 35% subsidy for new enterprises. Max project cost
-            ₹50 Lakh for manufacturing.</p>
-        </div>
-        <div class="scheme-card" [routerLink]="['/scheme','cgtmse']">
-          <div class="scheme-badge badge badge-blue">Credit</div>
-          <h3>CGTMSE Scheme</h3>
-          <p>Collateral-free loans up to ₹2 Crore for MSMEs under Credit Guarantee Fund Trust. No third-party guarantee
-            required.</p>
-        </div>
-        <div class="scheme-card" [routerLink]="['/scheme','mudra']">
-          <div class="scheme-badge badge badge-red">Central</div>
-          <h3>MUDRA Yojana</h3>
-          <p>Loans up to ₹10 Lakh under Shishu, Kishore and Tarun categories for micro enterprises and small businesses.
-          </p>
-        </div>
-        <div class="scheme-card" [routerLink]="['/scheme','digital-msme']">
-          <div class="scheme-badge badge badge-orange">Technology</div>
-          <h3>Digital MSME Scheme</h3>
-          <p>Cloud computing, ERP and digital solutions with government subsidy under the Digital MSME Scheme.</p>
-        </div>
-        <div class="scheme-card" [routerLink]="['/scheme','trade-fair']">
-          <div class="scheme-badge badge badge-green">Marketing</div>
-          <h3>Trade Fair Subsidy</h3>
-          <p>Government subsidized participation in national and international trade fairs for MSME exporters and
-            manufacturers.</p>
-        </div>
-        <div class="scheme-card" [routerLink]="['/scheme','design-clinic']">
-          <div class="scheme-badge badge badge-blue">Design</div>
-          <h3>Design Clinic Scheme</h3>
-          <p>50–75% subsidy for design consultancy services to improve product quality, packaging and marketability of
-            MSME products.</p>
-        </div>
+        @for (sc of homeSchemes(); track sc.slug) {
+          <div class="scheme-card" [routerLink]="['/scheme', sc.slug]">
+            <div [class]="'scheme-badge ' + schemeBadgeClass(sc.homeBadgeClass)">{{ sc.homeBadgeText }}</div>
+            <h3>{{ sc.homeTitle }}</h3>
+            <p>{{ sc.homeDescription }}</p>
+          </div>
+        }
       </div>
       <div class="text-center">
         <a class="btn-outline" routerLink="/schemes">View All Schemes</a>

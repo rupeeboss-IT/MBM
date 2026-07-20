@@ -3,19 +3,42 @@
 <div class="page-header"><div class="container"><h1>Government Schemes & Subsidies</h1><p>Central and state government schemes worth crores for MSME growth</p></div></div>
 <section class="section"><div class="container">
   <div class="zone-filter">
-    <button class="filter-btn" [class.active]="active()==='all'" (click)="setFilter('all')">All Schemes</button>
-    <button class="filter-btn" [class.active]="active()==='central'" (click)="setFilter('central')">Central Govt</button>
-    <button class="filter-btn" [class.active]="active()==='credit'" (click)="setFilter('credit')">Credit</button>
-    <button class="filter-btn" [class.active]="active()==='technology'" (click)="setFilter('technology')">Technology</button>
-    <button class="filter-btn" [class.active]="active()==='marketing'" (click)="setFilter('marketing')">Marketing</button>
+    <button class="filter-btn" [class.active]="activeCategory()==='all'" (click)="setCategory('all')">All Schemes</button>
+    @for (cat of categories(); track cat.slug) {
+      <button class="filter-btn" [class.active]="activeCategory()===cat.slug" (click)="setCategory(cat.slug)">{{ cat.name }}</button>
+    }
   </div>
-  <div class="schemes-grid-2" id="schemesGrid">
-    <div class="scheme-detail-card" data-cat="central" [style.display]="show('central') ? 'block' : 'none'" [routerLink]="['/scheme','pmegp']"><div class="scheme-meta"><span class="badge badge-green">Central Govt</span><span class="badge badge-orange">Up to 35% subsidy</span></div><h3>PMEGP — Prime Minister's Employment Generation Programme</h3><p>Financial assistance in the form of subsidy for setting up new micro enterprises in non-farm sector. Subsidy up to 25% in urban areas and 35% in rural areas.</p><ul class="scheme-benefits"><li>Max project cost: ₹50 Lakh (manufacturing)</li><li>Max project cost: ₹20 Lakh (service)</li><li>Beneficiary contribution: 5-10% only</li></ul></div>
-    <div class="scheme-detail-card" data-cat="credit" [style.display]="show('credit') ? 'block' : 'none'" [routerLink]="['/scheme','cgtmse']"><div class="scheme-meta"><span class="badge badge-blue">Credit Guarantee</span><span class="badge badge-green">Collateral Free</span></div><h3>CGTMSE — Credit Guarantee Fund Trust for MSMEs</h3><p>Provides collateral-free loans up to ₹2 Crore to micro and small enterprises. No third-party guarantee required from the borrower.</p><ul class="scheme-benefits"><li>Loans up to ₹2 Crore without collateral</li><li>Covers manufacturing and service sectors</li><li>Both new and existing enterprises eligible</li></ul></div>
-    <div class="scheme-detail-card" data-cat="central" [style.display]="show('central') ? 'block' : 'none'" [routerLink]="['/scheme','mudra']"><div class="scheme-meta"><span class="badge badge-red">Central Govt</span><span class="badge badge-orange">Up to ₹10 Lakh</span></div><h3>MUDRA Yojana — Micro Units Development & Refinance Agency</h3><p>Provides loans up to ₹10 Lakh to non-corporate, non-farm small and micro enterprises under three categories: Shishu, Kishore, and Tarun.</p><ul class="scheme-benefits"><li>Shishu: Up to ₹50,000</li><li>Kishore: ₹50,000 to ₹5 Lakh</li><li>Tarun: ₹5 Lakh to ₹10 Lakh</li></ul></div>
-    <div class="scheme-detail-card" data-cat="technology" [style.display]="show('technology') ? 'block' : 'none'" [routerLink]="['/scheme','digital-msme']"><div class="scheme-meta"><span class="badge badge-blue">Technology</span><span class="badge badge-green">Subsidy Available</span></div><h3>Digital MSME Scheme</h3><p>Promotes adoption of Information and Communication Technology (ICT) tools by MSMEs. Provides subsidized cloud services and digital transformation support.</p><ul class="scheme-benefits"><li>Subsidized cloud computing services</li><li>ERP and digital solution support</li><li>Training and capacity building</li></ul></div>
-    <div class="scheme-detail-card" data-cat="marketing" [style.display]="show('marketing') ? 'block' : 'none'" [routerLink]="['/scheme','trade-fair']"><div class="scheme-meta"><span class="badge badge-orange">Marketing</span><span class="badge badge-green">50% subsidy</span></div><h3>Trade Fair Subsidy Scheme</h3><p>Government assistance for MSME participation in national and international trade fairs, exhibitions and buyer-seller meets to promote their products globally.</p><ul class="scheme-benefits"><li>50% subsidy on stall charges</li><li>Domestic and international trade fairs</li><li>Exporter MSMEs especially eligible</li></ul></div>
-    <div class="scheme-detail-card" data-cat="marketing" [style.display]="show('marketing') ? 'block' : 'none'" [routerLink]="['/scheme','design-clinic']"><div class="scheme-meta"><span class="badge badge-blue">Design</span><span class="badge badge-orange">Up to 75% subsidy</span></div><h3>Design Clinic Scheme</h3><p>Brings Design expertise to Indian MSMEs for improving design capability and to provide access to expert design solutions to enhance product quality and market reach.</p><ul class="scheme-benefits"><li>50-75% subsidy on design consultancy</li><li>Product design and packaging</li><li>Manufacturing and service sectors</li></ul></div>
-  </div>
+
+  @if (loading()) {
+    <p class="muted" style="padding:1.5rem 0">Loading schemes…</p>
+  } @else if (error()) {
+    <p class="muted" style="padding:1.5rem 0;color:#b91c1c">{{ error() }}</p>
+  } @else {
+    <div class="schemes-grid-2" id="schemesGrid">
+      @for (sc of schemes(); track sc.slug) {
+        <div class="scheme-detail-card" [attr.data-cat]="sc.categorySlug" [routerLink]="['/scheme', sc.slug]">
+          <div class="scheme-meta">
+            @if (sc.primaryBadgeText) {
+              <span [class]="badgeClass(sc.primaryBadgeClass)">{{ sc.primaryBadgeText }}</span>
+            }
+            @if (sc.secondaryBadgeText) {
+              <span [class]="badgeClass(sc.secondaryBadgeClass)">{{ sc.secondaryBadgeText }}</span>
+            }
+          </div>
+          <h3>{{ sc.title }}</h3>
+          <p>{{ sc.shortDescription }}</p>
+          @if (sc.cardHighlights.length) {
+            <ul class="scheme-benefits">
+              @for (h of sc.cardHighlights; track h) {
+                <li>{{ h }}</li>
+              }
+            </ul>
+          }
+        </div>
+      } @empty {
+        <p class="muted" style="padding:1.5rem 0">No schemes found in this category.</p>
+      }
+    </div>
+  }
 </div></section>
 </div><!-- /schemes -->

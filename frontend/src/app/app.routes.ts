@@ -63,6 +63,10 @@ import { EventCategoryList } from './admin/event-management/event-category-list/
 import { EventCategoryForm } from './admin/event-management/event-category-form/event-category-form';
 import { EventCityList } from './admin/event-management/event-city-list/event-city-list';
 import { EventCityForm } from './admin/event-management/event-city-form/event-city-form';
+import { SchemeList } from './admin/scheme-management/scheme-list/scheme-list';
+import { SchemeForm } from './admin/scheme-management/scheme-form/scheme-form';
+import { SchemeCategoryList } from './admin/scheme-management/scheme-category-list/scheme-category-list';
+import { SchemeCategoryForm } from './admin/scheme-management/scheme-category-form/scheme-category-form';
 
 export const routes: Routes = [
     {
@@ -597,6 +601,40 @@ export const routes: Routes = [
     {
         path: 'admin/event-cities/edit/:cityId',
         component: EventCityForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/scheme-management',
+        component: SchemeList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/scheme-management/new',
+        component: SchemeForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/scheme-management/edit/:schemeId',
+        component: SchemeForm,
+        canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/scheme-categories',
+        component: SchemeCategoryList,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/scheme-categories/new',
+        component: SchemeCategoryForm,
+        canActivate: [adminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/scheme-categories/edit/:categoryId',
+        component: SchemeCategoryForm,
         canActivate: [adminGuard],
     },
     {

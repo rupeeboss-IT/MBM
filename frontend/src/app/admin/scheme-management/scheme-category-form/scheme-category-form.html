@@ -1,0 +1,111 @@
+<div class="admin-wrap">
+  <div class="admin-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>{{ mode() === 'create' ? 'New scheme category' : 'Edit scheme category' }}</h2>
+      <div class="muted">
+        Used for scheme grouping and the filter tabs on <code>/schemes</code>.
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn" type="button" (click)="save()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : 'Save category' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="scf-layout section">
+      <div class="scf-main">
+        <div class="form-group">
+          <label class="form-label" for="scf-name">Name <span class="req">*</span></label>
+          <input
+            id="scf-name"
+            class="form-control"
+            type="text"
+            placeholder="Business"
+            [ngModel]="form().name"
+            (ngModelChange)="updateField('name', $event)"
+            (blur)="onNameBlur()"
+            name="name"
+          />
+          <p class="scf-hint">Shown on /schemes filter tabs and in the scheme Category dropdown.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="scf-slug">Slug <span class="req">*</span></label>
+          <input
+            id="scf-slug"
+            class="form-control"
+            type="text"
+            placeholder="business"
+            [ngModel]="form().slug"
+            (ngModelChange)="updateField('slug', $event)"
+            name="slug"
+            [disabled]="mode() === 'edit'"
+          />
+          <p class="scf-hint">Internal key stored on schemes. Lowercase letters, numbers, and hyphens only.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="scf-short">Short description</label>
+          <textarea
+            id="scf-short"
+            class="form-control"
+            rows="2"
+            placeholder="Optional blurb for filter or admin context"
+            [ngModel]="form().shortDescription"
+            (ngModelChange)="updateField('shortDescription', $event)"
+            name="shortDescription"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="scf-icon">Icon URL</label>
+          <input
+            id="scf-icon"
+            class="form-control"
+            type="text"
+            placeholder="https://… (optional)"
+            [ngModel]="form().iconUrl"
+            (ngModelChange)="updateField('iconUrl', $event)"
+            name="iconUrl"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="scf-sort">Sort order</label>
+            <input
+              id="scf-sort"
+              class="form-control"
+              type="number"
+              min="0"
+              [ngModel]="form().sortOrder"
+              (ngModelChange)="updateField('sortOrder', +$event)"
+              name="sortOrder"
+            />
+          </div>
+          <div class="form-group scf-checks">
+            <label class="scf-check">
+              <input type="checkbox" [ngModel]="form().isActive" (ngModelChange)="updateField('isActive', $event)" name="isActive" />
+              Active
+            </label>
+            <label class="scf-check">
+              <input type="checkbox" [ngModel]="form().showInFilter" (ngModelChange)="updateField('showInFilter', $event)" name="showInFilter" />
+              Show as /schemes filter tab
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -16,8 +16,6 @@ import { AdminSessionService } from '../../core/services/admin-session.service';
 import { ToastService } from '../../core/services/toast.service';
 import { API_USER_MESSAGES } from '../../core/utils/api-user-messages';
 import { getHttpErrorMessage } from '../../core/utils/http-error-message';
-import { CONTENT_COUNTS } from '../../data/content-counts';
-
 type DashboardCounts = {
   success: boolean;
   message?: string;
@@ -80,12 +78,7 @@ export class AdminDashboard {
           dateTo: this.dateTo() || undefined,
         }),
       )) as DashboardCounts;
-      this.counts.set({
-        ...counts,
-        // blogs count now comes from the DB via the API — no override needed
-        events: CONTENT_COUNTS.events,
-        schemes: CONTENT_COUNTS.schemes,
-      });
+      this.counts.set(counts);
       try {
         const um = await firstValueFrom(this.userMgmt.stats());
         if (um?.success && um.stats) this.userStats.set(um.stats);

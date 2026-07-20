@@ -415,6 +415,8 @@ public sealed class AdminController : ControllerBase
         var reportsGenerated = await reportsQ.CountAsync(ct);
 
         var blogCount = await _db.Blogs.AsNoTracking().CountAsync(b => b.IsPublished, ct);
+        var eventCount = await _db.Events.AsNoTracking().CountAsync(e => e.IsPublished, ct);
+        var schemeCount = await _db.Schemes.AsNoTracking().CountAsync(s => s.IsPublished, ct);
 
         var plans = await _db.Plans.AsNoTracking().CountAsync(p => p.IsActive, ct);
 
@@ -461,8 +463,8 @@ public sealed class AdminController : ControllerBase
             ExpiredSubscriptions: expiredSubscriptions,
             ReportsGenerated: reportsGenerated,
             Blogs: blogCount,
-            Events: ContentCatalog.Events,
-            Schemes: ContentCatalog.Schemes,
+            Events: eventCount,
+            Schemes: schemeCount,
             SchemeNews: 0,
             SuccessStories: 0,
             Offers: 0,

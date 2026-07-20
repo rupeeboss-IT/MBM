@@ -15,6 +15,7 @@ import { getHttpErrorMessage } from '../../core/utils/http-error-message';
 import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.util';
 import { RecaptchaService } from '../../core/services/recaptcha.service';
 import { EventsService, type PublicEvent } from '../../core/services/events.service';
+import { SchemesService, type PublicScheme } from '../../core/services/schemes.service';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,7 @@ export class Home implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly recaptcha = inject(RecaptchaService);
   private readonly eventsApi = inject(EventsService);
+  private readonly schemesApi = inject(SchemesService);
   readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly planCheckout = inject(MembershipPlanCheckoutService);
 
@@ -35,6 +37,7 @@ export class Home implements OnInit {
   readonly lightboxSrc = signal<string | null>(null);
   readonly lightboxAlt = signal('');
   readonly homeEvents = signal<PublicEvent[]>([]);
+  readonly homeSchemes = signal<PublicScheme[]>([]);
 
   readonly callbackModalOpen = signal(false);
   readonly callbackSubmitting = signal(false);
@@ -58,17 +61,48 @@ export class Home implements OnInit {
   ngOnInit(): void {
     void this.schemeDiscovery.tryResumeOnPageLoad();
     void this.loadHomeEvents();
+    void this.loadHomeSchemes();
   }
 
   private async loadHomeEvents() {
     try {
-      const res = await firstValueFrom(
+      const featured = await firstValueFrom(
+        this.eventsApi.getPublished({ featured: true, page: 1, pageSize: 6 }),
+      );
+      if (featured.events.length) {
+        this.homeEvents.set(featured.events.slice(0, 3));
+        return;
+      }
+      const all = await firstValueFrom(
         this.eventsApi.getPublished({ page: 1, pageSize: 6 }),
       );
-      this.homeEvents.set(res.events.slice(0, 3));
+      this.homeEvents.set(all.events.slice(0, 3));
     } catch {
       this.homeEvents.set([]);
     }
+  }
+
+  private async loadHomeSchemes() {
+    try {
+      const featured = await firstValueFrom(
+        this.schemesApi.getPublished({ featured: true, page: 1, pageSize: 6 }),
+      );
+      if (featured.schemes.length) {
+        this.homeSchemes.set(featured.schemes.slice(0, 6));
+        return;
+      }
+      const all = await firstValueFrom(
+        this.schemesApi.getPublished({ page: 1, pageSize: 6 }),
+      );
+      this.homeSchemes.set(all.schemes.slice(0, 6));
+    } catch {
+      this.homeSchemes.set([]);
+    }
+  }
+
+  schemeBadgeClass(cls: string | null | undefined): string {
+    const c = (cls || 'badge-green').trim();
+    return c.startsWith('badge ') ? c : `badge ${c}`;
   }
 
   eventMetaLine(ev: PublicEvent): string {

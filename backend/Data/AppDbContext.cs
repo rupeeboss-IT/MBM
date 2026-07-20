@@ -46,6 +46,10 @@ namespace RB_Website_API.Data
         public DbSet<Models.Event> Events => Set<Models.Event>();
         public DbSet<Models.EventHighlight> EventHighlights => Set<Models.EventHighlight>();
         public DbSet<Models.EventPartner> EventPartners => Set<Models.EventPartner>();
+        public DbSet<Models.SchemeCategory> SchemeCategories => Set<Models.SchemeCategory>();
+        public DbSet<Models.Scheme> Schemes => Set<Models.Scheme>();
+        public DbSet<Models.SchemeBenefit> SchemeBenefits => Set<Models.SchemeBenefit>();
+        public DbSet<Models.SchemeCardHighlight> SchemeCardHighlights => Set<Models.SchemeCardHighlight>();
 
         public new DbSet<T> Set<T>() where T : class
         {
@@ -169,6 +173,27 @@ namespace RB_Website_API.Data
                 e.HasMany(x => x.Partners)
                     .WithOne(p => p.Event)
                     .HasForeignKey(p => p.EventId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Models.SchemeCategory>(e =>
+            {
+                e.ToTable("SchemeCategories", "dbo");
+                e.HasIndex(c => c.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<Models.Scheme>(e =>
+            {
+                e.ToTable("Schemes", "dbo");
+                e.HasIndex(x => x.Slug).IsUnique();
+                e.Property(x => x.ContentHtml).HasColumnType("nvarchar(max)");
+                e.HasMany(x => x.Benefits)
+                    .WithOne(b => b.Scheme)
+                    .HasForeignKey(b => b.SchemeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                e.HasMany(x => x.CardHighlights)
+                    .WithOne(h => h.Scheme)
+                    .HasForeignKey(h => h.SchemeId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
         }
