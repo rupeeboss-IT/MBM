@@ -7,9 +7,9 @@
   aria-label="Close menu"
   tabindex="-1"
 ></button>
-<nav class="navbar" id="navbar" [attr.aria-label]="showAdminNav() ? 'Admin navigation' : 'Main navigation'">
+<nav class="navbar" id="navbar" aria-label="Main navigation">
   <div class="nav-container">
-    <a class="brand" [routerLink]="showAdminNav() ? '/admin-dashboard' : '/home'">
+    <a class="brand" routerLink="/home">
       <img class="brand-logo brand-logo--nav" [src]="logoSrc" [alt]="logoAlt" width="64" height="64" />
     </a>
     <button
@@ -23,182 +23,95 @@
     >
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-links" [class.nav-links--admin]="showAdminNav()" id="navLinks" [class.open]="mobileMenuOpen()">
-      @if (showAdminNav()) {
-        <div class="nav-links__primary">
-          <a
-            class="nav-admin-link"
-            routerLink="/admin-dashboard"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="closeMobileMenu()"
-          >
-            Dashboard
-          </a>
-
-          @for (group of adminMenuGroups; track group.id) {
-            <div
-              class="dropdown"
-              [class.open]="adminDropdownOpen(group.id)"
-              [class.active-section]="isAdminGroupActive(group)"
-            >
-              <button
-                type="button"
-                class="dropdown-trigger dropdown-trigger--admin"
-                (click)="toggleAdminDropdown(group.id); $event.stopPropagation()"
-                [attr.aria-expanded]="adminDropdownOpen(group.id)"
-              >
-                {{ group.label }}
-                <span class="nav-caret" aria-hidden="true">▾</span>
-              </button>
-              @if (adminDropdownOpen(group.id)) {
-                <div class="dropdown-menu dropdown-menu--tree">
-                  @for (section of group.sections; track section.label) {
-                    <div class="admin-nav-tree__branch">
-                      <div class="admin-nav-tree__section">{{ section.label }}</div>
-                      <div class="admin-nav-tree__children">
-                        @for (item of section.children; track item.route) {
-                          @if (!item.superAdminOnly || isSuperAdmin()) {
-                            <a
-                              class="admin-nav-tree__link"
-                              [routerLink]="item.route"
-                              [queryParams]="item.queryParams ?? null"
-                              routerLinkActive="active"
-                              [routerLinkActiveOptions]="item.pathsSubset ? { paths: 'subset' } : { exact: item.exact ?? false }"
-                              (click)="closeMobileMenu(); closeAdminDropdown(group.id)"
-                            >
-                              {{ item.label }}
-                            </a>
-                          }
-                        }
-                      </div>
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-          }
+    <div class="nav-links" id="navLinks" [class.open]="mobileMenuOpen()">
+      <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
+      <a routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">About</a>
+      <div class="dropdown" [class.open]="servicesMenuOpen()">
+        <button type="button" class="dropdown-trigger" (click)="toggleServicesMenu(); $event.stopPropagation()" [attr.aria-expanded]="servicesMenuOpen()">Services ▾</button>
+        <div class="dropdown-menu" *ngIf="servicesMenuOpen()">
+          <a routerLink="/our-services" (click)="closeMobileMenu()">All 360° Services</a>
+          <div class="dd-sep"></div>
+          <a routerLink="/credit-rebuild" (click)="closeMobileMenu()">Credit Repair</a>
+          <a routerLink="/service/msme-loans-finance" (click)="closeMobileMenu()">MSME Loans</a>
+          <a routerLink="/service/company-formation" (click)="closeMobileMenu()">Company Formation</a>
+          <a routerLink="/service/government-subsidies" (click)="closeMobileMenu()">Govt. Subsidies</a>
+          <a routerLink="/service/technology-solutions" (click)="closeMobileMenu()">Technology</a>
+          <a routerLink="/service/sales-digital-marketing" (click)="closeMobileMenu()">Digital Marketing</a>
+          <a routerLink="/service/ipo-investment-banking" (click)="closeMobileMenu()">IPO & Investment</a>
+          <a routerLink="/service/coaching-consulting" (click)="closeMobileMenu()">Coaching</a>
+          <a routerLink="/service/legal-compliance" (click)="closeMobileMenu()">Legal & Compliance</a>
+          <a routerLink="/service/research-development" (click)="closeMobileMenu()">R &amp; D &amp; Innovation</a>
+          <a routerLink="/service/export-import" (click)="closeMobileMenu()">Export/Import</a>
+          <a routerLink="/service/hr-recruitment" (click)="closeMobileMenu()">HR & Recruitment</a>
+          <a routerLink="/service/accounting-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
         </div>
-
-        <div class="nav-links__account">
-          <div
-            class="dropdown"
-            [class.open]="adminAccountOpen()"
-            [class.active-section]="isAccountActive()"
-          >
-            <button
-              type="button"
-              class="dropdown-trigger dropdown-trigger--admin nav-account-trigger"
-              (click)="toggleAdminDropdown('account'); $event.stopPropagation()"
-              [attr.aria-expanded]="adminAccountOpen()"
-              aria-label="Admin account menu"
-            >
-              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span class="nav-account-label">Account</span>
-              <span class="nav-caret" aria-hidden="true">▾</span>
-            </button>
-            @if (adminAccountOpen()) {
-              <div class="dropdown-menu dm-right dropdown-menu--account">
-                <a routerLink="/home" (click)="closeMobileMenu(); closeAdminDropdown('account')">Public website</a>
-                <a routerLink="/admin-forgot-password" routerLinkActive="active" (click)="closeMobileMenu(); closeAdminDropdown('account')">Change password</a>
-                <div class="dd-sep"></div>
-                <a type="button" class="text-center" (click)="adminLogout()">Logout</a>
-              </div>
-            }
-          </div>
+      </div>
+      <a routerLink="/loans" routerLinkActive="active" (click)="closeMobileMenu()">Loans</a>
+      <a class="nav-loans" routerLink="/membership" routerLinkActive="active" (click)="closeMobileMenu()">Pricing</a>
+      <div class="dropdown" [class.open]="moreMenuOpen()">
+        <button type="button" class="dropdown-trigger" (click)="toggleMoreMenu(); $event.stopPropagation()" [attr.aria-expanded]="moreMenuOpen()">More ▾</button>
+        <div class="dropdown-menu" *ngIf="moreMenuOpen()">
+          <a routerLink="/news" (click)="closeMobileMenu()">News & Blog</a>
+          <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
+          <a routerLink="/search" (click)="closeMobileMenu()">Search</a>
+          <a routerLink="/careers" (click)="closeMobileMenu()">Careers</a>
+          <a routerLink="/schemes" (click)="closeMobileMenu()">Schemes</a>
+          <a routerLink="/events" (click)="closeMobileMenu()">Events</a>
         </div>
-      } @else {
-        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Home</a>
-        <a routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">About</a>
-        <div class="dropdown" [class.open]="servicesMenuOpen()">
-          <button type="button" class="dropdown-trigger" (click)="toggleServicesMenu(); $event.stopPropagation()" [attr.aria-expanded]="servicesMenuOpen()">Services ▾</button>
-          <div class="dropdown-menu" *ngIf="servicesMenuOpen()">
-            <a routerLink="/our-services" (click)="closeMobileMenu()">All 360° Services</a>
+      </div>
+      <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
+      <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
+        <a class="btn-outline" routerLink="/login">Login</a>
+        <a
+          class="btn-primary"
+          routerLink="/register"
+          [queryParams]="guestRegisterQueryParams"
+          queryParamsHandling="merge"
+          style="margin-left:.5rem">{{ guestRegisterLabel }}</a>
+      </div>
+      <div id="nav-auth-user" *ngIf="isLoggedIn()">
+        <div class="dropdown" [class.open]="userMenuOpen()">
+          <button
+            type="button"
+            class="dropdown-trigger nav-user-trigger"
+            (click)="toggleUserMenu(); $event.stopPropagation()"
+            [attr.aria-expanded]="userMenuOpen()"
+            [attr.aria-label]="'Open account menu for ' + userFirstName()"
+          >
+            <span class="nav-user-avatar" aria-hidden="true">👤</span>
+            <span class="nav-user-name" [title]="userFirstName()">{{ userFirstName() }}</span>
+            <span class="nav-user-caret" aria-hidden="true">▾</span>
+          </button>
+          <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
+            <a routerLink="/profile" (click)="closeUserMenu(); closeMobileMenu()">👤 My Profile</a>
+            <a routerLink="/my-plan" (click)="closeUserMenu(); closeMobileMenu()">💎 My Plan Details</a>
             <div class="dd-sep"></div>
-            <a routerLink="/credit-rebuild" (click)="closeMobileMenu()">Credit Repair</a>
-            <a routerLink="/service/msme-loans-finance" (click)="closeMobileMenu()">MSME Loans</a>
-            <a routerLink="/service/company-formation" (click)="closeMobileMenu()">Company Formation</a>
-            <a routerLink="/service/government-subsidies" (click)="closeMobileMenu()">Govt. Subsidies</a>
-            <a routerLink="/service/technology-solutions" (click)="closeMobileMenu()">Technology</a>
-            <a routerLink="/service/sales-digital-marketing" (click)="closeMobileMenu()">Digital Marketing</a>
-            <a routerLink="/service/ipo-investment-banking" (click)="closeMobileMenu()">IPO & Investment</a>
-            <a routerLink="/service/coaching-consulting" (click)="closeMobileMenu()">Coaching</a>
-            <a routerLink="/service/legal-compliance" (click)="closeMobileMenu()">Legal & Compliance</a>
-            <a routerLink="/service/research-development" (click)="closeMobileMenu()">R &amp; D &amp; Innovation</a>
-            <a routerLink="/service/export-import" (click)="closeMobileMenu()">Export/Import</a>
-            <a routerLink="/service/hr-recruitment" (click)="closeMobileMenu()">HR & Recruitment</a>
-            <a routerLink="/service/accounting-cfo" (click)="closeMobileMenu()">Accounting & Virtual CFO</a>
-          </div>
-        </div>
-        <a routerLink="/loans" routerLinkActive="active" (click)="closeMobileMenu()">Loans</a>
-        <a class="nav-loans" routerLink="/membership" routerLinkActive="active" (click)="closeMobileMenu()">Pricing</a>
-        <div class="dropdown" [class.open]="moreMenuOpen()">
-          <button type="button" class="dropdown-trigger" (click)="toggleMoreMenu(); $event.stopPropagation()" [attr.aria-expanded]="moreMenuOpen()">More ▾</button>
-          <div class="dropdown-menu" *ngIf="moreMenuOpen()">
-            <a routerLink="/news" (click)="closeMobileMenu()">News & Blog</a>
-            <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
-            <a routerLink="/search" (click)="closeMobileMenu()">Search</a>
-            <a routerLink="/careers" (click)="closeMobileMenu()">Careers</a>
-            <a routerLink="/schemes" (click)="closeMobileMenu()">Schemes</a>
-            <a routerLink="/events" (click)="closeMobileMenu()">Events</a>
-          </div>
-        </div>
-        <button class="btn-icon" type="button" (click)="toggleSearch()">🔍</button>
-        <div id="nav-auth-guest" *ngIf="!isLoggedIn()">
-          <a class="btn-outline" routerLink="/login">Login</a>
-          <a
-            class="btn-primary"
-            routerLink="/register"
-            [queryParams]="guestRegisterQueryParams"
-            queryParamsHandling="merge"
-            style="margin-left:.5rem">{{ guestRegisterLabel }}</a>
-        </div>
-        <div id="nav-auth-user" *ngIf="isLoggedIn()">
-          <div class="dropdown" [class.open]="userMenuOpen()">
-            <button
-              type="button"
-              class="dropdown-trigger nav-user-trigger"
-              (click)="toggleUserMenu(); $event.stopPropagation()"
-              [attr.aria-expanded]="userMenuOpen()"
-              [attr.aria-label]="'Open account menu for ' + userFirstName()"
-            >
-              <span class="nav-user-avatar" aria-hidden="true">👤</span>
-              <span class="nav-user-name" [title]="userFirstName()">{{ userFirstName() }}</span>
-              <span class="nav-user-caret" aria-hidden="true">▾</span>
-            </button>
-            <div class="dropdown-menu dm-right" *ngIf="userMenuOpen()">
-              <a routerLink="/profile" (click)="closeUserMenu(); closeMobileMenu()">👤 My Profile</a>
-              <a routerLink="/my-plan" (click)="closeUserMenu(); closeMobileMenu()">💎 My Plan Details</a>
-              <div class="dd-sep"></div>
-              <div class="text-center">
-                <a type="button" (click)="logout()">Logout</a>
-              </div>
+            <div class="text-center">
+              <a type="button" (click)="logout()">Logout</a>
             </div>
           </div>
         </div>
-      }
+      </div>
     </div>
   </div>
-  @if (!showAdminNav()) {
-    <div class="search-drawer" id="searchDrawer" [class.open]="searchOpen">
-      <form class="search-form" (ngSubmit)="submitSearch()">
-        <input
-          #searchInput
-          type="search"
-          name="searchQuery"
-          [(ngModel)]="searchQuery"
-          placeholder="Search services, schemes, events, news..."
-        >
-        <button type="submit" class="btn-search">Search</button>
-        <button
-          type="button"
-          class="search-close-btn"
-          aria-label="Close search"
-          (click)="toggleSearch()"
-        >
-          ✕
-        </button>
-      </form>
-    </div>
-  }
+  <div class="search-drawer" id="searchDrawer" [class.open]="searchOpen">
+    <form class="search-form" (ngSubmit)="submitSearch()">
+      <input
+        #searchInput
+        type="search"
+        name="searchQuery"
+        [(ngModel)]="searchQuery"
+        placeholder="Search services, schemes, events, news..."
+      >
+      <button type="submit" class="btn-search">Search</button>
+      <button
+        type="button"
+        class="search-close-btn"
+        aria-label="Close search"
+        (click)="toggleSearch()"
+      >
+        ✕
+      </button>
+    </form>
+  </div>
 </nav>

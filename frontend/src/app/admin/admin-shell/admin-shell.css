@@ -1,0 +1,492 @@
+:host {
+  display: block;
+}
+
+.admin-app-shell {
+  --admin-sidebar-width: 252px;
+  display: flex;
+  min-height: 100dvh;
+  background: var(--admin-bg, #f4f5f7);
+}
+
+.admin-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1090;
+  border: none;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  cursor: pointer;
+}
+
+.admin-sidebar-backdrop.is-visible {
+  display: block;
+  opacity: 1;
+}
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 var(--admin-sidebar-width);
+  width: var(--admin-sidebar-width);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid var(--admin-border, #e8eaed);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.05);
+  z-index: 1100;
+  overflow: hidden;
+}
+
+.admin-sidebar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.65rem 0.85rem 0.6rem;
+  text-decoration: none;
+  border-bottom: 1px solid #ececec;
+}
+
+.admin-sidebar__logo {
+  width: 80px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.admin-sidebar__nav {
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem 0.4rem 0.35rem 0.55rem;
+}
+
+.admin-sidebar__scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-right: 1px;
+  padding-right: 0.2rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(206, 1, 1, 0.45) rgba(0, 0, 0, 0.04);
+}
+
+.admin-sidebar__scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-sidebar__scroll::-webkit-scrollbar-track {
+  margin: 6px 0;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 999px;
+}
+
+.admin-sidebar__scroll::-webkit-scrollbar-thumb {
+  background: rgba(206, 1, 1, 0.35);
+  border-radius: 999px;
+}
+
+.admin-sidebar__scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(206, 1, 1, 0.62);
+}
+
+.admin-sidebar__link,
+.admin-sidebar__group-trigger,
+.admin-sidebar__sublink,
+.admin-sidebar__account-trigger,
+.admin-sidebar__account-link,
+.admin-sidebar__logout {
+  font-family: var(--admin-font, 'Plus Jakarta Sans', system-ui, sans-serif);
+}
+
+.admin-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.6rem;
+  margin-bottom: 0.1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #444;
+  font-size: 0.86rem;
+  font-weight: 500;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.admin-sidebar__link:hover,
+.admin-sidebar__link.active {
+  color: var(--red, #e63946);
+}
+
+.admin-sidebar__link.active {
+  font-weight: 700;
+  background: rgba(230, 57, 70, 0.08);
+}
+
+.admin-sidebar__group {
+  margin-bottom: 0.05rem;
+}
+
+.admin-sidebar__group-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.42rem 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #444;
+  font-size: 0.84rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.admin-sidebar__group-label {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.admin-sidebar__group-caret {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  opacity: 0.55;
+  line-height: 1;
+  transition: transform 0.18s ease;
+}
+
+.admin-sidebar__group-caret::before {
+  content: '▾';
+}
+
+.admin-sidebar__group.is-expanded .admin-sidebar__group-caret,
+.admin-sidebar__account.is-open .admin-sidebar__group-caret {
+  transform: rotate(180deg);
+  display: inline-block;
+}
+
+.admin-sidebar__group-trigger:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.admin-sidebar__group-trigger:hover,
+.admin-sidebar__group.is-expanded .admin-sidebar__group-trigger {
+  color: var(--red, #e63946);
+}
+
+.admin-sidebar__group.is-active .admin-sidebar__group-trigger {
+  color: var(--red, #e63946);
+  font-weight: 700;
+  background: rgba(230, 57, 70, 0.06);
+}
+
+.admin-sidebar__group-panel {
+  padding: 0.15rem 0 0.25rem 0.35rem;
+}
+
+.admin-sidebar__section + .admin-sidebar__section {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.admin-sidebar__section-label {
+  padding: 0.15rem 0.55rem 0.25rem 0.65rem;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #8a8a8a;
+  user-select: none;
+  line-height: 1.25;
+}
+
+.admin-sidebar__section-links {
+  position: relative;
+  margin: 0 0.25rem 0 0.65rem;
+  padding-left: 0.65rem;
+  border-left: 2px solid #ececec;
+}
+
+.admin-sidebar__sublink {
+  position: relative;
+  display: block;
+  margin: 0.06rem 0;
+  padding: 0.4rem 0.55rem 0.4rem 0.5rem;
+  border-radius: 7px;
+  text-decoration: none;
+  color: #444;
+  font-size: 0.84rem;
+  font-weight: 500;
+  line-height: 1.35;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-sidebar__sublink::before {
+  content: '';
+  position: absolute;
+  left: -0.65rem;
+  top: 50%;
+  width: 0.5rem;
+  height: 2px;
+  background: #ececec;
+  transform: translateY(-50%);
+}
+
+.admin-sidebar__sublink:hover {
+  background: rgba(230, 57, 70, 0.06);
+  color: var(--red, #e63946);
+}
+
+.admin-sidebar__sublink:hover::before {
+  background: rgba(230, 57, 70, 0.35);
+}
+
+.admin-sidebar__sublink.active {
+  color: var(--red, #e63946);
+  font-weight: 700;
+  background: rgba(230, 57, 70, 0.08);
+}
+
+.admin-sidebar__sublink.active::before {
+  background: var(--red, #e63946);
+}
+
+.admin-sidebar__footer {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0.55rem 0.55rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid #ececec;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 2;
+}
+
+.admin-sidebar__account {
+  position: relative;
+}
+
+.admin-sidebar__account.is-active .admin-sidebar__account-trigger {
+  color: var(--red, #e63946);
+  font-weight: 700;
+}
+
+.admin-sidebar__account-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.48rem 0.6rem;
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  background: #fff;
+  color: #444;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-sidebar__account-trigger:hover,
+.admin-sidebar__account.is-open .admin-sidebar__account-trigger {
+  background: rgba(230, 57, 70, 0.04);
+  border-color: rgba(230, 57, 70, 0.22);
+  color: var(--red, #e63946);
+}
+
+.admin-sidebar__account-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--red-light, #fff5f5);
+  color: var(--red, #e63946);
+  flex-shrink: 0;
+}
+
+.admin-sidebar__account-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.admin-sidebar__account-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-sidebar__account-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.3rem);
+  padding: 0.3rem;
+  border: 1px solid #ececec;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  animation: adminAccountPanelIn 0.16s ease;
+  z-index: 20;
+}
+
+.admin-sidebar__account-panel::after {
+  content: '';
+  position: absolute;
+  left: 1.1rem;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-right: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+  transform: rotate(45deg);
+}
+
+.admin-sidebar__account-link {
+  display: block;
+  padding: 0.45rem 0.55rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #444;
+  font-size: 0.84rem;
+  font-weight: 500;
+  line-height: 1.35;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-sidebar__account-link + .admin-sidebar__account-link {
+  margin-top: 0.05rem;
+}
+
+.admin-sidebar__account-link:hover,
+.admin-sidebar__account-link.active {
+  color: var(--red, #e63946);
+  background: rgba(230, 57, 70, 0.06);
+}
+
+.admin-sidebar__logout {
+  width: 100%;
+  padding: 0.48rem 0.6rem;
+  border: 1px solid rgba(230, 57, 70, 0.25);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--red, #e63946);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-sidebar__logout:hover {
+  background: var(--red-light, #fff5f5);
+  border-color: rgba(230, 57, 70, 0.4);
+}
+
+.admin-app-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-mobile-bar {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  padding: 0.65rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #ececec;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+}
+
+.admin-mobile-bar__toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: var(--touch-min, 44px);
+  height: var(--touch-min, 44px);
+  padding: 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.admin-mobile-bar__toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: #444;
+  border-radius: 1px;
+}
+
+.admin-mobile-bar__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--navy, #1a1a2e);
+}
+
+.admin-app-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+@keyframes adminAccountPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-app-shell {
+    --admin-mobile-bar-height: 57px;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-105%);
+    transition: transform 0.24s ease;
+  }
+
+  .admin-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .admin-mobile-bar {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar,
+  .admin-sidebar-backdrop,
+  .admin-sidebar__account-panel {
+    animation: none;
+    transition: none;
+  }
+}

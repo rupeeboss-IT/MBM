@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, OnInit, inject } from '@angular/core';
+import { Component, PLATFORM_ID, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
@@ -17,6 +17,9 @@ import { CookieConsentBanner } from './core/components/cookie-consent-banner/coo
 import { AnalyticsService } from './core/services/analytics.service';
 import { CookieConsentService } from './core/services/cookie-consent.service';
 import { SessionExpiryService } from './core/services/session-expiry.service';
+import { AdminSessionService } from './core/services/admin-session.service';
+import { AdminShell } from './admin/admin-shell/admin-shell';
+import { isAdminShellRoute } from './core/utils/admin-route.util';
 
 /** Canonical origin — must be absolute and match the production domain. */
 const SITE_ORIGIN = 'https://msmebharatmanch.com';
@@ -25,18 +28,31 @@ const SITE_ORIGIN = 'https://msmebharatmanch.com';
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MembershipCheckoutModals, MsmeSaathiChat, CookieConsentBanner]
+  imports: [Header, Footer, RouterOutlet, ToastContainer, SchemeDiscoveryModals, MembershipCheckoutModals, MsmeSaathiChat, CookieConsentBanner, AdminShell]
 })
 export class App implements OnInit {
   private readonly analytics = inject(AnalyticsService);
   private readonly cookieConsent = inject(CookieConsentService);
   private readonly seoService = inject(SeoService);
   private readonly sessionExpiry = inject(SessionExpiryService);
+  private readonly adminSession = inject(AdminSessionService);
   private readonly doc = inject(DOCUMENT);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly router = inject(Router);
+  private readonly currentUrl = signal(this.router.url);
 
-  constructor(private readonly router: Router) {}
+  readonly showAdminShell = computed(() => {
+    if (!this.adminSession.isLoggedIn() || !this.adminSession.hasAdminAccess()) {
+      return false;
+    }
+
+    const path = this.currentUrl().split('?')[0]?.split('#')[0] ?? '/';
+    if (path.startsWith('/admin-login')) return false;
+    if (path.startsWith('/admin-forgot-password')) return true;
+
+    return isAdminShellRoute(this.currentUrl());
+  });
 
   ngOnInit(): void {
     // Apply route SEO on initial load — runs on both server (SSR/prerender) and browser
@@ -59,6 +75,8 @@ export class App implements OnInit {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe((e) => {
+        this.currentUrl.set(e.urlAfterRedirects || e.url);
+
         // Update SEO tags on every SPA navigation
         this.applyRouteSeo(e.urlAfterRedirects);
 

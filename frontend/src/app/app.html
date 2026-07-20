@@ -1,6 +1,10 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
+@if (showAdminShell()) {
+  <app-admin-shell />
+} @else {
+  <app-header></app-header>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+}
 <app-toast-container />
 <app-scheme-discovery-modals />
 <app-membership-checkout-modals />

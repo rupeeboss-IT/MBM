@@ -1322,3 +1322,31 @@ Request URL: POST /api/admin/login
 IP Address: ::1
 Correlation ID: 0HNN662LVTFAI:00000001
 
+2026-07-20 18:45:13 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN662LVTFEQ:00000001
+
+2026-07-20 18:45:13 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN662LVTFEQ:00000001
+
+2026-07-20 18:45:14 [INFO]
+ClientHandler()
+Received HTTP response headers after 195.5549ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN662LVTFEQ:00000001
+
+2026-07-20 18:45:14 [INFO]
+LogicalHandler()
+End processing HTTP request after 209.0521ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN662LVTFEQ:00000001
+

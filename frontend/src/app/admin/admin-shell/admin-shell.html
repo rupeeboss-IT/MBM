@@ -1,0 +1,138 @@
+<div class="admin-app-shell">
+  <button
+    type="button"
+    class="admin-sidebar-backdrop"
+    [class.is-visible]="sidebarOpen()"
+    (click)="closeSidebar()"
+    aria-label="Close navigation menu"
+    tabindex="-1"
+  ></button>
+
+  <aside
+    id="admin-sidebar"
+    class="admin-sidebar"
+    [class.is-open]="sidebarOpen()"
+    aria-label="Admin navigation"
+  >
+    <a class="admin-sidebar__brand" routerLink="/admin-dashboard" (click)="onNavClick()">
+      <img class="admin-sidebar__logo" [src]="logoSrc" [alt]="logoAlt" width="64" height="64" />
+    </a>
+
+    <nav class="admin-sidebar__nav admin-sidebar__scroll">
+      <a
+        class="admin-sidebar__link admin-sidebar__link--dashboard"
+        routerLink="/admin-dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="onNavClick()"
+      >
+        Dashboard
+      </a>
+
+      @for (group of adminMenuGroups; track group.id) {
+        <div
+          class="admin-sidebar__group"
+          [class.is-expanded]="isGroupExpanded(group.id)"
+          [class.is-active]="isAdminGroupActive(group)"
+        >
+          <button
+            type="button"
+            class="admin-sidebar__group-trigger"
+            (click)="toggleGroup(group.id); $event.stopPropagation()"
+            [attr.aria-expanded]="isGroupExpanded(group.id)"
+          >
+            <span class="admin-sidebar__group-label">{{ group.label }}</span>
+            <span class="admin-sidebar__group-caret" aria-hidden="true"></span>
+          </button>
+
+          @if (isGroupExpanded(group.id)) {
+            <div class="admin-sidebar__group-panel">
+              @for (section of group.sections; track section.label) {
+                <div class="admin-sidebar__section">
+                  <div class="admin-sidebar__section-label">{{ section.label }}</div>
+                  <div class="admin-sidebar__section-links">
+                    @for (item of section.children; track item.route) {
+                      @if (!item.superAdminOnly || isSuperAdmin()) {
+                        <a
+                          class="admin-sidebar__sublink"
+                          [routerLink]="item.route"
+                          [queryParams]="item.queryParams ?? null"
+                          routerLinkActive="active"
+                          [routerLinkActiveOptions]="item.pathsSubset ? { paths: 'subset' } : { exact: item.exact ?? false }"
+                          (click)="onNavClick()"
+                        >
+                          {{ item.label }}
+                        </a>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </nav>
+
+    <div class="admin-sidebar__footer">
+      <div
+        class="admin-sidebar__account"
+        [class.is-open]="accountMenuOpen()"
+        [class.is-active]="isAccountActive()"
+      >
+        <button
+          type="button"
+          class="admin-sidebar__account-trigger"
+          (click)="toggleAccountMenu(); $event.stopPropagation()"
+          [attr.aria-expanded]="accountMenuOpen()"
+        >
+          <span class="admin-sidebar__account-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <span class="admin-sidebar__account-label">Account</span>
+          <span class="admin-sidebar__group-caret" aria-hidden="true"></span>
+        </button>
+
+        @if (accountMenuOpen()) {
+          <div class="admin-sidebar__account-panel">
+            <a class="admin-sidebar__account-link" routerLink="/home" (click)="onNavClick()">
+              Public website
+            </a>
+            <a
+              class="admin-sidebar__account-link"
+              routerLink="/admin-forgot-password"
+              routerLinkActive="active"
+              (click)="onNavClick()"
+            >
+              Change password
+            </a>
+          </div>
+        }
+      </div>
+
+      <button type="button" class="admin-sidebar__logout" (click)="adminLogout()">
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <div class="admin-app-main">
+    <header class="admin-mobile-bar">
+      <button
+        type="button"
+        class="admin-mobile-bar__toggle"
+        (click)="toggleSidebar()"
+        [attr.aria-expanded]="sidebarOpen()"
+        aria-controls="admin-sidebar"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <span class="admin-mobile-bar__title">Admin</span>
+    </header>
+
+    <div class="admin-app-content">
+      <router-outlet />
+    </div>
+  </div>
+</div>

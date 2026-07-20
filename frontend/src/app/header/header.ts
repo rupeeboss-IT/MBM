@@ -14,14 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter, firstValueFrom, Subscription, timeout } from 'rxjs';
 import { MBM_LOGO_ALT, MBM_LOGO_SRC } from '../core/brand';
-import { AdminSessionService } from '../core/services/admin-session.service';
 import { AuthService } from '../core/services/auth.service';
 import { AuthSessionService } from '../core/services/auth-session.service';
-import {
-  ADMIN_MENU_GROUPS,
-  type AdminDropdown,
-  type AdminNavGroup,
-} from './admin-nav.config';
 import { FREE_REGISTER_QUERY_PARAMS } from '../core/utils/registration-mode.util';
 
 @Component({
@@ -35,7 +29,6 @@ export class Header implements OnDestroy {
   readonly logoAlt = MBM_LOGO_ALT;
 
   private readonly session = inject(AuthSessionService);
-  private readonly adminSession = inject(AdminSessionService);
   private readonly auth = inject(AuthService);
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly router = inject(Router);
@@ -50,48 +43,11 @@ export class Header implements OnDestroy {
     const first = displayFirstName(this.fullName());
     return first ?? 'My Account';
   });
-  readonly isSuperAdmin = this.adminSession.isSuperAdmin;
-  readonly showAdminNav = computed(
-    () => this.adminSession.isLoggedIn() && this.adminSession.hasAdminAccess(),
-  );
 
   readonly userMenuOpen = signal(false);
   readonly mobileMenuOpen = signal(false);
   readonly servicesMenuOpen = signal(false);
   readonly moreMenuOpen = signal(false);
-  readonly adminPeopleOpen = signal(false);
-  readonly adminCrmOpen = signal(false);
-  readonly adminFinanceOpen = signal(false);
-  readonly adminPartnersOpen = signal(false);
-  readonly adminContentOpen = signal(false);
-  readonly adminConnectOpen = signal(false);
-  readonly adminAdministrationOpen = signal(false);
-  readonly adminAccountOpen = signal(false);
-  readonly adminUrl = signal(this.router.url);
-  readonly adminMenuGroups = ADMIN_MENU_GROUPS;
-
-  isAdminGroupActive(group: AdminNavGroup): boolean {
-    return this.matchesAdminPrefix(group.prefixes);
-  }
-
-  adminDropdownOpen(menu: AdminDropdown): boolean {
-    return this.adminDropdownSignals[menu]();
-  }
-
-  private readonly adminDropdownSignals: Record<AdminDropdown, ReturnType<typeof signal<boolean>>> = {
-    people: this.adminPeopleOpen,
-    crm: this.adminCrmOpen,
-    finance: this.adminFinanceOpen,
-    partners: this.adminPartnersOpen,
-    content: this.adminContentOpen,
-    connect: this.adminConnectOpen,
-    administration: this.adminAdministrationOpen,
-    account: this.adminAccountOpen,
-  };
-
-  readonly isAccountActive = computed(() =>
-    this.matchesAdminPrefix(['/admin-forgot-password']),
-  );
 
   readonly guestRegisterLabel = 'Register Free';
 
@@ -116,8 +72,7 @@ export class Header implements OnDestroy {
 
     this.navSub = this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe((e) => {
-        this.adminUrl.set(e.urlAfterRedirects || e.url);
+      .subscribe(() => {
         this.closeMobileMenu();
         this.closeDropdowns();
         if (this.searchOpen) this.searchOpen = false;
@@ -159,7 +114,6 @@ export class Header implements OnDestroy {
     this.mobileMenuOpen.set(false);
     this.servicesMenuOpen.set(false);
     this.moreMenuOpen.set(false);
-    this.closeAdminDropdowns();
     this.setBodyScrollLock(false);
   }
 
@@ -167,7 +121,6 @@ export class Header implements OnDestroy {
     this.servicesMenuOpen.set(!this.servicesMenuOpen());
     if (this.servicesMenuOpen()) {
       this.moreMenuOpen.set(false);
-      this.closeAdminDropdowns();
     }
   }
 
@@ -175,32 +128,13 @@ export class Header implements OnDestroy {
     this.moreMenuOpen.set(!this.moreMenuOpen());
     if (this.moreMenuOpen()) {
       this.servicesMenuOpen.set(false);
-      this.closeAdminDropdowns();
     }
-  }
-
-  toggleAdminDropdown(menu: AdminDropdown): void {
-    const current = this.adminDropdownSignals[menu];
-    const next = !current();
-    this.closeDropdowns();
-    current.set(next);
   }
 
   closeDropdowns(): void {
     this.servicesMenuOpen.set(false);
     this.moreMenuOpen.set(false);
     this.userMenuOpen.set(false);
-    this.closeAdminDropdowns();
-  }
-
-  closeAdminDropdowns(): void {
-    for (const sig of Object.values(this.adminDropdownSignals)) {
-      sig.set(false);
-    }
-  }
-
-  closeAdminDropdown(menu: AdminDropdown): void {
-    this.adminDropdownSignals[menu].set(false);
   }
 
   toggleSearch(): void {
@@ -219,7 +153,6 @@ export class Header implements OnDestroy {
 
   toggleUserMenu(): void {
     this.userMenuOpen.set(!this.userMenuOpen());
-    if (this.userMenuOpen()) this.closeAdminDropdowns();
   }
 
   closeUserMenu(): void {
@@ -231,18 +164,6 @@ export class Header implements OnDestroy {
     this.closeDropdowns();
     this.closeMobileMenu();
     this.router.navigateByUrl('/home');
-  }
-
-  adminLogout(): void {
-    this.adminSession.logout();
-    this.closeDropdowns();
-    this.closeMobileMenu();
-    this.router.navigateByUrl('/admin-login');
-  }
-
-  private matchesAdminPrefix(prefixes: string[]): boolean {
-    const url = this.adminUrl();
-    return prefixes.some((prefix) => url === prefix || url.startsWith(`${prefix}/`) || url.startsWith(prefix));
   }
 
   private setBodyScrollLock(lock: boolean): void {
