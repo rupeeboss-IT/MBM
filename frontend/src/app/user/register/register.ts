@@ -21,6 +21,8 @@ import { passwordComplexityValidator } from '../../core/validators/password.vali
 import { strictEmailValidator } from '../../core/validators/email.validators';
 import { indianMobileValidator } from '../../core/validators/phone.validators';
 import { PasswordInputComponent } from '../../core/components/password-input/password-input';
+import { MembershipPlanCards } from '../../core/components/membership-plan-cards/membership-plan-cards';
+import { PlansService, type PublicPlanItem } from '../../core/services/plans.service';
 import { captureRegistrationLeadSourceFromUrl, clearRegistrationLeadSource, getRegistrationLeadSource } from '../../core/utils/registration-lead-source.util';
 import { captureRegistrationAdvisorFromUrl, getRegistrationAdvisorCode, setRegistrationAdvisorCode } from '../../core/utils/registration-advisor.util';
 import { ReferralService, referrerDisplayName } from '../../core/services/referral.service';
@@ -55,7 +57,7 @@ type AdvisorValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, PasswordInputComponent],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, PasswordInputComponent, MembershipPlanCards],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -74,6 +76,7 @@ export class Register implements OnInit {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly recaptcha = inject(RecaptchaService);
   private readonly analytics = inject(AnalyticsService);
+  private readonly plansApi = inject(PlansService);
 
   private advisorDebounceTimer: ReturnType<typeof setTimeout> | null = null;
   private advisorPanelTimer: ReturnType<typeof setTimeout> | null = null;
@@ -105,6 +108,8 @@ export class Register implements OnInit {
   private readonly smsOtpIssuedForNorm = signal<string | null>(null);
 
   readonly step = signal<1 | 2 | 3 | 4>(1);
+  readonly cmsPlans = signal<PublicPlanItem[]>([]);
+  readonly plansLoading = signal(true);
   readonly createdUserId = signal<string | null>(null);
 
   readonly emailOtpSent = signal(false);
@@ -248,6 +253,18 @@ export class Register implements OnInit {
     this.session.refreshFromStorage();
     if (this.session.isLoggedIn()) {
       void this.redirectIfAlreadyAuthenticated();
+    }
+    void this.loadCmsPlans();
+  }
+
+  private async loadCmsPlans() {
+    try {
+      const res = await firstValueFrom(this.plansApi.listPublic());
+      this.cmsPlans.set(res.plans ?? []);
+    } catch {
+      this.cmsPlans.set([]);
+    } finally {
+      this.plansLoading.set(false);
     }
   }
 
@@ -669,8 +686,8 @@ export class Register implements OnInit {
     void this.router.navigateByUrl('/profile');
   }
 
-  selectMembershipPlan(code: MembershipPlanCode): void {
-    void this.planCheckout.choosePlan(code);
+  selectMembershipPlan(code: string): void {
+    void this.planCheckout.choosePlan(code as MembershipPlanCode);
   }
 
   selectSchemeDiscoveryReport(): void {

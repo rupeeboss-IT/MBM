@@ -299,104 +299,12 @@
         <span><strong>All-inclusive tiers:</strong> Higher plans include every benefit from lower plans, plus additional
           features.</span>
       </p>
-      <div class="home-plans-grid">
-        <div class="home-plan-card">
-          <div class="hp-card-head">
-            <div class="hp-icon">🌱</div>
-            <div class="hp-badge free">₹999/yr</div>
-          </div>
-          <h3>MSME Basic</h3>
-          <p class="hp-desc">For any MSME with Udyam Aadhaar — start your growth journey</p>
-          <ul class="hp-features">
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">Join with Udyam
-                  Aadhaar</span></a></li>
-            <li><span class="tick">✓</span><span class="pfl-text">National MSME network</span></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
-                  class="pfl-text">Knowledge &amp; events access</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','whatsapp-platform']"><span class="pfl-text">WhatsApp Business Platform</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','basic-website']"><span class="pfl-text">Basic Website</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','business-diagnostic']"><span class="pfl-text">Business Diagnostic + 30-Min Coach Session</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','practo-insurance']"><span class="pfl-text">Practo Insurance
-                  Basic</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','credit-report']"><span class="pfl-text">Free Credit Report</span><span
-                  class="pfl-info">ℹ Learn more</span></a></li>
-          </ul>
-          <button class="btn-outline" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('basic')">Get MSME
-            Basic</button>
-        </div>
-        <div class="home-plan-card featured-plan">
-          <div class="plan-popular">Most Popular</div>
-          <div class="hp-card-head">
-            <div class="hp-icon">🏆</div>
-            <div class="hp-badge gold">₹9,999/yr</div>
-          </div>
-          <h3>MSME Premium</h3>
-          <p class="hp-desc">Perfect for MSMEs ready to build financial credibility</p>
-          <ul class="hp-features">
-            <li class="hp-features-includes"><span class="tick">✓</span><span class="pfl-text">Includes all Basic Plan benefits</span></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
-                  class="pfl-text">Infomerics IVerified Report</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','scheme-discovery']"><span class="pfl-text">Company Scheme
-                  Discovery</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','bank-statement-analyzer']"><span class="pfl-text">Bank Statement
-                  Analyzer</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','relationship-manager']"><span class="pfl-text">Free Relationship
-                  Manager</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','loan-audit']"><span
-                  class="pfl-text">Free Loan Audit</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','insurance-audit']"><span
-                  class="pfl-text">Free Insurance Audit</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span
-                  class="pfl-text">10L Insurance Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
-            class="pfl-text">2 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          </ul>
-          <button class="btn-primary" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('premium')">Get MSME
-            Premium</button>
-        </div>
-        <div class="home-plan-card">
-          <div class="hp-card-head">
-            <div class="hp-icon">💎</div>
-            <div class="hp-badge platinum">₹19,999/yr</div>
-          </div>
-          <h3>MSME Pro</h3>
-          <p class="hp-desc">For MSMEs seeking deeper insights and GeM access</p>
-          <ul class="hp-features">
-            <li class="hp-features-includes"><span class="tick">✓</span><span class="pfl-text">Includes all Premium Plan benefits</span></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','trust-score']"><span
-                  class="pfl-text">Infomerics TrustScore Report</span><span class="pfl-info">ℹ Learn more</span></a>
-            </li>
-            <li><span class="tick">✓</span><a class="plan-feature-link"
-                [routerLink]="['/offering','gem-registration']"><span class="pfl-text">GeM Portal
-                  Registration</span><span class="pfl-info">ℹ Learn more</span></a></li>
-            <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','practo-insurance']"><span
-                  class="pfl-text">15L Insurance Cover</span><span class="pfl-info">ℹ Learn more</span></a></li>
-              <li><span class="tick">✓</span><a class="plan-feature-link" [routerLink]="['/offering','msme-events']"><span
-              class="pfl-text">4 Events</span><span class="pfl-info">ℹ Learn more</span></a></li>
-          </ul>
-          <button class="btn-navy" style="width:100%;text-align:center;display:block" type="button"
-            (click)="choosePlan('pro')">Get MSME
-            Pro</button>
-        </div>
-      </div>
+      <app-membership-plan-cards
+        variant="home"
+        [plans]="cmsPlans()"
+        [loading]="plansLoading()"
+        (choose)="onPlanChoose($event)"
+      />
       <div class="text-left mt-3">
         <small style="color:var(--red);font-weight:500"><strong>Note:Plan prices are exclusive of taxes</strong></small>
       </div>

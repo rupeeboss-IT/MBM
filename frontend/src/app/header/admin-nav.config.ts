@@ -166,6 +166,7 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
       '/admin/scheme-management',
       '/admin/scheme-categories',
       '/admin/team-management',
+      '/admin/plan-management',
     ],
     sections: [
       {
@@ -223,11 +224,16 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
   {
     id: 'administration',
     label: 'Administration',
-    prefixes: ['/admin/bulk-member-import'],
+    prefixes: ['/admin/bulk-member-import', '/admin/plan-management'],
     sections: [
       {
-        label: 'Data migration',
+        label: 'Administration',
         children: [
+          {
+            label: 'Membership plan CMS',
+            route: '/admin/plan-management',
+            superAdminOnly: true,
+          },
           {
             label: 'Bulk Member Import',
             route: '/admin/bulk-member-import',

@@ -72,6 +72,8 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'admin/team-management',                        renderMode: RenderMode.Client },
   { path: 'admin/team-management/new',                    renderMode: RenderMode.Client },
   { path: 'admin/team-management/edit/:teamMemberId',     renderMode: RenderMode.Client },
+  { path: 'admin/plan-management',                        renderMode: RenderMode.Client },
+  { path: 'admin/plan-management/edit/:planId',           renderMode: RenderMode.Client },
 
   // ── Legacy redirect with param — keep as Client (redirects to service/:slug) ─
   { path: 'services/:slug', renderMode: RenderMode.Client },

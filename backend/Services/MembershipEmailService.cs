@@ -12,6 +12,7 @@ public sealed class MembershipEmailService
     private readonly AppDbContext _db;
     private readonly IEmailSender _email;
     private readonly InvoicePdfService _invoices;
+    private readonly IPlanBenefitsService _planBenefits;
     private readonly InvoiceSettings _settings;
     private readonly ApplicationUrlsSettings _urls;
     private readonly ILogger<MembershipEmailService> _logger;
@@ -20,6 +21,7 @@ public sealed class MembershipEmailService
         AppDbContext db,
         IEmailSender email,
         InvoicePdfService invoices,
+        IPlanBenefitsService planBenefits,
         IOptions<InvoiceSettings> settings,
         IOptions<ApplicationUrlsSettings> urls,
         ILogger<MembershipEmailService> logger)
@@ -27,6 +29,7 @@ public sealed class MembershipEmailService
         _db = db;
         _email = email;
         _invoices = invoices;
+        _planBenefits = planBenefits;
         _settings = settings.Value;
         _urls = urls.Value;
         _logger = logger;
@@ -54,7 +57,8 @@ public sealed class MembershipEmailService
             var activeFrom = result.ActiveFrom ?? payment.PaidAt;
             var activeTo = result.ActiveTo;
             var invoiceNo = InvoiceNumber.ForPayment(payment.PaymentId, payment.PaidAt);
-            var pdf = _invoices.Generate(payment, order, plan, user, activeFrom, activeTo);
+            var benefits = await _planBenefits.GetBenefitTextsAsync(plan.Code, ct);
+            var pdf = _invoices.Generate(payment, order, plan, user, activeFrom, activeTo, benefits);
 
             var subject = result.Kind switch
             {
@@ -63,7 +67,7 @@ public sealed class MembershipEmailService
                 _ => $"Welcome — {plan.Name} activated",
             };
 
-            var body = BuildHtmlBody(user.FullName, plan.Name, result, activeFrom, activeTo);
+            var body = await BuildHtmlBodyAsync(user.FullName, plan.Name, plan.Code, result, activeFrom, activeTo, ct);
             var attachment = new EmailAttachment($"{invoiceNo}.pdf", pdf, "application/pdf");
 
             await _email.SendAsync(user.Email, subject, body, isHtml: true, [attachment], ct);
@@ -75,14 +79,16 @@ public sealed class MembershipEmailService
         }
     }
 
-    private string BuildHtmlBody(
+    private async Task<string> BuildHtmlBodyAsync(
         string fullName,
         string planName,
+        string planCode,
         ActivationResult result,
         DateTime activeFrom,
-        DateTime? activeTo)
+        DateTime? activeTo,
+        CancellationToken ct)
     {
-        var benefits = PlanBenefitsCatalog.GetBenefits(result.PlanCode ?? "");
+        var benefits = await _planBenefits.GetBenefitTextsAsync(planCode, ct);
         var sb = new StringBuilder();
         sb.Append("<html><body style=\"font-family:Arial,sans-serif;color:#222;\">");
         sb.Append($"<p>Hello {System.Net.WebUtility.HtmlEncode(fullName)},</p>");

@@ -1,0 +1,95 @@
+<div class="admin-wrap">
+  <div class="admin-topbar pl-topbar">
+    <div>
+      <span class="admin-eyebrow">Super Admin</span>
+      <h2>Membership Plan CMS</h2>
+      <div class="muted">
+        Edit pricing and benefits for <strong>Basic</strong>, <strong>Standard</strong>,
+        <strong>Premium</strong>, and <strong>Pro</strong>. One-time report plans stay hardcoded.
+      </div>
+    </div>
+    <div class="actions pl-topbar-actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+      <a class="btn" href="/membership" target="_blank" rel="noopener">View membership page</a>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading plans…</span>
+      </div>
+    </div>
+  } @else if (loadError()) {
+    <div class="section pl-empty">
+      <p class="pl-empty__title">{{ loadError() }}</p>
+      <p class="muted">Sign in again as Super Admin, or confirm the API is running.</p>
+      <button class="btn btn-outline" type="button" (click)="load()">Try again</button>
+    </div>
+  } @else if (sortedPlans().length === 0) {
+    <div class="section pl-empty">
+      <p class="pl-empty__title">No CMS-managed plans found</p>
+      <p class="muted">Run <code>docs/plan-cms-create-tables.sql</code> then <code>docs/plan-cms-seed.sql</code> on the database.</p>
+    </div>
+  } @else {
+    <div class="pl-grid">
+      @for (p of sortedPlans(); track p.planId) {
+        <article class="pl-card section" [class.pl-card--inactive]="!p.isActive" [class.pl-card--featured]="p.isFeatured">
+          <div class="pl-card__head">
+            <div class="pl-card__identity">
+              <span class="pl-card__emoji" aria-hidden="true">{{ p.iconEmoji }}</span>
+              <div>
+                <h3 class="pl-card__name">{{ p.name }}</h3>
+                <div class="pl-card__meta">
+                  <span class="pl-code">{{ p.code }}</span>
+                  <span class="pl-order">Order {{ p.sortOrder }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="pl-card__badges">
+              <span [class]="'badge ' + statusBadge(p.isActive)">{{ statusLabel(p.isActive) }}</span>
+              @if (p.isFeatured) {
+                <span class="badge badge-info">Featured</span>
+              }
+            </div>
+          </div>
+
+          <div class="pl-card__price">
+            <strong>{{ formatPrice(p.baseAmountPaise) }}</strong>
+            <span class="muted">/ year + {{ p.gstPercent }}% GST</span>
+            <span class="muted pl-card__total">Total checkout: {{ formatPrice(p.totalAmountPaise) }}</span>
+          </div>
+
+          @if (p.tagline) {
+            <p class="pl-card__tagline">{{ p.tagline }}</p>
+          }
+
+          <ul class="pl-card__features">
+            @for (f of p.features.slice(0, 4); track $index) {
+              <li>{{ f.text }}</li>
+            }
+            @if (p.features.length > 4) {
+              <li class="pl-card__features-more">+ {{ p.features.length - 4 }} more…</li>
+            }
+          </ul>
+
+          <div class="pl-card__actions">
+            <button
+              class="btn btn-sm"
+              type="button"
+              (click)="goToEdit(p.planId)"
+              [disabled]="actionId() === p.planId"
+            >Edit plan</button>
+            <button
+              class="btn btn-sm btn-outline"
+              type="button"
+              (click)="toggleActive(p)"
+              [disabled]="actionId() === p.planId"
+            >{{ p.isActive ? 'Deactivate' : 'Activate' }}</button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>

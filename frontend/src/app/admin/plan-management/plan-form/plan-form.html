@@ -1,0 +1,340 @@
+<div class="admin-wrap">
+  <div class="admin-topbar pf-topbar">
+    <div>
+      <span class="admin-eyebrow">Super Admin · Plan CMS</span>
+      <h2>Edit {{ form().name || 'plan' }}</h2>
+      <div class="muted">
+        Plan code <strong>{{ form().code || '—' }}</strong> is fixed for checkout.
+        Changes apply to membership pages, My Plan, invoices, and emails.
+      </div>
+    </div>
+    <div class="actions pf-topbar-actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn" type="button" (click)="save()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : 'Save plan' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading plan…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="pf-layout">
+      <div class="pf-main">
+        <section class="section pf-section">
+          <h3 class="pf-section-title">Card display</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="pf-name">Plan name <span class="req">*</span></label>
+            <input
+              id="pf-name"
+              class="form-control pf-title-input"
+              type="text"
+              placeholder="MSME Premium"
+              [ngModel]="form().name"
+              (ngModelChange)="updateField('name', $event)"
+              name="name"
+            />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group pf-emoji-group">
+              <label class="form-label" for="pf-emoji">Icon emoji</label>
+              <div class="pf-emoji-row">
+                <span class="pf-emoji-preview" aria-hidden="true">{{ form().iconEmoji || '🌱' }}</span>
+                <input
+                  id="pf-emoji"
+                  class="form-control"
+                  type="text"
+                  maxlength="20"
+                  placeholder="🌱"
+                  [ngModel]="form().iconEmoji"
+                  (ngModelChange)="updateField('iconEmoji', $event)"
+                  name="iconEmoji"
+                />
+              </div>
+              <p class="pf-hint">Shown on membership cards.</p>
+              <div class="pf-emoji-presets">
+                @for (e of emojiPresets; track e) {
+                  <button type="button" class="pf-emoji-preset" (click)="setEmoji(e)" [title]="'Use ' + e">{{ e }}</button>
+                }
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pf-badge">Price badge colour</label>
+              <select
+                id="pf-badge"
+                class="form-control"
+                [ngModel]="form().badgeClass"
+                (ngModelChange)="updateField('badgeClass', $event)"
+                name="badgeClass"
+              >
+                @for (c of badgeClasses; track c.value) {
+                  <option [value]="c.value">{{ c.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pf-tagline">Tagline / card description</label>
+            <textarea
+              id="pf-tagline"
+              class="form-control"
+              rows="2"
+              placeholder="Short line under the plan title on membership cards"
+              [ngModel]="form().tagline"
+              (ngModelChange)="updateField('tagline', $event)"
+              name="tagline"
+            ></textarea>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="pf-sort">Display order</label>
+              <input
+                id="pf-sort"
+                class="form-control"
+                type="number"
+                min="0"
+                [ngModel]="form().sortOrder"
+                (ngModelChange)="updateField('sortOrder', parseIntField($event))"
+                name="sortOrder"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pf-includes">Includes lower plan</label>
+              <select
+                id="pf-includes"
+                class="form-control"
+                [ngModel]="form().includesPlanCode"
+                (ngModelChange)="updateField('includesPlanCode', $event)"
+                name="includesPlanCode"
+              >
+                @for (opt of includesOptions; track opt.value) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                }
+              </select>
+              <p class="pf-hint">Adds an “includes all … benefits” line when set in features.</p>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="pf-suffix">Price suffix</label>
+              <input
+                id="pf-suffix"
+                class="form-control"
+                type="text"
+                placeholder="/ year + 18% GST"
+                [ngModel]="form().displayPriceSuffix"
+                (ngModelChange)="updateField('displayPriceSuffix', $event)"
+                name="displayPriceSuffix"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pf-cta">Button label (CTA)</label>
+              <input
+                id="pf-cta"
+                class="form-control"
+                type="text"
+                placeholder="Get MSME Premium"
+                [ngModel]="form().ctaLabel"
+                (ngModelChange)="updateField('ctaLabel', $event)"
+                name="ctaLabel"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pf-popular">Featured ribbon text</label>
+            <input
+              id="pf-popular"
+              class="form-control"
+              type="text"
+              placeholder="Most Popular"
+              [ngModel]="form().popularLabel"
+              (ngModelChange)="updateField('popularLabel', $event)"
+              name="popularLabel"
+            />
+            <p class="pf-hint">Only shown when “Featured plan” is enabled in the sidebar.</p>
+          </div>
+        </section>
+
+        <section class="section pf-section">
+          <h3 class="pf-section-title">Pricing &amp; checkout</h3>
+          <p class="pf-hint pf-section-lead">These amounts are used for Razorpay checkout and invoices.</p>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="pf-price">Base price (₹ / year)</label>
+              <div class="pf-input-prefix">
+                <span class="pf-input-prefix__symbol">₹</span>
+                <input
+                  id="pf-price"
+                  class="form-control pf-input-prefix__control"
+                  type="number"
+                  min="0"
+                  step="1"
+                  [ngModel]="form().baseAmountRupees"
+                  (ngModelChange)="updateField('baseAmountRupees', parseNumberField($event))"
+                  name="baseAmountRupees"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pf-gst">GST %</label>
+              <input
+                id="pf-gst"
+                class="form-control"
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                [ngModel]="form().gstPercent"
+                (ngModelChange)="updateField('gstPercent', parseNumberField($event))"
+                name="gstPercent"
+              />
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="pf-duration">Duration (days)</label>
+              <input
+                id="pf-duration"
+                class="form-control"
+                type="number"
+                min="1"
+                [ngModel]="form().durationDays"
+                (ngModelChange)="updateField('durationDays', parseIntField($event))"
+                name="durationDays"
+              />
+            </div>
+            <div class="form-group pf-total-box">
+              <span class="form-label">Checkout total (incl. GST)</span>
+              <strong class="pf-total-value">₹{{ previewTotal() | number:'1.0-2':'en-IN' }}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="section pf-section">
+          <div class="pf-section-head">
+            <div>
+              <h3 class="pf-section-title">Benefits / features</h3>
+              <p class="pf-hint">Shown on membership cards. Descriptions appear on My Plan.</p>
+            </div>
+            <button class="btn btn-outline btn-sm" type="button" (click)="addFeature()">+ Add benefit</button>
+          </div>
+
+          <div class="pf-dyn-list">
+            @for (f of features(); track $index; let i = $index) {
+              <div class="pf-feature-card">
+                <div class="pf-feature-card__index">{{ i + 1 }}</div>
+                <div class="pf-feature-card__fields">
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Benefit text (required)"
+                    [ngModel]="f.text"
+                    (ngModelChange)="updateFeature(i, { text: $event })"
+                    [name]="'feat-text-' + i"
+                  />
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="Description for My Plan (optional)"
+                    [ngModel]="f.description"
+                    (ngModelChange)="updateFeature(i, { description: $event })"
+                    [name]="'feat-desc-' + i"
+                  />
+                  <div class="form-row-2 pf-feature-card__row">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Offering slug e.g. msme-events"
+                      [ngModel]="f.offeringSlug"
+                      (ngModelChange)="updateFeature(i, { offeringSlug: $event })"
+                      [name]="'feat-slug-' + i"
+                    />
+                    <label class="pf-check">
+                      <input
+                        type="checkbox"
+                        [ngModel]="f.isIncludesLine"
+                        (ngModelChange)="updateFeature(i, { isIncludesLine: $event })"
+                        [name]="'feat-inc-' + i"
+                      />
+                      “Includes lower plan” line
+                    </label>
+                  </div>
+                </div>
+                <div class="pf-feature-card__actions">
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveFeature(i, -1)" [disabled]="i === 0">↑</button>
+                  <button class="btn btn-outline btn-xs" type="button" (click)="moveFeature(i, 1)" [disabled]="i === features().length - 1">↓</button>
+                  <button class="btn btn-outline btn-xs btn-danger" type="button" (click)="removeFeature(i)">Remove</button>
+                </div>
+              </div>
+            } @empty {
+              <p class="pf-hint">No benefits yet. Add at least one bullet for the membership card.</p>
+            }
+          </div>
+        </section>
+      </div>
+
+      <aside class="pf-aside">
+        <div class="section pf-aside-card">
+          <p class="pf-aside-heading">Status</p>
+          <label class="pf-check pf-check--block">
+            <input type="checkbox" [ngModel]="form().isActive" (ngModelChange)="updateField('isActive', $event)" name="isActive" />
+            Active — visible on site &amp; checkout enabled
+          </label>
+          <label class="pf-check pf-check--block">
+            <input type="checkbox" [ngModel]="form().isFeatured" (ngModelChange)="updateField('isFeatured', $event)" name="isFeatured" />
+            Featured — highlight card styling
+          </label>
+          <p class="pf-aside-note muted">
+            Deactivating hides the plan from the website and blocks new purchases.
+          </p>
+        </div>
+
+        <div class="section pf-aside-card pf-preview-wrap">
+          <p class="pf-aside-heading">Live preview</p>
+          <div class="home-plan-card pf-preview-card" [class.featured-plan]="form().isFeatured">
+            @if (form().isFeatured && form().popularLabel) {
+              <div class="plan-popular">{{ form().popularLabel }}</div>
+            }
+            <div class="hp-card-head">
+              <div class="hp-icon">{{ form().iconEmoji || '🌱' }}</div>
+              <div class="hp-badge" [ngClass]="form().badgeClass">
+                ₹{{ form().baseAmountRupees | number:'1.0-0':'en-IN' }}
+              </div>
+            </div>
+            <p class="hp-gst-note">{{ form().displayPriceSuffix || '/ year + 18% GST' }}</p>
+            <h3>{{ form().name || 'Plan name' }}</h3>
+            <p class="hp-desc">{{ form().tagline || 'Tagline appears here…' }}</p>
+            @if (features().length) {
+              <ul class="hp-features pf-preview-features">
+                @for (f of features().slice(0, 5); track $index) {
+                  @if (f.text.trim()) {
+                    <li [class.hp-features-includes]="f.isIncludesLine">
+                      <span class="tick">✓</span>
+                      <span class="pfl-text">{{ f.text }}</span>
+                    </li>
+                  }
+                }
+              </ul>
+            }
+            <button class="btn-outline pf-preview-btn" type="button" disabled>
+              {{ form().ctaLabel || 'Get plan' }}
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  }
+</div>

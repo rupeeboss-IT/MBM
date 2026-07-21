@@ -1,12 +1,4 @@
-/* Membership plans — GST line below price badge (home-style cards) */
-.hp-gst-note {
-  margin: -0.35rem 0 0.5rem;
-  font-size: 0.8rem;
-  color: var(--muted, #888);
-  text-align: right;
-}
-
-.home-plan-card .btn-outline,
+/* Membership plans — GST line uses global .hp-gst-note in styles.css */
 .home-plan-card .btn-primary,
 .home-plan-card .btn-navy {
   margin-top: auto;

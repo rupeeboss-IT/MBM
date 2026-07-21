@@ -25,6 +25,7 @@ public sealed class PaymentController : ControllerBase
     private readonly IHttpClientFactory _http;
     private readonly PaymentActivationService _activation;
     private readonly InvoicePdfService _invoices;
+    private readonly IPlanBenefitsService _planBenefits;
     private readonly IReferralService _referral;
     private readonly ILeadPushService _leadPush;
     private readonly IEmployeeValidationService _employeeValidation;
@@ -37,6 +38,7 @@ public sealed class PaymentController : ControllerBase
         IHttpClientFactory http,
         PaymentActivationService activation,
         InvoicePdfService invoices,
+        IPlanBenefitsService planBenefits,
         IReferralService referral,
         ILeadPushService leadPush,
         IEmployeeValidationService employeeValidation,
@@ -48,6 +50,7 @@ public sealed class PaymentController : ControllerBase
         _http = http;
         _activation = activation;
         _invoices = invoices;
+        _planBenefits = planBenefits;
         _referral = referral;
         _leadPush = leadPush;
         _employeeValidation = employeeValidation;
@@ -516,7 +519,8 @@ public sealed class PaymentController : ControllerBase
         if (row is null) return NotFound();
 
         var activeFrom = row.ActiveFrom != default ? row.ActiveFrom : row.Payment.PaidAt;
-        var pdf = _invoices.Generate(row.Payment, row.Order, row.Plan, row.User, activeFrom, row.ActiveTo);
+        var benefits = await _planBenefits.GetBenefitTextsAsync(row.Plan.Code, ct);
+        var pdf = _invoices.Generate(row.Payment, row.Order, row.Plan, row.User, activeFrom, row.ActiveTo, benefits);
         var fileName = $"{InvoiceNumber.ForPayment(row.Payment.PaymentId, row.Payment.PaidAt)}.pdf";
         return File(pdf, "application/pdf", fileName);
     }

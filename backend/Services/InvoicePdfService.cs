@@ -36,12 +36,13 @@ public sealed class InvoicePdfService
         Plan plan,
         User user,
         DateTime activeFrom,
-        DateTime? activeTo)
+        DateTime? activeTo,
+        IReadOnlyList<string>? benefits = null)
     {
         var invoiceNo = InvoiceNumber.ForPayment(payment.PaymentId, payment.PaidAt);
         var isTaxInvoice = !string.IsNullOrWhiteSpace(_settings.Gstin);
         var hasGst = order.GstPaise > 0 || plan.GstPercent > 0;
-        var benefits = PlanBenefitsCatalog.GetBenefits(plan.Code);
+        var benefitList = benefits ?? PlanBenefitsCatalog.GetBenefits(plan.Code);
         var paidAt = Normalize(payment.PaidAt);
         var logo = TryLoadLogo();
         var orderNo = !string.IsNullOrWhiteSpace(payment.RazorpayOrderId)
@@ -208,11 +209,11 @@ public sealed class InvoicePdfService
                         }));
                     });
 
-                    if (benefits.Count > 0)
+                    if (benefitList.Count > 0)
                     {
                         col.Item().Element(c => SectionBox(c, "Benefits Included", inner =>
                         {
-                            foreach (var benefit in benefits)
+                            foreach (var benefit in benefitList)
                             {
                                 inner.Item().PaddingBottom(3).Row(r =>
                                 {

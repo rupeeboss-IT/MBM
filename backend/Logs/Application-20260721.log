@@ -748,3 +748,237 @@ Request URL: POST /api/admin/login
 IP Address: ::1
 Correlation ID: 0HNN6V3TMUS4P:00000001
 
+2026-07-21 16:22:37 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 16:22:41 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 16:22:41 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 16:22:41 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 16:22:41 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 16:22:42 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 16:22:42 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=94
+
+2026-07-21 16:22:42 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=287
+
+2026-07-21 16:22:42 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 17:37:18 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 17:37:22 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 17:37:22 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 17:37:22 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 17:37:22 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 17:37:23 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 17:37:23 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=88
+
+2026-07-21 17:37:23 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=276
+
+2026-07-21 17:37:23 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 17:49:02 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN742FNFQM9:00000001
+
+2026-07-21 17:49:02 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN742FNFQM9:00000001
+
+2026-07-21 17:49:03 [INFO]
+ClientHandler()
+Received HTTP response headers after 297.358ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN742FNFQM9:00000001
+
+2026-07-21 17:49:03 [INFO]
+LogicalHandler()
+End processing HTTP request after 312.137ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN742FNFQM9:00000001
+
+2026-07-21 17:49:05 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN742FNFQME:00000001
+
+2026-07-21 17:49:05 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN742FNFQMF:00000001
+
+2026-07-21 17:52:55 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/plans/admin
+IP Address: ::1
+Correlation ID: 0HNN742FNFQMU:00000001
+
+2026-07-21 17:53:17 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/plans/admin
+IP Address: ::1
+Correlation ID: 0HNN742FNFQN1:00000001
+
+2026-07-21 17:57:47 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 17:57:49 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 17:57:49 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 17:57:49 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 17:57:49 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 17:57:50 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 17:57:50 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=33
+
+2026-07-21 17:57:50 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=229
+
+2026-07-21 17:57:50 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 18:02:20 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNBC:00000001
+
+2026-07-21 18:02:20 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNBD:00000001
+
+2026-07-21 18:03:04 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/plans/admin
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNBJ:00000001
+
+2026-07-21 18:03:20 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/plans/admin
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNBK:00000001
+
+2026-07-21 18:03:28 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/plans/admin
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNBP:00000001
+
+2026-07-21 18:03:37 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/plans/admin
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNBQ:00000001
+
+2026-07-21 18:30:16 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNCC:00000001
+
+2026-07-21 18:30:16 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNCC:00000001
+
+2026-07-21 18:30:17 [INFO]
+ClientHandler()
+Received HTTP response headers after 292.069ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNCC:00000001
+
+2026-07-21 18:30:17 [INFO]
+LogicalHandler()
+End processing HTTP request after 318.3251ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN74DTDKNCC:00000001
+

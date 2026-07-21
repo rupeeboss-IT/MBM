@@ -69,6 +69,8 @@ import { SchemeCategoryList } from './admin/scheme-management/scheme-category-li
 import { SchemeCategoryForm } from './admin/scheme-management/scheme-category-form/scheme-category-form';
 import { TeamList } from './admin/team-management/team-list/team-list';
 import { TeamForm } from './admin/team-management/team-form/team-form';
+import { PlanList } from './admin/plan-management/plan-list/plan-list';
+import { PlanForm } from './admin/plan-management/plan-form/plan-form';
 
 export const routes: Routes = [
     {
@@ -655,6 +657,17 @@ export const routes: Routes = [
         path: 'admin/team-management/edit/:teamMemberId',
         component: TeamForm,
         canActivate: [adminGuard],
+    },
+    {
+        path: 'admin/plan-management',
+        component: PlanList,
+        canActivate: [adminGuard, superAdminGuard],
+        pathMatch: 'full'
+    },
+    {
+        path: 'admin/plan-management/edit/:planId',
+        component: PlanForm,
+        canActivate: [adminGuard, superAdminGuard],
     },
     {
         path: 'register',

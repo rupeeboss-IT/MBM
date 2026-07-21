@@ -122,6 +122,7 @@ try
     builder.Services.AddScoped<RB_Website_API.Services.MembershipEmailService>();
     builder.Services.AddScoped<RB_Website_API.Services.RegistrationWelcomeEmailService>();
     builder.Services.AddScoped<RB_Website_API.Services.InvoicePdfService>();
+    builder.Services.AddScoped<RB_Website_API.Services.IPlanBenefitsService, RB_Website_API.Services.PlanBenefitsService>();
     builder.Services.Configure<RB_Website_API.Auth.InvoiceSettings>(
         builder.Configuration.GetSection(RB_Website_API.Auth.InvoiceSettings.SectionName));
     builder.Services.Configure<RB_Website_API.Auth.CustomerReportSettings>(

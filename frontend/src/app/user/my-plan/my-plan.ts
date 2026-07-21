@@ -10,6 +10,7 @@ import {
   type PaymentHistoryItem,
 } from '../../core/services/payment.service';
 import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
+import { PlansService } from '../../core/services/plans.service';
 import { ToastService } from '../../core/services/toast.service';
 import { LocalDatePipe } from '../../core/pipes/local-date.pipe';
 import { SchemeDiscoveryReportAccess } from '../../core/components/scheme-discovery-report-access/scheme-discovery-report-access';
@@ -624,8 +625,10 @@ export class MyPlan {
   private readonly payments = inject(PaymentService);
   private readonly toast = inject(ToastService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
+  private readonly plansApi = inject(PlansService);
 
   readonly loading = signal(false);
+  readonly cmsBenefits = signal<Benefit[]>([]);
   readonly cancelling = signal(false);
   readonly plan = signal<ActivePlan | null>(null);
   readonly profile = signal<MeRes | null>(null);
@@ -646,6 +649,8 @@ export class MyPlan {
   }
 
   get benefits(): Benefit[] {
+    const cms = this.cmsBenefits();
+    if (cms.length) return cms;
     const code = (this.plan()?.planCode || '').toLowerCase();
     return PLAN_BENEFITS[code] ?? [];
   }
@@ -693,10 +698,12 @@ export class MyPlan {
       this.plan.set(planRes?.plan ?? null);
       this.history.set(histRes?.items ?? []);
       this.profile.set(profileRes);
+      await this.loadCmsBenefits(planRes?.plan?.planCode);
     } catch (e: any) {
       this.plan.set(null);
       this.profile.set(null);
       this.history.set([]);
+      this.cmsBenefits.set([]);
       const msg =
         (e?.error?.message as string | undefined) ||
         e?.message ||
@@ -705,5 +712,29 @@ export class MyPlan {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  private async loadCmsBenefits(planCode: string | null | undefined) {
+    const code = (planCode ?? '').trim();
+    if (!code) {
+      this.cmsBenefits.set([]);
+      return;
+    }
+    try {
+      const res = await firstValueFrom(this.plansApi.getByCode(code).pipe(timeout(10000)));
+      const features = res.plan?.features ?? [];
+      if (features.length) {
+        this.cmsBenefits.set(
+          features.map((f) => ({
+            title: f.text,
+            desc: f.description?.trim() || f.text,
+          })),
+        );
+        return;
+      }
+    } catch {
+      // fall back to hardcoded PLAN_BENEFITS
+    }
+    this.cmsBenefits.set([]);
   }
 }

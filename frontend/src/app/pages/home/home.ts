@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { JoinTodayButton } from '../../core/components/join-today-button/join-today-button';
 import { ImageLightbox } from '../../core/components/image-lightbox/image-lightbox';
+import { MembershipPlanCards } from '../../core/components/membership-plan-cards/membership-plan-cards';
 import { ContactService } from '../../core/services/contact.service';
 import { SchemeDiscoveryFlowService } from '../../core/services/scheme-discovery-flow.service';
 import { MembershipPlanCheckoutService, type MembershipPlanCode } from '../../core/services/membership-plan-checkout.service';
@@ -16,10 +17,11 @@ import { FREE_REGISTER_QUERY_PARAMS } from '../../core/utils/registration-mode.u
 import { RecaptchaService } from '../../core/services/recaptcha.service';
 import { EventsService, type PublicEvent } from '../../core/services/events.service';
 import { SchemesService, type PublicScheme } from '../../core/services/schemes.service';
+import { PlansService, type PublicPlanItem } from '../../core/services/plans.service';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, RouterLink, JoinTodayButton, ImageLightbox],
+  imports: [CommonModule, FormsModule, RouterLink, JoinTodayButton, ImageLightbox, MembershipPlanCards],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -32,12 +34,15 @@ export class Home implements OnInit {
   private readonly schemesApi = inject(SchemesService);
   readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly planCheckout = inject(MembershipPlanCheckoutService);
+  private readonly plansApi = inject(PlansService);
 
   readonly lightboxOpen = signal(false);
   readonly lightboxSrc = signal<string | null>(null);
   readonly lightboxAlt = signal('');
   readonly homeEvents = signal<PublicEvent[]>([]);
   readonly homeSchemes = signal<PublicScheme[]>([]);
+  readonly cmsPlans = signal<PublicPlanItem[]>([]);
+  readonly plansLoading = signal(true);
 
   readonly callbackModalOpen = signal(false);
   readonly callbackSubmitting = signal(false);
@@ -62,6 +67,18 @@ export class Home implements OnInit {
     void this.schemeDiscovery.tryResumeOnPageLoad();
     void this.loadHomeEvents();
     void this.loadHomeSchemes();
+    void this.loadCmsPlans();
+  }
+
+  private async loadCmsPlans() {
+    try {
+      const res = await firstValueFrom(this.plansApi.listPublic());
+      this.cmsPlans.set(res.plans ?? []);
+    } catch {
+      this.cmsPlans.set([]);
+    } finally {
+      this.plansLoading.set(false);
+    }
   }
 
   private async loadHomeEvents() {
@@ -123,6 +140,10 @@ export class Home implements OnInit {
 
   choosePlan(code: MembershipPlanCode): void {
     void this.planCheckout.choosePlan(code);
+  }
+
+  onPlanChoose(code: string): void {
+    this.choosePlan(code as MembershipPlanCode);
   }
 
   openLightbox(src: string, alt: string, event: MouseEvent) {

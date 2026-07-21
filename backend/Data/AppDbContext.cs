@@ -14,6 +14,7 @@ namespace RB_Website_API.Data
         public DbSet<Models.UserStatusHistory> UserStatusHistory => Set<Models.UserStatusHistory>();
         public DbSet<Models.UserAuditLog> UserAuditLog => Set<Models.UserAuditLog>();
         public DbSet<Models.Plan> Plans => Set<Models.Plan>();
+        public DbSet<Models.PlanFeature> PlanFeatures => Set<Models.PlanFeature>();
         public DbSet<Models.PaymentOrder> PaymentOrders => Set<Models.PaymentOrder>();
         public DbSet<Models.Payment> Payments => Set<Models.Payment>();
         public DbSet<Models.UserPlan> UserPlans => Set<Models.UserPlan>();
@@ -201,6 +202,14 @@ namespace RB_Website_API.Data
             modelBuilder.Entity<Models.TeamMember>(e =>
             {
                 e.ToTable("TeamMembers", "dbo");
+            });
+
+            modelBuilder.Entity<Models.Plan>(e =>
+            {
+                e.HasMany(x => x.Features)
+                    .WithOne(f => f.Plan)
+                    .HasForeignKey(f => f.PlanId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

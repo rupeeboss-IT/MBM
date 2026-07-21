@@ -1,0 +1,17 @@
+.mpc-loading,
+.mpc-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.mpc-card--register {
+  transition: box-shadow 0.15s ease;
+}
+
+.mpc-card--register:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.mpc-grid--register .hp-features {
+  font-size: 0.88rem;
+}

@@ -20,6 +20,7 @@ public sealed class RegistrationWelcomeEmailService
     private readonly AppDbContext _db;
     private readonly IEmailSender _email;
     private readonly InvoicePdfService _invoices;
+    private readonly IPlanBenefitsService _planBenefits;
     private readonly ApplicationUrlsSettings _urls;
     private readonly ContactSettings _contact;
     private readonly IWebHostEnvironment _env;
@@ -29,6 +30,7 @@ public sealed class RegistrationWelcomeEmailService
         AppDbContext db,
         IEmailSender email,
         InvoicePdfService invoices,
+        IPlanBenefitsService planBenefits,
         IOptions<ApplicationUrlsSettings> urls,
         IOptions<ContactSettings> contact,
         IWebHostEnvironment env,
@@ -37,6 +39,7 @@ public sealed class RegistrationWelcomeEmailService
         _db = db;
         _email = email;
         _invoices = invoices;
+        _planBenefits = planBenefits;
         _urls = urls.Value;
         _contact = contact.Value;
         _env = env;
@@ -91,10 +94,11 @@ public sealed class RegistrationWelcomeEmailService
             var activeFrom = result.ActiveFrom ?? payment.PaidAt;
             var activeTo = result.ActiveTo;
             var invoiceNo = InvoiceNumber.ForPayment(payment.PaymentId, payment.PaidAt);
-            var pdf = _invoices.Generate(payment, order, plan, user, activeFrom, activeTo);
+            var benefits = await _planBenefits.GetBenefitTextsAsync(plan.Code, ct);
+            var pdf = _invoices.Generate(payment, order, plan, user, activeFrom, activeTo, benefits);
 
             var subject = $"Welcome to MSME Bharat Manch — {plan.Name} activated";
-            var body = BuildPaidBody(user, plan, activeFrom, activeTo);
+            var body = await BuildPaidBodyAsync(user, plan, activeFrom, activeTo, ct);
             var attachment = new EmailAttachment($"{invoiceNo}.pdf", pdf, "application/pdf");
 
             await _email.SendAsync(user.Email, subject, body, isHtml: true, [attachment], ct);
@@ -145,11 +149,12 @@ public sealed class RegistrationWelcomeEmailService
             .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
     }
 
-    private string BuildPaidBody(
+    private async Task<string> BuildPaidBodyAsync(
         Models.User user,
         Models.Plan plan,
         DateTime activeFrom,
-        DateTime? activeTo)
+        DateTime? activeTo,
+        CancellationToken ct)
     {
         var template = LoadTemplate(PaidTemplateFile);
         return template
@@ -158,7 +163,7 @@ public sealed class RegistrationWelcomeEmailService
             .Replace("{{PlanName}}", Encode(plan.Name))
             .Replace("{{ActiveFrom}}", Encode(AppDateTime.FormatDate(activeFrom)))
             .Replace("{{ActiveTo}}", Encode(AppDateTime.FormatDate(activeTo)))
-            .Replace("{{BenefitsHtml}}", BuildBenefitsHtml(plan.Code))
+            .Replace("{{BenefitsHtml}}", await BuildBenefitsHtmlAsync(plan.Code, ct))
             .Replace("{{MyPlanUrl}}", Encode(_urls.MyPlanUrl))
             .Replace("{{DashboardUrl}}", Encode(_urls.ProfileUrl))
             .Replace("{{SupportEmail}}", Encode(_contact.FromEmail))
@@ -166,9 +171,9 @@ public sealed class RegistrationWelcomeEmailService
             .Replace("{{Year}}", DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
     }
 
-    private static string BuildBenefitsHtml(string planCode)
+    private async Task<string> BuildBenefitsHtmlAsync(string planCode, CancellationToken ct)
     {
-        var benefits = PlanBenefitsCatalog.GetBenefits(planCode);
+        var benefits = await _planBenefits.GetBenefitTextsAsync(planCode, ct);
         if (benefits.Count == 0)
             return "<p style=\"margin:0;font-size:15px;line-height:1.65;color:#334155;\">Your membership benefits are available in your dashboard.</p>";
 

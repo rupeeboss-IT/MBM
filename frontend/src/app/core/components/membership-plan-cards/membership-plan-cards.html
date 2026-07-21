@@ -1,0 +1,76 @@
+@if (loading) {
+  <div class="mpc-loading muted">Loading plans…</div>
+} @else if (plans.length === 0) {
+  <div class="mpc-empty muted">Membership plans are temporarily unavailable.</div>
+} @else {
+  <div class="home-plans-grid" [class.mpc-grid--register]="variant === 'register'">
+    @for (plan of plans; track plan.planId) {
+      <div
+        [class]="cardClass(plan)"
+        [id]="'plan-' + plan.code"
+        [class.mpc-card--register]="variant === 'register'"
+        (click)="variant === 'register' ? onChoose(plan.code) : null"
+        [style.cursor]="variant === 'register' ? 'pointer' : null"
+      >
+        @if (plan.isFeatured && plan.popularLabel) {
+          <div class="plan-popular">{{ plan.popularLabel }}</div>
+        }
+        @if (variant === 'membership' && planBadge(plan.code); as badge) {
+          <div class="membership-plan-rec-badge">{{ badge }}</div>
+        }
+
+        <div class="hp-card-head">
+          <div class="hp-icon">{{ plan.iconEmoji }}</div>
+          <div class="hp-badge" [ngClass]="plan.badgeClass">{{ priceLabel(plan) }}</div>
+        </div>
+
+        @if (variant === 'membership' && plan.displayPriceSuffix) {
+          <p class="hp-gst-note">{{ plan.displayPriceSuffix }}</p>
+        }
+
+        <h3 [style.font-size]="variant === 'register' ? '1rem' : null">{{ plan.name }}</h3>
+        @if (plan.tagline) {
+          <p class="hp-desc">{{ plan.tagline }}</p>
+        }
+
+        <ul class="hp-features">
+          @for (f of plan.features; track $index) {
+            <li [class.hp-features-includes]="f.isIncludesLine">
+              <span class="tick">✓</span>
+              @if (f.offeringSlug && !f.isIncludesLine) {
+                <a class="plan-feature-link" [routerLink]="['/offering', f.offeringSlug]" (click)="$event.stopPropagation()">
+                  <span class="pfl-text">{{ f.text }}</span>
+                  @if (variant !== 'register') {
+                    <span class="pfl-info">ℹ Learn more</span>
+                  }
+                </a>
+              } @else {
+                <span class="pfl-text">{{ f.text }}</span>
+              }
+            </li>
+          }
+        </ul>
+
+        @if (variant === 'register') {
+          <div
+            style="background:var(--gray);border-radius:8px;padding:.6rem;text-align:center;font-weight:700;color:var(--green);font-size:.9rem"
+            [style.background]="plan.isFeatured ? 'var(--red-light)' : 'var(--gray)'"
+            [style.color]="plan.isFeatured ? 'var(--red)' : 'var(--green)'"
+          >
+            Select {{ plan.name.split(' ').slice(-1)[0] }} — {{ priceLabel(plan) }}
+          </div>
+        } @else {
+          <button
+            [class]="plan.isFeatured ? 'btn-primary' : 'btn-outline'"
+            style="width:100%;text-align:center;display:block"
+            type="button"
+            (click)="onChoose(plan.code)"
+            [disabled]="isCheckoutDisabled(plan.code)"
+          >
+            {{ ctaLabel(plan) }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+}

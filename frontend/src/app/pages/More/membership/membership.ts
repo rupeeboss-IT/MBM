@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { MembershipPlanCards } from '../../../core/components/membership-plan-cards/membership-plan-cards';
 import { AuthSessionService } from '../../../core/services/auth-session.service';
+import { PlansService, type PublicPlanItem } from '../../../core/services/plans.service';
 import { SchemeDiscoveryFlowService } from '../../../core/services/scheme-discovery-flow.service';
 import { ToastService } from '../../../core/services/toast.service';
 import {
@@ -22,7 +25,7 @@ import { OFFERING_EXPLORER_CARDS } from '../../../data/offering-explorer-cards.d
 @Component({
   selector: 'app-membership',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, MembershipPlanCards],
   templateUrl: './membership.html',
   styleUrl: './membership.css',
 })
@@ -35,9 +38,12 @@ export class Membership implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly schemeDiscovery = inject(SchemeDiscoveryFlowService);
   private readonly analytics = inject(AnalyticsService);
+  private readonly plansApi = inject(PlansService);
 
   openFaqIndex: number | null = null;
   readonly membershipSource = signal<MembershipSource | null>(null);
+  readonly cmsPlans = signal<PublicPlanItem[]>([]);
+  readonly plansLoading = signal(true);
   readonly sourceGuidance = () => getMembershipSourceGuidance(this.membershipSource());
   readonly isRecommendedPlan = isRecommendedPlan;
 
@@ -48,6 +54,18 @@ export class Membership implements OnInit {
   ngOnInit(): void {
     this.resolveMembershipSource();
     this.checkout.processPendingPlanAfterAuth();
+    void this.loadCmsPlans();
+  }
+
+  private async loadCmsPlans() {
+    try {
+      const res = await firstValueFrom(this.plansApi.listPublic());
+      this.cmsPlans.set(res.plans ?? []);
+    } catch {
+      this.cmsPlans.set([]);
+    } finally {
+      this.plansLoading.set(false);
+    }
   }
 
   private resolveMembershipSource(): void {
@@ -79,5 +97,9 @@ export class Membership implements OnInit {
   choosePlan(code: MembershipPlanCode): void {
     this.analytics.trackMembershipCheckoutStarted(code);
     void this.checkout.choosePlan(code, { membershipSource: this.membershipSource() });
+  }
+
+  onPlanChoose(code: string): void {
+    this.choosePlan(code as MembershipPlanCode);
   }
 }
