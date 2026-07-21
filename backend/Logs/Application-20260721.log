@@ -1,0 +1,750 @@
+2026-07-21 11:12:19 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 11:12:28 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 11:12:28 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 11:12:28 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 11:12:28 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 11:12:30 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 11:12:30 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=101
+
+2026-07-21 11:12:30 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=318
+
+2026-07-21 11:12:30 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 11:48:33 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ6I:00000001
+
+2026-07-21 11:48:33 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ6I:00000001
+
+2026-07-21 11:48:33 [INFO]
+ClientHandler()
+Received HTTP response headers after 287.1409ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ6I:00000001
+
+2026-07-21 11:48:33 [INFO]
+LogicalHandler()
+End processing HTTP request after 317.6221ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ6I:00000001
+
+2026-07-21 11:48:35 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ6N:00000001
+
+2026-07-21 11:48:35 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ6O:00000001
+
+2026-07-21 12:23:00 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/team-members
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ75:00000001
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__15>d.MoveNext() in D:\MBM\backend\Program.cs:line 322
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-21 12:23:01 [ERROR]
+ApiExceptionLogService()
+API error 404 "GET" "/api/team-members" UserId=null IP="::1" Operation=null UserMessage="The requested file is not available."
+Request URL: GET /api/team-members
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ75:00000001
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__15>d.MoveNext() in D:\MBM\backend\Program.cs:line 322
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-21 12:23:07 [ERROR]
+ExceptionHandlerMiddleware()
+An unhandled exception has occurred while executing the request.
+Request URL: GET /api/team-members
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ78:00000001
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__15>d.MoveNext() in D:\MBM\backend\Program.cs:line 322
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-21 12:23:07 [ERROR]
+ApiExceptionLogService()
+API error 404 "GET" "/api/team-members" UserId=null IP="::1" Operation=null UserMessage="The requested file is not available."
+Request URL: GET /api/team-members
+IP Address: ::1
+Correlation ID: 0HNN6TBDIJQ78:00000001
+Exception:
+System.IO.FileNotFoundException: Could not find file 'D:\MBM\backend\wwwroot\index.html'.
+File name: 'D:\MBM\backend\wwwroot\index.html'
+   at System.IO.FileInfo.get_Length()
+   at Microsoft.AspNetCore.Http.SendFileFallback.SendFileAsync(Stream destination, String filePath, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Http.SendFileResponseExtensions.SendFileAsyncCore(HttpResponse response, String fileName, Int64 offset, Nullable`1 count, CancellationToken cancellationToken)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__15>d.MoveNext() in D:\MBM\backend\Program.cs:line 322
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
+
+2026-07-21 12:27:41 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 12:27:44 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 12:27:44 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 12:27:44 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 12:27:44 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 12:27:45 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 12:27:45 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=58
+
+2026-07-21 12:27:45 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=258
+
+2026-07-21 12:27:45 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 12:29:46 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVA:00000001
+
+2026-07-21 12:29:46 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVA:00000001
+
+2026-07-21 12:29:47 [INFO]
+ClientHandler()
+Received HTTP response headers after 280.5616ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVA:00000001
+
+2026-07-21 12:29:47 [INFO]
+LogicalHandler()
+End processing HTTP request after 293.8484ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVA:00000001
+
+2026-07-21 12:29:48 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVF:00000001
+
+2026-07-21 12:29:49 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVG:00000001
+
+2026-07-21 12:32:08 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVQ:00000001
+
+2026-07-21 12:32:08 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVQ:00000001
+
+2026-07-21 12:32:08 [INFO]
+ClientHandler()
+Received HTTP response headers after 132.3648ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVQ:00000001
+
+2026-07-21 12:32:08 [INFO]
+LogicalHandler()
+End processing HTTP request after 133.2199ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6ULF5JLVQ:00000001
+
+2026-07-21 12:33:59 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 12:34:04 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 12:34:04 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 12:34:04 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 12:34:04 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 12:34:05 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 12:34:06 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=617
+
+2026-07-21 12:34:06 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=863
+
+2026-07-21 12:34:06 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 12:35:02 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEFT:00000001
+
+2026-07-21 12:35:02 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEFT:00000001
+
+2026-07-21 12:35:02 [INFO]
+ClientHandler()
+Received HTTP response headers after 293.7629ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEFT:00000001
+
+2026-07-21 12:35:02 [INFO]
+LogicalHandler()
+End processing HTTP request after 318.0071ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEFT:00000001
+
+2026-07-21 12:35:05 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEG2:00000001
+
+2026-07-21 12:35:05 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEG3:00000001
+
+2026-07-21 12:35:21 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/team-members/admin
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEG4:00000001
+
+2026-07-21 12:35:26 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/team-members/admin
+IP Address: ::1
+Correlation ID: 0HNN6UP0JPEG5:00000001
+
+2026-07-21 12:35:52 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 12:35:56 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 12:35:56 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 12:35:56 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 12:35:56 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 12:35:56 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 12:35:56 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=24
+
+2026-07-21 12:35:56 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=214
+
+2026-07-21 12:35:56 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 12:38:02 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENQN:00000001
+
+2026-07-21 12:38:02 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENQN:00000001
+
+2026-07-21 12:38:02 [INFO]
+ClientHandler()
+Received HTTP response headers after 260.2511ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENQN:00000001
+
+2026-07-21 12:38:02 [INFO]
+LogicalHandler()
+End processing HTTP request after 278.67ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENQN:00000001
+
+2026-07-21 12:38:04 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENQS:00000001
+
+2026-07-21 12:38:04 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENQT:00000001
+
+2026-07-21 12:38:21 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/team-members/admin
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENR4:00000001
+
+2026-07-21 12:38:26 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/team-members/admin
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENR5:00000001
+
+2026-07-21 12:38:29 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/team-members/admin
+IP Address: ::1
+Correlation ID: 0HNN6UQ1JENR6:00000001
+
+2026-07-21 12:38:38 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 12:38:42 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 12:38:42 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 12:38:43 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 12:38:43 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 12:38:44 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 12:38:44 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=28
+
+2026-07-21 12:38:44 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=235
+
+2026-07-21 12:38:44 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 12:38:57 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL5R:00000001
+
+2026-07-21 12:38:57 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL5R:00000001
+
+2026-07-21 12:38:58 [INFO]
+ClientHandler()
+Received HTTP response headers after 320.3258ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL5R:00000001
+
+2026-07-21 12:38:58 [INFO]
+LogicalHandler()
+End processing HTTP request after 340.1895ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL5R:00000001
+
+2026-07-21 12:39:02 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL60:00000001
+
+2026-07-21 12:39:02 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL61:00000001
+
+2026-07-21 12:39:04 [INFO]
+JwtBearerHandler()
+AuthenticationScheme: "Bearer" was challenged.
+Request URL: GET /api/team-members/admin
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL62:00000001
+
+2026-07-21 12:41:06 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL63:00000001
+
+2026-07-21 12:41:06 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL63:00000001
+
+2026-07-21 12:41:06 [INFO]
+ClientHandler()
+Received HTTP response headers after 151.4256ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL63:00000001
+
+2026-07-21 12:41:06 [INFO]
+LogicalHandler()
+End processing HTTP request after 152.5465ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6URJBVL63:00000001
+
+2026-07-21 12:53:32 [INFO]
+mbm-api()
+MBM API started Environment="Development" Urls="" LogFolder="Logs"
+
+2026-07-21 12:53:36 [INFO]
+AdminSeederHostedService()
+Superadmin already exists ("superadmin@msmebharatmanch.com").
+
+2026-07-21 12:53:36 [INFO]
+BlogInitializerService()
+Blogs table verified.
+
+2026-07-21 12:53:36 [INFO]
+BlogInitializerService()
+BlogCategories table verified.
+
+2026-07-21 12:53:36 [INFO]
+BlogInitializerService()
+BlogBadges table verified.
+
+2026-07-21 12:53:37 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup starting.
+
+2026-07-21 12:53:37 [INFO]
+SmtpEmailSender()
+SMTP warmup DNS resolved Host="smtpout.secureserver.net" AddressCount=1 ElapsedMs=74
+
+2026-07-21 12:53:37 [INFO]
+SmtpEmailSender()
+SMTP warmup TCP connected Host="smtpout.secureserver.net" Port=587 ElapsedMs=270
+
+2026-07-21 12:53:37 [INFO]
+SmtpWarmupHostedService()
+SMTP warmup finished.
+
+2026-07-21 12:54:05 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS0R:00000001
+
+2026-07-21 12:54:05 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS0R:00000001
+
+2026-07-21 12:54:08 [INFO]
+ClientHandler()
+Received HTTP response headers after 3301.9809ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS0R:00000001
+
+2026-07-21 12:54:08 [INFO]
+LogicalHandler()
+End processing HTTP request after 3318.6669ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS0R:00000001
+
+2026-07-21 12:54:10 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/enquiry-management/stats
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS10:00000001
+
+2026-07-21 12:54:10 [WARN]
+Query()
+The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+Request URL: GET /api/admin/credit-repair/stats
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS11:00000001
+
+2026-07-21 12:54:45 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS13:00000001
+
+2026-07-21 12:54:45 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS13:00000001
+
+2026-07-21 12:54:45 [INFO]
+ClientHandler()
+Received HTTP response headers after 127.2194ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS13:00000001
+
+2026-07-21 12:54:45 [INFO]
+LogicalHandler()
+End processing HTTP request after 128.0083ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS13:00000001
+
+2026-07-21 12:55:03 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS1H:00000001
+
+2026-07-21 12:55:03 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS1H:00000001
+
+2026-07-21 12:55:03 [INFO]
+ClientHandler()
+Received HTTP response headers after 101.5501ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS1H:00000001
+
+2026-07-21 12:55:03 [INFO]
+LogicalHandler()
+End processing HTTP request after 102.5204ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS1H:00000001
+
+2026-07-21 12:56:10 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS20:00000001
+
+2026-07-21 12:56:10 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS20:00000001
+
+2026-07-21 12:56:10 [INFO]
+ClientHandler()
+Received HTTP response headers after 152.2016ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS20:00000001
+
+2026-07-21 12:56:10 [INFO]
+LogicalHandler()
+End processing HTTP request after 153.2267ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS20:00000001
+
+2026-07-21 15:15:18 [INFO]
+LogicalHandler()
+Start processing HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS4P:00000001
+
+2026-07-21 15:15:18 [INFO]
+ClientHandler()
+Sending HTTP request "POST" "https://www.google.com/recaptcha/api/siteverify"
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS4P:00000001
+
+2026-07-21 15:15:19 [INFO]
+ClientHandler()
+Received HTTP response headers after 1389.4298ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS4P:00000001
+
+2026-07-21 15:15:19 [INFO]
+LogicalHandler()
+End processing HTTP request after 1423.6131ms - 200
+Request URL: POST /api/admin/login
+IP Address: ::1
+Correlation ID: 0HNN6V3TMUS4P:00000001
+

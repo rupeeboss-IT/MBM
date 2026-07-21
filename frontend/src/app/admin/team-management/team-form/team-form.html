@@ -1,0 +1,176 @@
+<div class="admin-wrap">
+  <div class="admin-topbar tf-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>{{ mode() === 'create' ? 'New team member' : 'Edit team member' }}</h2>
+      <div class="muted">
+        @if (mode() === 'edit') {
+          Update profile details. Change display order from the
+          <a routerLink="/admin/team-management">team list</a>.
+        } @else {
+          New members are added at the end. Reorder them on the team list after saving.
+        }
+      </div>
+    </div>
+    <div class="actions tf-topbar-actions">
+      <button class="btn btn-outline" type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
+      <button class="btn" type="button" (click)="save()" [disabled]="saving() || loading()">
+        {{ saving() ? 'Saving…' : 'Save' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading…</span>
+      </div>
+    </div>
+  } @else {
+    <div class="tf-layout">
+      <div class="tf-main">
+        <section class="tf-section section">
+          <h3 class="tf-section-title">Profile</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="tf-name">Name <span class="req">*</span></label>
+            <input
+              id="tf-name"
+              class="form-control tf-title-input"
+              type="text"
+              placeholder="Mr. Example Name"
+              [ngModel]="form().name"
+              (ngModelChange)="updateField('name', $event)"
+              name="name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="tf-designation">Designation / role</label>
+            <textarea
+              id="tf-designation"
+              class="form-control"
+              rows="4"
+              placeholder="Director - MSME Bharat Manch"
+              [ngModel]="form().designationHtml"
+              (ngModelChange)="updateField('designationHtml', $event)"
+              name="designationHtml"
+            ></textarea>
+            <p class="tf-hint">Use a new line or <code>&lt;br /&gt;</code> for multiple lines.</p>
+          </div>
+        </section>
+
+        <section class="tf-section section">
+          <h3 class="tf-section-title">Photo</h3>
+
+          <div class="tf-photo-grid">
+            <div class="tf-photo-upload">
+              @if (form().photoUrl) {
+                <div class="tf-photo-preview-wrap">
+                  <img class="tf-photo-preview" [src]="form().photoUrl" [alt]="form().name || 'Team member'" />
+                </div>
+                <div class="tf-photo-actions">
+                  <label class="btn btn-outline tf-photo-btn" [class.is-disabled]="uploadingPhoto()">
+                    {{ uploadingPhoto() ? 'Uploading…' : 'Change photo' }}
+                    <input
+                      type="file"
+                      class="tf-file-input"
+                      [accept]="acceptImages"
+                      [disabled]="uploadingPhoto()"
+                      (change)="onPhotoSelected($event)"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    class="btn btn-outline tf-photo-btn"
+                    (click)="clearPhoto()"
+                    [disabled]="uploadingPhoto()"
+                  >
+                    Remove
+                  </button>
+                </div>
+              } @else {
+                <label class="tf-photo-drop" [class.is-busy]="uploadingPhoto()">
+                  <span class="tf-photo-drop-title">
+                    {{ uploadingPhoto() ? 'Uploading…' : 'Upload photo' }}
+                  </span>
+                  <span class="tf-photo-drop-hint">JPG, PNG, WEBP or GIF · max 5 MB</span>
+                  <input
+                    type="file"
+                    class="tf-file-input"
+                    [accept]="acceptImages"
+                    [disabled]="uploadingPhoto()"
+                    (change)="onPhotoSelected($event)"
+                  />
+                </label>
+              }
+            </div>
+
+            <div class="form-group tf-photo-url">
+              <label class="form-label" for="tf-photo-url">Or photo URL / path <span class="req">*</span></label>
+              <input
+                id="tf-photo-url"
+                class="form-control"
+                type="text"
+                placeholder="/team/example.jpg"
+                [ngModel]="form().photoUrl"
+                (ngModelChange)="updateField('photoUrl', $event)"
+                name="photoUrl"
+              />
+              <p class="tf-hint">Use an uploaded path or an existing file under <code>/team/</code>.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="tf-aside">
+        <div class="tf-aside-card section">
+          <p class="tf-aside-heading">Status</p>
+          <div class="tf-status" [class.tf-status--live]="form().isActive">
+            <span class="tf-status-dot" aria-hidden="true"></span>
+            <span>{{ form().isActive ? 'Active' : 'Inactive' }}</span>
+          </div>
+          <p class="tf-aside-note">
+            {{ form().isActive
+              ? 'Visible on the public About page.'
+              : 'Hidden from the website until activated.' }}
+          </p>
+          <label class="tf-check">
+            <input
+              type="checkbox"
+              [ngModel]="form().isActive"
+              (ngModelChange)="updateField('isActive', $event)"
+              name="isActive"
+            />
+            Show on About page
+          </label>
+        </div>
+
+        <div class="tf-aside-card section tf-preview-card">
+          <p class="tf-aside-heading">Live preview</p>
+          <article class="tf-preview-team-card">
+            <div class="tf-preview-avatar">
+              @if (hasPhoto()) {
+                <img [src]="form().photoUrl" [alt]="previewName()" />
+              } @else {
+                <span class="tf-preview-placeholder" aria-hidden="true">Photo</span>
+              }
+            </div>
+            <h4>{{ previewName() }}</h4>
+            <p [innerHTML]="previewDesignation()"></p>
+          </article>
+        </div>
+
+        <div class="tf-aside-card section tf-aside-tip">
+          <p class="tf-aside-heading">Display order</p>
+          <p class="tf-aside-note">
+            Drag members on the
+            <a routerLink="/admin/team-management">team list</a>
+            to change who appears first on <code>/about</code>.
+          </p>
+        </div>
+      </aside>
+    </div>
+  }
+</div>

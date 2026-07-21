@@ -92,77 +92,29 @@
         <div class="section-tag">Team</div>
         <h2>Our Leadership Team</h2>
       </div>
-      <div class="team-grid">
-        <div class="team-card">
-          <div class="team-avatar">
-            <img class="team-avatar-logo" src="../team/NBShetty.jpg" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" />
-          </div>
-          <h3>Shri. CA. N B Shetty</h3>
-          <!-- <div class="role">Manufacturer - Pune</div> -->
-          <p>Chairman, MSME Bharat Manch, RupeeBoss Financial Services Pvt Ltd & Triveni Group</p>
+      @if (teamLoading()) {
+        <p class="muted" style="text-align:center">Loading team…</p>
+      } @else if (teamMembers().length === 0) {
+        <p class="muted" style="text-align:center">Leadership team information will be available soon.</p>
+      } @else {
+        <div class="team-grid">
+          @for (member of teamMembers(); track member.teamMemberId) {
+            <div class="team-card">
+              <div class="team-avatar">
+                <img
+                  class="team-avatar-logo"
+                  [src]="member.photoUrl"
+                  [alt]="member.name"
+                  width="95"
+                  style="height: 100%; border-radius: 50%; border: 2px solid #Ce0101;"
+                />
+              </div>
+              <h3>{{ member.name }}</h3>
+              <p [innerHTML]="member.designationHtml"></p>
+            </div>
+          }
         </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/PNShetty.jpg" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. P N Shetty</h3>
-          <!-- <div class="role">Trader - New Delhi</div> -->
-          <p>President MSME Bharat Manch <br />
-            Founder & CEO - RupeeBoss Financial Services Pvt Ltd</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/dr.Narendra.jpeg" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Dr. Narendra Mairpady</h3>
-          <!-- <div class="role">Service Provider — Mumbai</div> -->
-          <p>Advisor - Enqube Collaborations</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/satish.jpg" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Sathish Shetty</h3>
-          <!-- <div class="role">Manufacturer - Pune</div> -->
-          <p>Senior Director - (South) MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/praveen.png" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Praveen Chandra</h3>
-          <!-- <div class="role">Trader - New Delhi</div> -->
-          <p>Country Director - MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/rawlo.jpg" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Rawlo Tuna</h3>
-          <!-- <div class="role">Service Provider — Mumbai</div> -->
-          <p>Director - (East) MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/adesh.png" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Adesh Otari</h3>
-          <!-- <div class="role">Manufacturer - Pune</div> -->
-          <p>Director - (west) MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/keerthi.jpg" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Keerthiraja Shetty</h3>
-          <!-- <div class="role">Trader - New Delhi</div> -->
-          <p>Deputy Director - MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/sushanth.png" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Sushanth Shetty</h3>
-          <!-- <div class="role">Service Provider — Mumbai</div> -->
-          <p>Deputy Director - MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/shriniwasa.png" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Shrinivasa Shetty</h3>
-          <!-- <div class="role">Manufacturer - Pune</div> -->
-          <p>Deputy Director - MSME Bharat Manch</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar"><img class="team-avatar-logo" src="../team/pravinkamble.png" alt="team" width="95" style="height: 100%;border-radius: 50%; border: 2px solid #Ce0101;" /></div>
-          <h3>Mr. Pravin Kamble</h3>
-          <!-- <div class="role">Trader - New Delhi</div> -->
-          <p>Associate Director - (Product & Digital) MSME Bharat Manch</p>
-        </div>
-      </div>
+      }
     </div>
   </section>
   <section class="cta-section">

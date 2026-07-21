@@ -10,6 +10,7 @@ export const adminGuard: CanActivateFn = () => {
   const router = inject(Router);
   const toast = inject(ToastService);
 
+  session.refreshFromStorage();
   const status = sessionExpiry.ensureAdminSession();
   if (status === 'expired') return false;
   if (status === 'missing') {

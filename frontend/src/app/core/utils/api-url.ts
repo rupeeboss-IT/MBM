@@ -64,6 +64,7 @@ export function isAdminApiRequest(url: string): boolean {
     path.startsWith('/api/event-categories/admin') ||
     path.startsWith('/api/event-cities/admin') ||
     path.startsWith('/api/schemes/admin') ||
-    path.startsWith('/api/scheme-categories/admin')
+    path.startsWith('/api/scheme-categories/admin') ||
+    path.startsWith('/api/team-members/admin')
   );
 }

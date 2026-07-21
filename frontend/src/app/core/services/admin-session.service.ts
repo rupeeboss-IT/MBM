@@ -45,6 +45,14 @@ export class AdminSessionService {
     return !!this._userId() && !!token && !isJwtExpired(token);
   }
 
+  /** Re-read localStorage (required after SSR/hydration and on hard refresh). */
+  refreshFromStorage(): void {
+    if (!isPlatformBrowser(this.platformId) || typeof localStorage === 'undefined') return;
+    this._userId.set(localStorage.getItem(KEY_USER_ID));
+    this._token.set(localStorage.getItem(KEY_TOKEN));
+    this._role.set(localStorage.getItem(KEY_ROLE));
+  }
+
   setSession(userId: string, token: string, role?: string) {
     const uid = (userId ?? '').trim();
     const tok = (token ?? '').trim();

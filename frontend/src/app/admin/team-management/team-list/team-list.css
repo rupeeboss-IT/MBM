@@ -1,0 +1,241 @@
+.tl-topbar {
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tl-topbar-actions {
+  flex-wrap: wrap;
+}
+
+.tl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0;
+}
+
+.tl-search {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.tl-select {
+  flex: 0 1 160px;
+  min-width: 140px;
+}
+
+.tl-reorder-hint {
+  margin-top: 0;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.88rem;
+  color: var(--admin-muted, #6b7280);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+}
+
+.tl-reorder-hint__link {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--admin-accent, #e63946);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tl-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--admin-muted, #6b7280);
+}
+
+.tl-sortable {
+  position: relative;
+  padding: 1rem;
+}
+
+.tl-sortable--disabled .tl-order-item {
+  cursor: default;
+}
+
+.tl-saving-banner {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  z-index: 2;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: var(--admin-navy, #1a1a2e);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tl-order-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tl-order-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--admin-border, #e5e7eb);
+  border-radius: 12px;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+  cursor: grab;
+}
+
+.tl-order-item:active {
+  cursor: grabbing;
+}
+
+.tl-order-item.is-dragging {
+  opacity: 0.45;
+}
+
+.tl-order-item.is-drag-over {
+  border-color: var(--admin-accent, #e63946);
+  box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.15);
+}
+
+.tl-order-item__main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.tl-drag-handle {
+  flex: 0 0 auto;
+  color: var(--admin-muted, #9ca3af);
+  font-size: 1rem;
+  line-height: 1;
+  user-select: none;
+  letter-spacing: -0.15em;
+}
+
+.tl-position {
+  flex: 0 0 1.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: var(--admin-navy, #1a1a2e);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.tl-thumb {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ce0101;
+}
+
+.tl-order-item__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tl-title {
+  font-weight: 700;
+  color: var(--admin-navy, #1a1a2e);
+}
+
+.tl-summary {
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tl-status-badge {
+  flex: 0 0 auto;
+  display: none;
+}
+
+.tl-order-item__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  padding-left: 2.5rem;
+}
+
+.tl-move-btns {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .tl-order-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tl-order-item__main {
+    flex: 1 1 auto;
+  }
+
+  .tl-status-badge {
+    display: inline-flex;
+  }
+
+  .tl-order-item__actions {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .tl-filters .btn,
+  .tl-filters .tl-select {
+    width: 100%;
+  }
+
+  .tl-order-item__main {
+    align-items: flex-start;
+  }
+
+  .tl-order-item__actions {
+    padding-left: 0;
+    width: 100%;
+  }
+
+  .tl-order-item__actions .btn {
+    flex: 1 1 calc(50% - 0.2rem);
+    min-width: 0;
+  }
+
+  .tl-move-btns {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.15rem;
+  }
+
+  .tl-move-btns .btn {
+    flex: 1 1 0;
+  }
+}

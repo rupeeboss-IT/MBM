@@ -43,7 +43,7 @@ export class App implements OnInit {
   private readonly currentUrl = signal(this.router.url);
 
   readonly showAdminShell = computed(() => {
-    if (!this.adminSession.isLoggedIn() || !this.adminSession.hasAdminAccess()) {
+    if (!this.adminSession.hasValidSession() || !this.adminSession.hasAdminAccess()) {
       return false;
     }
 
@@ -61,6 +61,9 @@ export class App implements OnInit {
 
     // Everything below is browser-only (analytics, lead capture, SPA navigation hooks)
     if (!isPlatformBrowser(this.platformId)) return;
+
+    // Restore persisted sessions before guards / interceptors run on hard refresh
+    this.adminSession.refreshFromStorage();
 
     // Start JWT expiry timers + redirect-on-expiry (must run on every browser load)
     this.sessionExpiry.startWatching();

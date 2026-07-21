@@ -7,6 +7,7 @@ export const adminTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (!isAdminApiRequest(req.url)) return next(req);
 
   const session = inject(AdminSessionService);
+  session.refreshFromStorage();
   const token = session.token();
   if (!token) return next(req);
 

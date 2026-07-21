@@ -50,6 +50,7 @@ namespace RB_Website_API.Data
         public DbSet<Models.Scheme> Schemes => Set<Models.Scheme>();
         public DbSet<Models.SchemeBenefit> SchemeBenefits => Set<Models.SchemeBenefit>();
         public DbSet<Models.SchemeCardHighlight> SchemeCardHighlights => Set<Models.SchemeCardHighlight>();
+        public DbSet<Models.TeamMember> TeamMembers => Set<Models.TeamMember>();
 
         public new DbSet<T> Set<T>() where T : class
         {
@@ -195,6 +196,11 @@ namespace RB_Website_API.Data
                     .WithOne(h => h.Scheme)
                     .HasForeignKey(h => h.SchemeId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Models.TeamMember>(e =>
+            {
+                e.ToTable("TeamMembers", "dbo");
             });
         }
     }

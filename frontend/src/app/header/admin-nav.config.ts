@@ -165,6 +165,7 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
       '/admin/event-cities',
       '/admin/scheme-management',
       '/admin/scheme-categories',
+      '/admin/team-management',
     ],
     sections: [
       {
@@ -195,6 +196,13 @@ export const ADMIN_MENU_GROUPS: AdminNavGroup[] = [
           { label: 'All schemes', route: '/admin/scheme-management', exact: true },
           { label: 'New scheme', route: '/admin/scheme-management/new', exact: true },
           { label: 'Scheme categories', route: '/admin/scheme-categories', exact: true },
+        ],
+      },
+      {
+        label: 'About page',
+        children: [
+          { label: 'Leadership team', route: '/admin/team-management', exact: true },
+          { label: 'New team member', route: '/admin/team-management/new', exact: true },
         ],
       },
     ],

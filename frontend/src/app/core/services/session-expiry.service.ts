@@ -36,6 +36,7 @@ export class SessionExpiryService {
     this.started = true;
 
     this.memberSession.refreshFromStorage();
+    this.adminSession.refreshFromStorage();
     this.scheduleMemberExpiry(this.memberSession.token());
     this.scheduleAdminExpiry(this.adminSession.token());
     this.checkSessions(SESSION_INACTIVITY_MESSAGE);
@@ -93,6 +94,7 @@ export class SessionExpiryService {
   }
 
   ensureAdminSession(): SessionValidity {
+    this.adminSession.refreshFromStorage();
     const token = this.adminSession.token();
     const userId = this.adminSession.userId();
 
@@ -109,6 +111,7 @@ export class SessionExpiryService {
     if (!isPlatformBrowser(this.platformId) || this.handling) return;
 
     this.memberSession.refreshFromStorage();
+    this.adminSession.refreshFromStorage();
 
     const memberToken = this.memberSession.token();
     if (memberToken && this.memberSession.userId() && isJwtExpired(memberToken)) {

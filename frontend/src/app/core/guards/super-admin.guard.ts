@@ -10,6 +10,7 @@ export const superAdminGuard: CanActivateFn = () => {
   const router = inject(Router);
   const toast = inject(ToastService);
 
+  session.refreshFromStorage();
   const status = sessionExpiry.ensureAdminSession();
   if (status !== 'valid') {
     return router.parseUrl('/admin-login');

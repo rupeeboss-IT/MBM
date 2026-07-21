@@ -1,0 +1,135 @@
+<div class="admin-wrap">
+  <div class="admin-topbar tl-topbar">
+    <div>
+      <span class="admin-eyebrow">Content Management</span>
+      <h2>About — Leadership Team</h2>
+      <div class="muted">Drag to reorder how members appear on the <a href="/about" target="_blank">About page</a>.</div>
+    </div>
+    <div class="actions tl-topbar-actions">
+      <button class="btn btn-outline" type="button" (click)="load()" [disabled]="loading() || savingOrder()">
+        Refresh
+      </button>
+      <a class="btn" routerLink="/admin/team-management/new">+ New Team Member</a>
+    </div>
+  </div>
+
+  <div class="tl-filters section">
+    <input
+      type="search"
+      class="tl-search form-control"
+      placeholder="Search name, designation…"
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)"
+      (keyup.enter)="runSearch()"
+    />
+    <select class="tl-select form-control" [ngModel]="statusFilter()" (ngModelChange)="onStatusChange($event)">
+      <option value="">All statuses</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+    <button class="btn btn-outline" type="button" (click)="runSearch()" [disabled]="loading()">Search</button>
+    @if (!canReorder()) {
+      <button class="btn btn-outline" type="button" (click)="clearFilters()">Clear filters</button>
+    }
+  </div>
+
+  @if (!canReorder()) {
+    <div class="tl-reorder-hint section">
+      Reordering is disabled while search or status filters are active.
+      <button type="button" class="tl-reorder-hint__link" (click)="clearFilters()">Show all members</button>
+      to drag and reorder.
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="section section--loading">
+      <div class="admin-loading">
+        <div class="admin-spinner" aria-hidden="true"></div>
+        <span>Loading team members…</span>
+      </div>
+    </div>
+  } @else if (sortedMembers().length === 0) {
+    <div class="section tl-empty">
+      No team members found.
+      <a routerLink="/admin/team-management/new">Add one →</a>
+    </div>
+  } @else {
+    <div class="tl-sortable section" [class.tl-sortable--disabled]="!canReorder() || savingOrder()">
+      @if (savingOrder()) {
+        <div class="tl-saving-banner">Saving order…</div>
+      }
+
+      <ul class="tl-order-list" role="list">
+        @for (m of sortedMembers(); track m.teamMemberId; let i = $index) {
+          <li
+            class="tl-order-item"
+            [class.is-dragging]="dragIndex() === i"
+            [class.is-drag-over]="dragOverIndex() === i && dragIndex() !== i"
+            [attr.draggable]="canReorder() && !savingOrder()"
+            (dragstart)="onDragStart(i, $event)"
+            (dragover)="onDragOver(i, $event)"
+            (dragleave)="onDragLeave()"
+            (drop)="onDrop(i, $event)"
+            (dragend)="onDragEnd()"
+          >
+            <div class="tl-order-item__main">
+              @if (canReorder()) {
+                <span class="tl-drag-handle" title="Drag to reorder" aria-hidden="true">⋮⋮</span>
+              }
+              <span class="tl-position" aria-label="Position">{{ i + 1 }}</span>
+              <img class="tl-thumb" [src]="m.photoUrl" [alt]="m.name" width="56" height="56" />
+              <div class="tl-order-item__body">
+                <div class="tl-title">{{ m.name }}</div>
+                <div class="tl-summary muted" [innerHTML]="m.designationHtml"></div>
+              </div>
+              <span [class]="'badge tl-status-badge ' + statusBadge(m.isActive)">
+                {{ statusLabel(m.isActive) }}
+              </span>
+            </div>
+
+            <div class="tl-order-item__actions">
+              @if (canReorder()) {
+                <div class="tl-move-btns">
+                  <button
+                    class="btn btn-xs btn-outline"
+                    type="button"
+                    title="Move up"
+                    [disabled]="i === 0 || savingOrder() || actionId() === m.teamMemberId"
+                    (click)="moveMember(i, -1)"
+                  >↑</button>
+                  <button
+                    class="btn btn-xs btn-outline"
+                    type="button"
+                    title="Move down"
+                    [disabled]="i === sortedMembers().length - 1 || savingOrder() || actionId() === m.teamMemberId"
+                    (click)="moveMember(i, 1)"
+                  >↓</button>
+                </div>
+              }
+              <a href="/about" target="_blank" class="btn btn-xs btn-outline">View</a>
+              <button
+                class="btn btn-xs btn-outline"
+                type="button"
+                (click)="goToEdit(m.teamMemberId)"
+                [disabled]="actionId() === m.teamMemberId"
+              >Edit</button>
+              <button
+                class="btn btn-xs"
+                [class.btn-outline]="m.isActive"
+                type="button"
+                (click)="toggleActive(m)"
+                [disabled]="actionId() === m.teamMemberId || savingOrder()"
+              >{{ m.isActive ? 'Deactivate' : 'Activate' }}</button>
+              <button
+                class="btn btn-xs btn-danger"
+                type="button"
+                (click)="deleteMember(m)"
+                [disabled]="actionId() === m.teamMemberId || savingOrder()"
+              >Delete</button>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>

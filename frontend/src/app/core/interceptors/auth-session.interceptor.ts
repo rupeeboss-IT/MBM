@@ -41,6 +41,7 @@ export const authSessionInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (isApiRequest(req.url) && !isPublicAuthEndpoint(req.url)) {
     memberSession.refreshFromStorage();
+    adminSession.refreshFromStorage();
 
     if (isAdminApiRequest(req.url)) {
       const adminToken = adminSession.token();
@@ -84,6 +85,7 @@ export const authSessionInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       memberSession.refreshFromStorage();
+      adminSession.refreshFromStorage();
       const scope = resolveUnauthorizedScope(
         req.url,
         req.headers.has('Authorization'),
