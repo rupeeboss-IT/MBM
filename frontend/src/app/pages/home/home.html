@@ -1,76 +1,133 @@
 <!-- ===== HOME PAGE ===== -->
 <div class="page active" id="page-home">
 
-  <div class="hero-wrap">
-    <div class="hero-pattern"></div>
-    <div class="hero-lines"></div>
-    <div class="hero-inner">
-      <div>
-        <div class="hero-badge">Limited Offer</div>
-        <h1 style="color:#ffffff;">Empower Your Business with MSME Bharat Manch</h1>
-        <p class="hero-sub">Access Infomerics IVerified &amp; TrustScore Reports, Government Scheme Reports, Loan Audits &amp; Bank
-          Statement Analysis &mdash; all in one powerful membership for growing MSMEs across India.</p>
-        <div class="hero-btns">
-          <button class="btn-primary" style="padding: 16px 34px;" type="button" (click)="goToFreeRegister()">
+  <section
+    class="saas-hero"
+    aria-labelledby="saas-hero-heading"
+    [class.saas-hero--enter]="heroEnter()"
+    [class.saas-hero--settled]="heroSettled()"
+  >
+    <div class="saas-hero__bg" aria-hidden="true">
+      <div class="saas-hero__wash saas-hero__wash--brand"></div>
+      <div class="saas-hero__wash saas-hero__wash--neutral"></div>
+      <div class="saas-hero__orb saas-hero__orb--1"></div>
+      <div class="saas-hero__orb saas-hero__orb--2"></div>
+      <div class="saas-hero__orb saas-hero__orb--3"></div>
+      <div class="saas-hero__mesh"></div>
+      <div class="saas-hero__noise"></div>
+    </div>
+
+    <div class="saas-hero__inner">
+      <div class="saas-hero__content">
+        <h1 id="saas-hero-heading" class="saas-hero__title">
+          Empower Your Business with MSME Bharat Manch
+        </h1>
+        <p class="saas-hero__subtitle">
+          One platform to help MSMEs discover Government Schemes, improve Trust Score, analyse Business Loans,
+          compare Banks, manage WhatsApp Business communication and register on GeM.
+        </p>
+
+        <div class="saas-hero__tiles" role="list" aria-label="Platform features">
+          @for (feature of heroFeatures; track feature.slug) {
+            <a
+              class="saas-hero__tile"
+              role="listitem"
+              [routerLink]="['/offering', feature.slug]"
+            >
+              <span class="saas-hero__tile-icon" [innerHTML]="heroIcon(feature.iconSvg)" aria-hidden="true"></span>
+              <span class="saas-hero__tile-text">
+                <span class="saas-hero__tile-label">{{ feature.title }}</span>
+                <span class="saas-hero__tile-hint">{{ feature.tagline }}</span>
+              </span>
+              <span class="saas-hero__tile-arrow" aria-hidden="true">→</span>
+            </a>
+          }
+        </div>
+
+        <div class="saas-hero__actions">
+          <button class="saas-hero__btn saas-hero__btn--primary" type="button" (click)="goToFreeRegister()">
             Register Free
           </button>
-          <button class="btn-ghost" type="button" (click)="goToMembership()">
+          <button class="saas-hero__btn saas-hero__btn--secondary" type="button" (click)="goToMembership()">
             Explore All Plans
           </button>
         </div>
-        <p class="hero-trust">Powered by <strong><a href="https://www.rupeeboss.com" target="_blank"
-              style="color:inherit;">Rupeeboss</a></strong> &nbsp;&middot;&nbsp; Trusted by MSMEs Across India
-        </p>
-      </div>
-      <div class="hero-card">
-        <div class="hcard-title">What&rsquo;s Included &mdash; click to explore</div>
-        <div class="hcard-grid">
-          <a class="hcard-item" [routerLink]="['/offering', 'trust-score']">
-            <div class="hcard-icon">&#128202;</div>
-            <div class="hcard-body">
-              <div class="hcard-label">Trust Score</div>
-              <div class="hcard-sub">IVerified Report</div>
-            </div>
-          </a>
-          <a class="hcard-item" [routerLink]="['/offering', 'scheme-discovery']">
-            <div class="hcard-icon">&#127963;</div>
-            <div class="hcard-body">
-              <div class="hcard-label">Govt Schemes</div>
-              <div class="hcard-sub">Personalised report</div>
-            </div>
-          </a>
-          <a class="hcard-item" [routerLink]="['/offering', 'loan-audit']">
-            <div class="hcard-icon">&#128269;</div>
-            <div class="hcard-body">
-              <div class="hcard-label">Loan Audit</div>
-              <div class="hcard-sub">Optimise terms</div>
-            </div>
-          </a>
-          <a class="hcard-item" [routerLink]="['/offering', 'bank-statement-analyzer']">
-            <div class="hcard-icon">&#128200;</div>
-            <div class="hcard-body">
-              <div class="hcard-label">Bank Analyzer</div>
-              <div class="hcard-sub">Smart insights</div>
-            </div>
-          </a>
-          <a class="hcard-item" [routerLink]="['/offering', 'whatsapp-platform']">
-            <div class="hcard-icon">&#128172;</div>
-            <div class="hcard-body">
-              <div class="hcard-label">WhatsApp</div>
-              <div class="hcard-sub">Business platform</div>
-            </div>
-          </a>
-          <a class="hcard-item" [routerLink]="['/offering', 'gem-registration']">
-            <div class="hcard-icon">&#128188;</div>
-            <div class="hcard-body">
-              <div class="hcard-label">GeM Registration</div>
-              <div class="hcard-sub">Online Marketplace</div>
-            </div>
-          </a>
+
+        <div class="saas-hero__trust">
+          <span class="saas-hero__trust-sep" aria-hidden="true"></span>
+          <p>
+            Powered by
+            <strong>
+              <a href="https://www.rupeeboss.com" target="_blank" rel="noopener noreferrer">Rupeeboss</a>
+            </strong>
+            &nbsp;&middot;&nbsp; Trusted by MSMEs Across India
+          </p>
         </div>
       </div>
+
+      <aside class="saas-hero__spotlight" aria-label="Platform feature showcase">
+        <div class="saas-hero__stage">
+          <div class="saas-hero__themes" aria-hidden="true">
+            @for (feature of heroFeatures; track feature.slug; let i = $index) {
+              <div
+                class="saas-hero__theme"
+                [class.saas-hero__theme--active]="activeHeroFeature() === i"
+                [attr.data-theme]="feature.theme"
+              >
+                <div class="saas-hero__theme-gradient"></div>
+                <div class="saas-hero__theme-pattern"></div>
+              </div>
+            }
+          </div>
+
+          <div class="saas-hero__stage-panels">
+            @for (feature of heroFeatures; track feature.slug; let i = $index) {
+              <div
+                class="saas-hero__panel"
+                [class.saas-hero__panel--active]="activeHeroFeature() === i"
+                [attr.data-theme]="feature.theme"
+                [attr.aria-hidden]="activeHeroFeature() !== i"
+              >
+                <div class="saas-hero__panel-copy">
+                  <div class="saas-hero__panel-icon" [innerHTML]="heroIcon(feature.iconSvg)" aria-hidden="true"></div>
+                  <p class="saas-hero__panel-eyebrow">{{ feature.tagline }}</p>
+                  <h2 class="saas-hero__panel-title">{{ feature.title }}</h2>
+                  <p class="saas-hero__panel-desc">{{ feature.description }}</p>
+                  <a class="saas-hero__panel-cta" [routerLink]="['/offering', feature.slug]">
+                    Explore {{ feature.title }}
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+                <div class="saas-hero__panel-visual" aria-hidden="true">
+                  <div class="saas-hero__panel-orb"></div>
+                  <div class="saas-hero__panel-mark"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <nav class="saas-hero__featnav" aria-label="Feature navigation">
+          @for (feature of heroFeatures; track feature.slug; let i = $index) {
+            <button
+              type="button"
+              class="saas-hero__featnav-item"
+              [class.saas-hero__featnav-item--active]="activeHeroFeature() === i"
+              [attr.aria-pressed]="activeHeroFeature() === i"
+              (mouseenter)="selectHeroFeature(i)"
+              (focus)="selectHeroFeature(i)"
+              (click)="selectHeroFeature(i)"
+            >
+              <span class="saas-hero__featnav-icon" [innerHTML]="heroIcon(feature.iconSvg)" aria-hidden="true"></span>
+              <span class="saas-hero__featnav-label">{{ feature.title }}</span>
+            </button>
+          }
+        </nav>
+      </aside>
     </div>
-  </div>
+  </section>
 
   <section class="stats-strip">
     <div class="stats-container">

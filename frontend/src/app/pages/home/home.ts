@@ -1,8 +1,18 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import { firstValueFrom } from 'rxjs';
 import { JoinTodayButton } from '../../core/components/join-today-button/join-today-button';
 import { ImageLightbox } from '../../core/components/image-lightbox/image-lightbox';
@@ -19,14 +29,25 @@ import { EventsService, type PublicEvent } from '../../core/services/events.serv
 import { SchemesService, type PublicScheme } from '../../core/services/schemes.service';
 import { PlansService, type PublicPlanItem } from '../../core/services/plans.service';
 
+export interface HeroFeature {
+  slug: string;
+  title: string;
+  tagline: string;
+  description: string;
+  theme: 'trust' | 'schemes' | 'loan' | 'bank' | 'whatsapp' | 'gem';
+  iconSvg: string;
+}
+
 @Component({
   selector: 'app-home',
   imports: [CommonModule, FormsModule, RouterLink, JoinTodayButton, ImageLightbox, MembershipPlanCards],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home implements OnInit {
+export class Home implements OnInit, AfterViewInit, OnDestroy {
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly sanitizer = inject(DomSanitizer);
   private readonly contactApi = inject(ContactService);
   private readonly toast = inject(ToastService);
   private readonly recaptcha = inject(RecaptchaService);
@@ -63,11 +84,95 @@ export class Home implements OnInit {
   readonly callbackErrors = signal<Record<string, string>>({});
   readonly isCallbackValid = computed(() => Object.keys(this.callbackErrors()).length === 0);
 
+  readonly heroEnter = signal(false);
+  readonly heroSettled = signal(false);
+  /** Active feature for the spotlight panel (defaults to first). */
+  readonly activeHeroFeature = signal(0);
+
+  private heroSettleTimer: ReturnType<typeof setTimeout> | null = null;
+
+  readonly heroFeatures: HeroFeature[] = [
+    {
+      slug: 'trust-score',
+      title: 'Trust Score',
+      tagline: 'Verified credibility',
+      description: 'Build credibility with verified trust indicators that boost customer confidence and funding opportunities.',
+      theme: 'trust',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>`,
+    },
+    {
+      slug: 'scheme-discovery',
+      title: 'Govt Schemes',
+      tagline: 'Central & State benefits',
+      description: 'Discover Central and State MSME schemes with eligibility guidance and subsidy support.',
+      theme: 'schemes',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg>`,
+    },
+    {
+      slug: 'loan-audit',
+      title: 'Loan Audit',
+      tagline: 'Optimise borrowing',
+      description: 'Review existing business loans and find opportunities to reduce borrowing costs.',
+      theme: 'loan',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>`,
+    },
+    {
+      slug: 'bank-statement-analyzer',
+      title: 'Bank Analyzer',
+      tagline: 'Compare financing',
+      description: 'Compare banks and financing options to make informed funding decisions with clarity.',
+      theme: 'bank',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18"/><path d="M5 10V20M9 10V20M15 10V20M19 10V20"/><path d="M2 20h20"/><path d="M12 2L2 7h20L12 2z"/></svg>`,
+    },
+    {
+      slug: 'whatsapp-platform',
+      title: 'WhatsApp',
+      tagline: 'Business messaging',
+      description: 'Connect with customers using automated messaging and business communication tools.',
+      theme: 'whatsapp',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>`,
+    },
+    {
+      slug: 'gem-registration',
+      title: 'GeM Registration',
+      tagline: 'Government marketplace',
+      description: 'Register on the Government eMarketplace and unlock new business opportunities.',
+      theme: 'gem',
+      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M12 12v4M10 14h4"/></svg>`,
+    },
+  ];
+
   ngOnInit(): void {
     void this.schemeDiscovery.tryResumeOnPageLoad();
     void this.loadHomeEvents();
     void this.loadHomeSchemes();
     void this.loadCmsPlans();
+  }
+
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.heroEnter.set(true);
+      this.heroSettled.set(true);
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      this.heroEnter.set(true);
+      this.heroSettleTimer = setTimeout(() => this.heroSettled.set(true), 1200);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.heroSettleTimer) clearTimeout(this.heroSettleTimer);
+  }
+
+  selectHeroFeature(index: number): void {
+    if (index === this.activeHeroFeature()) return;
+    this.activeHeroFeature.set(index);
+  }
+
+  heroIcon(svg: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
 
   private async loadCmsPlans() {
