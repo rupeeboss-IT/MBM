@@ -6,55 +6,274 @@
       <p>Connect with the MSME community and learn from industry experts</p>
     </div>
   </div>
-  <section class="section">
-    <div class="container">
-      <div class="zone-filter">
-        <button class="filter-btn" [class.active]="activeCategory()==='all'" (click)="setCategory('all')" type="button">All Events</button>
+
+  <div class="ev-toolbar" aria-label="Event filters and search">
+    <div class="container ev-toolbar-inner">
+      <div class="ev-toolbar-categories" role="tablist" aria-label="Event categories">
+        <button
+          class="ev-pill"
+          [class.ev-pill--active]="activeCategory() === 'all'"
+          (click)="setCategory('all')"
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeCategory() === 'all'"
+        >
+          All Events
+        </button>
         @for (c of categories(); track c.slug) {
           <button
-            class="filter-btn"
-            [class.active]="activeCategory()===c.slug"
+            class="ev-pill"
+            [class.ev-pill--active]="activeCategory() === c.slug"
             (click)="setCategory(c.slug)"
             type="button"
-          >{{ c.name }}</button>
+            role="tab"
+            [attr.aria-selected]="activeCategory() === c.slug"
+          >
+            {{ c.name }}
+          </button>
         }
       </div>
 
-      @if (loading()) {
-        <p class="muted" style="padding:2rem 0">Loading events…</p>
-      } @else if (error()) {
-        <p class="muted" style="padding:2rem 0">{{ error() }}</p>
-      } @else {
-        <div class="events-grid-2" id="eventsGrid">
-          @for (ev of events(); track ev.slug) {
-            <div
-              class="event-list-card"
-              [attr.data-cat]="ev.categorySlug"
-              [routerLink]="['/event', ev.slug]"
-            >
+      <div class="ev-toolbar-search">
+        <label class="ev-search-field ev-search-field--name">
+          <span class="ev-search-label">Search by Event Name</span>
+          <div class="ev-search-input-wrap">
+            <span class="ev-search-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path
+                  d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                />
+              </svg>
+            </span>
+            <input
+              type="search"
+              class="ev-search-input"
+              placeholder="Search events..."
+              [value]="searchQuery()"
+              (input)="onSearchInput($any($event.target).value)"
+              aria-label="Search by event name"
+            />
+          </div>
+        </label>
+
+        <div class="ev-search-field ev-search-field--date">
+          <span class="ev-search-label" id="ev-date-picker-label">Select Date</span>
+          <div class="ev-date-picker" #datePickerRoot>
+            <div class="ev-date-input-wrap">
+              <button
+                type="button"
+                class="ev-date-trigger"
+                (click)="toggleCalendar()"
+                aria-haspopup="dialog"
+                [attr.aria-expanded]="calendarOpen()"
+                aria-labelledby="ev-date-picker-label"
+                [attr.aria-label]="dateFrom() ? 'Selected date: ' + dateDisplayLabel() : 'Select date'"
+              >
+                <span class="ev-date-icon" aria-hidden="true">📅</span>
+                <span class="ev-date-trigger-text" [class.ev-date-trigger-text--placeholder]="!dateFrom()">
+                  {{ dateDisplayLabel() }}
+                </span>
+              </button>
+              @if (dateFrom()) {
+                <button
+                  type="button"
+                  class="ev-date-clear"
+                  (click)="clearDateFilter($event)"
+                  aria-label="Clear date selection"
+                >
+                  ×
+                </button>
+              }
+            </div>
+
+            @if (calendarOpen()) {
               <div
-                class="event-img-side event-img-side--photo"
-                [style.background-image]="ev.imageUrl ? 'url(' + ev.imageUrl + ')' : null"
-                (click)="ev.imageUrl && openLightbox(ev.imageUrl!, ev.title, $event)"
-              ></div>
-              <div class="event-list-body">
-                <div class="event-meta">
-                  @if (ev.categoryName) {
-                    <span class="badge badge-red">{{ ev.categoryName }}</span>
-                  }
-                  @if (ev.cityName) {
-                    <span class="badge" [ngClass]="ev.cityBadgeClass || 'badge-green'">{{ ev.cityName }}</span>
+                class="ev-calendar-popup"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Event date calendar"
+                (click)="$event.stopPropagation()"
+              >
+                <div class="ev-calendar-header">
+                  <button
+                    type="button"
+                    class="ev-calendar-nav"
+                    (click)="prevCalendarMonth()"
+                    aria-label="Previous month"
+                  >
+                    ‹
+                  </button>
+                  <span class="ev-calendar-month">{{ calendarMonthLabel() }}</span>
+                  <button
+                    type="button"
+                    class="ev-calendar-nav"
+                    (click)="nextCalendarMonth()"
+                    aria-label="Next month"
+                  >
+                    ›
+                  </button>
+                </div>
+
+                <div class="ev-calendar-weekdays" aria-hidden="true">
+                  @for (label of calendarWeekdayLabels; track label) {
+                    <span class="ev-calendar-weekday">{{ label }}</span>
                   }
                 </div>
-                <h3>{{ ev.title }}</h3>
-                <p>{{ ev.shortDescription }}</p>
-                @if (metaLine(ev)) {
-                  <div class="event-date">📅 {{ metaLine(ev) }}</div>
+
+                <div class="ev-calendar-grid" role="grid" aria-label="Calendar dates">
+                  @for (week of calendarWeeks(); track $index) {
+                    <div class="ev-calendar-row" role="row">
+                      @for (cell of week; track cell.date.getTime()) {
+                        <button
+                          type="button"
+                          class="ev-calendar-day"
+                          role="gridcell"
+                          [class.ev-calendar-day--today]="cell.isToday"
+                          [class.ev-calendar-day--selected]="cell.isSelected"
+                          [class.ev-calendar-day--in-range]="cell.isInRange"
+                          [class.ev-calendar-day--range-start]="cell.isRangeStart"
+                          [class.ev-calendar-day--range-end]="cell.isRangeEnd"
+                          [class.ev-calendar-day--disabled]="cell.isDisabled"
+                          [class.ev-calendar-day--outside]="cell.isOutsideMonth"
+                          [class.ev-calendar-day--focused]="isCalendarDayFocused(cell)"
+                          [disabled]="cell.isDisabled"
+                          [attr.tabindex]="isCalendarDayFocused(cell) ? 0 : -1"
+                          [attr.aria-label]="formatDisplayDate(cell.date)"
+                          [attr.aria-selected]="cell.isSelected"
+                          (click)="selectCalendarDate(cell.date)"
+                          (keydown)="onCalendarDayKeydown($event, cell)"
+                        >
+                          {{ cell.label }}
+                        </button>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <p class="ev-calendar-hint">
+                  @if (!dateFrom()) {
+                    Select a start date
+                  } @else if (!dateTo()) {
+                    Select an end date (optional)
+                  } @else {
+                    {{ dateDisplayLabel() }}
+                  }
+                </p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section ev-timeline-section">
+    <div class="container">
+      @if (loading()) {
+        <div class="ev-loading" role="status" aria-live="polite">
+          <div class="ev-loading-spinner" aria-hidden="true"></div>
+          <p>Loading events…</p>
+        </div>
+      } @else if (error()) {
+        <p class="ev-error" role="alert">{{ error() }}</p>
+      } @else if (groupedEventsByYear().length === 0) {
+        <div class="ev-empty" role="status">
+          <div class="ev-empty-icon" aria-hidden="true">📅</div>
+          <h2>No Events Found</h2>
+          <p>Try another category or search keyword.</p>
+        </div>
+      } @else {
+        <div class="ev-timeline-root ev-fade-in">
+          @for (group of groupedEventsByYear(); track group.year) {
+            <section class="ev-year-group" [attr.aria-labelledby]="'ev-year-' + group.year">
+              <h2 class="ev-year-heading" [id]="'ev-year-' + group.year">{{ group.year }}</h2>
+
+              <div class="ev-timeline">
+                @for (ev of group.events; track ev.slug; let last = $last) {
+                  <article
+                    class="ev-timeline-item"
+                    [class.ev-timeline-item--last]="last"
+                  >
+                    <div class="ev-timeline-date" aria-hidden="true">
+                      @if (timelineDateParts(ev); as parts) {
+                        <span class="ev-timeline-day">{{ parts.day }}</span>
+                        <span class="ev-timeline-month">{{ parts.month }}</span>
+                      } @else if (ev.date) {
+                        <span class="ev-timeline-fallback">{{ ev.date }}</span>
+                      }
+                    </div>
+
+                    <div class="ev-timeline-axis" aria-hidden="true">
+                      <span class="ev-timeline-dot"></span>
+                      @if (!last) {
+                        <span class="ev-timeline-line"></span>
+                      }
+                    </div>
+
+                    <div
+                      class="ev-event-card"
+                      [attr.data-cat]="ev.categorySlug"
+                      [routerLink]="['/event', ev.slug]"
+                      [attr.aria-label]="'View details for ' + ev.title"
+                      role="link"
+                      tabindex="0"
+                    >
+                      <div class="ev-event-card-badges">
+                        @if (ev.categoryName) {
+                          <span class="ev-badge ev-badge--category">{{ ev.categoryName }}</span>
+                        }
+                        @if (ev.cityName) {
+                          <span class="ev-badge ev-badge--city">{{ ev.cityName }}</span>
+                        }
+                      </div>
+
+                      <div class="ev-event-card-body">
+                        @if (ev.imageUrl) {
+                          <div
+                            class="ev-event-card-image event-img-side--photo"
+                            [style.background-image]="'url(' + ev.imageUrl + ')'"
+                            (click)="openLightbox(ev.imageUrl!, ev.title, $event)"
+                          ></div>
+                        } @else {
+                          <div class="ev-event-card-image ev-event-card-image--placeholder" aria-hidden="true">
+                            <span>📅</span>
+                          </div>
+                        }
+
+                        <div class="ev-event-card-content">
+                          <h3 class="ev-event-title">{{ ev.title }}</h3>
+
+                          @if (ev.shortDescription) {
+                            <p class="ev-event-desc">{{ ev.shortDescription }}</p>
+                          }
+
+                          <div class="ev-event-meta">
+                            @if (ev.date) {
+                              <p class="ev-event-datetime">
+                                <span class="ev-event-meta-icon" aria-hidden="true">📅</span>
+                                {{ ev.date }}
+                              </p>
+                            }
+                            @if (ev.time) {
+                              <p class="ev-event-datetime">
+                                <span class="ev-event-meta-icon" aria-hidden="true">🕐</span>
+                                {{ ev.time }}
+                              </p>
+                            }
+                            @if (eventAddress(ev)) {
+                              <p class="ev-event-address">
+                                <span class="ev-event-meta-icon" aria-hidden="true">📍</span>
+                                {{ eventAddress(ev) }}
+                              </p>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
                 }
               </div>
-            </div>
-          } @empty {
-            <p class="muted" style="padding:2rem 0">No events match your filters.</p>
+            </section>
           }
         </div>
       }
