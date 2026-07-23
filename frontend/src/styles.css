@@ -12,11 +12,64 @@ html {
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  /* Apple/Safari: keep system emoji fonts in the stack so icons don't render blank
+     when Plus Jakarta Sans lacks (or blanks) emoji glyphs. */
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
   color: #1a1a2e;
   background: #fff;
   line-height: 1.6;
   overflow-x: hidden
+}
+
+/*
+ * Emoji / pictograph icons — Safari often draws blank boxes when a webfont is
+ * first in the stack and claims the codepoint without a real glyph. Force the
+ * system color-emoji fonts on known icon containers.
+ */
+.sol-icon,
+.ob-icon,
+.hp-icon,
+.tag-icon,
+.btn-icon,
+.feature-icon,
+.service-icon,
+.crh-icon,
+.info-ico,
+.hcard-icon,
+.emoji-icon,
+.offering-hero-icon,
+.pl-card__emoji,
+.pf-emoji-preview,
+.pf-emoji-preset,
+.bbf-card-preview,
+.bbl-card-icon,
+.plans-tier-notice__icon,
+.membership-onetime__icon,
+.scheme-discovery-highlight-icon,
+.news-img:not(.news-img--photo) {
+  font-family: var(--emoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', emoji, sans-serif);
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hero SVGs injected via innerHTML bypass Angular encapsulation — size them globally */
+.saas-hero__tile-icon svg,
+.saas-hero__featnav-icon svg {
+  width: 100%;
+  height: 100%;
+  max-width: 18px;
+  max-height: 18px;
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.saas-hero__featnav-icon svg {
+  max-width: 15px;
+  max-height: 15px;
 }
 
 a {
@@ -68,8 +121,12 @@ textarea {
   --light-gray: #f1f3f5;
   --navy-light: #223a6b;
   --red-mid: rgba(230, 57, 70, .35);
-  --fb: 'Plus Jakarta Sans', sans-serif;
-  --fd: 'Plus Jakarta Sans', sans-serif;
+  --fb: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  --fd: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  /* Force system color emoji — Safari won't fall back if a webfont claims the codepoint */
+  --emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', emoji, sans-serif;
   /* Admin dashboard — mapped to app brand */
   --admin-bg: var(--light-gray);
   --admin-surface: #fff;

@@ -1,29 +1,90 @@
 ##################################
-# Angular Frontend
+# OS / IDE
 ##################################
-Frontend/node_modules/
-Frontend/dist/
-Frontend/.angular/
-Frontend/.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
 
 ##################################
-# .NET Backend
+# Visual Studio cache
 ##################################
-Backend/**/bin/
-Backend/**/obj/
-Backend/**/.vs/
+.vs/
+**/.vs/
+
+##################################
+# .NET — build, publish, build-check
+##################################
+**/bin/
+**/obj/
+**/out/
+**/publish/
+**/Publish/
+**/PubTmp/
+**/BuildCheck/
+**/TestResults/
+artifacts/
+nupkg/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+~.nuget/
+packages/
+
+# User-specific / local publish & launch settings
+backend/Properties/
+**/Properties/launchSettings.json
+**/Properties/PublishProfiles/
+*.pubxml
+*.pubxml.user
+*.csproj.user
+
+##################################
+# Logs
+##################################
+**/Logs/
+**/logs/
+*.log
 
 ##################################
 # Environment & Secrets
+# (keep appsettings.json + *.example tracked)
 ##################################
 *.env
-appsettings.Development.json
-appsettings.*.json
+.env.*
+!.env.example
+**/secrets.json
+**/appsettings.*.json
+!**/appsettings.*.json.example
 
 ##################################
-# OS / IDE
+# Angular Frontend — build & deps
 ##################################
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+frontend/coverage/
+frontend/.sass-cache/
+frontend/connect.lock
+frontend/libpeerconnection.log
+frontend/npm-debug.log*
+frontend/yarn-error.log*
+frontend/testem.log
+frontend/typings/
+frontend/__screenshots__/
+
+##################################
+# Misc editor junk
+##################################
+*.swp
+*~

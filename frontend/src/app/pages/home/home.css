@@ -194,9 +194,12 @@
   transition: transform var(--hero-hover-ms) var(--hero-ease), background var(--hero-hover-ms) var(--hero-ease);
 }
 
-.saas-hero__tile-icon :deep(svg) {
+.saas-hero__tile-icon :deep(svg),
+.saas-hero__tile-icon svg {
   width: 18px;
   height: 18px;
+  display: block;
+  overflow: visible;
 }
 
 .saas-hero__tile:hover .saas-hero__tile-icon {
@@ -367,9 +370,12 @@
 }
 
 .saas-hero__stage {
+  --story-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --story-out: 280ms;
+  --story-in: 700ms;
   position: relative;
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: min(380px, 50vh);
   border-radius: 24px;
   overflow: hidden;
   isolation: isolate;
@@ -385,6 +391,7 @@
   z-index: 1;
   display: grid;
   width: 100%;
+  min-height: inherit;
 }
 
 .saas-hero__panel {
@@ -394,15 +401,18 @@
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: 8px;
   width: 100%;
-  min-height: min(360px, 48vh);
+  min-height: inherit;
   padding: clamp(22px, 3vw, 36px);
-  opacity: 0;
-  visibility: hidden;
+  /* Keep in layout for fixed height; visibility handled by children storytelling */
+  opacity: 1;
+  visibility: visible;
   pointer-events: none;
-  transition:
-    opacity var(--spot-fade) var(--spot-ease),
-    visibility var(--spot-fade) var(--spot-ease);
-  will-change: opacity;
+  z-index: 0;
+}
+
+.saas-hero__panel--active {
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .saas-hero__themes {
@@ -530,14 +540,7 @@
   -webkit-mask-image: radial-gradient(ellipse 75% 70% at 70% 40%, #000 10%, transparent 78%);
 }
 
-/* Stacked feature panels — crossfade only, stable layout */
-.saas-hero__panel--active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  z-index: 1;
-}
-
+/* Stacked feature panels — storytelling sequence on activate */
 .saas-hero__panel-copy {
   display: flex;
   flex-direction: column;
@@ -547,37 +550,21 @@
   z-index: 1;
 }
 
-.saas-hero__panel-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow:
-    0 8px 24px rgba(26, 26, 46, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-  color: var(--hero-accent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.saas-hero__panel-icon :deep(svg) {
-  width: 26px;
-  height: 26px;
-}
-
-.saas-hero__panel-eyebrow {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--hero-accent);
-  margin-bottom: 8px;
-  opacity: 0.9;
+/* Shared exit / idle state for story elements */
+.saas-hero__panel-title,
+.saas-hero__panel-eyebrow,
+.saas-hero__panel-desc,
+.saas-hero__panel-cta,
+.saas-hero__panel-mark {
+  opacity: 0;
+  filter: blur(5px);
+  will-change: transform, opacity, filter, clip-path;
+  transition:
+    opacity var(--story-out) var(--story-ease),
+    transform var(--story-out) var(--story-ease),
+    filter var(--story-out) var(--story-ease),
+    clip-path var(--story-out) var(--story-ease);
+  transition-delay: 0ms;
 }
 
 .saas-hero__panel-title {
@@ -587,7 +574,18 @@
   line-height: 1.15;
   letter-spacing: -0.03em;
   color: var(--hero-text);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  transform: translate3d(0, 14px, 0);
+}
+
+.saas-hero__panel-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hero-accent);
+  margin-bottom: 14px;
+  transform: translate3d(0, 10px, 0);
 }
 
 .saas-hero__panel-desc {
@@ -595,6 +593,11 @@
   line-height: 1.65;
   color: var(--hero-muted);
   margin-bottom: 22px;
+  /* Reserve full text height — never truncate */
+  white-space: normal;
+  overflow: visible;
+  transform: translate3d(0, 12px, 0);
+  clip-path: inset(0 0 100% 0);
 }
 
 .saas-hero__panel-cta {
@@ -610,29 +613,71 @@
   font-weight: 700;
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(26, 26, 46, 0.05);
-  transition:
-    transform var(--hero-hover-ms) var(--hero-ease),
-    box-shadow var(--hero-hover-ms) var(--hero-ease),
-    border-color var(--hero-hover-ms) var(--hero-ease),
-    background var(--hero-hover-ms) var(--hero-ease);
+  transform: translate3d(0, 10px, 0);
 }
 
 .saas-hero__panel-cta svg {
   color: var(--hero-accent);
-  transition: transform var(--hero-hover-ms) var(--hero-ease);
+  opacity: 0;
+  transform: translate3d(-4px, 0, 0);
+  transition:
+    transform var(--story-in) var(--story-ease),
+    opacity var(--story-in) var(--story-ease);
+  transition-delay: 0ms;
+}
+
+/* Active: staggered storytelling reveal */
+.saas-hero__panel--active .saas-hero__panel-title,
+.saas-hero__panel--active .saas-hero__panel-eyebrow,
+.saas-hero__panel--active .saas-hero__panel-desc,
+.saas-hero__panel--active .saas-hero__panel-cta,
+.saas-hero__panel--active .saas-hero__panel-mark {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate3d(0, 0, 0);
+  transition-duration: var(--story-in);
+}
+
+.saas-hero__panel--active .saas-hero__panel-title {
+  transition-delay: 150ms;
+}
+
+.saas-hero__panel--active .saas-hero__panel-eyebrow {
+  transition-delay: 300ms;
+}
+
+.saas-hero__panel--active .saas-hero__panel-desc {
+  clip-path: inset(0 0 0 0);
+  transition-delay: 550ms;
+}
+
+.saas-hero__panel--active .saas-hero__panel-cta {
+  transition-delay: 850ms;
+}
+
+.saas-hero__panel--active .saas-hero__panel-cta svg {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 1100ms;
+}
+
+.saas-hero__panel--active .saas-hero__panel-mark {
+  transition-delay: 200ms;
 }
 
 .saas-hero__panel-cta:hover {
-  transform: translate3d(0, -1px, 0);
   background: #fff;
   border-color: rgba(206, 1, 1, 0.22);
   box-shadow:
     0 8px 22px rgba(26, 26, 46, 0.08),
     0 0 0 1px rgba(206, 1, 1, 0.06);
+  transform: translate3d(0, -1px, 0);
 }
 
-.saas-hero__panel-cta:hover svg {
+.saas-hero__panel--active .saas-hero__panel-cta:hover svg {
   transform: translate3d(3px, 0, 0);
+  transition-delay: 0ms;
+  transition-duration: var(--hero-hover-ms);
 }
 
 .saas-hero__panel-visual {
@@ -650,6 +695,14 @@
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, transparent 70%);
   filter: blur(8px);
+  opacity: 0;
+  transition: opacity var(--story-in) var(--story-ease);
+  transition-delay: 0ms;
+}
+
+.saas-hero__panel--active .saas-hero__panel-orb {
+  opacity: 1;
+  transition-delay: 80ms;
 }
 
 .saas-hero__panel-mark {
@@ -659,13 +712,23 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  opacity: 0.22;
-  filter: drop-shadow(0 12px 28px rgba(206, 1, 1, 0.08));
+  opacity: 0;
+  transform: translate3d(0, 16px, 0) scale(0.94);
+  filter: blur(6px) drop-shadow(0 12px 28px rgba(206, 1, 1, 0.08));
+}
+
+.saas-hero__panel--active .saas-hero__panel-mark {
+  opacity: 0.24;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0) drop-shadow(0 12px 28px rgba(206, 1, 1, 0.08));
 }
 
 .saas-hero__panel[data-theme="trust"] .saas-hero__panel-mark {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 140' fill='none'%3E%3Cpath d='M60 8L108 28v40c0 36-28 58-48 66-20-8-48-30-48-66V28L60 8z' stroke='%23CE0101' stroke-width='5'/%3E%3Cpath d='M42 68l14 14 24-28' stroke='%23CE0101' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  opacity: 0.28;
+}
+
+.saas-hero__panel--active[data-theme="trust"] .saas-hero__panel-mark {
+  opacity: 0.3;
 }
 
 .saas-hero__panel[data-theme="schemes"] .saas-hero__panel-mark {
@@ -743,9 +806,12 @@
   transition: transform var(--hero-hover-ms) var(--hero-ease), background var(--hero-hover-ms) var(--hero-ease);
 }
 
-.saas-hero__featnav-icon :deep(svg) {
+.saas-hero__featnav-icon :deep(svg),
+.saas-hero__featnav-icon svg {
   width: 15px;
   height: 15px;
+  display: block;
+  overflow: visible;
 }
 
 .saas-hero__featnav-item--active .saas-hero__featnav-icon,
@@ -773,11 +839,10 @@
 
 @media (max-width: 1100px) {
   .saas-hero__stage {
-    min-height: 0;
+    min-height: min(340px, 46vh);
   }
 
   .saas-hero__panel {
-    min-height: min(300px, 42vh);
     padding: 20px 18px;
   }
 
@@ -806,7 +871,6 @@
 
   .saas-hero__panel {
     grid-template-columns: 1fr;
-    min-height: 0;
   }
 
   .saas-hero__panel-visual {
@@ -858,8 +922,12 @@
   .saas-hero__stage {
     min-height: 0;
     height: auto;
-    overflow: visible;
+    overflow: hidden;
     border-radius: 20px;
+  }
+
+  .saas-hero__stage-panels {
+    min-height: 0;
   }
 
   .saas-hero__panel {
@@ -867,6 +935,18 @@
     height: auto;
     padding: 22px 18px 24px;
     align-content: start;
+  }
+
+  /* On mobile, only active panel contributes to height to avoid huge empty stage */
+  .saas-hero__panel:not(.saas-hero__panel--active) {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+  }
+
+  .saas-hero__panel--active {
+    position: relative;
+    visibility: visible;
   }
 
   .saas-hero__panel-copy {
@@ -909,12 +989,6 @@
     padding: 20px 16px 22px;
   }
 
-  .saas-hero__panel-icon {
-    width: 44px;
-    height: 44px;
-    margin-bottom: 12px;
-  }
-
   .saas-hero__panel-title {
     font-size: 1.35rem;
   }
@@ -924,12 +998,20 @@
   .saas-hero__spotlight,
   .saas-hero__theme,
   .saas-hero__panel,
-  .saas-hero__featnav-item,
+  .saas-hero__panel-title,
+  .saas-hero__panel-eyebrow,
+  .saas-hero__panel-desc,
   .saas-hero__panel-cta,
+  .saas-hero__panel-cta svg,
+  .saas-hero__panel-mark,
+  .saas-hero__panel-orb,
+  .saas-hero__featnav-item,
   .saas-hero__tile,
   .saas-hero__btn {
     animation: none !important;
     transition: none !important;
+    filter: none !important;
+    clip-path: none !important;
   }
 
   .saas-hero__spotlight {
@@ -939,6 +1021,24 @@
 
   .saas-hero--enter .saas-hero__spotlight {
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .saas-hero__panel:not(.saas-hero__panel--active) .saas-hero__panel-title,
+  .saas-hero__panel:not(.saas-hero__panel--active) .saas-hero__panel-eyebrow,
+  .saas-hero__panel:not(.saas-hero__panel--active) .saas-hero__panel-desc,
+  .saas-hero__panel:not(.saas-hero__panel--active) .saas-hero__panel-cta,
+  .saas-hero__panel:not(.saas-hero__panel--active) .saas-hero__panel-mark {
+    opacity: 0;
+  }
+
+  .saas-hero__panel--active .saas-hero__panel-title,
+  .saas-hero__panel--active .saas-hero__panel-eyebrow,
+  .saas-hero__panel--active .saas-hero__panel-desc,
+  .saas-hero__panel--active .saas-hero__panel-cta,
+  .saas-hero__panel--active .saas-hero__panel-mark,
+  .saas-hero__panel--active .saas-hero__panel-cta svg {
     opacity: 1;
     transform: none;
   }

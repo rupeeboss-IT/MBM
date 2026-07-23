@@ -145,8 +145,8 @@ public sealed class PlanController : ControllerBase
 
         if (plan is null) return NotFound(new MutationResponse(false, "Plan not found."));
 
-        plan.Name = req.Name.Trim();
-        plan.Tagline = string.IsNullOrWhiteSpace(req.Tagline) ? null : req.Tagline.Trim();
+        plan.Name = Utf8Mojibake.Fix(req.Name.Trim());
+        plan.Tagline = string.IsNullOrWhiteSpace(req.Tagline) ? null : Utf8Mojibake.Fix(req.Tagline.Trim());
         plan.IconEmoji = string.IsNullOrWhiteSpace(req.IconEmoji)
             ? PlanEmojiDefaults.Get(plan.Code)
             : req.IconEmoji.Trim();
@@ -222,8 +222,10 @@ public sealed class PlanController : ControllerBase
             .Where(f => !string.IsNullOrWhiteSpace(f.Text))
             .Select((f, i) => new PlanFeature
             {
-                Text = f.Text.Trim(),
-                Description = string.IsNullOrWhiteSpace(f.Description) ? null : f.Description.Trim(),
+                Text = Utf8Mojibake.Fix(f.Text.Trim()),
+                Description = string.IsNullOrWhiteSpace(f.Description)
+                    ? null
+                    : Utf8Mojibake.Fix(f.Description.Trim()),
                 OfferingSlug = string.IsNullOrWhiteSpace(f.OfferingSlug) ? null : f.OfferingSlug.Trim(),
                 IsIncludesLine = f.IsIncludesLine,
                 SortOrder = f.SortOrder >= 0 ? f.SortOrder : i,
@@ -251,8 +253,8 @@ public sealed class PlanController : ControllerBase
             .ThenBy(f => f.PlanFeatureId)
             .Select(f => new PlanFeatureItem(
                 f.PlanFeatureId,
-                f.Text,
-                f.Description,
+                Utf8Mojibake.Fix(f.Text),
+                string.IsNullOrWhiteSpace(f.Description) ? f.Description : Utf8Mojibake.Fix(f.Description),
                 f.OfferingSlug,
                 f.IsIncludesLine,
                 f.SortOrder))
@@ -261,8 +263,8 @@ public sealed class PlanController : ControllerBase
         return new PlanListItem(
             p.PlanId,
             p.Code,
-            p.Name,
-            p.Tagline,
+            Utf8Mojibake.Fix(p.Name),
+            string.IsNullOrWhiteSpace(p.Tagline) ? p.Tagline : Utf8Mojibake.Fix(p.Tagline),
             PlanEmojiDefaults.Normalize(p.Code, p.IconEmoji),
             p.BadgeClass,
             p.BaseAmountPaise,

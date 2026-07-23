@@ -65,7 +65,14 @@
         </div>
       </div>
 
-      <aside class="saas-hero__spotlight" aria-label="Platform feature showcase">
+      <aside
+        class="saas-hero__spotlight"
+        aria-label="Platform feature showcase"
+        (mouseenter)="pauseHeroAutoRotate()"
+        (mouseleave)="resumeHeroAutoRotate()"
+        (focusin)="pauseHeroAutoRotate()"
+        (focusout)="onHeroSpotlightFocusOut($event)"
+      >
         <div class="saas-hero__stage">
           <div class="saas-hero__themes" aria-hidden="true">
             @for (feature of heroFeatures; track feature.slug; let i = $index) {
@@ -89,12 +96,11 @@
                 [attr.aria-hidden]="activeHeroFeature() !== i"
               >
                 <div class="saas-hero__panel-copy">
-                  <div class="saas-hero__panel-icon" [innerHTML]="heroIcon(feature.iconSvg)" aria-hidden="true"></div>
-                  <p class="saas-hero__panel-eyebrow">{{ feature.tagline }}</p>
                   <h2 class="saas-hero__panel-title">{{ feature.title }}</h2>
+                  <p class="saas-hero__panel-eyebrow">{{ feature.tagline }}</p>
                   <p class="saas-hero__panel-desc">{{ feature.description }}</p>
                   <a class="saas-hero__panel-cta" [routerLink]="['/offering', feature.slug]">
-                    Explore {{ feature.title }}
+                    Learn More
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                       <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>

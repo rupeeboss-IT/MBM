@@ -90,6 +90,9 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   readonly activeHeroFeature = signal(0);
 
   private heroSettleTimer: ReturnType<typeof setTimeout> | null = null;
+  private heroAutoTimer: ReturnType<typeof setInterval> | null = null;
+  private heroAutoPaused = false;
+  private static readonly HERO_AUTO_MS = 3000;
 
   readonly heroFeatures: HeroFeature[] = [
     {
@@ -98,7 +101,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       tagline: 'Verified credibility',
       description: 'Build credibility with verified trust indicators that boost customer confidence and funding opportunities.',
       theme: 'trust',
-      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>`,
+      iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>`,
     },
     {
       slug: 'scheme-discovery',
@@ -106,7 +109,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       tagline: 'Central & State benefits',
       description: 'Discover Central and State MSME schemes with eligibility guidance and subsidy support.',
       theme: 'schemes',
-      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg>`,
+      iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg>`,
     },
     {
       slug: 'loan-audit',
@@ -114,7 +117,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       tagline: 'Optimise borrowing',
       description: 'Review existing business loans and find opportunities to reduce borrowing costs.',
       theme: 'loan',
-      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>`,
+      iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>`,
     },
     {
       slug: 'bank-statement-analyzer',
@@ -122,7 +125,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       tagline: 'Compare financing',
       description: 'Compare banks and financing options to make informed funding decisions with clarity.',
       theme: 'bank',
-      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18"/><path d="M5 10V20M9 10V20M15 10V20M19 10V20"/><path d="M2 20h20"/><path d="M12 2L2 7h20L12 2z"/></svg>`,
+      iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18"/><path d="M5 10V20M9 10V20M15 10V20M19 10V20"/><path d="M2 20h20"/><path d="M12 2L2 7h20L12 2z"/></svg>`,
     },
     {
       slug: 'whatsapp-platform',
@@ -130,7 +133,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       tagline: 'Business messaging',
       description: 'Connect with customers using automated messaging and business communication tools.',
       theme: 'whatsapp',
-      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>`,
+      iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>`,
     },
     {
       slug: 'gem-registration',
@@ -138,7 +141,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       tagline: 'Government marketplace',
       description: 'Register on the Government eMarketplace and unlock new business opportunities.',
       theme: 'gem',
-      iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M12 12v4M10 14h4"/></svg>`,
+      iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M12 12v4M10 14h4"/></svg>`,
     },
   ];
 
@@ -158,17 +161,57 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
 
     requestAnimationFrame(() => {
       this.heroEnter.set(true);
-      this.heroSettleTimer = setTimeout(() => this.heroSettled.set(true), 1200);
+      this.heroSettleTimer = setTimeout(() => {
+        this.heroSettled.set(true);
+        this.startHeroAutoRotate();
+      }, 1200);
     });
   }
 
   ngOnDestroy(): void {
     if (this.heroSettleTimer) clearTimeout(this.heroSettleTimer);
+    this.stopHeroAutoRotate();
   }
 
   selectHeroFeature(index: number): void {
-    if (index === this.activeHeroFeature()) return;
+    // User interaction always pauses auto-rotate until pointer leaves the spotlight
+    this.pauseHeroAutoRotate();
     this.activeHeroFeature.set(index);
+  }
+
+  pauseHeroAutoRotate(): void {
+    this.heroAutoPaused = true;
+    this.stopHeroAutoRotate();
+  }
+
+  resumeHeroAutoRotate(): void {
+    this.heroAutoPaused = false;
+    this.startHeroAutoRotate();
+  }
+
+  onHeroSpotlightFocusOut(event: FocusEvent): void {
+    const root = event.currentTarget as HTMLElement | null;
+    const next = event.relatedTarget as Node | null;
+    if (root && next && root.contains(next)) return;
+    this.resumeHeroAutoRotate();
+  }
+
+  private startHeroAutoRotate(): void {
+    if (!isPlatformBrowser(this.platformId) || this.heroAutoPaused) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    this.stopHeroAutoRotate();
+    this.heroAutoTimer = setInterval(() => {
+      const next = (this.activeHeroFeature() + 1) % this.heroFeatures.length;
+      this.activeHeroFeature.set(next);
+    }, Home.HERO_AUTO_MS);
+  }
+
+  private stopHeroAutoRotate(): void {
+    if (this.heroAutoTimer) {
+      clearInterval(this.heroAutoTimer);
+      this.heroAutoTimer = null;
+    }
   }
 
   heroIcon(svg: string): SafeHtml {

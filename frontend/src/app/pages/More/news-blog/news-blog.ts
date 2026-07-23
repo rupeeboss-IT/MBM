@@ -28,15 +28,25 @@ export class NewsBlog implements OnInit {
   });
 
   async ngOnInit() {
+    await Promise.all([this.loadArticles(), this.loadFilters()]);
+    this.loading.set(false);
+  }
+
+  private async loadArticles() {
     try {
-      const [items, catRes] = await Promise.all([
-        firstValueFrom(this.articlesService.getPublished()),
-        firstValueFrom(this.categoryApi.listPublic(true)),
-      ]);
+      const items = await firstValueFrom(this.articlesService.getPublished());
       this.articles.set(items);
+    } catch {
+      this.articles.set([]);
+    }
+  }
+
+  private async loadFilters() {
+    try {
+      const catRes = await firstValueFrom(this.categoryApi.listPublic(true));
       this.filterCategories.set(catRes.categories ?? []);
-    } finally {
-      this.loading.set(false);
+    } catch {
+      this.filterCategories.set([]);
     }
   }
 
